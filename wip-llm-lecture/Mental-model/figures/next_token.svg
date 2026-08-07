@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 232" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="nt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/>
+    </marker>
+    <marker id="ntt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/>
+    </marker>
+    <style>
+      .ink{fill:#1f2937;} .muted{fill:#64748b;} .title{font-weight:700;}
+      .cap{font-size:13.5px;} .sm{font-size:12px;}
+      .tok{fill:#f8fafc;stroke:#1f2937;stroke-width:2;}
+      .flow{stroke:#1f2937;stroke-width:2.2;fill:none;}
+      .model{fill:#1f2937;}
+      .cand{fill:#ffffff;stroke:#0d9488;stroke-width:2;}
+      .loop{stroke:#0d9488;stroke-width:2;fill:none;stroke-dasharray:6 5;}
+    </style>
+  </defs>
+
+  <!-- context tokens -->
+  <text class="muted sm" x="24" y="34">the tokens so far</text>
+  <g class="ink sm title" text-anchor="middle">
+    <rect class="tok" x="24"  y="58" width="56" height="32" rx="8"/><text x="52"  y="78">the</text>
+    <rect class="tok" x="86"  y="58" width="56" height="32" rx="8"/><text x="114" y="78">best</text>
+    <rect class="tok" x="148" y="58" width="56" height="32" rx="8"/><text x="176" y="78">way</text>
+    <rect class="tok" x="210" y="58" width="56" height="32" rx="8"/><text x="238" y="78">to</text>
+    <rect class="tok" x="272" y="58" width="56" height="32" rx="8"/><text x="300" y="78">learn</text>
+    <rect class="tok" x="334" y="58" width="56" height="32" rx="8"/><text x="362" y="78">is</text>
+    <rect class="tok" x="396" y="58" width="56" height="32" rx="8"/><text x="424" y="78">by</text>
+  </g>
+
+  <!-- arrow to model (label raised clear of the boxes) -->
+  <text class="muted sm" x="486" y="40" text-anchor="middle">guess the next</text>
+  <path class="flow" d="M456,74 L518,74" marker-end="url(#nt)"/>
+
+  <!-- model -->
+  <rect class="model" x="520" y="56" width="150" height="36" rx="10"/>
+  <text class="sm title" fill="#ffffff" x="595" y="78" text-anchor="middle">next-token model</text>
+
+  <!-- two sampled candidates -->
+  <path class="flow" d="M672,67 L736,45" marker-end="url(#nt)"/>
+  <path class="flow" d="M672,81 L736,103" marker-end="url(#nt)"/>
+
+  <rect class="cand" x="740" y="30" width="96" height="30" rx="8"/>
+  <text class="sm title" fill="#0d9488" x="788" y="50" text-anchor="middle">doing</text>
+  <text class="muted sm" x="844" y="50">run 1</text>
+
+  <rect class="cand" x="740" y="92" width="96" height="30" rx="8"/>
+  <text class="sm title" fill="#0d9488" x="788" y="112" text-anchor="middle">through</text>
+  <text class="muted sm" x="844" y="112">run 2</text>
+
+  <!-- loop: append the guess and repeat -->
+  <path class="loop" d="M788,124 C788,190 470,206 250,176 L250,96" marker-end="url(#ntt)"/>
+  <text class="sm title" fill="#0d9488" x="470" y="222" text-anchor="middle">append the guess, then read again</text>
+</svg>

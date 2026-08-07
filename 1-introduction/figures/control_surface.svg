@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 250" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="cs" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .ink{fill:#1f2937;} .muted{fill:#64748b;} .title{font-weight:700;}
+      .lbl{font-size:15px;} .cap{font-size:13px;} .sub{font-size:12.5px;}
+      .frozen{fill:#eef1f4;stroke:#94a3b8;stroke-width:2.2;}
+      .yours{fill:#e8f6f4;stroke:#0d9488;stroke-width:2.6;}
+      .out{fill:#1f2937;}
+      .flow{stroke:#1f2937;stroke-width:2.2;fill:none;}
+    </style>
+  </defs>
+
+  <!-- FROZEN WEIGHTS -->
+  <rect class="frozen" x="24" y="80" width="200" height="100" rx="12"/>
+  <g transform="translate(104,92)"><path d="M4,13 a11,11 0 0 1 22,0 v7" fill="none" stroke="#64748b" stroke-width="3.4"/><rect x="0" y="18" width="30" height="24" rx="4" fill="#64748b"/></g>
+  <text class="ink lbl title" x="124" y="150" text-anchor="middle">frozen weights</text>
+  <text class="muted sub" x="124" y="170" text-anchor="middle">you can&#8217;t change these</text>
+
+  <path class="flow" d="M228,130 L268,130" marker-end="url(#cs)"/>
+
+  <!-- THE WINDOW (yours) -->
+  <rect class="yours" x="276" y="80" width="360" height="100" rx="12"/>
+  <text fill="#0d9488" class="lbl title" x="456" y="108" text-anchor="middle">the context window</text>
+  <g fill="#0d9488">
+    <rect x="300" y="120" width="40" height="34" rx="5"/>
+    <rect x="348" y="120" width="40" height="34" rx="5"/>
+    <rect x="396" y="120" width="40" height="34" rx="5"/>
+    <rect x="444" y="120" width="40" height="34" rx="5"/>
+    <rect x="492" y="120" width="40" height="34" rx="5"/>
+    <rect x="540" y="120" width="40" height="34" rx="5"/>
+    <rect x="588" y="120" width="24" height="34" rx="5" opacity="0.35"/>
+  </g>
+  <text class="muted sub" x="456" y="172" text-anchor="middle">the only thing you control: every token you put in front of it</text>
+
+  <path class="flow" d="M640,130 L680,130" marker-end="url(#cs)"/>
+
+  <!-- NEXT TOKEN -->
+  <rect class="out" x="688" y="80" width="208" height="100" rx="12"/>
+  <text fill="#ffffff" class="lbl title" x="792" y="124" text-anchor="middle">next token</text>
+  <text fill="#cbd5e1" class="sub" x="792" y="148" text-anchor="middle">the nearest match</text>
+
+  <text class="ink lbl title" x="460" y="226" text-anchor="middle">You steer the model only by what you put in the middle box.</text>
+</svg>

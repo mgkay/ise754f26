@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="wsa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/>
+    </marker>
+    <style>
+      .ink{fill:#1f2937;} .muted{fill:#64748b;} .title{font-weight:700;}
+      .sm{font-size:12px;}
+      .win{fill:#ffffff;stroke:#1f2937;stroke-width:2;}
+      .pane{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.4;}
+      .editor{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.4;}
+      .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;}
+      .teal{fill:#0d9488;}
+      .cmt{fill:#008000;} .kw{fill:#7c3aed;} .str{fill:#b91c1c;}
+      .ln{fill:#94a3b8;font-size:10px;} .lens{fill:#5b7fa6;font-size:9.5px;}
+      .lead{stroke:#0d9488;stroke-width:1.6;fill:none;}
+      .lbl{fill:#0d9488;font-weight:700;font-size:12.5px;}
+    </style>
+  </defs>
+
+  <!-- window frame + title bar -->
+  <rect class="win" x="24" y="44" width="620" height="354" rx="10"/>
+  <line x1="24" y1="70" x2="644" y2="70" stroke="#cbd5e1" stroke-width="1.4"/>
+  <circle cx="42" cy="57" r="4" fill="#ef4444"/>
+  <circle cx="56" cy="57" r="4" fill="#f59e0b"/>
+  <circle cx="70" cy="57" r="4" fill="#22c55e"/>
+  <text class="muted sm" x="334" y="61" text-anchor="middle">1-intr-2-workspace.jl  —  VS Code</text>
+
+  <!-- editor pane -->
+  <rect class="editor" x="38" y="84" width="346" height="196"/>
+  <g class="mono" font-size="11">
+    <text class="lens" x="72" y="96">&#9655; Run | Above | Below | Debug</text>
+    <text class="ln" x="62" y="109" text-anchor="end">7</text>
+    <text class="cmt" x="72" y="109">## A first DataFrame</text>
+    <text class="ln" x="62" y="122" text-anchor="end">8</text>
+    <text x="72" y="122"><tspan class="kw">using</tspan><tspan class="ink"> DataFrames</tspan></text>
+    <text class="ln" x="62" y="135" text-anchor="end">9</text>
+    <text class="ink" x="72" y="135">ship = DataFrame(</text>
+    <text class="ln" x="62" y="148" text-anchor="end">10</text>
+    <text x="72" y="148"><tspan class="ink">    origin = [</tspan><tspan class="str">"RDU", "RDU", "GSO"</tspan><tspan class="ink">],</tspan></text>
+    <text class="ln" x="62" y="161" text-anchor="end">11</text>
+    <text class="ink" x="72" y="161">    ton    = [12, 5, 18])</text>
+    <text class="ln" x="62" y="174" text-anchor="end">12</text>
+    <text class="ink" x="72" y="174">ship.ton</text>
+    <text class="ln" x="62" y="187" text-anchor="end">13</text>
+    <text class="lens" x="72" y="200">&#9655; Run | Above | Below | Debug</text>
+    <text class="ln" x="62" y="213" text-anchor="end">14</text>
+    <text class="cmt" x="72" y="213">## A first plot</text>
+    <text class="ln" x="62" y="226" text-anchor="end">15</text>
+    <text x="72" y="226"><tspan class="kw">using</tspan><tspan class="ink"> CairoMakie</tspan></text>
+    <text class="ln" x="62" y="239" text-anchor="end">16</text>
+    <text class="ink" x="72" y="239">f(x) = x - x^3</text>
+    <text class="ln" x="62" y="252" text-anchor="end">17</text>
+    <text class="ink" x="72" y="252">xrng = -2:0.01:2</text>
+    <text class="ln" x="62" y="265" text-anchor="end">18</text>
+    <text class="ink" x="72" y="265">lines(xrng, f)</text>
+  </g>
+
+  <!-- plot pane -->
+  <rect class="pane" x="398" y="84" width="232" height="120"/>
+  <line x1="414" y1="190" x2="620" y2="190" stroke="#94a3b8" stroke-width="1.2"/>
+  <line x1="414" y1="100" x2="414" y2="190" stroke="#94a3b8" stroke-width="1.2"/>
+  <path d="M416,104 C445,112 458,144 486,148 C512,151 528,140 552,142 C580,145 600,170 618,188"
+        fill="none" stroke="#1f2937" stroke-width="2"/>
+
+  <!-- REPL pane -->
+  <rect x="38" y="292" width="592" height="94" rx="4" fill="#0f172a"/>
+  <g class="mono">
+    <text x="50" y="316"><tspan class="teal">julia&gt;</tspan><tspan fill="#e2e8f0"> ship.ton</tspan></text>
+    <text x="50" y="338" fill="#94a3b8">3-element Vector{Int64}:</text>
+    <text x="50" y="356" fill="#e2e8f0"> 12   5   18</text>
+  </g>
+
+  <!-- callout labels (right) -->
+  <text class="lbl" x="690" y="101">each cell has its own &#9655; Run</text>
+  <text class="muted sm" x="690" y="117">run the table cell, then the plot</text>
+  <path class="lead" d="M684,105 L232,92" marker-end="url(#wsa)"/>
+
+  <text class="lbl" x="690" y="168">your script, in ## cells</text>
+  <text class="muted sm" x="690" y="184">a full editor</text>
+  <path class="lead" d="M684,166 L386,150" marker-end="url(#wsa)"/>
+
+  <text class="lbl" x="690" y="138">plots open here</text>
+  <path class="lead" d="M684,134 L632,128" marker-end="url(#wsa)"/>
+
+  <text class="lbl" x="690" y="330">the live Julia session</text>
+  <text class="muted sm" x="690" y="346">results appear here</text>
+  <path class="lead" d="M684,328 L632,332" marker-end="url(#wsa)"/>
+</svg>

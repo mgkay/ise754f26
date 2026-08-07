@@ -1,0 +1,678 @@
+{
+ "1.1": {
+  "fig-scm-le": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-strategic": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-tactical": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-operational": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-triangle": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-fermi": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-jensen-convex": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-jensen-fuel": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-pizza": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "tbl-truck-param": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-truck-calc": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-fuel": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "mdl-loc": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "mdl-prodinv": {
+   "label": "Model 2",
+   "word": "Model"
+  },
+  "mdl-vrp": {
+   "label": "Model 3",
+   "word": "Model"
+  },
+  "mdl-pizza": {
+   "label": "Model 4",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-4-a": {
+   "label": "Ex. 4(a)",
+   "word": "Ex."
+  },
+  "example-4-b": {
+   "label": "Ex. 4(b)",
+   "word": "Ex."
+  }
+ },
+ "1.2": {
+  "fig-workspace": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-lineplot": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-next-token": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-token-embed": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-neuron2": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-nexttoken-plane": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-xor-separable": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-net": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-attention": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-control": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-context-rot": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-nearest": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-loop": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "tbl-corpus": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-checks": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  }
+ },
+ "1.3": {
+  "eq-little": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-scv": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-poisson": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-mmin": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-util": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-vut": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-vutm": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-cd": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-ce": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "fig-prodsys": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-little": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-scv": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-fourws": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-util": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-queue": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-stationary": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-transient": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "tbl-feasible": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-cycle": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-pizza": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-stationary": {
+   "label": "Table 4",
+   "word": "Table"
+  },
+  "mdl-poisson": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "mdl-queue": {
+   "label": "Model 2",
+   "word": "Model"
+  },
+  "mdl-spt": {
+   "label": "Model 3",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  }
+ },
+ "2.1": {
+  "eq-balance": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-sqdist": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-centroid": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-median": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "fig-cities": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-taxonomy": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-hotelling": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-hotelling-coop": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-corridor": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-apt-tc": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-median4": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-i40": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-rect2d": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-gc": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-minimax-maximin": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "tbl-objectives": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "mdl-hotdog-comp": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "mdl-hotdog-coop": {
+   "label": "Model 2",
+   "word": "Model"
+  },
+  "mdl-beach-choice": {
+   "label": "Model 3",
+   "word": "Model"
+  },
+  "mdl-apt-equity": {
+   "label": "Model 4",
+   "word": "Model"
+  },
+  "mdl-apt-centroid": {
+   "label": "Model 5",
+   "word": "Model"
+  },
+  "mdl-apt-minisum": {
+   "label": "Model 6",
+   "word": "Model"
+  },
+  "mdl-apt-expanded": {
+   "label": "Model 7",
+   "word": "Model"
+  },
+  "mdl-minisum1d": {
+   "label": "Model 8",
+   "word": "Model"
+  },
+  "mdl-minimax": {
+   "label": "Model 9",
+   "word": "Model"
+  },
+  "mdl-maximin": {
+   "label": "Model 10",
+   "word": "Model"
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  }
+ },
+ "2.2": {
+  "eq-minisum": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-lp": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-rectilinear": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-euclidean": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-chebychev": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-gc": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-degrad": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "fig-network": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-production": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-product-a": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-product-b": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-i40": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-bom": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-median": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-fermat": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-varignon": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-convexity": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-search": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-neldermead-ops": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-metric-lp": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "fig-chebychev": {
+   "label": "Fig. 14",
+   "word": "Fig."
+  },
+  "fig-gc-derivation": {
+   "label": "Fig. 15",
+   "word": "Fig."
+  },
+  "fig-greatcircle": {
+   "label": "Fig. 16",
+   "word": "Fig."
+  },
+  "fig-mercator": {
+   "label": "Fig. 17",
+   "word": "Fig."
+  },
+  "fig-nc-minisum": {
+   "label": "Fig. 18",
+   "word": "Fig."
+  },
+  "fig-fedex": {
+   "label": "Fig. 19",
+   "word": "Fig."
+  },
+  "mdl-minisum": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  }
+ },
+ "3.3": {
+  "eq-eoq-tl": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "fig-transcharge": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-alpha": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-tlc0-wide": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-tlc0-zoom": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-q17-curves": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "tbl-inventory-classification": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-alpha-regimes": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-shipment-economics": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
+  "example-1-d": {
+   "label": "Ex. 1(d)",
+   "word": "Ex."
+  },
+  "example-1-e": {
+   "label": "Ex. 1(e)",
+   "word": "Ex."
+  },
+  "example-1-f": {
+   "label": "Ex. 1(f)",
+   "word": "Ex."
+  },
+  "example-1-g": {
+   "label": "Ex. 1(g)",
+   "word": "Ex."
+  },
+  "example-1-h": {
+   "label": "Ex. 1(h)",
+   "word": "Ex."
+  },
+  "example-1-i": {
+   "label": "Ex. 1(i)",
+   "word": "Ex."
+  },
+  "example-1-j": {
+   "label": "Ex. 1(j)",
+   "word": "Ex."
+  },
+  "example-1-k": {
+   "label": "Ex. 1(k)",
+   "word": "Ex."
+  },
+  "example-1-l": {
+   "label": "Ex. 1(l)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  }
+ }
+}

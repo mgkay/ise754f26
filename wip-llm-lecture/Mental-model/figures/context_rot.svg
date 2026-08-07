@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <style>
+      .ink{fill:#1f2937;} .muted{fill:#64748b;} .title{font-weight:700;}
+      .cap{font-size:13.5px;} .sm{font-size:12.5px;}
+      .axis{stroke:#94a3b8;stroke-width:1.6;}
+      .curve{fill:none;stroke:#0d9488;stroke-width:3.5;}
+    </style>
+  </defs>
+  <text class="ink cap title" x="410" y="32" text-anchor="middle">How much attention each position in the window gets</text>
+
+  <!-- axes -->
+  <line class="axis" x1="90" y1="290" x2="760" y2="290"/>
+  <line class="axis" x1="90" y1="290" x2="90"  y2="70"/>
+  <text class="sm muted" x="90"  y="312" text-anchor="middle">start</text>
+  <text class="sm muted" x="425" y="312" text-anchor="middle">middle of the window</text>
+  <text class="sm muted" x="760" y="312" text-anchor="middle">end</text>
+  <text class="sm muted" x="56" y="180" text-anchor="middle" transform="rotate(-90 56 180)">attention</text>
+
+  <!-- U-shaped curve: high at start, dips in middle, high at end -->
+  <path class="curve" d="M90,110 C150,250 230,278 425,280 C620,278 700,250 760,100"/>
+
+  <!-- annotations -->
+  <circle cx="90" cy="110" r="5" fill="#0d9488"/>
+  <text class="sm ink title" x="150" y="92" text-anchor="middle">strong at the start</text>
+  <text class="sm muted" x="150" y="108" text-anchor="middle">(attention sink:</text>
+  <text class="sm muted" x="150" y="123" text-anchor="middle">always-present tokens)</text>
+
+  <circle cx="760" cy="100" r="5" fill="#0d9488"/>
+  <text class="sm ink title" x="690" y="82" text-anchor="middle">strong at the end</text>
+  <text class="sm muted" x="690" y="98" text-anchor="middle">(recency: the next</text>
+  <text class="sm muted" x="690" y="113" text-anchor="middle">token is predicted here)</text>
+
+  <circle cx="425" cy="280" r="5" fill="#ef6b5e"/>
+  <text class="sm" fill="#ef6b5e" x="425" y="262" text-anchor="middle" font-weight="700">weakest in the middle</text>
+  <text class="sm muted" x="425" y="340" text-anchor="middle">a fact buried here is the easiest for the model to lose: this is context rot</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="ui-sans-serif, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="xr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .ink{fill:#1f2937;} .muted{fill:#64748b;} .title{font-weight:700;}
+      .cap{font-size:13.5px;} .sm{font-size:12px;} .coord{font-size:11px;fill:#64748b;}
+      .tok{font-size:12.5px;font-weight:700;fill:#334155;}
+      .panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5;}
+      .axis{stroke:#cbd5e1;stroke-width:1.5;}
+      .teal{fill:#0d9488;} .coral{fill:#ef6b5e;}
+      .zoom{fill:none;stroke:#0d9488;stroke-width:1.6;stroke-dasharray:4 3;}
+      .zlbl{font-size:10px;font-weight:700;fill:#0d9488;}
+      .ptitle{font-size:14px;font-weight:700;fill:#1f2937;}
+    </style>
+  </defs>
+
+  <!-- LEFT: zoom of the cargo cluster -->
+  <text class="ptitle" x="225" y="40" text-anchor="middle">Inside the cargo cluster: no line works</text>
+  <rect class="panel" x="40" y="56" width="370" height="284" rx="10"/>
+
+  <!-- locator: this panel magnifies the cargo cluster of Fig 3 -->
+  <rect x="52" y="66" width="74" height="50" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <rect class="coral" x="62" y="76" width="6" height="6" rx="1"/>
+  <rect class="coral" x="70" y="84" width="6" height="6" rx="1"/>
+  <circle class="teal" cx="100" cy="92" r="3"/>
+  <circle class="teal" cx="108" cy="96" r="3"/>
+  <circle class="teal" cx="101" cy="102" r="3"/>
+  <rect class="zoom" x="92" y="86" width="26" height="22" rx="4"/>
+  <text class="zlbl" x="89" y="130" text-anchor="middle">the cargo cluster</text>
+  <line class="zoom" x1="118" y1="88" x2="150" y2="120" opacity="0.55"/>
+  <line class="zoom" x1="118" y1="106" x2="150" y2="186" opacity="0.55"/>
+
+  <!-- axes: x = vehicle (van .. rig), y = load (parcel .. pallet) -->
+  <line class="axis" x1="170" y1="200" x2="305" y2="200"/>
+  <line class="axis" x1="237" y1="120" x2="237" y2="280"/>
+  <text class="tok" x="158" y="204" text-anchor="end">van</text>
+  <text class="tok" x="318" y="204" text-anchor="start">rig</text>
+  <text class="tok" x="237" y="298" text-anchor="middle">parcel</text>
+  <text class="tok" x="237" y="112" text-anchor="middle">pallet</text>
+  <text class="sm muted" x="318" y="218" text-anchor="start">vehicle</text>
+  <text class="sm muted" x="237" y="326" text-anchor="middle">load</text>
+
+  <!-- one context drawn as a sum: van (x=-1) + parcel (y=-1) -> corner -->
+  <line x1="180" y1="200" x2="180" y2="270" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
+  <line x1="237" y1="270" x2="180" y2="270" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
+
+  <!-- the four summed contexts at the corners -->
+  <circle class="teal" cx="180" cy="270" r="12"/><text class="coord" x="174" y="290" text-anchor="end">van+parcel</text>
+  <circle class="teal" cx="300" cy="130" r="12"/><text class="coord" x="300" y="110" text-anchor="middle">rig+pallet</text>
+  <rect class="coral" x="168" y="118" width="24" height="24" rx="3"/><text class="coord" x="180" y="110" text-anchor="middle">van+pallet</text>
+  <rect class="coral" x="288" y="258" width="24" height="24" rx="3"/><text class="coord" x="306" y="290" text-anchor="start">rig+parcel</text>
+
+  <!-- any straight cut fails -->
+  <line x1="180" y1="158" x2="330" y2="252" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 5"/>
+  <text class="sm" fill="#94a3b8" x="360" y="158" text-anchor="middle">any line leaves</text>
+  <text class="sm" fill="#94a3b8" x="360" y="172" text-anchor="middle">one case wrong</text>
+
+  <!-- transition -->
+  <path d="M420,196 L490,196" stroke="#1f2937" stroke-width="2.4" marker-end="url(#xr2)"/>
+  <text class="sm ink title" x="455" y="178" text-anchor="middle">hidden</text>
+  <text class="sm ink title" x="455" y="192" text-anchor="middle">layer</text>
+
+  <!-- RIGHT: re-plotted by the hidden layer -->
+  <text class="ptitle" x="690" y="40" text-anchor="middle">After the hidden layer: one line works</text>
+  <rect class="panel" x="505" y="56" width="370" height="284" rx="10"/>
+  <line x1="540" y1="210" x2="850" y2="182" stroke="#0d9488" stroke-width="3"/>
+  <text class="sm" fill="#0d9488" x="800" y="174" text-anchor="middle">one line separates</text>
+  <circle class="teal" cx="600" cy="268" r="12"/><text class="coord" x="600" y="290" text-anchor="middle">van+parcel</text>
+  <circle class="teal" cx="705" cy="278" r="12"/><text class="coord" x="705" y="300" text-anchor="middle">rig+pallet</text>
+  <rect class="coral" x="612" y="104" width="24" height="24" rx="3"/><text class="coord" x="624" y="98" text-anchor="middle">van+pallet</text>
+  <rect class="coral" x="752" y="122" width="24" height="24" rx="3"/><text class="coord" x="764" y="116" text-anchor="middle">rig+parcel</text>
+
+  <!-- captions -->
+  <text class="ink cap title" x="450" y="384" text-anchor="middle">Magnified, the cargo cluster has structure: each context is a vehicle token plus a load token.</text>
+  <text class="ink cap" x="450" y="404" text-anchor="middle">A match (same size) sits at two opposite corners, so no single line separates go from wait.</text>
+  <text class="muted cap" x="450" y="423" text-anchor="middle">circles = go (match)&#160;&#160; squares = wait (mismatch)</text>
+</svg>
