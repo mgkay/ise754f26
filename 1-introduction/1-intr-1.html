@@ -4996,27 +4996,21 @@ Figure 9: The pizza delivery area: customers (gray) are uniformly distributed o
 </blockquote>
 <p>Claude Code proposes each action with <strong>Accept</strong> / <strong>Reject</strong> buttons; click <strong>Accept</strong>.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> It shows each command before running it and waits for the click, so nothing is installed on the machine without approval.</p>
 <p><em>Success:</em> Claude Code reports VS Code installed.</p>
+<p><strong>The course now ships a written setup guide that does steps 2 and 3 and then verifies them, and that guide is the procedure to follow:</strong> <a href="https://github.com/mgkay/ise754f26-materials">SETUP.md</a> in the course materials repository. It detects what is already installed, installs only what is missing, and ends with a check that either reports <code>READY</code> or names exactly what is wrong. Follow it, then return here for step 4. The prompt below predates the guide; it describes what the guide now does automatically, and where the two differ the guide is correct.</p>
 <p><strong>3. Install Julia and the extensions.</strong> In the same conversation, type:</p>
 <blockquote class="blockquote">
 <p>Install these, or verify and report the version of any already present: (1) Julia, using juliaup; (2) the Julia extension for VS Code; (3) the Claude Code extension for VS Code; (4) the Claude Code command-line tool, so that <code>claude</code> works in a terminal.</p>
 </blockquote>
 <p>Item (4) is needed because the desktop app does not by itself put <code>claude</code> on the command line.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> Claude Code reports each version, the Julia one reading like</p>
-<pre><code>julia version 1.12.1</code></pre>
+<pre><code>julia version 1.12.6</code></pre>
 <p><em>Success:</em> all four are installed or verified.</p>
 <p><strong>4. Open the folder and start Claude Code in VS Code.</strong> Open VS Code, choose <strong>File ▸ Open Folder…</strong>, and pick the course folder. Give Claude Code its own full-height pane by opening a terminal <strong>in the editor area</strong>: right-click the editor tab bar and choose <strong>New Terminal</strong>, or run <strong>Terminal: Create New Terminal in Editor Area</strong> from the Command Palette.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> With Git for Windows this is a <strong>Bash</strong> prompt in the course folder (on macOS, a <code>zsh</code> prompt ending in <code>%</code>):</p>
 <pre><code>user@PC MINGW64 ~/ISE754
 $</code></pre>
 <p>Type <code>claude</code> and press <strong>Enter</strong>.</p>
 <p><em>Success:</em> Claude Code starts in the editor-area tab. It lives there, in a full pane, rather than the short bottom panel, so its output has room; the bottom panel is left for the Julia REPL and Bash commands. Lecture 1.2 Sec. 1.1 lays out the full working layout.</p>
-<p><strong>5. Hello, World.</strong> In the Claude Code tab, type:</p>
-<blockquote class="blockquote">
-<p>Create a file hello.jl in this folder that prints “Hello, World!”.</p>
-</blockquote>
-<p>Approve the new file. Open it (click <code>hello.jl</code> in the <strong>Explorer</strong>, the file list on the left), then open the <strong>Command Palette</strong> with <strong>View ▸ Command Palette</strong> and run <strong>Julia: Start REPL</strong>. The Julia banner appears, ending in a <code>Version</code> line (here <code>1.12.1</code>), above a green <code>julia&gt;</code> prompt. Put the cursor on the <code>println</code> line and press <strong>Shift+Enter</strong>:</p>
-<pre><code>julia&gt; println(&quot;Hello, World!&quot;)
-Hello, World!</code></pre>
-<p>That printed line is the smoke test of the whole chain: Claude Code wrote the file, VS Code holds it, Julia ran it. Lecture 1.2 Sec. 1.1 develops this run-a-script workflow in full.</p>
-<p>If a step fails, paste the error into Claude Code and let it fix it; recovering with the agent is the course’s method, met a week early. The course’s Julia packages are installed later, by a one-step cell in Lecture 1.2.</p>
+<p><strong>5. Confirm the toolchain works.</strong> The setup guide ends by running a check that tests eleven things and prints either <code>READY</code> or the specific reason it is not, and it saves that output to <code>ISE754/bootstrap-report.txt</code>. <code>READY</code> is the smoke test of the whole chain: the tools are installed, the pinned Julia runs, and the course’s packages load.</p>
+<p>If a step fails, paste the error into Claude Code and let it fix it; recovering with the agent is the course’s method, met a week early. The check names which of the eleven failed and what to do about it, so there is something specific to paste.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -5052,7 +5046,7 @@ Hello, World!</code></pre>
 </section>
 <section id="assignment-due-before-class-2" class="level3">
 <h3 class="anchored" data-anchor-id="assignment-due-before-class-2">Assignment (due before class 2)</h3>
-<p>Complete the bootstrap through step 5, ending with the “Hello, World!” output, the classic smoke test that the toolchain works. Claude Code needs a paid Anthropic account (Pro or better, see the account note above), so arrange that before starting.</p>
+<p>Complete the setup through step 5, ending with the check reporting <code>READY</code>, and paste its entire output into Moodle. A <code>NOT READY</code> report is also worth submitting: knowing what broke, across the class, is what the second meeting is built on. Claude Code needs a paid Anthropic account (Pro or better, see the account note above), so arrange that before starting.</p>
 <!-- DELIVERABLE = decision D3 (transcript / screenshot / both), still OPEN
      (gated on the platform/submission decision ~Jul 5). -->
 <!-- ============================================================================
