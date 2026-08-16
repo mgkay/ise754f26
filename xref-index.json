@@ -36,6 +36,10 @@
    "label": "Fig. 9",
    "word": "Fig."
   },
+  "fig-course-map": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
   "tbl-truck-param": {
    "label": "Table 1",
    "word": "Table"
@@ -570,108 +574,6 @@
   },
   "example-3": {
    "label": "Ex. 3",
-   "word": "Ex."
-  }
- },
- "3.3": {
-  "eq-eoq-tl": {
-   "label": "Eq. 1",
-   "word": "Eq."
-  },
-  "fig-transcharge": {
-   "label": "Fig. 1",
-   "word": "Fig."
-  },
-  "fig-alpha": {
-   "label": "Fig. 2",
-   "word": "Fig."
-  },
-  "fig-tlc0-wide": {
-   "label": "Fig. 3",
-   "word": "Fig."
-  },
-  "fig-tlc0-zoom": {
-   "label": "Fig. 4",
-   "word": "Fig."
-  },
-  "fig-q17-curves": {
-   "label": "Fig. 5",
-   "word": "Fig."
-  },
-  "tbl-inventory-classification": {
-   "label": "Table 1",
-   "word": "Table"
-  },
-  "tbl-alpha-regimes": {
-   "label": "Table 2",
-   "word": "Table"
-  },
-  "tbl-shipment-economics": {
-   "label": "Table 3",
-   "word": "Table"
-  },
-  "example-1": {
-   "label": "Ex. 1",
-   "word": "Ex."
-  },
-  "example-1-a": {
-   "label": "Ex. 1(a)",
-   "word": "Ex."
-  },
-  "example-1-b": {
-   "label": "Ex. 1(b)",
-   "word": "Ex."
-  },
-  "example-1-c": {
-   "label": "Ex. 1(c)",
-   "word": "Ex."
-  },
-  "example-1-d": {
-   "label": "Ex. 1(d)",
-   "word": "Ex."
-  },
-  "example-1-e": {
-   "label": "Ex. 1(e)",
-   "word": "Ex."
-  },
-  "example-1-f": {
-   "label": "Ex. 1(f)",
-   "word": "Ex."
-  },
-  "example-1-g": {
-   "label": "Ex. 1(g)",
-   "word": "Ex."
-  },
-  "example-1-h": {
-   "label": "Ex. 1(h)",
-   "word": "Ex."
-  },
-  "example-1-i": {
-   "label": "Ex. 1(i)",
-   "word": "Ex."
-  },
-  "example-1-j": {
-   "label": "Ex. 1(j)",
-   "word": "Ex."
-  },
-  "example-1-k": {
-   "label": "Ex. 1(k)",
-   "word": "Ex."
-  },
-  "example-1-l": {
-   "label": "Ex. 1(l)",
-   "word": "Ex."
-  },
-  "example-2": {
-   "label": "Ex. 2",
-   "word": "Ex."
-  },
-  "example-2-a": {
-   "label": "Ex. 2(a)",
-   "word": "Ex."
-  },
-  "example-2-b": {
-   "label": "Ex. 2(b)",
    "word": "Ex."
   }
  }

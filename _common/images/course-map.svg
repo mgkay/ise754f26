@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 500" role="img"
+     aria-label="Three groups. Public, needing no account, holds the course materials repository on GitHub, the course website, and the overview videos on YouTube. The ISE754 folder on your computer holds materials, handouts and work. NC State holds Moodle, the handouts repository and your own repository. Materials and handouts are pulled down to your computer, work is pushed up to your repository, and feedback written there by the teaching staff is pulled back down from it.">
+  <!--
+    The syllabus's file-structure diagram.
+
+    A STANDALONE FILE, not inline markup, and both reasons were found the hard way.
+    Under `engine: julia` a ```{mermaid} cell is claimed by the engine and echoed as a
+    highlighted code block, so the diagram never renders; rewriting it as a raw
+    <pre class="mermaid"> fixes the markup but stops Quarto bundling mermaid.js, which
+    leaves the source showing as plain text. And inline SVG in a raw HTML block has its
+    `viewBox` LOWERCASED to `viewbox` on the way through, which SVG ignores because the
+    attribute is case-sensitive, so the drawing loses its ability to scale.
+
+    As a file referenced by <img>, the markup is passed through untouched, it scales by
+    viewBox on any screen, and it needs no library on a site built to be self-contained.
+    Styles live inside the file because an <img> is an isolated document that the page's
+    stylesheet cannot reach.
+  -->
+  <style>
+    .cm-band     { fill: #fafafa; stroke: #e5e7eb; stroke-width: 1; }
+    .cm-bandlabel{ font: 700 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   letter-spacing: 0.08em; fill: #9ca3af; }
+    .cm-box      { fill: #ffffff; stroke: #9ca3af; stroke-width: 1; }
+    .cm-name     { font: 700 13.5px "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   fill: #222222; text-anchor: middle; }
+    .cm-sub      { font: 11.5px "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   fill: #9ca3af; text-anchor: middle; }
+    .cm-flow     { stroke: #cc0000; stroke-width: 1.6; fill: none; }
+    .cm-head     { fill: #cc0000; }
+    .cm-op       { font: 700 11.5px "Helvetica Neue", Helvetica, Arial, sans-serif;
+                   fill: #cc0000; }
+    .cm-right    { text-anchor: end; }
+  </style>
+
+  <defs>
+    <marker id="cm-arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="cm-head"/>
+    </marker>
+  </defs>
+
+  <rect class="cm-band" x="6" y="8" width="548" height="126" rx="8"/>
+  <text class="cm-bandlabel" x="20" y="30">PUBLIC — NO ACCOUNT NEEDED</text>
+  <rect class="cm-box" x="20" y="44" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="104" y="70">ise754f26-materials</text>
+  <text class="cm-sub"  x="104" y="90">scripts, data,</text>
+  <text class="cm-sub"  x="104" y="106">environment, skills</text>
+  <rect class="cm-box" x="202" y="44" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="286" y="70">Course website</text>
+  <text class="cm-sub"  x="286" y="90">lectures, schedule,</text>
+  <text class="cm-sub"  x="286" y="106">syllabus, models</text>
+  <rect class="cm-box" x="384" y="44" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="468" y="78">YouTube</text>
+  <text class="cm-sub"  x="468" y="98">overview videos</text>
+
+  <rect class="cm-band" x="6" y="190" width="548" height="126" rx="8"/>
+  <text class="cm-bandlabel" x="20" y="212">THE ISE754 FOLDER ON YOUR COMPUTER</text>
+  <rect class="cm-box" x="20" y="226" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="104" y="258">materials/</text>
+  <text class="cm-sub"  x="104" y="278">received, not edited</text>
+  <rect class="cm-box" x="202" y="226" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="286" y="258">handouts/</text>
+  <text class="cm-sub"  x="286" y="278">received, not edited</text>
+  <rect class="cm-box" x="384" y="226" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="468" y="258">work/</text>
+  <text class="cm-sub"  x="468" y="278">you write in this</text>
+
+  <rect class="cm-band" x="6" y="372" width="548" height="126" rx="8"/>
+  <text class="cm-bandlabel" x="20" y="394">NC STATE — SIGN IN REQUIRED</text>
+  <rect class="cm-box" x="20" y="408" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="104" y="440">Moodle</text>
+  <text class="cm-sub"  x="104" y="460">grades only</text>
+  <rect class="cm-box" x="202" y="408" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="286" y="438">ise754-f26-handouts</text>
+  <text class="cm-sub"  x="286" y="458">homework, projects,</text>
+  <text class="cm-sub"  x="286" y="474">study guides</text>
+  <rect class="cm-box" x="384" y="408" width="168" height="72" rx="5"/>
+  <text class="cm-name" x="468" y="438">your own repository</text>
+  <text class="cm-sub"  x="468" y="458">yours and staff</text>
+  <text class="cm-sub"  x="468" y="474">alone</text>
+
+  <line class="cm-flow" x1="104" y1="120" x2="104" y2="222" marker-end="url(#cm-arrow)"/>
+  <text class="cm-op" x="112" y="176">git pull</text>
+
+  <line class="cm-flow" x1="286" y1="406" x2="286" y2="302" marker-end="url(#cm-arrow)"/>
+  <text class="cm-op" x="294" y="358">git pull</text>
+
+  <line class="cm-flow" x1="444" y1="300" x2="444" y2="404" marker-end="url(#cm-arrow)"/>
+  <text class="cm-op cm-right" x="438" y="344">git push</text>
+
+  <line class="cm-flow" x1="492" y1="406" x2="492" y2="302" marker-end="url(#cm-arrow)"/>
+  <text class="cm-op" x="498" y="340">feedback</text>
+  <text class="cm-op" x="498" y="356">git pull</text>
+</svg>
