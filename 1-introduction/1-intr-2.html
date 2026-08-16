@@ -5228,7 +5228,7 @@ Figure 8: The hidden-layer network of Example 6: two inputs, three sigmoid unit
 <span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="fu">softmax</span>(W2 <span class="op">*</span> <span class="fu">σ</span>.(W1 <span class="op">*</span> X <span class="op">.+</span> b1) <span class="op">.+</span> b2)</span>
 <span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a><span class="pp">@show</span> <span class="fu">round</span>.(P, digits <span class="op">=</span> <span class="fl">2</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>round.(P, digits = 2) = [1.0 1.0 0.0 0.0; 0.0 0.0 1.0 1.0]</code></pre>
+<pre><code>round.(P, digits = 2) = [0.5 1.0 0.5 0.0; 0.5 0.0 0.5 1.0]</code></pre>
 </div>
 </div>
 <p>The new line <code>d1 = ...</code> carries the output error <code>d2</code> back through the hidden layer, scaled by the sigmoid’s own slope <code>a1 .* (1 .- a1)</code>; that is how the hidden cuts learn which way to move.</p>
