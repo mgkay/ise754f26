@@ -5,13 +5,20 @@
 ## Get class-ready — install packages
 # Run this cell once. It installs every package the course uses, at the
 # versions pinned in the shared Manifest.toml, by activating the course
-# project (the nearest folder above with a Project.toml) and instantiating
-# it. Idempotent: packages already present at the right version are skipped.
+# project and instantiating it. The project is the nearest folder above
+# this one holding a Project.toml, or an env/ beside one -- this repo
+# keeps it at the root, the materials repo under env/. Idempotent:
+# packages already present at the right version are skipped.
 import Pkg
 let dir = @__DIR__
-    while !isfile(joinpath(dir, "Project.toml")) && dir != dirname(dir)
+    isproj = d -> isfile(joinpath(d, "Project.toml"))
+    while !isproj(dir) && !isproj(joinpath(dir, "env")) &&
+          dir != dirname(dir)
         dir = dirname(dir)
     end
+    isproj(joinpath(dir, "env")) && (dir = joinpath(dir, "env"))
+    isproj(dir) ||
+        error("no course project above $(@__DIR__)")
     Pkg.activate(dir)
     Pkg.instantiate()
 end
@@ -100,7 +107,6 @@ b = [6, 3, 17]
 x = A \ b          # left division solves A*x = b
 A * x              # verify: should return b
 
-# Sec. Get class-ready — install packages
 ## Example 3: A small shipment table
 # Assemble a three-row table of shipments, each with an origin, a
 # destination, and a weight, then read back the weight column.
@@ -111,7 +117,7 @@ ship = DataFrame(
     ton    = [12, 5, 18])
 ship.ton           # read the weight column
 
-## Sec. Get class-ready — install packages
+## Sec. 1. Julia
 using CairoMakie                     # load the plotting backend
 f(x) = x - x^3                       # the curve to draw
 xrng = -2:0.01:2          # x-values, fine steps

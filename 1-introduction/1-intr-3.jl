@@ -5,13 +5,20 @@
 ## Get class-ready — install packages
 # Run this cell once. It installs every package the course uses, at the
 # versions pinned in the shared Manifest.toml, by activating the course
-# project (the nearest folder above with a Project.toml) and instantiating
-# it. Idempotent: packages already present at the right version are skipped.
+# project and instantiating it. The project is the nearest folder above
+# this one holding a Project.toml, or an env/ beside one -- this repo
+# keeps it at the root, the materials repo under env/. Idempotent:
+# packages already present at the right version are skipped.
 import Pkg
 let dir = @__DIR__
-    while !isfile(joinpath(dir, "Project.toml")) && dir != dirname(dir)
+    isproj = d -> isfile(joinpath(d, "Project.toml"))
+    while !isproj(dir) && !isproj(joinpath(dir, "env")) &&
+          dir != dirname(dir)
         dir = dirname(dir)
     end
+    isproj(joinpath(dir, "env")) && (dir = joinpath(dir, "env"))
+    isproj(dir) ||
+        error("no course project above $(@__DIR__)")
     Pkg.activate(dir)
     Pkg.instantiate()
 end
