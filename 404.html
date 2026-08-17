@@ -644,15 +644,45 @@ if (new URLSearchParams(location.search).has('present')) {
 
     main.insertBefore(sticky, main.firstChild);
 
+    // WHAT THE RIGHT-HAND SIDE NAMES. On most pages it is the current H2, which is what
+    // this bar has always tracked. The SCHEDULE has no H2s at all -- the page is one
+    // table -- so the right-hand side sat empty there. What a reader wants named while
+    // scrolling a calendar is the TOPIC its rows belong to, which build_schedule.py
+    // stamps on the first row of each topic as `data-topic`, taking the label from the
+    // sidebar so the two never disagree.
+    //
+    // It matters most on a phone (instructor, 2026-08-16). At that width each row becomes
+    // a stacked card, the table runs to several screens, and a topic boundary scrolls out
+    // of view long before the topic ends, leaving no way to tell Location from Transport
+    // without scrolling back.
+    //
+    // `.topic-start` is read directly and the row found with closest(), rather than
+    // selecting `tr:has(.topic-start)`. :has() in a querySelectorAll is newer than the
+    // rest of this file needs to be, and the span already knows its own row.
+    var marks = [];
+    var topicMarks = main.querySelectorAll('.schedule .topic-start');
+    if (topicMarks.length) {
+      for (var t = 0; t < topicMarks.length; t++) {
+        marks.push({
+          el: topicMarks[t].closest('tr') || topicMarks[t],
+          label: topicMarks[t].getAttribute('data-topic') || ''
+        });
+      }
+    } else {
+      var hs = main.querySelectorAll('h2');
+      for (var j = 0; j < hs.length; j++) {
+        marks.push({ el: hs[j], label: hs[j].textContent.replace(/¶.*$/, '').trim() });
+      }
+    }
+
     function update() {
-      var hs = document.querySelectorAll('main h2');
       var active = null;
-      for (var i = 0; i < hs.length; i++) {
-        // Pick the topmost h2 whose top has crossed above the sticky header.
-        if (hs[i].getBoundingClientRect().top < 90) active = hs[i];
+      for (var i = 0; i < marks.length; i++) {
+        // Pick the topmost mark whose top has crossed above the sticky header.
+        if (marks[i].el.getBoundingClientRect().top < 90) active = marks[i];
         else break;
       }
-      right.textContent = active ? active.textContent.replace(/¶.*$/, '').trim() : '';
+      right.textContent = active ? active.label : '';
     }
 
     window.addEventListener('scroll', update, { passive: true });
