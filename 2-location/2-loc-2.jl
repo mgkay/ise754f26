@@ -1,6 +1,7 @@
 # 2-loc-2 — generated from 2-loc-2.qmd by tools/qmd_to_jl.py
 # (do not edit by hand; rerun the generator after editing the .qmd)
 # Cells (## title) follow the Julia VS Code extension convention.
+# Run a cell: click inside it, then press Alt+Enter.
 
 ## Get class-ready — install packages
 # Run this cell once. It installs every package the course uses, at the
