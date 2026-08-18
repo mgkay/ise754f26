@@ -6,17 +6,20 @@
 # Run this cell once. It installs every package the course uses, at the
 # versions pinned in the shared Manifest.toml, by activating the course
 # project and instantiating it. The project is the nearest folder above
-# this one holding a Project.toml, or an env/ beside one -- this repo
-# keeps it at the root, the materials repo under env/. Idempotent:
+# this one holding a Project.toml, or an env/ or materials/env/ beside
+# one -- this repo keeps it at the root, the materials repo under env/,
+# so a copy under work/ finds it as ISE754/materials/env. Idempotent:
 # packages already present at the right version are skipped.
 import Pkg
 let dir = @__DIR__
     isproj = d -> isfile(joinpath(d, "Project.toml"))
-    while !isproj(dir) && !isproj(joinpath(dir, "env")) &&
+    env = d -> isproj(joinpath(d, "env")) ? joinpath(d, "env") :
+               joinpath(d, "materials", "env")
+    while !isproj(dir) && !isproj(env(dir)) &&
           dir != dirname(dir)
         dir = dirname(dir)
     end
-    isproj(joinpath(dir, "env")) && (dir = joinpath(dir, "env"))
+    isproj(env(dir)) && (dir = env(dir))
     isproj(dir) ||
         error("no course project above $(@__DIR__)")
     Pkg.activate(dir)

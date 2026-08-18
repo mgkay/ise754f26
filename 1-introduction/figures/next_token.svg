@@ -10,6 +10,7 @@
       .ink{fill:#1f2937;} .muted{fill:#64748b;} .title{font-weight:700;}
       .cap{font-size:13.5px;} .sm{font-size:12px;}
       .tok{fill:#f8fafc;stroke:#1f2937;stroke-width:2;}
+      .slot{fill:#ffffff;stroke:#0d9488;stroke-width:2;stroke-dasharray:5 4;}
       .flow{stroke:#1f2937;stroke-width:2.2;fill:none;}
       .model{fill:#1f2937;}
       .cand{fill:#ffffff;stroke:#0d9488;stroke-width:2;}
@@ -26,12 +27,15 @@
     <rect class="tok" x="210" y="58" width="56" height="32" rx="8"/><text x="238" y="78">to</text>
     <rect class="tok" x="272" y="58" width="56" height="32" rx="8"/><text x="300" y="78">learn</text>
     <rect class="tok" x="334" y="58" width="56" height="32" rx="8"/><text x="362" y="78">is</text>
-    <rect class="tok" x="396" y="58" width="56" height="32" rx="8"/><text x="424" y="78">by</text>
   </g>
+
+  <!-- the empty slot the guess will fill -->
+  <rect class="slot" x="396" y="58" width="56" height="32" rx="8"/>
+  <text class="sm" fill="#0d9488" x="424" y="78" text-anchor="middle">?</text>
 
   <!-- arrow to model (label raised clear of the boxes) -->
   <text class="muted sm" x="486" y="40" text-anchor="middle">guess the next</text>
-  <path class="flow" d="M456,74 L518,74" marker-end="url(#nt)"/>
+  <path class="flow" d="M458,74 L518,74" marker-end="url(#nt)"/>
 
   <!-- model -->
   <rect class="model" x="520" y="56" width="150" height="36" rx="10"/>
@@ -42,14 +46,14 @@
   <path class="flow" d="M672,81 L736,103" marker-end="url(#nt)"/>
 
   <rect class="cand" x="740" y="30" width="96" height="30" rx="8"/>
-  <text class="sm title" fill="#0d9488" x="788" y="50" text-anchor="middle">doing</text>
+  <text class="sm title" fill="#0d9488" x="788" y="50" text-anchor="middle">by</text>
   <text class="muted sm" x="844" y="50">run 1</text>
 
   <rect class="cand" x="740" y="92" width="96" height="30" rx="8"/>
   <text class="sm title" fill="#0d9488" x="788" y="112" text-anchor="middle">through</text>
   <text class="muted sm" x="844" y="112">run 2</text>
 
-  <!-- loop: append the guess and repeat -->
-  <path class="loop" d="M788,124 C788,190 470,206 250,176 L250,96" marker-end="url(#ntt)"/>
-  <text class="sm title" fill="#0d9488" x="470" y="222" text-anchor="middle">append the guess, then read again</text>
+  <!-- loop: the guess fills the empty slot, then the model reads again -->
+  <path class="loop" d="M788,124 C788,192 620,212 424,186 L424,94" marker-end="url(#ntt)"/>
+  <text class="sm title" fill="#0d9488" x="620" y="226" text-anchor="middle">append the guess, then read again</text>
 </svg>
