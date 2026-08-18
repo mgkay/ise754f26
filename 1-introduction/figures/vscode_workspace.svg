@@ -29,7 +29,6 @@
   <!-- editor pane -->
   <rect class="editor" x="38" y="84" width="346" height="196"/>
   <g class="mono" font-size="11">
-    <text class="lens" x="72" y="96">&#9655; Run | Above | Below | Debug</text>
     <text class="ln" x="62" y="109" text-anchor="end">7</text>
     <text class="cmt" x="72" y="109">## A first DataFrame</text>
     <text class="ln" x="62" y="122" text-anchor="end">8</text>
@@ -43,7 +42,6 @@
     <text class="ln" x="62" y="174" text-anchor="end">12</text>
     <text class="ink" x="72" y="174">ship.ton</text>
     <text class="ln" x="62" y="187" text-anchor="end">13</text>
-    <text class="lens" x="72" y="200">&#9655; Run | Above | Below | Debug</text>
     <text class="ln" x="62" y="213" text-anchor="end">14</text>
     <text class="cmt" x="72" y="213">## A first plot</text>
     <text class="ln" x="62" y="226" text-anchor="end">15</text>
@@ -72,9 +70,9 @@
   </g>
 
   <!-- callout labels (right) -->
-  <text class="lbl" x="690" y="101">each cell has its own &#9655; Run</text>
+  <text class="lbl" x="690" y="101">click in a cell, Alt+Enter</text>
   <text class="muted sm" x="690" y="117">run the table cell, then the plot</text>
-  <path class="lead" d="M684,105 L232,92" marker-end="url(#wsa)"/>
+  <path class="lead" d="M684,105 L232,112" marker-end="url(#wsa)"/>
 
   <text class="lbl" x="690" y="168">your script, in ## cells</text>
   <text class="muted sm" x="690" y="184">a full editor</text>
