@@ -4522,8 +4522,10 @@ TH = \frac{WIP}{CT} = \frac{360}{9} = 40 \text{ graduates per semester}.
      CARRYOVER: Model 1 Poisson simulation, MOVED to Sec. 7 (2026-07-02). -->
 <p>The <strong>squared coefficient of variation</strong> (SCV) provides a normalized measure used to estimate the variance of a process (demand, production, etc.):</p>
 <p><span id="eq-scv"><span class="math display">
-c = \frac{\sigma}{t} = \text{coefficient of variation (CV)}, \qquad
-c^2 = \frac{\sigma^2}{t^2} = \text{squared coefficient of variation (SCV)},
+\begin{aligned}
+c   &amp;= \frac{\sigma}{t} = \text{coefficient of variation (CV)}, \\
+c^2 &amp;= \frac{\sigma^2}{t^2} = \text{squared coefficient of variation (SCV)},
+\end{aligned}
 \tag{2}</span></span></p>
 <p>where <span class="math inline">\sigma</span> is the standard deviation of the process, <span class="math inline">t</span> its mean, and <span class="math inline">\sigma^2</span> its variance. The SCV places a process on a scale of variability:</p>
 <ul>
@@ -4592,7 +4594,12 @@ Np = r_a \Delta t = 5 \cdot \tfrac{1}{60} = \tfrac{1}{12} \;\Rightarrow\; p = \t
 <p>Increasing the departure rate to account for yield loss results in the required arrival rate to the station, <span class="math inline">r_a = r_d / y</span> (with <span class="math inline">y</span> the yield, the fraction of nondefective units produced).</p>
 <p>The <strong>throughput-feasible minimum</strong> number of identical machines at the workstation is the fewest whose combined effective capacity (service rate) <em>strictly exceeds</em> that arrival rate. It is found by a <strong>machine-hours</strong> accounting, a general method of determining resource requirements (the resources can be machines, people, etc.) that can also be used to determine operating costs for economic justification. Over <span class="math inline">H</span> hours of operation, the available machine hours <span class="math inline">mH</span> split into processing, repair, and idle hours, and the minimum number of machines is the machine hours needed to meet demand divided by the productive hours per machine:</p>
 <p><span id="eq-mmin"><span class="math display">
-m_{\min} = \left\lfloor \frac{\text{machine hours needed to meet demand}}{\text{productive hours per machine}} + 1 \right\rfloor = \left\lfloor \frac{r_a t_0 H}{AH} + 1 \right\rfloor = \left\lfloor r_a \frac{t_0}{A} + 1 \right\rfloor = \lfloor r_a t_e + 1 \rfloor ,
+\begin{aligned}
+m_{\min} &amp;= \left\lfloor \frac{\text{machine hours needed to meet demand}}{\text{productive hours per machine}} + 1 \right\rfloor \\
+         &amp;= \left\lfloor \frac{r_a t_0 H}{AH} + 1 \right\rfloor
+          = \left\lfloor r_a \frac{t_0}{A} + 1 \right\rfloor
+          = \lfloor r_a t_e + 1 \rfloor ,
+\end{aligned}
 \tag{4}</span></span></p>
 <p>where</p>
 <div class="deflist">
