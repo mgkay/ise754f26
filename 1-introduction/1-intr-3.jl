@@ -139,7 +139,7 @@ function queue(rₐ, tₑ, n)
         a = -log(rand()) / rₐ      # gap to the next arrival
         wq = max(0.0, wq + s - a)  # Lindley recursion
     end
-    ct
+    return ct
 end
 
 ## Sec. 7. Level 3: Simulation
@@ -178,7 +178,7 @@ function queue_spt(rₐ, tₑ, n)
         t += st[j]                 # serve job j to completion
         ct[j] = t - at[j]          # cycle time = finish - arrival
     end
-    ct
+    return ct
 end
 
 ## Sec. 7. Level 3: Simulation
@@ -200,7 +200,7 @@ function barberq(rₐ, tₑ, hrs)
         wsum += wq; n += 1
         dep   = t + wq + tₑ  # deterministic service
     end
-    n == 0 ? 0.0 : wsum / n
+    return n == 0 ? 0.0 : wsum / n
 end
 simq(rₐ, tₑ, hrs, m) = sum(barberq(rₐ, tₑ, hrs) for _ in 1:m) / m
 nothing
