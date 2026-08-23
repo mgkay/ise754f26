@@ -5228,7 +5228,7 @@ Model 3: Single-server SPT queue simulation
 <h2 class="anchored" data-anchor-id="stationarity">8. Stationarity</h2>
 <!-- SOURCE: Capacity Planning ch.4 Sec. 4.7 + stationarity figure (1-intr-1 / 453 s23);
      ISE 453 F25 slide 211 (limited hours, nonhomogeneous Poisson). -->
-<p>The cycle-time estimate also assumes the demand process is <strong>stationary</strong>: its statistics do not drift over the horizon, so the estimate is a long-run average. Trend, seasonality, or a one-time structural change all break this, the same conditions under which the mean stops being scalable (mean-value analysis, Lecture 1.1). A non-stationary series must first be made stationary. <a href="#fig-stationary" class="quarto-xref">Fig. 7</a> shows the order that takes: trim the one-time structural shift first, then remove trend and seasonality from what is left.</p>
+<p>The cycle-time estimate also assumes the demand process is <strong>stationary</strong>: its statistics do not drift over the horizon, so the estimate is a long-run average. Trend, seasonality, or a one-time structural change all break this, the same conditions under which the mean stops being scalable (mean-value analysis, Lecture 1.1). A non-stationary series must first be made stationary. <a href="#fig-stationary" class="quarto-xref">Fig. 7</a> takes each of those violations out in turn, and the series to carry forward is the one left at the end: the estimate is entitled to that series, not to the one first observed.</p>
 <div id="fig-stationary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-stationary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
