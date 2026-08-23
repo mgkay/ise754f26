@@ -3950,6 +3950,22 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   .tc-verbatim::before { content: "verbatim \2014 delete after confirming";
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
     font-weight: 700; color: #777; letter-spacing: .02em; }
+  /* .gap-draft: a passage the INSTRUCTOR has not written yet. Deliberately
+     not a .tc-region: tc-prov is a closed whitelist and an unknown value
+     falls back silently to "authored", which would render a hole as
+     ordinary yellow AI prose and let /tc accept bake it in as body text.
+     So this is its own namespace, its own numbering (G1, G2, ...), and it
+     is resolved only by replacement with the dictated draft. Red, heavy,
+     dashed, and unlike every other state in the palette, because the one
+     thing it must never be mistaken for is the instructor's own material.
+     tools/check_gaps.py refuses to publish while one is open. */
+  .gap-draft { position: relative; border: 3px dashed #c0392b;
+    background: #fdf0ee; color: #6b1f16; padding: 1.5rem .85rem .5rem;
+    margin: .9rem 0; border-radius: 3px; font-size: .94em; }
+  .gap-draft::before { content: "¸E  instructor draft needed";
+    position: absolute; top: .25rem; right: .6rem; font-size: .7rem;
+    font-weight: 700; color: #c0392b; letter-spacing: .04em;
+    text-transform: uppercase; }
   /* Aligned equation groups (::: {.eq-align} + the eq-align.lua
      filter). The filter equalizes the label/symbol column widths
      inside each equation; these rules left-anchor the group so the

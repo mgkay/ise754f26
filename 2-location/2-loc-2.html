@@ -3950,6 +3950,22 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   .tc-verbatim::before { content: "verbatim \2014 delete after confirming";
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
     font-weight: 700; color: #777; letter-spacing: .02em; }
+  /* .gap-draft: a passage the INSTRUCTOR has not written yet. Deliberately
+     not a .tc-region: tc-prov is a closed whitelist and an unknown value
+     falls back silently to "authored", which would render a hole as
+     ordinary yellow AI prose and let /tc accept bake it in as body text.
+     So this is its own namespace, its own numbering (G1, G2, ...), and it
+     is resolved only by replacement with the dictated draft. Red, heavy,
+     dashed, and unlike every other state in the palette, because the one
+     thing it must never be mistaken for is the instructor's own material.
+     tools/check_gaps.py refuses to publish while one is open. */
+  .gap-draft { position: relative; border: 3px dashed #c0392b;
+    background: #fdf0ee; color: #6b1f16; padding: 1.5rem .85rem .5rem;
+    margin: .9rem 0; border-radius: 3px; font-size: .94em; }
+  .gap-draft::before { content: "¸E  instructor draft needed";
+    position: absolute; top: .25rem; right: .6rem; font-size: .7rem;
+    font-weight: 700; color: #c0392b; letter-spacing: .04em;
+    text-transform: uppercase; }
   /* Aligned equation groups (::: {.eq-align} + the eq-align.lua
      filter). The filter equalizes the label/symbol column widths
      inside each equation; these rules left-anchor the group so the
@@ -4315,7 +4331,7 @@ window.Quarto = {
 
 
 <div class="epigraph">
-<p>TK: epigraph to be supplied.</p>
+<p>You can know where before you know what it costs.</p>
 </div>
 <!-- Epigraph form (pick one, then delete this comment):
      (a) quoted, with a byline footnote: "…quoted line…" — Author[^epi], plus a
@@ -4766,7 +4782,7 @@ Figure 11: Nelder-Mead in action from <span style="white-space: nowrap"><span c
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Each iteration orders the simplex’s corners from best to worst and tries to replace the worst. It first <strong>reflects</strong> that corner through the opposite edge: the reflected point is accepted if it is merely middling, stretched further by an <strong>expansion</strong> if it is the new best, and, if it is worse than the second-worst corner, pulled back by a <strong>contraction</strong>, taken <em>outside</em> the edge when the reflection still beats the current worst corner and <em>inside</em> when it does not. When even the contraction fails to improve, the whole simplex <strong>shrinks</strong> toward the best corner and the iteration restarts. The search reads only values of the objective, never its derivatives, which is what lets it handle kinked or discontinuous objectives a gradient method cannot.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Each iteration orders the simplex’s corners from best to worst and tries to replace the worst. It first <strong>reflects</strong> that corner through the opposite edge: the reflected point is accepted if it is merely middling, stretched further by an <strong>expansion</strong> if it is the new best, and, if it is worse than the second-worst corner, pulled back by a <strong>contraction</strong>, taken <em>outside</em> the edge when the reflection still beats the current worst corner and <em>inside</em> when it does not. When even the contraction fails to improve, the whole simplex <strong>shrinks</strong> toward the best corner and the iteration restarts. The search reads only values of the objective, never its derivatives, and <a href="#fig-neldermead-ops" class="quarto-xref">Fig. 12</a> draws all four moves on a two-dimensional simplex, which is what lets it handle kinked or discontinuous objectives a gradient method cannot.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div id="fig-neldermead-ops" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-neldermead-ops-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -4963,7 +4979,7 @@ d_{rad} = c = \cos^{-1}\!\left[\sin(y_2)\sin(y_1)
 </div>
 </div>
 </div>
-<p>The formula applied to a few points shows how far apart the distances can be. The chapter’s worked example measures three cities from Raleigh, each given as a <code>(longitude, latitude)</code> pair in decimal degrees; <code>dists</code> with the <code>:mi</code> unit (or <code>:rad</code>) returns the great-circle distance to each.</p>
+<p>The formula applied to a few points shows how far apart the distances can be. The chapter’s worked example measures three cities from Raleigh, each given as a <code>(longitude, latitude)</code> pair in decimal degrees; <code>dists</code> with the <code>:mi</code> unit (or <code>:rad</code>) returns the great-circle distance to each. <a href="#fig-greatcircle" class="quarto-xref">Fig. 16</a> draws those three arcs on the globe, which is where the shortest path between two points on a sphere actually lies.</p>
 <div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Raleigh <span class="op">=</span> [<span class="op">-</span><span class="fl">78.659</span> <span class="fl">35.8219</span>]        <span class="co"># one point, as a row</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>XY <span class="op">=</span> [<span class="op">-</span><span class="fl">82.336</span>  <span class="fl">29.6742</span>             <span class="co"># Gainesville, FL</span></span>
@@ -5075,7 +5091,7 @@ Figure 17: The same world coastline drawn with latitude plotted directly (left)
   35.64959801955728</code></pre>
 </div>
 </div>
-<p>The nearest place names the answer.</p>
+<p>The nearest place names the answer. <a href="#fig-nc-minisum" class="quarto-xref">Fig. 18</a> puts that optimum on the map against every place in the state.</p>
 <div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="fu">dgc</span>.([xyᵒ], pt)                      <span class="co"># optimum to each place</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">argmin</span>(d), <span class="op">:</span>NAME], <span class="fu">round</span>(<span class="fu">minimum</span>(d))  <span class="co"># nearest place, miles</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

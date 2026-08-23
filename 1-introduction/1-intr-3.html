@@ -3950,6 +3950,22 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   .tc-verbatim::before { content: "verbatim \2014 delete after confirming";
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
     font-weight: 700; color: #777; letter-spacing: .02em; }
+  /* .gap-draft: a passage the INSTRUCTOR has not written yet. Deliberately
+     not a .tc-region: tc-prov is a closed whitelist and an unknown value
+     falls back silently to "authored", which would render a hole as
+     ordinary yellow AI prose and let /tc accept bake it in as body text.
+     So this is its own namespace, its own numbering (G1, G2, ...), and it
+     is resolved only by replacement with the dictated draft. Red, heavy,
+     dashed, and unlike every other state in the palette, because the one
+     thing it must never be mistaken for is the instructor's own material.
+     tools/check_gaps.py refuses to publish while one is open. */
+  .gap-draft { position: relative; border: 3px dashed #c0392b;
+    background: #fdf0ee; color: #6b1f16; padding: 1.5rem .85rem .5rem;
+    margin: .9rem 0; border-radius: 3px; font-size: .94em; }
+  .gap-draft::before { content: "¸E  instructor draft needed";
+    position: absolute; top: .25rem; right: .6rem; font-size: .7rem;
+    font-weight: 700; color: #c0392b; letter-spacing: .04em;
+    text-transform: uppercase; }
   /* Aligned equation groups (::: {.eq-align} + the eq-align.lua
      filter). The filter equalizes the label/symbol column widths
      inside each equation; these rules left-anchor the group so the
@@ -5212,7 +5228,7 @@ Model 3: Single-server SPT queue simulation
 <h2 class="anchored" data-anchor-id="stationarity">8. Stationarity</h2>
 <!-- SOURCE: Capacity Planning ch.4 Sec. 4.7 + stationarity figure (1-intr-1 / 453 s23);
      ISE 453 F25 slide 211 (limited hours, nonhomogeneous Poisson). -->
-<p>The cycle-time estimate also assumes the demand process is <strong>stationary</strong>: its statistics do not drift over the horizon, so the estimate is a long-run average. Trend, seasonality, or a one-time structural change all break this, the same conditions under which the mean stops being scalable (mean-value analysis, Lecture 1.1). A non-stationary series must first be made stationary.</p>
+<p>The cycle-time estimate also assumes the demand process is <strong>stationary</strong>: its statistics do not drift over the horizon, so the estimate is a long-run average. Trend, seasonality, or a one-time structural change all break this, the same conditions under which the mean stops being scalable (mean-value analysis, Lecture 1.1). A non-stationary series must first be made stationary. <a href="#fig-stationary" class="quarto-xref">Fig. 7</a> shows the order that takes: trim the one-time structural shift first, then remove trend and seasonality from what is left.</p>
 <div id="fig-stationary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-stationary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
