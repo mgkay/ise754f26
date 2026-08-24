@@ -126,9 +126,9 @@ using CairoMakie                     # load the plotting backend
 f(x) = x - x^3                       # the curve to draw
 xrng = -2:0.01:2          # x-values, fine steps
 lines(xrng, f;
-# lines draws f over the range xrng; the axis = (...) keyword sets
-# the title and axis labels inside the same call, so the separate
-# Figure and Axis objects that fuller plots use are not needed yet.
+# lines draws f over the range xrng; the axis = (...) keyword sets the title
+# and axis labels inside the same call, so the separate Figure and Axis objects
+# that fuller plots use are not needed yet.
     axis = (title  = "f(x) = x - x³",
             xlabel = "x",
             ylabel = "f(x)"))
@@ -151,7 +151,7 @@ cosine(a, b) = (a'b) / (sqrt(a'a) * sqrt(b'b))
 
 ## Sec. 2. Large Language Models
 softmax(Z) = exp.(Z) ./ sum(exp.(Z), dims = 1)
-@show softmax([2.0, 1.0, 0.0]);   # ~ [0.66, 0.24, 0.09]
+@show round.(softmax([2.0, 1.0, 0.0]); digits = 3);
 
 ## Example 5: Predicting the next token by gradient descent
 # Place a few tokens as points in a two-dimensional space, give a tiny

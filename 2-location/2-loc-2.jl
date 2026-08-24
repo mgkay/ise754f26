@@ -101,11 +101,68 @@ scatter!([Xᵒ2[1]], [Xᵒ2[2]]; color = :red, marker = :star5,
          markersize = 14)
 current_figure()
 
-## Sec. 4. Logjam: the course's logistics toolkit
+## Sec. 4. Other types of location objectives
+using Statistics
+x0 = mean.(eachcol(P))              # centroid start
+d2.([x0], eachrow(P))
+maximum(d2.([x0], eachrow(P)))
+TC(x) = maximum(d2.([x], eachrow(P)))
+res = optimize(TC, x0)
+@show TCᵒ = res.minimum
+xᵒ = res.minimizer
+d2.([xᵒ], eachrow(P))
+TC(x) = -minimum(d2.([x], eachrow(P)))  # minus converts min to max
+res = optimize(TC, x0)
+@show TCᵒ = res.minimum
+xᵒ = res.minimizer
+r = [(0, 0), (7, 6)]   # SW and NE corners of feasible region
+isinrect(x, r) = r[1][1] <= x[1] <= r[2][1] &&
+                 r[1][2] <= x[2] <= r[2][2]
+TC(x) = isinrect(x, r) ? -minimum(d2.([x], eachrow(P))) : Inf
+TC([4, 4]), TC([8, 8])
+res = optimize(TC, x0)
+@show TCᵒ = res.minimum
+xᵒ = res.minimizer
+TC(x) = sum(d2.([x], eachrow(P)) .^ 2)
+res = optimize(TC, x0)
+@show TCᵒ = res.minimum
+xᵒ = res.minimizer
+optimize(TC, [0.0, 0.0]).minimizer
+sols = ["minisum" => Xᵒ,
+        "center of gravity" =>
+            optimize(x -> sum(d2.([x], eachrow(P)) .^ 2),
+                     x0).minimizer,
+        "minimax" => optimize(x -> maximum(d2.([x], eachrow(P))),
+                              x0).minimizer,
+        "maximin, bounded" =>
+            optimize(x -> isinrect(x, r) ?
+                     -minimum(d2.([x], eachrow(P))) : Inf,
+                     x0).minimizer]
+fig = Figure(size = (760, 430))
+ax = Axis(fig[1, 1]; xlabel = "x", ylabel = "y",
+          aspect = DataAspect())
+lines!(ax, [0, 7, 7, 0, 0], [0, 0, 6, 6, 0]; color = (:gray, 0.7),
+       linestyle = :dash, label = "feasible region")
+scatter!(ax, P[:, 1], P[:, 2]; color = :firebrick, markersize = 13,
+         label = "existing facilities")
+for ((nm, X), col, mk) in zip(sols,
+        [:dodgerblue, :seagreen, :darkorange, :purple],
+        [:circle, :rect, :utriangle, :diamond])
+    scatter!(ax, [X[1]], [X[2]]; color = col, marker = mk,
+             markersize = 14, label = nm)
+end
+arrows2d!(ax, [3.2], [4.1], [-1.6], [0.8]; color = :purple)
+text!(ax, 3.35, 4.05; color = :purple, fontsize = 11,
+      align = (:left, :top),
+      text = "maximin, unbounded:\nruns off to infinity")
+Legend(fig[1, 2], ax; framevisible = false, labelsize = 11)
+fig
+
+## Sec. 5. Logjam: the course's logistics toolkit
 using Pkg
 Pkg.add(url="https://github.com/mgkay/Logjam")
 
-## Sec. 5. Computing distances with Logjam
+## Sec. 6. Computing distances with Logjam
 P1 = [0, 0]                 # two points in the plane
 P2 = [4, 3]
 d1(P1, P2), d2(P1, P2)      # rectilinear, Euclidean
@@ -134,7 +191,7 @@ d  = dgc.([xyR], pt)                 # Raleigh to each city
 df[argmax(d), :NAME]                 # farthest city
 df[sortperm(d)[2:4], :NAME]          # three nearest (skip Raleigh)
 
-# Sec. 5. Computing distances with Logjam
+# Sec. 6. Computing distances with Logjam
 ## Example 3
 # Locate a single facility to minimize the total population-weighted
 # great-circle distance to every place in North Carolina.
@@ -147,3 +204,50 @@ w = wcentroid(df.LON, df.LAT, df.POP)    # weighted-centroid start
 xyᵒ = optimize(TC, [w.LON, w.LAT]).minimizer
 d = dgc.([xyᵒ], pt)                      # optimum to each place
 df[argmin(d), :NAME], round(minimum(d))  # nearest place, miles
+
+## Sec. 7. Circuity factors
+Detroit     = [-83.1022, 42.3830]   # (lon, lat), degrees
+Gainesville = [-82.3492, 29.6807]
+Memphis     = [-89.9666, 35.1090]
+
+gc = [dgc(Detroit, Gainesville),    # great circle, mi
+      dgc(Detroit, Memphis),
+      dgc(Gainesville, Memphis)]
+
+road = [1024.2, 710.8, 632.8]       # road network, mi
+
+g = road ./ gc
+
+ḡ = sum(g) / length(g)              # the region's factor
+prt(DataFrame(
+    Pair = ["Detroit-Gainesville", "Detroit-Memphis",
+            "Gainesville-Memphis"],
+    GreatCircle = round.(gc, digits = 1),
+    Road = road,
+    g = round.(g, digits = 3)))
+gGH = 137.7 / 121.0                 # @fig-circuity-road, held out
+(held_out = round(gGH, digits = 3),
+ estimate = round(ḡ, digits = 3),
+ error_pct = round(100 * (gGH - ḡ) / gGH, digits = 1))
+
+# Sec. 7. Circuity factors
+## Example 4. Pricing an alternative location
+# Determine the new-facility location serving existing facilities at
+# Detroit, Gainesville and Memphis, receiving 40, 25 and 35 truckloads
+# per year, and determine the increase in annual transport cost at
+# \$2.00 per loaded mile if the facility is instead placed at Cary,
+# North Carolina.
+P = permutedims(hcat(Detroit, Gainesville, Memphis))
+wTL = [40.0, 25.0, 35.0]           # truckloads per year
+rate = 2.00                        # $ per loaded mile
+
+TCyr(xy) = rate * ḡ *
+    sum(wTL[i] * dgc(xy, P[i, :]) for i in 1:3)
+c0 = wcentroid(P[:, 1], P[:, 2], wTL)
+xᵒ = Optim.minimizer(optimize(TCyr, [c0.LON, c0.LAT]))
+lonlat2loc(xᵒ, usplace()).desc
+Cary = [-78.8190, 35.7814]
+Δ = TCyr(Cary) - TCyr(xᵒ)
+prt(DataFrame(
+    Site = ["optimum", "Cary, NC", "increase"],
+    Cost = round.([TCyr(xᵒ), TCyr(Cary), Δ], digits = 0)))

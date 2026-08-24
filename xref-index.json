@@ -476,6 +476,10 @@
    "label": "Eq. 7",
    "word": "Eq."
   },
+  "eq-circuity": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
   "fig-network": {
    "label": "Fig. 1",
    "word": "Fig."
@@ -524,32 +528,44 @@
    "label": "Fig. 12",
    "word": "Fig."
   },
-  "fig-metric-lp": {
+  "fig-objectives": {
    "label": "Fig. 13",
    "word": "Fig."
   },
-  "fig-chebychev": {
+  "fig-metric-lp": {
    "label": "Fig. 14",
    "word": "Fig."
   },
-  "fig-gc-derivation": {
+  "fig-chebychev": {
    "label": "Fig. 15",
    "word": "Fig."
   },
-  "fig-greatcircle": {
+  "fig-gc-derivation": {
    "label": "Fig. 16",
    "word": "Fig."
   },
-  "fig-mercator": {
+  "fig-greatcircle": {
    "label": "Fig. 17",
    "word": "Fig."
   },
-  "fig-nc-minisum": {
+  "fig-mercator": {
    "label": "Fig. 18",
    "word": "Fig."
   },
-  "fig-fedex": {
+  "fig-nc-minisum": {
    "label": "Fig. 19",
+   "word": "Fig."
+  },
+  "fig-circuity-road": {
+   "label": "Fig. 20",
+   "word": "Fig."
+  },
+  "fig-circuity-triangle": {
+   "label": "Fig. 21",
+   "word": "Fig."
+  },
+  "fig-fedex": {
+   "label": "Fig. 22",
    "word": "Fig."
   },
   "mdl-minisum": {
@@ -578,6 +594,10 @@
   },
   "example-3": {
    "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
    "word": "Ex."
   }
  }
