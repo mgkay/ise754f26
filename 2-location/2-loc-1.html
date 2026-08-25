@@ -4521,7 +4521,7 @@ Model 4: Fair (equitable) apartment location
 </figcaption>
 </figure>
 </div>
-<p>The objective slot reads <em>find</em> rather than <em>minimize</em> because nothing has been optimized: the model states a fairness condition the location must satisfy, not a quantity to make small. Turning that condition into an optimization answers a question typically unasked: why is squared distance the quantity so many methods minimize? Written out, equalizing the burdens is the balance condition <span id="eq-balance"><span class="math display">
+<p>The callout has no objective slot at all, which is what makes it a feasibility model: it states a fairness condition the location must satisfy, not a quantity to make small. Turning that condition into an optimization answers a question typically unasked: why is squared distance the quantity so many methods minimize? Written out, equalizing the burdens is the balance condition <span id="eq-balance"><span class="math display">
 \sum_i w_i(x - a_i) = 0,
 \tag{1}</span></span></p>
 <p>the weighted pull to the left set equal to the weighted pull to the right. Nothing has been optimized here either; this is just the fairness requirement stated directly, which is the natural way to write it down.</p>
