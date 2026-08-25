@@ -600,5 +600,131 @@
    "label": "Ex. 4",
    "word": "Ex."
   }
+ },
+ "2.3": {
+  "eq-multifacility": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-separable": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-majority": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-majority-multi": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-alloc-vector": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-stirling": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "fig-allocate": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-net-multifacility": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-net-multiple-single": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-production-chain": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-la": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-corridor-contour": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-ncsc": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-retail": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "tbl-ala-west": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-ala-east": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-retail": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "mdl-alloc": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "mdl-majority": {
+   "label": "Model 2",
+   "word": "Model"
+  },
+  "mdl-la": {
+   "label": "Model 3",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-6-a": {
+   "label": "Ex. 6(a)",
+   "word": "Ex."
+  },
+  "example-6-b": {
+   "label": "Ex. 6(b)",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  },
+  "example-8": {
+   "label": "Ex. 8",
+   "word": "Ex."
+  }
  }
 }
