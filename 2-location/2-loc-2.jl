@@ -35,6 +35,7 @@ using Logjam, Optim, DataFrames
 ## Example 1(a): From the bill of material to the monetary weights
 # Determine each existing facility's monetary weight, outbound from the
 # demands and inbound through the bill of material.
+# Code block 1: monetary weights from flows and rates
 fout = [10, 20, 30]      # ton/yr to the three customers
 rout = 1.00              # $/ton-mi outbound
 wout = fout .* rout      # customer monetary weights
@@ -46,6 +47,7 @@ win  = fin ./ 3          # supplier wts; r_in = $1/3 ($0.33)
 ## Example 1(b): Locating the plant
 # Order the facilities along I-40 and apply the median procedure of {{<
 # xref 2.1 mdl-minisum1d >}}.
+# Code block 2: west-to-east order and the weighted median
 city = ["Asheville", "Statesville", "Winston-Salem",
         "Durham", "Wilmington"]          # west-to-east order
 w = [win[1], wout[1], wout[2], win[2], wout[3]]  # $/mi, W to E
@@ -56,7 +58,7 @@ city[findfirst(>=(W / 2), cumsum(w))]
 ## Example 1(c): Weight-gaining or weight-losing
 # Classify the plant by comparing its inbound and outbound weights,
 # physical and monetary.
-@show sum(fin) sum(fout) sum(win) sum(wout);
+@show sum(fin) sum(fout) sum(win) sum(wout);  # Code block 3: totals agree
 
 # Sec. 3. The single-facility minisum
 ## Model: Single-facility minisum
@@ -70,7 +72,7 @@ end
 ## Example 2
 # Determine the minisum location for three facilities of equal weight at
 # $(1, 1)$, $(6, 1)$, and $(6, 5)$, under straight-line distance.
-# d2 from 2-Loc-2.ipynb cell 3 (straight-line = Logjam.d2)
+# Code block 4: straight-line distance, the same as Logjam.d2
 d2(x1, x2) = length(x1) == length(x2) ?
     sqrt(sum((x1 .- x2).^2)) :
     error("Inputs not same length.")
@@ -79,7 +81,7 @@ w = [1.0, 1.0, 1.0]                 # equal weights
 Xᵒ = minisum(w, P, d2)              # the minisum location
 
 ## Sec. 3. The single-facility minisum
-# From 2-Loc-2.ipynb cells 20–26 (tuples → matrix P)
+# Code block 5: the total-cost surface over the plane
 using CairoMakie
 xrng = 0:0.1:7
 yrng = 0:0.1:6
@@ -91,7 +93,7 @@ scatter!(a1, P[:, 1], P[:, 2]; color = :firebrick)
 surface(fig[1, 2], xrng, yrng, Z;
         axis = (type = Axis3, azimuth = pi / 4))
 fig
-# From 2-Loc-2.ipynb cell 12 (fargplot NM path; tuples → matrix P)
+# Code block 6: the path Nelder-Mead takes
 TC(X) = sum(d2(X, P[i, :]) for i in axes(P, 1))
 fargplot(f, x, kw) = (scatter!(x...; kw...); f(x))
 scatter(P[:, 1], P[:, 2]; color = :firebrick, markersize = 11)
@@ -102,32 +104,39 @@ scatter!([Xᵒ2[1]], [Xᵒ2[2]]; color = :red, marker = :star5,
 current_figure()
 
 ## Sec. 4. Other types of location objectives
+# Code block 7: the centroid as a starting point
 using Statistics
 x0 = mean.(eachcol(P))              # centroid start
 d2.([x0], eachrow(P))
-maximum(d2.([x0], eachrow(P)))
+maximum(d2.([x0], eachrow(P)))  # Code block 8: farthest from centroid
+# Code block 9: minimax, the smallest largest distance
 TC(x) = maximum(d2.([x], eachrow(P)))
 res = optimize(TC, x0)
 @show TCᵒ = res.minimum
 xᵒ = res.minimizer
-d2.([xᵒ], eachrow(P))
+d2.([xᵒ], eachrow(P))  # Code block 10: distances at the minimax point
+# Code block 11: maximin, pushing the facility away
 TC(x) = -minimum(d2.([x], eachrow(P)))  # minus converts min to max
 res = optimize(TC, x0)
 @show TCᵒ = res.minimum
 xᵒ = res.minimizer
+# Code block 12: a feasible region for the maximin
 r = [(0, 0), (7, 6)]   # SW and NE corners of feasible region
 isinrect(x, r) = r[1][1] <= x[1] <= r[2][1] &&
                  r[1][2] <= x[2] <= r[2][2]
 TC(x) = isinrect(x, r) ? -minimum(d2.([x], eachrow(P))) : Inf
 TC([4, 4]), TC([8, 8])
+# Code block 13: the bounded maximin solution
 res = optimize(TC, x0)
 @show TCᵒ = res.minimum
 xᵒ = res.minimizer
+# Code block 14: center of gravity, minimizing squared distance
 TC(x) = sum(d2.([x], eachrow(P)) .^ 2)
 res = optimize(TC, x0)
 @show TCᵒ = res.minimum
 xᵒ = res.minimizer
-optimize(TC, [0.0, 0.0]).minimizer
+optimize(TC, [0.0, 0.0]).minimizer  # Code block 15: a different start
+# Code block 16: every objective's solution on one plot
 sols = ["minisum" => Xᵒ,
         "center of gravity" =>
             optimize(x -> sum(d2.([x], eachrow(P)) .^ 2),
@@ -159,16 +168,20 @@ Legend(fig[1, 2], ax; framevisible = false, labelsize = 11)
 fig
 
 ## Sec. 5. Logjam: the course's logistics toolkit
+# Code block 17: adding Logjam by URL
 using Pkg
 Pkg.add(url="https://github.com/mgkay/Logjam")
 
 ## Sec. 6. Computing distances with Logjam
+# Code block 18: rectilinear and Euclidean distance
 P1 = [0, 0]                 # two points in the plane
 P2 = [4, 3]
 d1(P1, P2), d2(P1, P2)      # rectilinear, Euclidean
+# Code block 19: the l1, l2 and l-infinity metrics
 X1 = [0 0]                  # point sets, one row per point
 X2 = [4 3]
 [dists(X1, X2, p)[1] for p in (1, 2, Inf)]   # l₁, l₂, l∞
+# Code block 20: great-circle distance to three cities
 Raleigh = [-78.659 35.8219]        # one point, as a row
 XY = [-82.336  29.6742             # Gainesville, FL
        44.3667 33.2333             # Baghdad
@@ -177,35 +190,39 @@ prt(DataFrame(
     City = ["Gainesville, FL", "Baghdad", "Rio de Janeiro"],
     Radians = vec(dists(Raleigh, XY, :rad)),
     Miles = vec(dists(Raleigh, XY, :mi))))
-# NC cities over 100k (2-Loc-3 cells 17-18, Logjam gazetteer)
+# Code block 21: NC cities over 100k, from the Logjam gazetteer
 df = filter(r -> r.STFIP == st2fips(:NC) &&
                  r.POP > 100_000, usplace())
 select!(df, :NAME, :LON, :LAT, :POP)
 prt(df)
+# Code block 22: Raleigh to Charlotte
 ll(nm) = collect(filter(r -> r.NAME == nm,
                         df)[1, [:LON, :LAT]])
 xyR = ll("Raleigh")           # (lon, lat) in degrees
 dgc(xyR, ll("Charlotte"))     # great-circle miles
+# Code block 23: the farthest city from Raleigh
 pt = collect.(zip(df.LON, df.LAT))   # one [lon,lat] per city
 d  = dgc.([xyR], pt)                 # Raleigh to each city
 df[argmax(d), :NAME]                 # farthest city
-df[sortperm(d)[2:4], :NAME]          # three nearest (skip Raleigh)
+df[sortperm(d)[2:4], :NAME]  # Code block 24: three nearest, skip Raleigh
 
 # Sec. 6. Computing distances with Logjam
 ## Example 3
 # Locate a single facility to minimize the total population-weighted
 # great-circle distance to every place in North Carolina.
-# every NC place, population-weighted (2-Loc-3 cells 40-41)
+# Code block 25: every NC place, population-weighted
 df = filter(r -> r.STFIP == st2fips(:NC), usplace())
 select!(df, :NAME, :LON, :LAT, :POP)
 pt = collect.(zip(df.LON, df.LAT))       # [lon,lat] per place
 TC(xy) = sum(df.POP .* dgc.([xy], pt))   # pop-weighted miles
 w = wcentroid(df.LON, df.LAT, df.POP)    # weighted-centroid start
 xyᵒ = optimize(TC, [w.LON, w.LAT]).minimizer
+# Code block 26: the place nearest that optimum
 d = dgc.([xyᵒ], pt)                      # optimum to each place
 df[argmin(d), :NAME], round(minimum(d))  # nearest place, miles
 
 ## Sec. 7. Circuity factors
+# Code block 27: three cities, road against great-circle
 Detroit     = [-83.1022, 42.3830]   # (lon, lat), degrees
 Gainesville = [-82.3492, 29.6807]
 Memphis     = [-89.9666, 35.1090]
@@ -219,12 +236,14 @@ road = [1024.2, 710.8, 632.8]       # road network, mi
 g = road ./ gc
 
 ḡ = sum(g) / length(g)              # the region's factor
+# Code block 28: circuity for each pair
 prt(DataFrame(
     Pair = ["Detroit-Gainesville", "Detroit-Memphis",
             "Gainesville-Memphis"],
     GreatCircle = round.(gc, digits = 1),
     Road = road,
     g = round.(g, digits = 3)))
+# Code block 29: the estimate against a held-out pair
 gGH = 137.7 / 121.0                 # @fig-circuity-road, held out
 (held_out = round(gGH, digits = 3),
  estimate = round(ḡ, digits = 3),
@@ -237,15 +256,18 @@ gGH = 137.7 / 121.0                 # @fig-circuity-road, held out
 # per year, and determine the increase in annual transport cost at
 # \$2.00 per loaded mile if the facility is instead placed at Cary,
 # North Carolina.
+# Code block 30: truckload weights and the annual cost
 P = permutedims(hcat(Detroit, Gainesville, Memphis))
 wTL = [40.0, 25.0, 35.0]           # truckloads per year
 rate = 2.00                        # $ per loaded mile
 
 TCyr(xy) = rate * ḡ *
     sum(wTL[i] * dgc(xy, P[i, :]) for i in 1:3)
+# Code block 31: the optimum site
 c0 = wcentroid(P[:, 1], P[:, 2], wTL)
 xᵒ = Optim.minimizer(optimize(TCyr, [c0.LON, c0.LAT]))
 lonlat2loc(xᵒ, usplace()).desc
+# Code block 32: what an alternative site would cost
 Cary = [-78.8190, 35.7814]
 Δ = TCyr(Cary) - TCyr(xᵒ)
 prt(DataFrame(

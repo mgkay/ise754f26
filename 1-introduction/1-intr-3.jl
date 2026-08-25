@@ -121,6 +121,7 @@ end
 simulate(rₐ, n) = [-log(rand()) / rₐ for _ in 1:n]
 
 ## Sec. 7. Level 3: Simulation
+# Code block 1: arrivals simulated, mean and SCV
 using Random
 Random.seed!(1)                             # reproducible draws
 tₐ  = simulate(5, 100_000)                  # inter-arrival times
@@ -143,12 +144,14 @@ function queue(rₐ, tₑ, n)
 end
 
 ## Sec. 7. Level 3: Simulation
+# Code block 2: simulated cycle time against the VUT formula
 Random.seed!(1)
 ct  = queue(8, 0.1, 10_000)    # rₐ = 8/hr, tₑ = 0.1 hr, so u = 0.8
 sim = sum(ct) / length(ct)     # simulated mean cycle time
 u   = 8 * 0.1
 vut = u / (1 - u) * 0.1 + 0.1  # analytic CT (eq-vut, c² = 1)
 (sim, vut)
+# Code block 3: twenty replications and a confidence interval
 Random.seed!(2)
 nrep = 20                      # independent replications
 njob = 1_000_000               # jobs per replication
@@ -182,6 +185,7 @@ function queue_spt(rₐ, tₑ, n)
 end
 
 ## Sec. 7. Level 3: Simulation
+# Code block 4: FIFO against SPT at the same station
 Random.seed!(1)
 fifo = queue(8, 0.1, 100_000)      # FIFO baseline
 spt  = queue_spt(8, 0.1, 100_000)  # same station, SPT
@@ -231,6 +235,7 @@ end
 # process-time variabilities $c_e^2 = 0.25$, $1$, and $4$; work enters
 # the first at $c_a^2 = 1$. Compare the line's total cycle time when the
 # most variable station is run last versus first.
+# Code block 5: station order and its effect on cycle time
 u  = 0.9  # utilization at each station
 tₑ = 0.1  # hr, same mean process time
 for order in ([0.25, 1, 4], [4, 1, 0.25])

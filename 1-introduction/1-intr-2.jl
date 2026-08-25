@@ -28,46 +28,58 @@ let dir = @__DIR__
 end
 
 ## Sec. 1. Julia
+# Code block 1: Unicode names by tab completion
 tₑ = 2.0          # t\_e Tab: subscript (assigned, silent)
 σ² = 16.0         # \sigma Tab, \^2 Tab (also silent)
 @show c² = σ² / tₑ^2   # define and inspect in one line
 7 ÷ 2             # \div Tab: last line shows on its own
+# Code block 2: a vector and a matrix
 a = [1, 2, 3]          # a 3-element vector
 A = [1 2 3 4; 5 6 7 8] # a 2x4 matrix; ; ends a row
+# Code block 3: ranges collected into vectors
 a = [1:5;]           # collect the range 1..5 into a vector
 a = [1:2:5;]         # start 1, step 2: [1, 3, 5]
 a = ones(5)          # five 1.0s (Float64 by default)
 a = zeros(5)         # five 0.0s
 a = [i^2 + i + 1 for i in 0:5]   # an array comprehension
+# Code block 4: indexing a vector
 a = [10:15;]
 @show a[3]         # single element
 @show a[[2, 4]]    # several elements, by an index array
 @show a[end];      # the last element
+# Code block 5: indexing a matrix
 A = [1 2 3 4; 5 6 7 8]
 @show A[1, 2]      # row 1, column 2
 @show A[:, 1]      # all of column 1
 @show A[1, :];     # all of row 1
+# Code block 6: slicing with end
 a = [10:15;]
 @show a[2:end]      # drop the first element
 @show a[1:end-1]    # drop the last element
 @show reverse(a);   # the elements in reverse order
+# Code block 7: broadcasting with the dot
 a = [1, 2, 3, 4]
 @show 2 .+ a       # add 2 to each element (the dot broadcasts)
 @show 2 * a        # scalar times array needs no dot
 @show 2a;          # the * is optional for a number times a name
+# Code block 8: reducing a vector
 a = [1:5;]
 @show sum(a)           # add all elements
 @show cumsum(a);       # running total
+# Code block 9: reducing along one dimension
 A = [1 3 4; 5 7 8]
 @show sum(A, dims = 1)   # sum down each column
 @show sum(A, dims = 2);  # sum across each row
+# Code block 10: comparisons broadcast to a mask
 a = [4, 0, -2, 7, 0]
 @show a .> 0                    # which elements are positive
 @show (a .>= 0) .& (a .<= 4)    # in the range [0, 4]
 @show any(a .> 0);              # is any element positive
+# Code block 11: selecting with a mask
 a = [5, 0, -1, 9, 0]
 @show a[a .> 0]            # keep the positive elements
 @show findall(a .> 0);     # the positions of the positive elements
+# Code block 12: sorting and ordering
 a = [5, 0, -1, 9, 0]
 @show sort(a)         # the values in order
 @show sortperm(a)     # the indices that sort them
@@ -78,14 +90,17 @@ a = [5, 0, -1, 9, 0]
 # Five shipments have the weights below. Compute the line-haul charge at
 # \$50 per ton by broadcasting, then select the shipments heavier than
 # 10 ton.
+# Code block 13: shipment charges from weights
 wt = [12, 5, 18, 7, 9]
 @show charge = 50 .* wt    # $/shipment at $50/ton
 @show heavy = wt[wt .> 10]; # shipments over 10 ton
 
 ## Sec. 1. Julia
+# Code block 14: a tuple and its elements
 t = (6, 1, 4)      # a 3-tuple
 @show t[2]         # access the second element
 @show typeof(t);
+# Code block 15: a function with a body
 function fun1(a)
     b = 3a + 1
     if b % 2 == 0      # is b even
@@ -96,39 +111,44 @@ function fun1(a)
     return c           # the value handed back
 end
 @show fun1(5);
+# Code block 16: a one-line function
 f(a) = 3a + 1      # a one-line function
 @show f(8);
+# Code block 17: a named test used by filter
 isheavy(w) = w > 10          # a one-line test: is w over 10?
 filter(isheavy, [12, 5, 18]) # keep those over 10 -> [12, 18]
-filter(w -> w > 10, [12, 5, 18])   # the same test, no name
+filter(w -> w > 10, [12, 5, 18])  # Code block 18: the same test, no name
 
 ## Example 2: Solving and verifying a 3x3 system
 # Solve the system below for $\boldsymbol{x}$ with the \ operator, then
 # verify the solution by checking that $\mathbf{A}\,\boldsymbol{x}$
 # returns $\mathbf{b}$.
+# Code block 19: solving a linear system
 A = [2 -1 3; 1 0 1; 4 1 8]
 b = [6, 3, 17]
 x = A \ b          # left division solves A*x = b
-A * x              # verify: should return b
+A * x  # Code block 20: verify, should return b
 
 ## Example 3: A small shipment table
 # Assemble a three-row table of shipments, each with an origin, a
 # destination, and a weight, then read back the weight column.
+# Code block 22: a DataFrame of shipments
 using DataFrames   # load the package, then build the table
 ship = DataFrame(
     origin = ["RDU", "RDU", "GSO"],
     dest   = ["ATL", "MIA", "ATL"],
     ton    = [12, 5, 18])
-ship.ton           # read the weight column
+ship.ton  # Code block 23: read the weight column
 
 ## Sec. 1. Julia
+# Code block 24: plotting a curve
 using CairoMakie                     # load the plotting backend
 f(x) = x - x^3                       # the curve to draw
 xrng = -2:0.01:2          # x-values, fine steps
 lines(xrng, f;
-# lines draws f over the range xrng; the axis = (...) keyword sets the title
-# and axis labels inside the same call, so the separate Figure and Axis objects
-# that fuller plots use are not needed yet.
+# lines draws f over the range xrng; the axis = (...) keyword sets the
+# title and axis labels inside the same call, so the separate Figure and
+# Axis objects that fuller plots use are not needed yet.
     axis = (title  = "f(x) = x - x³",
             xlabel = "x",
             ylabel = "f(x)"))
@@ -137,6 +157,7 @@ lines(xrng, f;
 ## Example 4: A token as a point in space
 # Represent a few words as points in a small space, then measure how
 # related two of them are using only their coordinates.
+# Code block 25: tokens as points in a space
 vocab = ["truck", "freight", "shipment", "cat"]
 
 # E: one column per token, each a point in 2-D meaning space
@@ -150,6 +171,7 @@ cosine(a, b) = (a'b) / (sqrt(a'a) * sqrt(b'b))
 @show cosine(emb("truck"), emb("cat"));       # unrelated
 
 ## Sec. 2. Large Language Models
+# Code block 26: softmax turns scores into probabilities
 softmax(Z) = exp.(Z) ./ sum(exp.(Z), dims = 1)
 @show round.(softmax([2.0, 1.0, 0.0]); digits = 3);
 
@@ -158,6 +180,7 @@ softmax(Z) = exp.(Z) ./ sum(exp.(Z), dims = 1)
 # corpus in which the current token determines the next, and train a
 # single layer by gradient descent until it predicts the next token
 # correctly.
+# Code block 27: training the next-token model
 vocab = ["van", "rig", "parcel", "pallet",
          "depot", "yard", "dock", "go", "wait"]
 
@@ -196,6 +219,7 @@ pred(c) = vocab[argmax(W * E[:, id(c)] .+ vec(b))]
 # corpus in which the next token depends on whether the sizes match, and
 # train a network with a small hidden layer by gradient descent until
 # its predictions match the corpus, using nothing but base Julia.
+# Code block 28: a network with a hidden layer
 σ(z) = 1 / (1 + exp(-z))             # squashing nonlinearity
 
 # four cargo tokens as fixed points: vehicle
@@ -230,6 +254,7 @@ P = softmax(W2 * σ.(W1 * X .+ b1) .+ b2)
 # Give a token a query, score it against the earlier tokens by content,
 # and blend them into a new vector for that token, using nothing but
 # base Julia.
+# Code block 29: attention weights for one query
 q = [2.0, 0.2]                   # the query "it" forms
 
 rig    = [1.0,  0.0]             # the same cross points
