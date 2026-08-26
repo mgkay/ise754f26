@@ -4435,7 +4435,7 @@ Figure 1: The VS Code Julia workspace: the script on the left, split into <code
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>The session panel and package mode
+<span class="screen-reader-only">Note</span>Session panel and package mode
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -4771,7 +4771,7 @@ x_1 \phantom{{}- x_2} + x_3 &amp;= 3 \\
 </section>
 <section id="installing-and-loading-packages" class="level3">
 <h3 class="anchored" data-anchor-id="installing-and-loading-packages">1.9 Installing and loading packages</h3>
-<p>Everything so far has used only base Julia, which is always available. The next two sections are the first to need a <em>package</em>: <code>DataFrames</code> for the table and <code>CairoMakie</code> for the plot. A package is installed once per machine, then loaded with <code>using</code> wherever it is first needed. Every package this course uses is installed together by the cell below, so a package that is new to a lecture is already on the machine, and <code>Pkg.add</code> is never the answer.</p>
+<p>Everything so far has used only base Julia, which is always available. The next two sections are the first to need a <em>package</em>: DataFrames for the table and CairoMakie for the plot. A package is installed once per machine, then loaded with <code>using</code> wherever it is first needed. Every package this course uses is installed together by the cell below, so a package that is new to a lecture is already on the machine, and <code>Pkg.add</code> is never the answer.</p>
 <p>The companion script’s opening <code>## Get class-ready</code> cell does the install. It finds the course project, activates it, and instantiates it, downloading every package at the version pinned for the course. It is safe to run repeatedly, so it need only run once per Julia session: activation lives in the running session, not in the file, so closing and reopening a script changes nothing, and only restarting the REPL or VS Code makes it necessary again. Unlike the rest of the lecture’s code, this cell is plumbing to <strong>run, not read</strong>: the walk-up loop and <code>@__DIR__</code> are not course material, and there is nothing here to trace by hand.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-21"><pre class="sourceCode numberSource julia code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode julia"><span id="annotated-cell-21-1"><a href="#annotated-cell-21-1"></a><span class="co"># Code block 21: get class-ready, install the packages</span></span>
 <span id="annotated-cell-21-2"><a href="#annotated-cell-21-2"></a><span class="im">import</span> <span class="bu">Pkg</span></span>
@@ -4931,7 +4931,7 @@ Figure 2: A line plot drawn with a single <code>lines</code> call.
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>The Julia plotting ecosystem
+<span class="screen-reader-only">Note</span>Julia plotting ecosystem
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -4955,8 +4955,8 @@ Figure 2: A line plot drawn with a single <code>lines</code> call.
 <li><strong>The engine</strong> (<em>next-token prediction</em>): read the tokens so far, guess the next, repeat.</li>
 <li><strong>The steering wheel</strong> (<em>the context window</em>): the tokens the model can see right now.</li>
 </ul>
-<section id="the-engine-next-token-prediction" class="level3">
-<h3 class="anchored" data-anchor-id="the-engine-next-token-prediction">2.1 The engine: next-token prediction</h3>
+<section id="engine-next-token-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="engine-next-token-prediction">2.1 Engine: next-token prediction</h3>
 <p>Strip everything away and a language model does one small thing: it reads the tokens in front of it, predicts the most likely next one, adds it to the end, and does the whole thing again. A <em>token</em> is a chunk of text, roughly three quarters of a word, and the tokens the model can see at this moment are its <em>context window</em>, the whole of its working memory for the task.</p>
 <div id="fig-next-token" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -5529,8 +5529,8 @@ Figure 13: A hook is the code on the action path: it runs on every action and c
 <p>One rule governs every check that follows: <strong>independent and cheap.</strong> Re-reading the assistant’s explanation is not a check, and neither is asking the model whether it is sure; both draw on the same source as the error they are meant to catch.</p>
 <p>The lecture’s epigraph names the stakes; meeting them means holding both ends of the workflow: understanding reasonable objectives and practical constraints in front, and verifying the results behind. The analysis and the computing do not go away.</p>
 </section>
-<section id="the-nine-checks" class="level3">
-<h3 class="anchored" data-anchor-id="the-nine-checks">3.2 The nine checks</h3>
+<section id="nine-checks" class="level3">
+<h3 class="anchored" data-anchor-id="nine-checks">3.2 Nine checks</h3>
 <p>The checks come in three families of three, ordered by the effort they cost. <em>Screens</em> run in seconds, on every result. When a result is <em>used</em>, feeding a next step, one <em>expectation</em> is added. When a result is <em>signed</em>, submitted or relied on by someone else, one <em>confirmation</em> is added. Every validation ends in a <strong>verdict</strong>: accept, reject, or escalate to a better check. Never a feeling.</p>
 <div id="tbl-checks" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">

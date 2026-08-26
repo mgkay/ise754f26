@@ -205,7 +205,7 @@ prt(DataFrame(start = ["[0, 200]", "[200, 500]"],
               NF2 = round.([Xᵒ¹[2], Xᵒ²[2]]; digits = 1),
               TC = round.([TCint(Xᵒ¹), TCint(Xᵒ²)]; digits = 1)))
 
-## Sec. 6. The ALA procedure
+## Sec. 6. ALA procedure
 # Code block 20: locate in one dimension, the median of Lecture 2.1
 median1(p, wt) = p[findfirst(≥(sum(wt) / 2), cumsum(wt))]
 

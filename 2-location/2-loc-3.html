@@ -4304,9 +4304,9 @@ window.Quarto = {
   <li><a href="#allocation" id="toc-allocation" class="nav-link active" data-scroll-target="#allocation">1. Allocation</a></li>
   <li><a href="#types-of-multifacility-location-problems" id="toc-types-of-multifacility-location-problems" class="nav-link" data-scroll-target="#types-of-multifacility-location-problems">2. Types of multifacility location problems</a></li>
   <li><a href="#co-locating-operations" id="toc-co-locating-operations" class="nav-link" data-scroll-target="#co-locating-operations">3. Co-locating operations</a></li>
-  <li><a href="#the-locationallocation-problem" id="toc-the-locationallocation-problem" class="nav-link" data-scroll-target="#the-locationallocation-problem">4. The location–allocation problem</a></li>
+  <li><a href="#locationallocation-problem" id="toc-locationallocation-problem" class="nav-link" data-scroll-target="#locationallocation-problem">4. Location–allocation problem</a></li>
   <li><a href="#two-formulations" id="toc-two-formulations" class="nav-link" data-scroll-target="#two-formulations">5. Two formulations</a></li>
-  <li><a href="#the-ala-procedure" id="toc-the-ala-procedure" class="nav-link" data-scroll-target="#the-ala-procedure">6. The ALA procedure</a></li>
+  <li><a href="#ala-procedure" id="toc-ala-procedure" class="nav-link" data-scroll-target="#ala-procedure">6. ALA procedure</a></li>
   <li><a href="#scale" id="toc-scale" class="nav-link" data-scroll-target="#scale">7. Scale</a></li>
   </ul>
 </nav>
@@ -4361,22 +4361,15 @@ window.Quarto = {
 <!-- APPARATUS: first-use checks complete for Secs. 1 to 8 (2026-08-23).
      Packages: SparseArrays and Random are standard-library modules and are
      never listed (CLAUDE.md); DataFrames arrives in 1.2, and Optim, CairoMakie
-     and GeoMakie in 2.2. GeoMakie was discussed in 2.2's prose but never
-     entered its packages panel, and 2.3 is its first use in code, so it is
-     listed here.
+     and GeoMakie in 2.2. GeoMakie is now listed in 2.2, whose NC-minisum map
+     became a live cell on 2026-08-26 and is therefore its first use in code;
+     the row moved there and is no longer duplicated here.
      Logjam functions: dgc, dists, d1, d2, loc2lonlat, lonlat2loc, usplace,
      st2fips and makemap are all introduced by 2.2, so none is new here. The
      four that are new are ala, randX, alloclines and uszcta3, first used in
      Secs. 6 and 7. -->
 <div class="lecture-meta">
-<details>
-<summary>
-New Julia packages used
-</summary>
-<ul>
-<li><a href="https://geo.makie.org/"><code>GeoMakie</code></a> is the geospatial extension of the Makie plotting ecosystem: it adds map projections and reference geography, such as coastlines and political boundaries from the Natural Earth dataset, so that data given in longitude and latitude is drawn on a correctly projected map rather than on a plain Cartesian axis.</li>
-</ul>
-</details>
+<p>No new Julia packages used.</p>
 <details>
 <summary>
 New Logjam functions used
@@ -4706,8 +4699,8 @@ Figure 3: With the manufacturing sites given, they join the existing facilities
 <section id="co-locating-operations" class="level2">
 <h2 class="anchored" data-anchor-id="co-locating-operations">3. Co-locating operations</h2>
 <p>Co-location answers the question about how it can be determined where different activities in a supply chain should be co-located, and when it is best to use transportation, when two operations and routing can be split between two locations. This is an important aspect of supply chain design that typically is not discussed in multifacility location, but the majority theorem gives a way of providing an answer.</p>
-<section id="the-theorem" class="level3">
-<h3 class="anchored" data-anchor-id="the-theorem">3.1 The theorem</h3>
+<section id="theorem" class="level3">
+<h3 class="anchored" data-anchor-id="theorem">3.1 Theorem</h3>
 <p>The single-facility form is already familiar from 2.1. If one existing facility carries at least half of all the weight, no search is needed, because the optimum is at that facility:</p>
 <p><span id="eq-majority"><span class="math display">
 \text{Locate NF at EF}_j \text{ if } w_j \ge \frac{W}{2},
@@ -4720,11 +4713,11 @@ Figure 3: With the manufacturing sites given, they join the existing facilities
 <div aria-describedby="mdl-majority-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <p><strong>settle:</strong> which new facilities must share a site, and which can be placed at an existing facility, without computing a single distance</p>
 <p><strong>solve for:</strong><br>
-(a) the co-located groups among the <span class="math inline">n</span> NFs;<br>
+(a) co-located groups among the <span class="math inline">n</span> NFs;<br>
 (b) an EF for each group the theorem can place</p>
 <p><strong>subject to:</strong><br>
 (a) majority: a facility is settled only when one weight reaches half of that facility’s own total</p>
-<p><strong>return:</strong> the placements and co-locations the theorem settles, together with the facilities it leaves open</p>
+<p><strong>return:</strong> placements and co-locations the theorem settles, together with the facilities it leaves open</p>
 <p><strong>assumptions:</strong><br>
 (a) interactions are symmetric, so the weight between two NFs is the same in either direction;<br>
 (b) distance is any metric, since the theorem never evaluates one</p>
@@ -4993,8 +4986,8 @@ V = \begin{bmatrix} 0 &amp; 3 &amp; 0\\ 3 &amp; 0 &amp; 5\\ 0 &amp; 5 &amp; 0 \e
 </div>
 </section>
 </section>
-<section id="the-locationallocation-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-locationallocation-problem">4. The location–allocation problem</h2>
+<section id="locationallocation-problem" class="level2">
+<h2 class="anchored" data-anchor-id="locationallocation-problem">4. Location–allocation problem</h2>
 <p>The <strong>location–allocation (LA) problem</strong> is to determine both the location of <span class="math inline">n</span> new facilities (NFs) and the allocation of the flow requirements of <span class="math inline">m</span> existing facilities (EFs) to the NFs that minimize total transportation costs.</p>
 <div id="fig-la" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -5221,8 +5214,8 @@ Figure 6: The integrated objective for the corridor, contoured over the two mil
 </div>
 </section>
 </section>
-<section id="the-ala-procedure" class="level2">
-<h2 class="anchored" data-anchor-id="the-ala-procedure">6. The ALA procedure</h2>
+<section id="ala-procedure" class="level2">
+<h2 class="anchored" data-anchor-id="ala-procedure">6. ALA procedure</h2>
 <p>Given initial NF locations, ALA local improvement procedure finds optimal EF allocations and then finds optimal NF locations for these allocations, continuing to alternate until no further EF allocation changes are made. Introduced by Cooper in 1963, ALA is still the best heuristic for the LA problem. Since the ALA procedure finds only a local optima, the procedure should be applied multiple times using different initial NF locations, keeping the best solution found as the final solution. This type of repeated application of a local improvement procedure is termed a <strong>multistart metaheuristic</strong>.</p>
 <div class="model-formulation" data-mdl-for="mdl-la"><div class="model-rung-label">Model 3 formulation: The location–allocation problem</div>
 <div class="pseudocode">
