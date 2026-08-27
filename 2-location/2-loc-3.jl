@@ -40,49 +40,39 @@ function allocate(D, w)
     return α, sum(W .* D)
 end
 
-## Example 1. Two distribution centers, four customers
-# Determine the allocation and the total weekly distance for two DCs
-# serving four customers with weights $w = (2, 4, 6, 8)$.
-# Code block 1: two DCs and four customers, by hand
+## Sec. 1. Allocation
+# Code block 1: the same allocation by the model
 w = [2, 4, 6, 8]                  # truckloads per week
 D = [ 10  20  30  40              # DC 1 to each customer
       45  35  25  15 ]            # DC 2 to each customer
-α = [argmin(c) for c in eachcol(D)]
-TD = sum(w[j] * D[α[j], j] for j in 1:length(w))  # Code block 2: the cost
-
-## Sec. 1. Allocation
-α, TD = allocate(D, w)  # Code block 3: the same by the model
+α, TD = allocate(D, w)
 
 ## Example 2. Two distribution centers for North Carolina
 # Determine the population-weighted total distance when the North
 # Carolina cities above one hundred thousand people are each served by
 # the nearer of two distribution centers at Charlotte and Raleigh, and
 # determine the reduction from adding a third at Greensboro.
-# Code block 4: the Carolinas' larger cities
+# Code block 2: the Carolinas' larger cities
 df = filter(r -> r.STFIP == st2fips(:NC) &&
                  r.POP > 100_000, usplace())
 select!(df, :NAME, :LON, :LAT, :POP)
 P = hcat(df.LON, df.LAT)          # one row per city
 w = df.POP
 prt(df)
-# Code block 5: two candidate DC sites
+# Code block 3: two candidate DC sites
 ll(nm) = collect(filter(r -> r.NAME == nm,
                         df)[1, [:LON, :LAT]])
 X = vcat(ll("Charlotte")', ll("Raleigh")')
 D = dists(X, P, :mi)
-α = [argmin(c) for c in eachcol(D)]
-n, m = size(D)
-TC2 = sum(sparse(α, 1:m, w, n, m) .* D)
+α, TC2 = allocate(D, w)
 
 # Example 2. Two distribution centers for North Carolina
 ## Part b. Adding Greensboro
-# Code block 6: adding a third DC
+# Code block 4: adding a third DC
 X = vcat(X, ll("Greensboro")')
 D = dists(X, P, :mi)
-α = [argmin(c) for c in eachcol(D)]
-n, m = size(D)
-TC3 = sum(sparse(α, 1:m, w, n, m) .* D)
-# Code block 7: comparing two and three DCs
+α, TC3 = allocate(D, w)
+# Code block 5: comparing two and three DCs
 prt(DataFrame(
     DCs = ["Charlotte, Raleigh",
            "Charlotte, Raleigh, Greensboro"],
@@ -132,7 +122,7 @@ end
 # Determine the locations, if any, that the majority theorem settles for
 # two new facilities serving three existing ones, under three different
 # sets of interaction weights.
-# Code block 8: the majority check, row by row
+# Code block 6: the majority check, row by row
 W = [2 1 0
      4 0 5]
 rowcheck(V) = DataFrame(
@@ -140,12 +130,12 @@ rowcheck(V) = DataFrame(
     half = [(sum(W[i, :]) + sum(V[i, :])) / 2 for i in 1:2],
     largest = [maximum([W[i, :]; V[i, :]]) for i in 1:2])
 prt(rowcheck([0 2; 2 0]))
-prt(rowcheck([0 0.5; 0.5 0]))  # Code block 9: with v = 0.5
-prt(rowcheck([0 4; 4 0]))  # Code block 10: with v = 4
-# Code block 11: the two facilities folded together
+prt(rowcheck([0 0.5; 0.5 0]))  # Code block 7: with v = 0.5
+prt(rowcheck([0 4; 4 0]))  # Code block 8: with v = 4
+# Code block 9: the two facilities folded together
 Wr = vec(sum(W, dims = 1))         # NF1 and NF2 folded together
 (reduced = Wr, Σ = sum(Wr), half = sum(Wr) / 2)
-# Code block 12: all three cases by the procedure
+# Code block 10: all three cases by the procedure
 vs = [2, 0.5, 4]
 prt(DataFrame(
     v = vs,
@@ -156,7 +146,7 @@ prt(DataFrame(
 # Determine which of heat treat, pressing and finishing must share a
 # site, and where each of the three operations belongs, given drop forge
 # fixed at Nagoya and painting fixed at Detroit.
-# Code block 13: the production chain's weights
+# Code block 11: the production chain's weights
 W7 = [4 0; 0 0; 0 4]
 V7 = [0 3 0; 3 0 5; 0 5 0]
 prt(DataFrame(
@@ -164,7 +154,7 @@ prt(DataFrame(
     Σ = [sum(W7[i, :]) + sum(V7[i, :]) for i in 1:3],
     half = [(sum(W7[i, :]) + sum(V7[i, :])) / 2 for i in 1:3],
     largest = [maximum([W7[i, :]; V7[i, :]]) for i in 1:3]))
-# Code block 14: after folding finishing into pressing
+# Code block 12: after folding finishing into pressing
 W2 = [4 0; 0 4]                    # finishing folded into pressing
 V2 = [0 3; 3 0]
 prt(DataFrame(
@@ -172,32 +162,32 @@ prt(DataFrame(
     Σ = [sum(W2[i, :]) + sum(V2[i, :]) for i in 1:2],
     half = [(sum(W2[i, :]) + sum(V2[i, :])) / 2 for i in 1:2],
     largest = [maximum([W2[i, :]; V2[i, :]]) for i in 1:2]))
-# Code block 15: the procedure's own answer
+# Code block 13: the procedure's own answer
 at7, groups7 = majority(W7, V7)
 prt(DataFrame(operation = ["heat treat", "pressing", "finishing"],
               site = ["Nagoya", "Detroit"][at7]))
 
-# Sec. 5. Two formulations
+# Sec. 5. Integrated vs alternating formulations
 ## Example 5. Two facilities along I-40
 # Determine the two mile markers along I-40 that minimize the total
 # weighted distance to seven cities on the corridor, and show the shape
 # of the objective the search has to work with.
-# Code block 16: seven towns along I-40
+# Code block 14: seven towns along I-40
 P = [50 150 190 220 270 295 420]'   # I-40 mile markers
 m = size(P, 1)
 w = collect(1:m)                    # relative demand at each
 X = [100 300]'                      # one pair of NF sites
 n = size(X, 1)
 prt(dists(X, P, 1); rows = ["NF $i" for i in 1:n], cols = vec(P))
-TCint(X) = allocate(dists(reshape(X, :, 1), P, 1), w)[2]  # Code block 17
-# Code block 18: the objective over the corridor
+TCint(X) = allocate(dists(reshape(X, :, 1), P, 1), w)[2]  # Code block 15
+# Code block 16: the objective over the corridor
 using CairoMakie
 xrng = 0:500
 Z = [TCint([x1, x2]) for x1 in xrng, x2 in xrng]
 contour(xrng, xrng, Z; levels = 100,
         axis = (xlabel = "NF 1 mile marker",
                 ylabel = "NF 2 mile marker"))
-# Code block 19: two starts, two local optima
+# Code block 17: two starts, two local optima
 Xᵒ¹ = optimize(TCint, [0.0, 200.0]).minimizer
 Xᵒ² = optimize(TCint, [200.0, 500.0]).minimizer
 prt(DataFrame(start = ["[0, 200]", "[200, 500]"],
@@ -206,7 +196,7 @@ prt(DataFrame(start = ["[0, 200]", "[200, 500]"],
               TC = round.([TCint(Xᵒ¹), TCint(Xᵒ²)]; digits = 1)))
 
 ## Sec. 6. ALA procedure
-# Code block 20: locate in one dimension, the median of Lecture 2.1
+# Code block 18: locate in one dimension, the median of Lecture 2.1
 median1(p, wt) = p[findfirst(≥(sum(wt) / 2), cumsum(wt))]
 
 function alatrace(X₀)
@@ -224,7 +214,7 @@ end
 
 prt(alatrace([0, 200]); title = "from markers 0 and 200")
 prt(alatrace([200, 500]); title = "from markers 200 and 500")
-# Code block 21: the same two starts through ala
+# Code block 19: the same two starts through ala
 Xᵃ, TCᵃ, = ala([0.0; 200.0;;], float(w), float(P); dist = 1)
 Xᵇ, TCᵇ, = ala([200.0; 500.0;;], float(w), float(P); dist = 1)
 prt(DataFrame(start = ["0, 200", "200, 500"],
@@ -232,12 +222,12 @@ prt(DataFrame(start = ["0, 200", "200, 500"],
                      join(round.(Int, vec(Xᵇ)), ", ")],
               TC = round.([TCᵃ, TCᵇ])))
 
-# Sec. 7. Scale
+# Sec. 7. Large-scale examples
 ## Example 7. Service centers for North and South Carolina
 # Determine the two locations that minimize the total
 # population-weighted distance to every city over 10,000 people in North
 # and South Carolina, and the territory each one serves.
-# Code block 22: the Carolinas' cities and their weights
+# Code block 20: the Carolinas' cities and their weights
 using GeoMakie, Random
 df = filter(r -> r.STFIP in st2fips.([:NC, :SC]) && r.POP > 10_000,
             usplace())
@@ -245,11 +235,11 @@ select!(df, :NAME, :ST, :LAT, :LON, :POP)
 P = hcat(df.LON, df.LAT)
 w = float(df.POP)
 nef = size(P, 1)
-# Code block 23: two service centers by multistart
+# Code block 21: two service centers by multistart
 Random.seed!(8345)
 Xᵒ, TCᵒ, W = ala(randX(P, 2), w, P; nruns = 5)
 prt(lonlat2loc(Xᵒ, df))
-# Code block 24: mapping the centers and their allocations
+# Code block 22: mapping the centers and their allocations
 Lx, Ly = alloclines(W, Xᵒ, P)
 fig, ax = makemap(df.LON, df.LAT; xexpand = 0.1)
 for i in eachindex(Lx)
@@ -257,11 +247,13 @@ for i in eachindex(Lx)
 end
 scatter!(ax, Xᵒ[:, 1], Xᵒ[:, 2]; marker = :dtriangle,
          markersize = 12, color = :black)
+text!(ax, Xᵒ[:, 1], Xᵒ[:, 2]; text = lonlat2loc(Xᵒ, df).NAME,
+      fontsize = 12, aligntext(Xᵒ[:, 1], Xᵒ[:, 2])...)
 fig
-# Code block 25: the allocation for a given pair
+# Code block 23: the allocation for a given pair
 function alloc36(X)
     D = dists(X, P, :mi)
-    α = [argmin(c) for c in eachcol(D)]
+    α, = allocate(D, w)
     α[1:3] .= 1
     α[4:6] .= 2
     Wc = sparse(α, 1:nef, w, size(X, 1), nef)
@@ -275,19 +267,19 @@ prt(lonlat2loc(Xᶜ, df))
 # Determine the best locations for one, two, three and nine retail
 # warehouses serving the continental United States in proportion to
 # population, and compare them with @tbl-retail.
-# Code block 26: every US population centroid
+# Code block 24: every US population centroid
 z = filter(r -> r.ISCUS && r.POP > 0, uszcta3())
 select!(z, :ZCTA3, :LAT, :LON, :POP)
 Pz = hcat(z.LON, z.LAT)
 wz = float(z.POP)
 nz = size(Pz, 1)
-# Code block 27: cities for naming the answer
+# Code block 25: cities for naming the answer
 cities = filter(r -> r.ISCUS && r.POP > 100_000, usplace())
 Random.seed!(4161)
 TC1(X) = sum(wz .* dists(reshape(X, 1, 2), Pz, :mi)')
 X1 = optimize(TC1, vec(randX(Pz, 1))).minimizer
 prt(lonlat2loc(reshape(X1, 1, 2), cities))
-# Code block 28: one to ten warehouses
+# Code block 26: one to ten warehouses
 named(X) = select(lonlat2loc(X, cities), :NAME, :ST, :dist)
 
 Xw = Dict{Int,Matrix{Float64}}()
@@ -296,7 +288,7 @@ for nw in (2, 3, 9)
     Xw[nw], = ala(randX(Pz, nw), wz, Pz; nruns = 3)
     prt(named(Xw[nw]); title = "$nw warehouses")
 end
-# Code block 29: the nine-warehouse allocation
+# Code block 27: the nine-warehouse allocation
 X9 = Xw[9]
 W9 = sparse([argmin(c) for c in eachcol(dists(X9, Pz, :mi))],
             1:nz, wz, size(X9, 1), nz)

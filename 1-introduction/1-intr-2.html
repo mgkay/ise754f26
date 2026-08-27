@@ -4000,6 +4000,19 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
      is JS-injected and purged from the bundled theme. */
   .deflist .katex .text, .deflist .katex .text * {
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
+  /* Circled matrix entries, for a hand solution that marks the chosen
+     element of each column (the allocation of 2.3 Sec. 1, drawn this
+     way on the source slide). KaTeX has no \enclose{circle}, so the
+     entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
+     ::: {.circle-min} div and the rectangle is rounded to an oval
+     here. Scoped to the div so every other \fcolorbox in the course
+     stays a box. Injected here, not in theme SCSS, because .katex and
+     .fcolorbox are JS-injected and purged from the bundled theme, and
+     !important is needed to beat KaTeX's own inline border style. */
+  .circle-min .katex .fcolorbox {
+    border-radius: 50% !important;
+    border-width: 1.3px !important;
+    padding: 0.14em 0.30em !important; }
 </style>
 
   
@@ -4648,7 +4661,7 @@ heavy = wt[wt .&gt; 10] = [12, 18]</code></pre>
 </div>
 </div>
 <div class="result-box">
-<p>The charges are <code>[600, 250, 900, 350, 450]</code>, and two shipments exceed 10 ton: 12 and 18.</p>
+<p>The charges are [600, 250, 900, 350, 450], and 2 shipments exceed 10 ton: [12, 18].</p>
 </div>
 <div class="example-end">
 
@@ -4888,7 +4901,7 @@ x_1 \phantom{{}- x_2} + x_3 &amp;= 3 \\
 </div>
 </div>
 <div class="result-box">
-<p><code>ship.ton</code> is the 3-element vector <code>[12, 5, 18]</code>, the weights pulled straight out of the table by name.</p>
+<p><code>ship.ton</code> is the 3-element vector [12, 5, 18], the weights pulled straight out of the table by name.</p>
 </div>
 <div class="example-end">
 

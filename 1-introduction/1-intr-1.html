@@ -3984,6 +3984,19 @@ font-family: inherit;
      is JS-injected and purged from the bundled theme. */
   .deflist .katex .text, .deflist .katex .text * {
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
+  /* Circled matrix entries, for a hand solution that marks the chosen
+     element of each column (the allocation of 2.3 Sec. 1, drawn this
+     way on the source slide). KaTeX has no \enclose{circle}, so the
+     entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
+     ::: {.circle-min} div and the rectangle is rounded to an oval
+     here. Scoped to the div so every other \fcolorbox in the course
+     stays a box. Injected here, not in theme SCSS, because .katex and
+     .fcolorbox are JS-injected and purged from the bundled theme, and
+     !important is needed to beat KaTeX's own inline border style. */
+  .circle-min .katex .fcolorbox {
+    border-radius: 50% !important;
+    border-width: 1.3px !important;
+    padding: 0.14em 0.30em !important; }
 </style>
 
   
@@ -4523,7 +4536,7 @@ Model 3: Operational vehicle routing
 </figure>
 </div>
 <p>An extra vehicle, with its driver, fuel, and capital, costs far more than the miles a tighter route would save, so the fleet is shrunk first and distance only breaks ties. This reverses the usual statement of the problem, in which distance is taken as the sole objective.</p>
-<p>These three models are stated only at the level of the decision each one makes. Later lectures attach the symbols, the data, and the Julia that turn a model into something you can run. How much detail a model needs, and how much effort solving it takes, is the subject of the next section.</p>
+<p>These three models are stated only at the level of the decision each one makes. Later lectures attach the symbols, the data, and the Julia that turn a model into something runnable. How much detail a model needs, and how much effort solving it takes, is the subject of the next section.</p>
 </section>
 <section id="levels-of-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="levels-of-modeling">4. Levels of modeling</h2>
@@ -4783,7 +4796,7 @@ Table 2: Composing the parameters, unit by unit, into a weekly truckload count.
 
 </div>
 <!-- SOURCE · 453 s22 (Why and When is the Mean Useful) -->
-<p><em>Scalability</em> of the mean: the mean lets you scale the total up or down for a different count <span style="white-space: nowrap"><span class="math inline">n</span>,</span></p>
+<p><em>Scalability</em> of the mean: the mean scales the total up or down for a different count <span style="white-space: nowrap"><span class="math inline">n</span>,</span></p>
 <p><span class="math display">
 \bar{x} = \frac{\sum_{i=1}^{n} x_i}{n}
 \;\Rightarrow\; n\,\bar{x} = \sum_{i=1}^{n} x_i

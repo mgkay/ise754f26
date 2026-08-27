@@ -4000,6 +4000,19 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
      is JS-injected and purged from the bundled theme. */
   .deflist .katex .text, .deflist .katex .text * {
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
+  /* Circled matrix entries, for a hand solution that marks the chosen
+     element of each column (the allocation of 2.3 Sec. 1, drawn this
+     way on the source slide). KaTeX has no \enclose{circle}, so the
+     entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
+     ::: {.circle-min} div and the rectangle is rounded to an oval
+     here. Scoped to the div so every other \fcolorbox in the course
+     stays a box. Injected here, not in theme SCSS, because .katex and
+     .fcolorbox are JS-injected and purged from the bundled theme, and
+     !important is needed to beat KaTeX's own inline border style. */
+  .circle-min .katex .fcolorbox {
+    border-radius: 50% !important;
+    border-width: 1.3px !important;
+    padding: 0.14em 0.30em !important; }
 </style>
 
   
@@ -4370,7 +4383,7 @@ Companion script
 <p><a href="1-intr-3.jl"><code>1-intr-3.jl</code></a>, runnable Julia extracted from the lecture’s code blocks. Run its first cell once to install the course packages at their pinned versions and get class-ready.</p>
 </details>
 </div>
-<p>Lecture 1.1 built models with a small vocabulary that separated two things you do with one: <em>describe</em> a system, or <em>prescribe</em> a change to it. Used descriptively, a model predicts how a given solution will perform; used prescriptively, it searches across solutions for a good one. This lecture is the descriptive side, <strong>performance estimation</strong>: given a system, real or proposed, predict how it will operate. The prescriptive side, optimization, comes later, and depends on this one, you cannot search over designs until you can evaluate a design.</p>
+<p>Lecture 1.1 built models with a small vocabulary that separated two things a model does: <em>describe</em> a system, or <em>prescribe</em> a change to it. Used descriptively, a model predicts how a given solution will perform; used prescriptively, it searches across solutions for a good one. This lecture is the descriptive side, <strong>performance estimation</strong>: given a system, real or proposed, predict how it will operate. The prescriptive side, optimization, comes later, and depends on this one, no search over designs is possible until a design can be evaluated.</p>
 <p>Lecture 1.1 also estimated <em>parameters</em> at different levels of effort: <strong>level 0</strong>, guesstimation, brackets an unknown with a quick low and high; <strong>level 1</strong>, mean-value analysis, works with averages; <strong>level 2</strong>, nonlinear models, brings in variability and more structure. Performance estimation uses the same levels, but what it estimates is now a measure of how the whole system <em>operates</em>: its cost, its profitability, its throughput, its cycle time, the work waiting in it, or whatever the decision at hand turns on. Any level can produce such an estimate; the level sets only how faithfully the model represents the system, and so how accurate the estimate is. A guesstimate or a linear, average-based model is often enough. But some systems are governed by their bottlenecks and their variability rather than their averages. Queues form from variation even when average capacity looks ample, and a line is paced by its tightest constraint. There, a level-2 model, nonlinear and variability-aware, represents the system far better. The cycle-time estimate developed later in this lecture is one such model. One rung higher, <strong>level 3</strong>, simulation, also makes its first appearance in this lecture (Sec. 7): where interactions grow too complex for any formula, the system is played out event by event instead.</p>
 <p>Two approaches run through the lecture. When a system resists a direct model, its performance can be <strong>bracketed</strong> between an easy best case and an easy worst case. When its load and variability can be modeled, a <strong>direct model</strong> estimates the performance outright. The bracket is the failsafe; the direct model is the sharper estimate when it applies.</p>
 <section id="bracketing" class="level2">
