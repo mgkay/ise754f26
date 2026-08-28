@@ -4423,11 +4423,21 @@ Figure 2: Basic production system.
 </div>
 <p>The bottom portion of <a href="#fig-production" class="quarto-xref">Fig. 2</a> illustrates two different shipping terms that describe when the transfer of title occurs when goods are transported from the seller to the buyer: <strong>FOB Origin</strong> and <strong>FOB Destination</strong>, where FOB stands for free on board.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> In most cases, the cost of transporting the goods is paid for by whoever is the owner of the goods during the transport. Taking the production system as the buyer, the supplier (the seller) would pay for the transport of goods from the supplier’s location (the origin) to the production facility (the destination) if the shipping terms were FOB Destination.</p>
 <p>The choice of FOB terms does not usually affect the location decision at all; it only fixes who pays for the freight. If a purchaser pays for the transport (FOB Origin), then they would typically pay less than they would if the supplier paid for the transport (FOB Destination). As a result, the sum of the transport cost and the purchase cost is unaffected by the FOB terms, and therefore does not impact the location decision. What typically determines who pays for the transport is who can provide the transport at lower cost. A large retailer with an extensive logistics network and its own fleet of trucks will typically be able to provide the transport at a lesser cost compared to a small supplier.</p>
-<p>Assuming that local input costs are either the same at every location or are insignificant as compared to transport costs, the minisum transport-oriented single-facility location problem is to locate a new facility (NF) to minimize the sum of weighted distances between NF and <span class="math inline">m</span> existing facilities EF<span style="white-space: nowrap"><span class="math inline">_i</span>,</span> <span style="white-space: nowrap"><span class="math inline">i = 1, \ldots, m</span>:</span></p>
+<p>Behind the choice of terms sits a short ladder of cost definitions that lead to transport cost, which is the cost most impacted by the location decision. Procurement cost is the landed cost at the supplier plus the inbound transport cost. Adding the local resource cost, meaning labor and whatever materials are bought locally, gives the production cost; adding the outbound transport cost to that gives the total delivered cost. The transport cost, <span style="white-space: nowrap"><span class="math inline">TC</span>,</span> is the sum of the inbound and the outbound transport costs alone.</p>
+<p><span id="eq-cost-ladder"><span class="math display">
+\begin{aligned}
+\text{procurement cost} &amp;= \text{landed cost at supplier} + \text{inbound transport cost}\\
+\text{production cost} &amp;= \text{procurement cost} + \text{local resource cost}\\
+\text{total delivered cost} &amp;= \text{production cost} + \text{outbound transport cost}\\
+TC &amp;= \text{inbound transport cost} + \text{outbound transport cost}
+\end{aligned}
+\tag{1}</span></span></p>
+<p>For most location problems only that last quantity is of interest, and everything else is assumed, as a first approximation, not to change with location.</p>
+<p>The <span class="math inline">TC(X)</span> minimized in <a href="#eq-minisum" class="quarto-xref">Eq. 2</a> below is exactly the last line of <a href="#eq-cost-ladder" class="quarto-xref">Eq. 1</a>. Assuming that local input costs are either the same at every location or are insignificant as compared to transport costs, the minisum transport-oriented single-facility location problem is to locate a new facility (NF) to minimize the sum of weighted distances between NF and <span class="math inline">m</span> existing facilities EF<span style="white-space: nowrap"><span class="math inline">_i</span>,</span> <span style="white-space: nowrap"><span class="math inline">i = 1, \ldots, m</span>:</span></p>
 <p><span id="eq-minisum"><span class="math display">
 \min_{X}\ TC(X) = \sum_{i=1}^{m} w_i\, d(X, P_i)
                 = \sum_{i=1}^{m} q_i\, r_i\, d(X, P_i)
-\tag{1}</span></span></p>
+\tag{2}</span></span></p>
 <p>where</p>
 <div class="deflist">
 <dl>
@@ -4466,13 +4476,13 @@ number of EFs.
 </dl>
 </div>
 <p>The quantity that drives the location is the <strong>monetary weight</strong>, and it is worth splitting into two parts. The physical weight is the easy one, tons per year. Multiplying it by the transport rate, in dollars per ton-mile, cancels the tons and leaves a rate in dollars per mile per year: the monetary weight. In practice people drop the qualifier and simply say “the weight,” always meaning this monetary one.</p>
-<p>If the physical weight <span class="math inline">q_i</span> is used, then <span class="math inline">TC</span> in <a href="#eq-minisum" class="quarto-xref">Eq. 1</a> is in units of $; if, instead, the physical weight rate <span class="math inline">f_i</span> in units of tons per year is used, then <span class="math inline">TC</span> is in units of $/year.</p>
+<p>If the physical weight <span class="math inline">q_i</span> is used, then <span class="math inline">TC</span> in <a href="#eq-minisum" class="quarto-xref">Eq. 2</a> is in units of $; if, instead, the physical weight rate <span class="math inline">f_i</span> in units of tons per year is used, then <span class="math inline">TC</span> is in units of $/year.</p>
 <p>An activity is <strong>weight-gaining</strong> when its outbound monetary weight exceeds its inbound, and <strong>weight-losing</strong> in the reverse. The distribution center is the standard weight-gaining case: cases of a product arrive on a tractor-trailer and leave on a smaller delivery truck whose cost per ton-mile might be twice as high, so the transport rate, and with it the monetary weight, roughly doubles even though the product itself has not changed.</p>
 <p>When the same vehicles carry the inbound and outbound flows, one transport rate is common to every term. Taking it as one turns the objective into minimizing total <em>distance</em>, so the minimum-cost problem becomes a minimum-distance problem, solved by the same median procedure as in <a href="2-loc-1.html#mdl-minisum1d" class="xref" data-lec="2.1" data-id="mdl-minisum1d" title="Types of Location Problems">Model 8 in Lecture 2.1</a>. The transport rate has to be included explicitly only when the flows travel at different costs.</p>
 </section>
 <section id="procurement-and-distribution" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="procurement-and-distribution">2. Procurement and distribution</h2>
-<p>A plant draws raw materials from its suppliers and ships finished goods to its customers, so its location is pulled from both sides at once: <strong>procurement</strong>, the inbound flows, and <strong>distribution</strong>, the outbound flows. Each existing facility, supplier or customer, enters the minisum objective of <a href="#eq-minisum" class="quarto-xref">Eq. 1</a> through its monetary weight, and the location balances all of them together.</p>
+<p>A plant draws raw materials from its suppliers and ships finished goods to its customers, so its location is pulled from both sides at once: <strong>procurement</strong>, the inbound flows, and <strong>distribution</strong>, the outbound flows. Each existing facility, supplier or customer, enters the minisum objective of <a href="#eq-minisum" class="quarto-xref">Eq. 2</a> through its monetary weight, and the location balances all of them together.</p>
 <p>The simplest case, one supplier and one customer, already shows how the weights decide the location. Two products illustrate the two extremes (<a href="#fig-product-a" class="quarto-xref">Fig. 3</a> and <a href="#fig-product-b" class="quarto-xref">Fig. 4</a>), with the same transport rate on both sides, so only the physical weights matter.</p>
 <div id="fig-product-a" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -4494,7 +4504,7 @@ Figure 4: Product B: one ton of raw material from Wilmington, plus two tons of 
 </figcaption>
 </figure>
 </div>
-<p>Product A is physically <strong>weight-losing</strong>: two tons move in for every one ton that moves out, so every mile the plant sits closer to Asheville saves a net ton-mile of transport, and the plant belongs at the supplier. Product B is <strong>weight-gaining</strong>: its ubiquitous inputs, such as water or air, are available everywhere and incur no transport, so only one ton moves in for every three tons that move out, and the plant belongs at the customer. If the two products were made in a single shared plant, neither answer stands alone: the location would depend on how much of each product is made, so each product’s annual demand <span class="math inline">f_i</span> enters, and the problem becomes exactly the weighted minisum of <a href="#eq-minisum" class="quarto-xref">Eq. 1</a>.</p>
+<p>Product A is physically <strong>weight-losing</strong>: two tons move in for every one ton that moves out, so every mile the plant sits closer to Asheville saves a net ton-mile of transport, and the plant belongs at the supplier. Product B is <strong>weight-gaining</strong>: its ubiquitous inputs, such as water or air, are available everywhere and incur no transport, so only one ton moves in for every three tons that move out, and the plant belongs at the customer. If the two products were made in a single shared plant, neither answer stands alone: the location would depend on how much of each product is made, so each product’s annual demand <span class="math inline">f_i</span> enters, and the problem becomes exactly the weighted minisum of <a href="#eq-minisum" class="quarto-xref">Eq. 2</a>.</p>
 <p>The worked example combines both sides at full scale: a plant on the I-40 corridor (<a href="#fig-i40" class="quarto-xref">Fig. 5</a>) with two suppliers, three customers, and different inbound and outbound transport rates.</p>
 <div id="fig-i40" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -4730,7 +4740,7 @@ number of existing facilities.
 <div class="example-end">
 
 </div>
-<p>The search reached that point without any care about where it started, and the reason is the shape of the objective. When the objective is <strong>convex</strong>, a single bowl (<a href="#fig-convexity" class="quarto-xref">Fig. 10</a>), a downhill search reaches the bottom from wherever it starts, so any starting point gives the same optimum. The weighted-minisum objective is convex, so choosing a start is not a concern here. A <strong>nonconvex</strong> objective is different: plotted, it shows a series of separate minima, and the starting point then has a large effect on which one the search settles in.</p>
+<p>The search reached that point without any care about where it started, and the reason is the shape of the objective. When the objective is <strong>convex</strong>, a single bowl (<a href="#fig-convexity" class="quarto-xref">Fig. 10</a>), a downhill search reaches the bottom from wherever it starts, so any starting point gives the same optimum. The weighted-minisum objective is convex, so choosing a start is not a concern here. Nonconvexity by itself does not change that. An objective can be nonconvex and still <strong>unimodal</strong>, a single basin of irregular shape, and a downhill search reaches its one minimum from any start just as it does in the convex case. What makes the starting point matter is <strong>multimodality</strong>: several separate local minima, so that where the search begins decides which one it settles in.</p>
 <div id="cell-fig-convexity" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code that generates this figure</summary>
@@ -5024,12 +5034,12 @@ Figure 13: The same three existing facilities under four objectives. The bounde
 <p>Given two points <span class="math inline">P_1 = (x_1, y_1)</span> and <span style="white-space: nowrap"><span class="math inline">P_2 = (x_2, y_2)</span>,</span> a general metric distance function termed the <span class="math inline">l_p</span> distance or norm can be used to represent several of the most common distances used in practice. The function uses different values of the parameter <span class="math inline">p</span> to represent these special cases:</p>
 <p><span id="eq-lp"><span class="math display">
 d_p(P_1, P_2) = \left[\,|x_1 - x_2|^p + |y_1 - y_2|^p\,\right]^{1/p}, \quad p \ge 1
-\tag{2}</span></span></p>
+\tag{3}</span></span></p>
 <p>corresponding to the rectilinear (<span style="white-space: nowrap"><span class="math inline">p = 1</span>),</span> Euclidean (<span style="white-space: nowrap"><span class="math inline">p = 2</span>),</span> and Chebychev (<span style="white-space: nowrap"><span class="math inline">p \to \infty</span>)</span> distances:</p>
 <div class="eq-align">
-<p><span id="eq-rectilinear"><span class="math display">\hphantom{\underset{\displaystyle d_\infty(P_1, P_2)}{\underset{\displaystyle d_2(P_1, P_2)}{d_1(P_1, P_2)}}}\mathllap{d_1(P_1, P_2)} = |x_1 - x_2| + |y_1 - y_2| \tag{3}</span></span></p>
-<p><span id="eq-euclidean"><span class="math display">\hphantom{\underset{\displaystyle d_\infty(P_1, P_2)}{\underset{\displaystyle d_2(P_1, P_2)}{d_1(P_1, P_2)}}}\mathllap{d_2(P_1, P_2)} = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2} \tag{4}</span></span></p>
-<p><span id="eq-chebychev"><span class="math display">\hphantom{\underset{\displaystyle d_\infty(P_1, P_2)}{\underset{\displaystyle d_2(P_1, P_2)}{d_1(P_1, P_2)}}}\mathllap{d_\infty(P_1, P_2)} = \max\{\,|x_1 - x_2|,\; |y_1 - y_2|\,\} \tag{5}</span></span></p>
+<p><span id="eq-rectilinear"><span class="math display">\hphantom{\underset{\displaystyle d_\infty(P_1, P_2)}{\underset{\displaystyle d_2(P_1, P_2)}{d_1(P_1, P_2)}}}\mathllap{d_1(P_1, P_2)} = |x_1 - x_2| + |y_1 - y_2| \tag{4}</span></span></p>
+<p><span id="eq-euclidean"><span class="math display">\hphantom{\underset{\displaystyle d_\infty(P_1, P_2)}{\underset{\displaystyle d_2(P_1, P_2)}{d_1(P_1, P_2)}}}\mathllap{d_2(P_1, P_2)} = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2} \tag{5}</span></span></p>
+<p><span id="eq-chebychev"><span class="math display">\hphantom{\underset{\displaystyle d_\infty(P_1, P_2)}{\underset{\displaystyle d_2(P_1, P_2)}{d_1(P_1, P_2)}}}\mathllap{d_\infty(P_1, P_2)} = \max\{\,|x_1 - x_2|,\; |y_1 - y_2|\,\} \tag{6}</span></span></p>
 </div>
 <p>The above distances are defined for two-dimensional points, but they can be extended for points of any dimension. For <span style="white-space: nowrap"><span class="math inline">0 &lt; p &lt; 1</span>,</span> the <span class="math inline">l_p</span> distance is not defined since the triangle inequality does not hold; for <span style="white-space: nowrap"><span class="math inline">1 &lt; p &lt; 2</span>,</span> the <span class="math inline">l_p</span> distance lies between the rectilinear and the Euclidean distances; and for <span style="white-space: nowrap"><span class="math inline">2 &lt; p &lt; \infty</span>,</span> the <span class="math inline">l_p</span> distance lies below the Euclidean distance and decreases as <span class="math inline">p</span> increases.</p>
 <p>Each value of <span class="math inline">p</span> has a characteristic contour of points at equal distance from the center (<a href="#fig-metric-lp" class="quarto-xref">Fig. 14</a>): a diamond for the rectilinear distance, the familiar circle for the Euclidean, and a square for the Chebychev, with the intermediate values filling the range between them.</p>
@@ -5108,11 +5118,11 @@ Figure 15: One move from A to B under the three metrics: rectilinear <span styl
 <p>The great circle distance <span class="math inline">d_{GC}</span> between points 1 and 2 on the surface of the earth, specified by their longitude (<span style="white-space: nowrap"><span class="math inline">lon</span>)</span> and latitude (<span style="white-space: nowrap"><span class="math inline">lat</span>)</span> angles in radians, is <span style="white-space: nowrap"><span class="math inline">d_{GC} = R\,d_{rad}</span>,</span> where <span class="math inline">R</span> is the radius of the earth and the central angle <span class="math inline">d_{rad}</span> (in radians) is</p>
 <p><span id="eq-gc"><span class="math display">
 d_{rad} = 2 \sin^{-1} \min\left\{1,\ \sqrt{\sin^2\!\left(\frac{y_1 - y_2}{2}\right) + \cos(y_1)\cos(y_2)\,\sin^2\!\left(\frac{x_1 - x_2}{2}\right)}\right\}
-\tag{6}</span></span></p>
+\tag{7}</span></span></p>
 <p>with <span class="math inline">x</span> and <span class="math inline">y</span> the longitude and latitude. To convert between decimal degrees and radians:</p>
 <p><span id="eq-degrad"><span class="math display">
 x_{rad} = \frac{x_{deg}}{180}\,\pi \qquad \text{and} \qquad x_{deg} = \frac{x_{rad} \cdot 180}{\pi}.
-\tag{7}</span></span></p>
+\tag{8}</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled" title="Derivation of the great circle distance">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -5154,7 +5164,7 @@ a = 90^\circ - y_2, \quad b = 90^\circ - y_1, \quad C = x_1 - x_2
 d_{rad} = c = \cos^{-1}\!\left[\sin(y_2)\sin(y_1)
                 + \cos(y_2)\cos(y_1)\cos(x_1 - x_2)\right]
 </span></p>
-<p>The above formula can result in round off error if the two points are located at exactly opposite sides of a sphere. Instead, the Haversine formula can be used (<a href="#eq-gc" class="quarto-xref">Eq. 6</a>). The Haversine formula does not need to be used if the great circle distance is being calculated by hand and the two points are known to not be on opposite sides of the sphere.</p>
+<p>The above formula can result in round off error if the two points are located at exactly opposite sides of a sphere. Instead, the Haversine formula can be used (<a href="#eq-gc" class="quarto-xref">Eq. 7</a>). The Haversine formula does not need to be used if the great circle distance is being calculated by hand and the two points are known to not be on opposite sides of the sphere.</p>
 </div>
 </div>
 </div>
@@ -5347,7 +5357,7 @@ Figure 19: The population-weighted minisum over every place in North Carolina (
 <p>A straight line between two points is not a distance anyone travels. The great-circle distance from Goldsboro to High Point, North Carolina is 121 miles; the shortest-travel-time road route between them, traced through the road network in <a href="#fig-circuity-road" class="quarto-xref">Fig. 20</a>, is 137.7 miles. The ratio of the two is the <strong>circuity factor</strong>,</p>
 <p><span id="eq-circuity"><span class="math display">
 g = \frac{\text{road distance}}{\text{great-circle distance}},
-\tag{8}</span></span></p>
+\tag{9}</span></span></p>
 <p>which for this pair is <span style="white-space: nowrap"><span class="math inline">137.7/121.0 = 1.14</span>.</span></p>
 <div id="fig-circuity-road" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">

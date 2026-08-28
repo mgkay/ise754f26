@@ -448,36 +448,40 @@
   }
  },
  "2.2": {
-  "eq-minisum": {
+  "eq-cost-ladder": {
    "label": "Eq. 1",
    "word": "Eq."
   },
-  "eq-lp": {
+  "eq-minisum": {
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-rectilinear": {
+  "eq-lp": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-euclidean": {
+  "eq-rectilinear": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-chebychev": {
+  "eq-euclidean": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-gc": {
+  "eq-chebychev": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-degrad": {
+  "eq-gc": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-circuity": {
+  "eq-degrad": {
    "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-circuity": {
+   "label": "Eq. 9",
    "word": "Eq."
   },
   "fig-network": {
