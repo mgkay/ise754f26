@@ -56,6 +56,172 @@ function logjam_fns(names::Symbol...)
 end
 
 """
+    docparams(M, name) -> String
+
+The `# Arguments` bullets from the primary docstring of `name` in module `M`,
+as Markdown, or "" if the docstring has no such section.
+
+WHY THIS EXISTS (instructor, 2026-09-01). An implementation rung backed by an
+imported Logjam export can only show the bare handle -- `ufladd` -- since there
+is no definition to display. That leaves "just a bunch of variables": the
+formulation above states the model in set notation, `kᵢ` and `C = (cᵢⱼ)`, and
+nothing connects those to the `k`, `C`, `y`, `p` the function actually takes.
+The keywords are worse, appearing ONLY in the implementation.
+
+Read LIVE from the loaded module at render, exactly as `docline` is, so it
+cannot drift from the pinned Logjam. That is the whole argument for generating
+this rather than writing it by hand once per rung.
+
+Arguments only, deliberately: `# Returns` repeats across the UFL family almost
+verbatim and the rung's own signature comment already names what comes back.
+"""
+function docparams(M::Module, name::Symbol)
+    md = Base.Docs.meta(M)
+    b = Base.Docs.Binding(M, name)
+    haskey(md, b) || return ""
+    for sig in md[b].order
+        raw = _apparatus_raw(md[b].docs[sig])
+        startswith(_apparatus_firstprose(raw), "Struct-form overload") && continue
+        i = findfirst("# Arguments", raw)
+        i === nothing && continue
+        rest = raw[(last(i) + 1):end]
+        j = findfirst(r"\n#+ ", rest)          # the next section heading, if any
+        body = j === nothing ? rest : rest[1:(first(j) - 1)]
+        return strip(body)
+    end
+    return ""
+end
+
+"""
+    logjam_sig(M, name) -> String
+
+The call form of `name` as `(args; keywords)`, read from its first method.
+
+Derived, not typed. The hand-written signature comments this replaces were wrong
+about `pmedian` within a day of being written, because they were copied from the
+working-copy source while the PINNED package is what renders.
+"""
+function logjam_sig(M::Module, name::Symbol; keywords::Bool = true)
+    args = String.(Base.method_argnames(first(methods(getfield(M, name))))[2:end])
+    filter!(a -> !startswith(a, "#"), args)
+    kws = keywords ? logjam_kwargs(M, name) : String[]
+    return "(" * join(args, ", ") * (isempty(kws) ? "" : "; " * join(kws, ", ")) * ")"
+end
+
+"""
+    logjam_kwargs(M, name) -> Vector{String}
+
+The keyword names of `name`, which is also what tells a rung's parameter list
+which docstring bullets are optional.
+"""
+function logjam_kwargs(M::Module, name::Symbol)
+    kws = String.(Base.kwarg_decl(first(methods(getfield(M, name)))))
+    return filter(k -> !endswith(k, "..."), kws)
+end
+
+"""
+    logjam_ret(M, name) -> String
+
+The returned form of `name`, taken from the first `# Returns` bullet of its
+docstring -- e.g. `(y, TC, W)`.
+
+Instructor, 2026-09-01: "keep the input argument to output argument on the last
+line ... currently nothing shows what the output arguments come from the
+functions." Derived like everything else in a rung, so `y, TC, W` is the
+docstring's own naming rather than a guess, and it cannot drift.
+"""
+function logjam_ret(M::Module, name::Symbol)
+    md = Base.Docs.meta(M)
+    b = Base.Docs.Binding(M, name)
+    haskey(md, b) || return ""
+    for sig in md[b].order
+        raw = _apparatus_raw(md[b].docs[sig])
+        startswith(_apparatus_firstprose(raw), "Struct-form overload") && continue
+        i = findfirst("# Returns", raw)
+        i === nothing && continue
+        m = match(r"-\s*`([^`]+)`", raw[(last(i) + 1):end])
+        return m === nothing ? "" : m.captures[1]
+    end
+    return ""
+end
+
+"""
+    logjam_rung(name, title)
+
+Print (for an `#| output: asis` chunk) a COMPLETE implementation rung as one
+fenced Julia block: the model title, the parameter definitions as comments, and
+the bare handle with its derived signature.
+
+One block rather than two (instructor, 2026-09-01), so the rung reads as a single
+piece of code rather than as a comment box sitting above a separate handle.
+Nothing here executes: a rung shows apparatus, and the docstring lookup already
+proves the binding exists -- an unknown name yields no parameters at all.
+"""
+function logjam_rung(name::Symbol, title::AbstractString;
+                     width::Int = 74, keywords::Bool = true)
+    # `keywords = false` FOR A PROCEDURE'S FIRST PRESENTATION (instructor,
+    # 2026-09-01): "the initial one and then the modified one are identical.
+    # That's confusing ... when you first present it, not include the two optional
+    # keywords. That would make the second one actually different." ADD and
+    # Modified ADD are one export, so with every parameter shown both rungs
+    # rendered the same line and the second looked like a duplicate. A rung should
+    # show what its own formulation describes: plain ADD takes `(k, C)`, and the
+    # warm start and the cap arrive with the modified formulation that introduces
+    # them.
+    skip = keywords ? String[] : logjam_kwargs(Logjam, name)
+    println("```julia")
+    println("# Model: ", title)
+    _logjam_param_comments(name; width = width, skip = skip)
+    ret = logjam_ret(Logjam, name)
+    println(rpad(String(name), 10), " # ",
+            logjam_sig(Logjam, name; keywords = keywords),
+            isempty(ret) ? "" : " -> " * ret)
+    println("```")
+    return nothing
+end
+
+function _logjam_param_comments(name::Symbol; width::Int = 74,
+                                skip::Vector{String} = String[])
+    body = docparams(Logjam, name)
+    isempty(body) && return nothing
+    # AS JULIA COMMENTS, INSIDE THE SHADED RUNG (instructor, 2026-09-01: "They
+    # should be part of the shaded model section. These can be comments in
+    # Julia."). A rung is a code block, so the parameter definitions belong in it
+    # rather than in a disclosure beneath it -- but they still have to be
+    # GENERATED, or they drift from the pinned Logjam the moment a docstring
+    # changes. Printing from an `output: asis` chunk gives both.
+    # JOIN EACH BULLET FIRST. A docstring bullet may run over several lines, and
+    # treating every line as its own bullet mangles the long ones -- `ala`'s
+    # `alloc` came out as three comments, two of them starting mid-sentence with
+    # no name. Only a line beginning "- " starts a new parameter.
+    bullets = String[]
+    for b in split(body, "\n")
+        s = strip(b)
+        isempty(s) && continue
+        if startswith(s, "-") || isempty(bullets)
+            push!(bullets, s)
+        else
+            bullets[end] *= " " * s
+        end
+    end
+    for s in bullets
+        s = replace(s, r"^-\s*" => "", "`" => "")      # bullet and code ticks
+        nm = strip(first(split(s, ":")))
+        nm in skip && continue                          # an optional not shown here
+        line = "#"
+        for w in split(s)
+            if length(line) + 1 + length(w) > width
+                println(line); line = "#    " * w      # continuation, indented
+            else
+                line *= " " * w
+            end
+        end
+        println(line)
+    end
+    return nothing
+end
+
+"""
     mdtable(headers, rows; align, caption, label, colwidths)
 
 Print (for an `#| output: asis` chunk) a Markdown table from already-

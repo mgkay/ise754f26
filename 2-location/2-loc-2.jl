@@ -31,7 +31,7 @@ end
 using Logjam, Optim, DataFrames
 
 # Sec. 2. Procurement and distribution
-# Example 1: Plant location with procurement and distribution costs
+# Example 1: Plant location along I-40
 ## Example 1(a): From the bill of material to the monetary weights
 # Determine each existing facility's monetary weight, outbound from the
 # demands and inbound through the bill of material.
@@ -41,7 +41,8 @@ rout = 1.00              # $/ton-mi outbound
 wout = fout .* rout      # customer monetary weights
 BOM  = [2.0, 0.5]        # ton raw per ton out: Ashvl, Durham
 fin  = BOM .* sum(fout)  # inbound physical flows (ton/yr)
-win  = fin ./ 3          # supplier wts; r_in = $1/3 ($0.33)
+rin  = 1/3               # $/ton-mi inbound, stated as $0.33
+win  = fin .* rin        # supplier monetary weights
 @show wout fin win;
 
 ## Example 1(b): Locating the plant
@@ -69,7 +70,7 @@ function minisum(w, P, dist)
     return optimize(TC, x0).minimizer
 end
 
-## Example 2
+## Example 2: Fermat's 1629 problem
 # Determine the minisum location for three facilities of equal weight at
 # $(1, 1)$, $(6, 1)$, and $(6, 5)$, under straight-line distance.
 # Code block 4: straight-line distance, the same as Logjam.d2
@@ -169,7 +170,7 @@ text!(ax, 3.35, 4.05; color = :purple, fontsize = 11,
 Legend(fig[1, 2], ax; framevisible = false, labelsize = 11)
 fig
 
-## Sec. 5. Logjam: the course's logistics toolkit
+## Sec. 5. Logjam: the logistics toolkit
 # Code block 17: adding Logjam by URL
 using Pkg
 Pkg.add(url="https://github.com/mgkay/Logjam")
@@ -209,7 +210,7 @@ df[argmax(d), :NAME]                 # farthest city
 df[sortperm(d)[2:4], :NAME]  # Code block 24: three nearest, skip Raleigh
 
 # Sec. 6. Computing distances with Logjam
-## Example 3
+## Example 3: NC Zoo
 # Locate a single facility to minimize the total population-weighted
 # great-circle distance to every place in North Carolina.
 # Code block 25: every NC place, population-weighted
@@ -282,13 +283,13 @@ prt(DataFrame(
     Road = road,
     g = round.(g, digits = 3)))
 # Code block 30: the estimate against a held-out pair
-gGH = 137.7 / 121.0                 # @fig-circuity-road, held out
+gGH = 137.7 / 121.0                 # road / great-circle, held out
 (held_out = round(gGH, digits = 3),
  estimate = round(ḡ, digits = 3),
  error_pct = round(100 * (gGH - ḡ) / gGH, digits = 1))
 
 # Sec. 7. Circuity factors
-## Example 4. Pricing an alternative location
+## Example 4: Price of staying in Cary
 # Determine the new-facility location serving existing facilities at
 # Detroit, Gainesville and Memphis, receiving 40, 25 and 35 truckloads
 # per year, and determine the increase in annual transport cost at

@@ -456,32 +456,56 @@
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-lp": {
+  "eq-td": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-rectilinear": {
+  "eq-argmin": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-euclidean": {
+  "eq-majority": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-chebychev": {
+  "eq-lp": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-gc": {
+  "eq-rectilinear": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-degrad": {
+  "eq-euclidean": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-circuity": {
+  "eq-chebychev": {
    "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-gc": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-degrad": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-dms": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-circuity": {
+   "label": "Eq. 13",
+   "word": "Eq."
+  },
+  "eq-circuity-sample": {
+   "label": "Eq. 14",
+   "word": "Eq."
+  },
+  "eq-road-est": {
+   "label": "Eq. 15",
    "word": "Eq."
   },
   "fig-network": {
@@ -508,68 +532,88 @@
    "label": "Fig. 6",
    "word": "Fig."
   },
-  "fig-median": {
+  "fig-weights": {
    "label": "Fig. 7",
    "word": "Fig."
   },
-  "fig-fermat": {
+  "fig-median": {
    "label": "Fig. 8",
    "word": "Fig."
   },
-  "fig-varignon": {
+  "fig-fermat": {
    "label": "Fig. 9",
    "word": "Fig."
   },
-  "fig-convexity": {
+  "fig-varignon": {
    "label": "Fig. 10",
    "word": "Fig."
   },
-  "fig-search": {
+  "fig-modality": {
    "label": "Fig. 11",
    "word": "Fig."
   },
-  "fig-neldermead-ops": {
+  "fig-convexity": {
    "label": "Fig. 12",
    "word": "Fig."
   },
-  "fig-objectives": {
+  "fig-search": {
    "label": "Fig. 13",
    "word": "Fig."
   },
-  "fig-metric-lp": {
+  "fig-amoeba": {
    "label": "Fig. 14",
    "word": "Fig."
   },
-  "fig-chebychev": {
+  "fig-neldermead-ops": {
    "label": "Fig. 15",
    "word": "Fig."
   },
-  "fig-gc-derivation": {
+  "fig-objectives": {
    "label": "Fig. 16",
    "word": "Fig."
   },
-  "fig-greatcircle": {
+  "fig-metric-lp": {
    "label": "Fig. 17",
    "word": "Fig."
   },
-  "fig-mercator": {
+  "fig-machines": {
    "label": "Fig. 18",
    "word": "Fig."
   },
-  "fig-nc-minisum": {
+  "fig-chebychev": {
    "label": "Fig. 19",
    "word": "Fig."
   },
-  "fig-circuity-road": {
+  "fig-lonlat": {
    "label": "Fig. 20",
    "word": "Fig."
   },
-  "fig-circuity-triangle": {
+  "fig-gc-derivation": {
    "label": "Fig. 21",
    "word": "Fig."
   },
-  "fig-fedex": {
+  "fig-greatcircle": {
    "label": "Fig. 22",
+   "word": "Fig."
+  },
+  "fig-mercator": {
+   "label": "Fig. 23",
+   "word": "Fig."
+  },
+  "fig-nc-minisum": {
+   "label": "Fig. 24",
+   "word": "Fig."
+  },
+  "fig-circuity-road": {
+   "label": "Fig. 25",
+   "word": "Fig."
+  },
+  "fig-circuity-triangle": {
+   "label": "Fig. 26",
+   "word": "Fig."
+  },
+  "fig-fedex": {
+   "label": "Fig. 27",
    "word": "Fig."
   },
   "mdl-minisum": {
@@ -662,16 +706,20 @@
    "label": "Fig. 8",
    "word": "Fig."
   },
-  "tbl-ala-west": {
+  "tbl-corridor": {
    "label": "Table 1",
    "word": "Table"
   },
-  "tbl-ala-east": {
+  "tbl-ala-west": {
    "label": "Table 2",
    "word": "Table"
   },
-  "tbl-retail": {
+  "tbl-ala-east": {
    "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-retail": {
+   "label": "Table 4",
    "word": "Table"
   },
   "mdl-alloc": {
@@ -702,6 +750,18 @@
    "label": "Ex. 3",
    "word": "Ex."
   },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
+   "word": "Ex."
+  },
   "example-4": {
    "label": "Ex. 4",
    "word": "Ex."
@@ -728,6 +788,148 @@
   },
   "example-8": {
    "label": "Ex. 8",
+   "word": "Ex."
+  }
+ },
+ "2.4": {
+  "eq-ufl": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-mmin": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-pmedian": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-cost-ladder": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-tpc-est": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-apc-act": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-apc-est": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-lsq-line": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-lsq": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-l1l2": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "fig-opt-num": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-construction": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-i40-ufl": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-scale": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-l1l2": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "tbl-i40": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-add-c": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-add-1": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-add-2": {
+   "label": "Table 4",
+   "word": "Table"
+  },
+  "tbl-add-3": {
+   "label": "Table 5",
+   "word": "Table"
+  },
+  "tbl-emca": {
+   "label": "Table 6",
+   "word": "Table"
+  },
+  "tbl-sp3d": {
+   "label": "Table 7",
+   "word": "Table"
+  },
+  "mdl-ufl": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "mdl-pmedian": {
+   "label": "Model 2",
+   "word": "Model"
+  },
+  "mdl-lsq": {
+   "label": "Model 3",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
    "word": "Ex."
   }
  }
