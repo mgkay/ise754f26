@@ -5303,7 +5303,7 @@ Figure 6: The integrated objective for the corridor, contoured over the two mil
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource pseudocode number-lines code-with-copy"><code class="sourceCode"><span id="cb25-1"><a href="#cb25-1"></a>algorithm ala;</span>
 <span id="cb25-2"><a href="#cb25-2"></a>{ input:  starting locations X, weights w, demand points P         }</span>
 <span id="cb25-3"><a href="#cb25-3"></a>{ output: locations X, allocation W, and total cost TC             }</span>
-<span id="cb25-4"><a href="#cb25-4"></a>{ allocate is @mdl-alloc; locate is the per-facility minisum solve }</span>
+<span id="cb25-4"><a href="#cb25-4"></a>{ allocate is Model 1; locate is the per-facility minisum solve    }</span>
 <span id="cb25-5"><a href="#cb25-5"></a>begin</span>
 <span id="cb25-6"><a href="#cb25-6"></a>    W := allocate(X);  TC := TC(X, W);  done := false;</span>
 <span id="cb25-7"><a href="#cb25-7"></a>    while done = false do</span>

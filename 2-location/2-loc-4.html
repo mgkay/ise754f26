@@ -5103,7 +5103,7 @@ Table 5: Third pass, <span style="white-space: nowrap"><span class="math inline
 <span id="cb23-5"><a href="#cb23-5"></a><span class="co"># y: Initial facility set.</span></span>
 <span id="cb23-6"><a href="#cb23-6"></a>uflxchg    <span class="co"># (k, C, y) -&gt; (y, TC, W)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The two loops starting at lines 4 and 7 in the above EXCHG formulation are what distinguish it from ADD and DROP: every open site is tried against every closed one, so each pass of EXCHG costs the product of the number of sites rather than the sum. In return it can reach a solution that neither construction procedure produces.</p>
+<p>The two loops starting at lines 9 and 10 in the above EXCHG formulation are what distinguish it from ADD and DROP: every open site is tried against every closed one, so each pass of EXCHG costs the product of the number of sites rather than the sum. In return it can reach a solution that neither construction procedure produces.</p>
 <p>Combining the three procedures needs one change to <code>ufladd</code>: it has to be able to start from a set of sites that are already open, rather than always from the empty set. With that additional input argument, an improved solution can be handed back to the construction procedure and extended.</p>
 <p>Two lines of the <strong>ADD construction</strong> formulation of <a href="#mdl-ufl" class="quarto-xref">Model 1</a> change, and nothing else does. A second argument supplies the sites already open, and a third caps how many may be opened, which is what the p-median below needs.</p>
 <div class="model-formulation" data-mdl-for="mdl-ufl" data-mdl-name="Modified ADD construction" id="rung-mdl-ufl-modified-add-construction"><div class="model-rung-label">Model 1 formulation: Modified ADD construction</div>
@@ -6001,7 +6001,7 @@ Figure 5: SP3D’s four hubs fitted twice, under L2 and L1 loss. The lines diff
 </figure>
 </div>
 </div>
-<p>The two intercepts are not the same number: L2 puts the fixed cost at $198,570 and L1 at $266,543. Running the L1 fit through the same table as code block 20 shows which one a UFL can use.</p>
+<p>The two intercepts are not the same number: L2 puts the fixed cost at $198,570 and L1 at $266,543. Running the L1 fit through the same table as code block 26 shows which one a UFL can use.</p>
 <div id="76" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href="#cb71-1"></a><span class="co"># Code block 28: the same table under L1, where the totals disagree</span></span>
 <span id="cb71-2"><a href="#cb71-2"></a>fit₁ <span class="op">=</span> <span class="fu">ŷ</span>([k₁, cp₁], f)</span>
@@ -6023,7 +6023,7 @@ Figure 5: SP3D’s four hubs fitted twice, under L2 and L1 loss. The lines diff
 </div>
 <p>L1 fits two of the four hubs almost exactly, which is what minimizing absolute deviation does: the line is pinned by the middle points and lets the outlying one go. But its total row no longer balances. The fitted costs fall short of the actual ones, and the residuals carry that shortfall rather than cancelling.</p>
 <p>Put the other way round: given nothing but the molds each hub produces and the fitted line, the total production cost of all four can be recovered exactly. The individual hubs are wrong, some badly, but the aggregate is not, and that is what the fit was for. Only L2 can do it; the same recovery from the L1 line comes up $66,449 short.</p>
-<p>That is the whole argument for L2 here, and it is not a matter of taste. The UFL charges <span class="math inline">k</span> once for every facility it opens, so those fixed costs are added together; only a fit whose residuals sum to zero leaves such a total undisturbed, and code block 20’s total row shows the L2 fit doing exactly that. An L1 fit is the more robust of the two against a single odd hub, and it is the one that cannot be summed.</p>
+<p>That is the whole argument for L2 here, and it is not a matter of taste. The UFL charges <span class="math inline">k</span> once for every facility it opens, so those fixed costs are added together; only a fit whose residuals sum to zero leaves such a total undisturbed, and code block 26’s total row shows the L2 fit doing exactly that. An L1 fit is the more robust of the two against a single odd hub, and it is the one that cannot be summed.</p>
 
 
 
