@@ -5876,6 +5876,9 @@ Model 3: Least-squares line
 <span id="cb62-4"><a href="#cb62-4"></a>    <span class="fu">loss</span>(α) <span class="op">=</span> <span class="fu">sum</span>((y <span class="op">.-</span> <span class="fu">ŷ</span>(α, x)) <span class="op">.^</span> <span class="fl">2</span>)</span>
 <span id="cb62-5"><a href="#cb62-5"></a>    <span class="cf">return</span> <span class="fu">optimize</span>(loss, [<span class="fl">0.0</span>, <span class="fl">1.0</span>]).minimizer</span>
 <span id="cb62-6"><a href="#cb62-6"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>lsq (generic function with 1 method)</code></pre>
+</div>
 </div>
 </div>
 <p>Binding <a href="#mdl-lsq" class="quarto-xref">Model 3</a> to the cost curve estimates production cost as a function of the production rate. The predictor is <span class="math inline">f</span> and the response is the total production cost, so <span class="math inline">\alpha_1</span> is the intercept <span class="math inline">k</span> of <a href="#eq-tpc-est" class="quarto-xref">Eq. 5</a> and <span class="math inline">\alpha_2</span> is the unit production cost <span style="white-space: nowrap"><span class="math inline">c_p</span>.</span> Taking the intercept takes the portion of production cost that does not scale with the production rate, which is exactly what the UFL charges once per facility opened; the rest, <span style="white-space: nowrap"><span class="math inline">c_p f</span>,</span> scales with output and is the part discarded. L2 is the loss to fit with, because that <span class="math inline">k</span> is then summed over every facility the UFL opens, and it is the mean, not the median, that keeps such a total right.</p>
@@ -5927,10 +5930,10 @@ Table 7: Annual output and production cost of each SP3D hub, exclusive of outbo
 </div>
 <p>The cost given for each hub is <em>exclusive of outbound transportation</em>. That exclusion is what makes the data usable. A cost figure that included outbound freight would already contain the quantity the UFL is trying to optimize, and fitting a line to it would fold transport into the fixed cost.</p>
 <div id="70" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb63-1"><a href="#cb63-1"></a><span class="co"># Code block 25: the four hubs</span></span>
-<span id="cb63-2"><a href="#cb63-2"></a>hub <span class="op">=</span> [<span class="st">&quot;Buffalo&quot;</span>, <span class="st">&quot;Pittsburgh&quot;</span>, <span class="st">&quot;Cleveland&quot;</span>, <span class="st">&quot;Detroit&quot;</span>]</span>
-<span id="cb63-3"><a href="#cb63-3"></a>f   <span class="op">=</span> [<span class="fl">19271</span>, <span class="fl">69238</span>, <span class="fl">63030</span>, <span class="fl">62117</span>]              <span class="co"># molds/yr</span></span>
-<span id="cb63-4"><a href="#cb63-4"></a>tpc <span class="op">=</span> [<span class="fl">408485</span>, <span class="fl">1047639</span>, <span class="fl">730795</span>, <span class="fl">519401</span>]         <span class="co"># $/yr, production only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># Code block 25: the four hubs</span></span>
+<span id="cb64-2"><a href="#cb64-2"></a>hub <span class="op">=</span> [<span class="st">&quot;Buffalo&quot;</span>, <span class="st">&quot;Pittsburgh&quot;</span>, <span class="st">&quot;Cleveland&quot;</span>, <span class="st">&quot;Detroit&quot;</span>]</span>
+<span id="cb64-3"><a href="#cb64-3"></a>f   <span class="op">=</span> [<span class="fl">19271</span>, <span class="fl">69238</span>, <span class="fl">63030</span>, <span class="fl">62117</span>]              <span class="co"># molds/yr</span></span>
+<span id="cb64-4"><a href="#cb64-4"></a>tpc <span class="op">=</span> [<span class="fl">408485</span>, <span class="fl">1047639</span>, <span class="fl">730795</span>, <span class="fl">519401</span>]         <span class="co"># $/yr, production only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
   408485
@@ -5941,16 +5944,16 @@ Table 7: Annual output and production cost of each SP3D hub, exclusive of outbo
 </div>
 <p><a href="#mdl-lsq" class="quarto-xref">Model 3</a> can now be used to fit the line, with the molds per year as the predictor and the annual production cost as the response.</p>
 <div id="72" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1"></a><span class="co"># Code block 26: the fit for SP3D&#39;s four hubs</span></span>
-<span id="cb65-2"><a href="#cb65-2"></a>k, cp <span class="op">=</span> <span class="fu">lsq</span>(f, tpc)</span>
-<span id="cb65-3"><a href="#cb65-3"></a><span class="pp">@show</span> k cp</span>
-<span id="cb65-4"><a href="#cb65-4"></a>fit <span class="op">=</span> <span class="fu">ŷ</span>([k, cp], f)</span>
-<span id="cb65-5"><a href="#cb65-5"></a>res <span class="op">=</span> tpc <span class="op">.-</span> fit</span>
-<span id="cb65-6"><a href="#cb65-6"></a>df <span class="op">=</span> <span class="fu">DataFrame</span>(hub <span class="op">=</span> hub, molds <span class="op">=</span> f, actual <span class="op">=</span> tpc,</span>
-<span id="cb65-7"><a href="#cb65-7"></a>               fitted <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, fit), residual <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, res))</span>
-<span id="cb65-8"><a href="#cb65-8"></a><span class="fu">push!</span>(df, (<span class="st">&quot;total&quot;</span>, <span class="fu">sum</span>(f), <span class="fu">sum</span>(tpc),</span>
-<span id="cb65-9"><a href="#cb65-9"></a>           <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(fit)), <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(res))))</span>
-<span id="cb65-10"><a href="#cb65-10"></a><span class="fu">prt</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1"></a><span class="co"># Code block 26: the fit for SP3D&#39;s four hubs</span></span>
+<span id="cb66-2"><a href="#cb66-2"></a>k, cp <span class="op">=</span> <span class="fu">lsq</span>(f, tpc)</span>
+<span id="cb66-3"><a href="#cb66-3"></a><span class="pp">@show</span> k cp</span>
+<span id="cb66-4"><a href="#cb66-4"></a>fit <span class="op">=</span> <span class="fu">ŷ</span>([k, cp], f)</span>
+<span id="cb66-5"><a href="#cb66-5"></a>res <span class="op">=</span> tpc <span class="op">.-</span> fit</span>
+<span id="cb66-6"><a href="#cb66-6"></a>df <span class="op">=</span> <span class="fu">DataFrame</span>(hub <span class="op">=</span> hub, molds <span class="op">=</span> f, actual <span class="op">=</span> tpc,</span>
+<span id="cb66-7"><a href="#cb66-7"></a>               fitted <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, fit), residual <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, res))</span>
+<span id="cb66-8"><a href="#cb66-8"></a><span class="fu">push!</span>(df, (<span class="st">&quot;total&quot;</span>, <span class="fu">sum</span>(f), <span class="fu">sum</span>(tpc),</span>
+<span id="cb66-9"><a href="#cb66-9"></a>           <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(fit)), <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(res))))</span>
+<span id="cb66-10"><a href="#cb66-10"></a><span class="fu">prt</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>k = 198570.29338446067
 cp = 8.949146412633347
@@ -5971,24 +5974,24 @@ cp = 8.949146412633347
 </div>
 <p>The squared loss is what <a href="#mdl-lsq" class="quarto-xref">Model 3</a> is: it is in the objective, in <a href="#eq-lsq" class="quarto-xref">Eq. 9</a>, and in the model’s name. What the square is <em>not</em> is forced by anything around it. The line form and the numerical solve are indifferent to which loss is handed to them, so replacing the square with an absolute value changes one function and leaves the rest of the apparatus standing. That gives a different model, the least absolute deviations line, fitted to the same four hubs by the same means, and drawing both over the data shows what the choice between them costs (<a href="#fig-l1l2" class="quarto-xref">Fig. 6</a>). Plotting a fitted functional form is the easiest thing a plotting library does: the coefficients are the whole description of the line, so it can be drawn anywhere the predictor runs.</p>
 <div id="cell-fig-l1l2" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1"></a><span class="co"># Code block 27: the same hubs under L1 loss, and both fits drawn</span></span>
-<span id="cb67-2"><a href="#cb67-2"></a><span class="im">using</span> <span class="bu">CairoMakie</span></span>
-<span id="cb67-3"><a href="#cb67-3"></a><span class="kw">function</span> <span class="fu">lad</span>(x, y)                  <span class="co"># L1: absolute, not squared</span></span>
-<span id="cb67-4"><a href="#cb67-4"></a>    <span class="fu">loss</span>(α) <span class="op">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>.(y <span class="op">.-</span> <span class="fu">ŷ</span>(α, x)))</span>
-<span id="cb67-5"><a href="#cb67-5"></a>    <span class="cf">return</span> <span class="fu">optimize</span>(loss, [<span class="fl">0.0</span>, <span class="fl">1.0</span>]).minimizer</span>
-<span id="cb67-6"><a href="#cb67-6"></a><span class="kw">end</span></span>
-<span id="cb67-7"><a href="#cb67-7"></a>k₁, cp₁ <span class="op">=</span> <span class="fu">lad</span>(f, tpc)</span>
-<span id="cb67-8"><a href="#cb67-8"></a><span class="pp">@show</span> k₁ cp₁</span>
-<span id="cb67-9"><a href="#cb67-9"></a></span>
-<span id="cb67-10"><a href="#cb67-10"></a>fs <span class="op">=</span> [<span class="fl">0</span>, <span class="fu">maximum</span>(f) <span class="op">*</span> <span class="fl">1.05</span>]</span>
-<span id="cb67-11"><a href="#cb67-11"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">620</span>, <span class="fl">380</span>))</span>
-<span id="cb67-12"><a href="#cb67-12"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>], xlabel <span class="op">=</span> <span class="st">&quot;production rate, molds/yr&quot;</span>,</span>
-<span id="cb67-13"><a href="#cb67-13"></a>          ylabel <span class="op">=</span> <span class="st">&quot;production cost, \$/yr&quot;</span>)</span>
-<span id="cb67-14"><a href="#cb67-14"></a><span class="fu">scatter!</span>(ax, f, tpc; color <span class="op">=</span> <span class="op">:</span>black, markersize <span class="op">=</span> <span class="fl">11</span>)</span>
-<span id="cb67-15"><a href="#cb67-15"></a><span class="fu">lines!</span>(ax, fs, <span class="fu">ŷ</span>([k, cp], fs); color <span class="op">=</span> <span class="op">:</span>steelblue4, label <span class="op">=</span> <span class="st">&quot;L2&quot;</span>)</span>
-<span id="cb67-16"><a href="#cb67-16"></a><span class="fu">lines!</span>(ax, fs, <span class="fu">ŷ</span>([k₁, cp₁], fs); color <span class="op">=</span> <span class="op">:</span>firebrick, label <span class="op">=</span> <span class="st">&quot;L1&quot;</span>)</span>
-<span id="cb67-17"><a href="#cb67-17"></a><span class="fu">axislegend</span>(ax; position <span class="op">=</span> <span class="op">:</span>lt)</span>
-<span id="cb67-18"><a href="#cb67-18"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># Code block 27: the same hubs under L1 loss, and both fits drawn</span></span>
+<span id="cb68-2"><a href="#cb68-2"></a><span class="im">using</span> <span class="bu">CairoMakie</span></span>
+<span id="cb68-3"><a href="#cb68-3"></a><span class="kw">function</span> <span class="fu">lad</span>(x, y)                  <span class="co"># L1: absolute, not squared</span></span>
+<span id="cb68-4"><a href="#cb68-4"></a>    <span class="fu">loss</span>(α) <span class="op">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>.(y <span class="op">.-</span> <span class="fu">ŷ</span>(α, x)))</span>
+<span id="cb68-5"><a href="#cb68-5"></a>    <span class="cf">return</span> <span class="fu">optimize</span>(loss, [<span class="fl">0.0</span>, <span class="fl">1.0</span>]).minimizer</span>
+<span id="cb68-6"><a href="#cb68-6"></a><span class="kw">end</span></span>
+<span id="cb68-7"><a href="#cb68-7"></a>k₁, cp₁ <span class="op">=</span> <span class="fu">lad</span>(f, tpc)</span>
+<span id="cb68-8"><a href="#cb68-8"></a><span class="pp">@show</span> k₁ cp₁</span>
+<span id="cb68-9"><a href="#cb68-9"></a></span>
+<span id="cb68-10"><a href="#cb68-10"></a>fs <span class="op">=</span> [<span class="fl">0</span>, <span class="fu">maximum</span>(f) <span class="op">*</span> <span class="fl">1.05</span>]</span>
+<span id="cb68-11"><a href="#cb68-11"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">620</span>, <span class="fl">380</span>))</span>
+<span id="cb68-12"><a href="#cb68-12"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>], xlabel <span class="op">=</span> <span class="st">&quot;production rate, molds/yr&quot;</span>,</span>
+<span id="cb68-13"><a href="#cb68-13"></a>          ylabel <span class="op">=</span> <span class="st">&quot;production cost, \$/yr&quot;</span>)</span>
+<span id="cb68-14"><a href="#cb68-14"></a><span class="fu">scatter!</span>(ax, f, tpc; color <span class="op">=</span> <span class="op">:</span>black, markersize <span class="op">=</span> <span class="fl">11</span>)</span>
+<span id="cb68-15"><a href="#cb68-15"></a><span class="fu">lines!</span>(ax, fs, <span class="fu">ŷ</span>([k, cp], fs); color <span class="op">=</span> <span class="op">:</span>steelblue4, label <span class="op">=</span> <span class="st">&quot;L2&quot;</span>)</span>
+<span id="cb68-16"><a href="#cb68-16"></a><span class="fu">lines!</span>(ax, fs, <span class="fu">ŷ</span>([k₁, cp₁], fs); color <span class="op">=</span> <span class="op">:</span>firebrick, label <span class="op">=</span> <span class="st">&quot;L1&quot;</span>)</span>
+<span id="cb68-17"><a href="#cb68-17"></a><span class="fu">axislegend</span>(ax; position <span class="op">=</span> <span class="op">:</span>lt)</span>
+<span id="cb68-18"><a href="#cb68-18"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>k₁ = 266543.09067848907
 cp₁ = 7.365570511209085</code></pre>
@@ -6006,14 +6009,14 @@ Figure 6: SP3D’s four hubs fitted twice, under L2 and L1 loss. The lines diff
 </div>
 <p>The two intercepts are not the same number: L2 puts the fixed cost at $198,570 and L1 at $266,543. Running the L1 fit through the same table as code block 26 shows which one a UFL can use.</p>
 <div id="76" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1"></a><span class="co"># Code block 28: the same table under L1, where the totals disagree</span></span>
-<span id="cb69-2"><a href="#cb69-2"></a>fit₁ <span class="op">=</span> <span class="fu">ŷ</span>([k₁, cp₁], f)</span>
-<span id="cb69-3"><a href="#cb69-3"></a>res₁ <span class="op">=</span> tpc <span class="op">.-</span> fit₁</span>
-<span id="cb69-4"><a href="#cb69-4"></a>df₁ <span class="op">=</span> <span class="fu">DataFrame</span>(hub <span class="op">=</span> hub, molds <span class="op">=</span> f, actual <span class="op">=</span> tpc,</span>
-<span id="cb69-5"><a href="#cb69-5"></a>                fitted <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, fit₁), residual <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, res₁))</span>
-<span id="cb69-6"><a href="#cb69-6"></a><span class="fu">push!</span>(df₁, (<span class="st">&quot;total&quot;</span>, <span class="fu">sum</span>(f), <span class="fu">sum</span>(tpc),</span>
-<span id="cb69-7"><a href="#cb69-7"></a>            <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(fit₁)), <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(res₁))))</span>
-<span id="cb69-8"><a href="#cb69-8"></a><span class="fu">prt</span>(df₁)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href="#cb70-1"></a><span class="co"># Code block 28: the same table under L1, where the totals disagree</span></span>
+<span id="cb70-2"><a href="#cb70-2"></a>fit₁ <span class="op">=</span> <span class="fu">ŷ</span>([k₁, cp₁], f)</span>
+<span id="cb70-3"><a href="#cb70-3"></a>res₁ <span class="op">=</span> tpc <span class="op">.-</span> fit₁</span>
+<span id="cb70-4"><a href="#cb70-4"></a>df₁ <span class="op">=</span> <span class="fu">DataFrame</span>(hub <span class="op">=</span> hub, molds <span class="op">=</span> f, actual <span class="op">=</span> tpc,</span>
+<span id="cb70-5"><a href="#cb70-5"></a>                fitted <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, fit₁), residual <span class="op">=</span> <span class="fu">round</span>.(<span class="dt">Int</span>, res₁))</span>
+<span id="cb70-6"><a href="#cb70-6"></a><span class="fu">push!</span>(df₁, (<span class="st">&quot;total&quot;</span>, <span class="fu">sum</span>(f), <span class="fu">sum</span>(tpc),</span>
+<span id="cb70-7"><a href="#cb70-7"></a>            <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(fit₁)), <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(res₁))))</span>
+<span id="cb70-8"><a href="#cb70-8"></a><span class="fu">prt</span>(df₁)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         hub    molds     actual     fitted  residual
 ─────────────────────────────────────────────────────
