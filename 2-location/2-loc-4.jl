@@ -126,6 +126,16 @@ yx, TCx
 yh, TCh, _ = ufl(k, C)   # _ is the allocation, unused here
 yh, TCh
 
+# Sec. 7. p-median facility location
+## Model: p-median location
+logjam_rung(:pmedian, "p-median location")
+
+## Sec. 7. p-median facility location
+# Code block 20: the p-median of the corridor at p = 2
+p = 2
+yp, TCp, _ = pmedian(p, C)   # _ is the allocation, unused here
+yp, TCp
+
 ## Example 3: How many machines to lease and where
 # EMCA Industries, LLC is considering leasing machines that can be used
 # to manufacture a single type of product. They have identified
@@ -194,16 +204,6 @@ while over
     nm += 1
 end
 prt(res)   # Code block 19: the experiment's whole history
-
-# Sec. 7. p-median facility location
-## Model: p-median location
-logjam_rung(:pmedian, "p-median location")
-
-## Sec. 7. p-median facility location
-# Code block 20: the p-median of the corridor at p = 2
-p = 2
-yp, TCp, _ = pmedian(p, C)   # _ is the allocation, unused here
-yp, TCp
 
 ## Example 4: Discrete retail warehouses
 # Determine the best nine locations for retail warehouses serving the
