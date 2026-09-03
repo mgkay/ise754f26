@@ -836,20 +836,24 @@
    "label": "Fig. 1",
    "word": "Fig."
   },
-  "fig-construction": {
+  "fig-ufl-rungs": {
    "label": "Fig. 2",
    "word": "Fig."
   },
-  "fig-i40-ufl": {
+  "fig-construction": {
    "label": "Fig. 3",
    "word": "Fig."
   },
-  "fig-scale": {
+  "fig-i40-ufl": {
    "label": "Fig. 4",
    "word": "Fig."
   },
-  "fig-l1l2": {
+  "fig-scale": {
    "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-l1l2": {
+   "label": "Fig. 6",
    "word": "Fig."
   },
   "tbl-i40": {
