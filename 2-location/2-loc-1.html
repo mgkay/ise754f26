@@ -4712,7 +4712,43 @@ Model 8: Minisum in one dimension
 </figcaption>
 </figure>
 </div>
-<div class="model-formulation" data-mdl-for="mdl-minisum1d" id="rung-mdl-minisum1d-formulation"><div class="model-rung-label">Model 8 formulation: Minisum in one dimension</div>
+<div class="model-formulation" data-mdl-for="mdl-minisum1d" data-mdl-name="Mathematical formulation" id="rung-mdl-minisum1d-mathematical-formulation"><div class="model-rung-label">Model 8 formulation: Mathematical formulation</div>
+<p><span id="eq-tc-1d"><span class="math display">
+TC(x) = \sum_i w_i d_i = \sum_i \beta_i (x - a_i),
+\qquad
+\beta_i = \begin{cases}
+w_i,  &amp; \text{if } x \ge a_i \\
+-w_i, &amp; \text{if } x &lt; a_i
+\end{cases}
+\tag{4}</span></span></p>
+<p>where</p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">x</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">location of the NF along the line</span>
+</dd>
+<dt><span class="math inline">a_i</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">location of EF <span class="math inline">i</span> along the line</span>
+</dd>
+<dt><span class="math inline">w_i</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">weight of EF <span class="math inline">i</span></span>
+</dd>
+<dt><span class="math inline">d_i</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">distance from the NF to EF <span style="white-space: nowrap"><span class="math inline">i</span>,</span> <span class="math inline">\lvert x - a_i \rvert</span></span>
+</dd>
+<dt><span class="math inline">\beta_i</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">signed weight of EF <span style="white-space: nowrap"><span class="math inline">i</span>.</span></span>
+</dd>
+</dl>
+</div>
+</div>
+<p>This means of finding the optimal solution only works because <span class="math inline">TC</span> is linear; numerical optimization is needed otherwise.</p>
+<div class="model-formulation" data-mdl-for="mdl-minisum1d" data-mdl-name="Pseudocode" id="rung-mdl-minisum1d-pseudocode"><div class="model-rung-label">Model 8 formulation: Pseudocode</div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource pseudocode number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>algorithm minisum-1D;</span>
 <span id="cb1-2"><a href="#cb1-2"></a>{ input:  m EFs on a line, EF i at position aᵢ with weight wᵢ &gt; 0 }</span>
 <span id="cb1-3"><a href="#cb1-3"></a>{ output: index j of the weighted median; the NF locates there   }</span>
@@ -4729,11 +4765,11 @@ Model 8: Minisum in one dimension
 </div>
 
 <div class="no-row-height column-margin column-container"><div class>
-<p><strong>Pseudocode, not Julia.</strong> The formulation of <a href="#mdl-minisum1d" class="quarto-xref">Model 8</a> is <em>pseudocode</em>: a step-by-step statement of the method’s logic in no particular programming language. It is deliberately not Julia; stating the algorithm language-independently shows the logic itself, which any language could then implement, rather than tying it to one.</p>
+<p><strong>Pseudocode, not Julia.</strong> The second formulation of <a href="#mdl-minisum1d" class="quarto-xref">Model 8</a> is <em>pseudocode</em>: a step-by-step statement of the method’s logic in no particular programming language. It is deliberately not Julia; stating the algorithm language-independently shows the logic itself, which any language could then implement, rather than tying it to one.</p>
 </div></div><p>The facility the loop returns is the <em>weighted median</em>: the first EF at which the accumulated weight reaches half the total, <span id="eq-median"><span class="math display">
 \sum_{i=1}^{j} w_i \ge \frac{W}{2}.
-\tag{4}</span></span></p>
-<p>Why does the median location correspond to the optimal location? From any EF location, take a small step of size <span class="math inline">\delta</span> in either direction. Every EF behind the new facility becomes <span class="math inline">\delta</span> farther away; every point ahead of it becomes <span class="math inline">\delta</span> closer. The step is worth taking whenever more weight lies ahead than behind. Stepping toward the heavier side repeatedly, the process stops precisely when neither side holds more than half the total weight: the median location. That stopping condition is exactly the test in <a href="#eq-median" class="quarto-xref">Eq. 4</a>: at the first EF whose running total reaches <span style="white-space: nowrap"><span class="math inline">W/2</span>,</span> the weight strictly behind is less than half, or an earlier EF would have been the first to reach it, and the weight strictly ahead is at most half, since the running total already accounts for the rest. Although it is unlikely, it is possible that the total reaches exactly <span class="math inline">W/2</span> at EF<span style="white-space: nowrap"><span class="math inline">_j</span>;</span> in this case, a step in either direction trades equal weight against equal weight: every point from EF<span class="math inline">_j</span> to the next unvisited facility EF<span class="math inline">_k</span> is equally good, so the optimum is the whole interval between EF<span class="math inline">_j</span> and EF<span class="math inline">_k</span> rather than the single point at EF<span style="white-space: nowrap"><span class="math inline">_j</span>.</span> In the objective function, this corresponds to a flat segment rather than a corner point.</p>
+\tag{5}</span></span></p>
+<p>Why does the median location correspond to the optimal location? From any EF location, take a small step of size <span class="math inline">\delta</span> in either direction. Every EF behind the new facility becomes <span class="math inline">\delta</span> farther away; every point ahead of it becomes <span class="math inline">\delta</span> closer. The step is worth taking whenever more weight lies ahead than behind. Stepping toward the heavier side repeatedly, the process stops precisely when neither side holds more than half the total weight: the median location. That stopping condition is exactly the test in <a href="#eq-median" class="quarto-xref">Eq. 5</a>: at the first EF whose running total reaches <span style="white-space: nowrap"><span class="math inline">W/2</span>,</span> the weight strictly behind is less than half, or an earlier EF would have been the first to reach it, and the weight strictly ahead is at most half, since the running total already accounts for the rest. Although it is unlikely, it is possible that the total reaches exactly <span class="math inline">W/2</span> at EF<span style="white-space: nowrap"><span class="math inline">_j</span>;</span> in this case, a step in either direction trades equal weight against equal weight: every point from EF<span class="math inline">_j</span> to the next unvisited facility EF<span class="math inline">_k</span> is equally good, so the optimum is the whole interval between EF<span class="math inline">_j</span> and EF<span class="math inline">_k</span> rather than the single point at EF<span style="white-space: nowrap"><span class="math inline">_j</span>.</span> In the objective function, this corresponds to a flat segment rather than a corner point.</p>
 <p>A separate and more general result is the <strong>Majority Theorem</strong>: if any single EF holds at least half of the total weight, the NF goes there. The theorem is true for all minisum problems with metric distances, whatever the number of dimensions, so it is a property neither of the line nor of the median procedure, and it is worth applying as a first check before any other means of determining the location is tried.</p>
 <div id="fig-median4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">

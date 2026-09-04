@@ -4870,6 +4870,9 @@ V = \begin{bmatrix} 0 &amp; v\\ v &amp; 0 \end{bmatrix}
 <div id="example-3-a" class="part-heading">
 <p>Example 3(a): No reduction and no placement</p>
 </div>
+<div class="statement">
+<p>Determine whether the majority theorem reduces or places anything when the flow between the new facilities is <span style="white-space: nowrap"><span class="math inline">v = 2</span>.</span></p>
+</div>
 <p>With <span style="white-space: nowrap"><span class="math inline">v = 2</span>:</span></p>
 <p><span class="math display">
 [\,W\ \ V\,] =
@@ -4888,6 +4891,9 @@ V = \begin{bmatrix} 0 &amp; v\\ v &amp; 0 \end{bmatrix}
 </div>
 <div id="example-3-b" class="part-heading">
 <p>Example 3(b): Both facilities placed</p>
+</div>
+<div class="statement">
+<p>Determine where both new facilities go when the flow between them is light, <span style="white-space: nowrap"><span class="math inline">v = 0.5</span>.</span></p>
 </div>
 <p>With <span style="white-space: nowrap"><span class="math inline">v = 0.5</span>:</span></p>
 <p><span class="math display">
@@ -4909,6 +4915,9 @@ V = \begin{bmatrix} 0 &amp; v\\ v &amp; 0 \end{bmatrix}
 </div>
 <div id="example-3-c" class="part-heading">
 <p>Example 3(c): A reduction, and then a placement</p>
+</div>
+<div class="statement">
+<p>Determine where the new facilities go when the flow between them is heavy, <span style="white-space: nowrap"><span class="math inline">v = 4</span>.</span></p>
 </div>
 <p>With <span style="white-space: nowrap"><span class="math inline">v = 4</span>:</span></p>
 <p><span class="math display">
@@ -5327,6 +5336,9 @@ Figure 6: The integrated objective for the corridor, contoured over the two mil
 <div id="example-6-a" class="part-heading">
 <p>Example 6(a): Starting at mile markers 0 and 200</p>
 </div>
+<div class="statement">
+<p>Determine where the procedure converges from this start, and the total cost there.</p>
+</div>
 <p><strong>Allocate.</strong> Facility 1 sits at marker 0 and facility 2 at marker 200, so every city east of marker 100 is nearer facility 2. Only the city at 50 goes to facility 1; the other six go to facility 2.</p>
 <p><strong>Locate.</strong> Facility 1 serves one city, so it moves to marker 50. Facility 2 serves the cities at 150, 190, 220, 270, 295 and 420, whose weights are 2, 3, 4, 5, 6 and 7 and total 27. Half of that is 13.5. Running west to east, the cumulative weight is 2 at marker 150, 5 at 190, 9 at 220, and 14 at 270, which is the first city at which it reaches 13.5. Facility 2 moves to marker 270.</p>
 <p>Three more passes determine it, each one repeating those two steps (<a href="#tbl-ala-west" class="quarto-xref">Table 2</a>).</p>
@@ -5402,6 +5414,9 @@ TC = 1(140) + 2(40) + 3(0) + 4(30) + 5(25) + 6(0) + 7(125) = 1{,}340.
 </div>
 <div id="example-6-b" class="part-heading">
 <p>Example 6(b): Starting at mile markers 200 and 500</p>
+</div>
+<div class="statement">
+<p>Determine where the procedure converges from a second start, and whether the two starts agree.</p>
 </div>
 <p>Now facility 1 starts at marker 200 and facility 2 at marker 500, so the midpoint between them is 350 and only the city at 420 lies east of it. Facility 2 takes that city alone and moves to it. Facility 1 takes the other six, whose weights 1 through 6 total 21; half is 10.5, and the cumulative weight running east is 1, 3, 6, 10, then 15 at marker 270, so facility 1 moves there.</p>
 <div id="tbl-ala-east" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -5531,30 +5546,14 @@ from markers 200 and 500
 </div>
 <section id="an-edge-case" class="level3">
 <h3 class="anchored" data-anchor-id="an-edge-case">An edge case</h3>
-<p>Edge case: What if a NF is not allocated to any EFs?</p>
-<ul>
-<li>Can happen if initial NF locations are chosen randomly</li>
-<li>One way to handle: Randomly relocate unallocated NFs to EFs</li>
-</ul>
+<p>What if a NF is not allocated to any EFs? It can happen when the initial NF locations are chosen at random.</p>
 <p>North and South Carolina are the example. A bounding box drawn around the cities of those two states covers a large area of the Atlantic, so a randomly chosen starting point can land in the ocean while another lands on the beach. The one on the beach takes the whole allocation and the one at sea is left with nothing. Code could be written to catch that and pick another starting point, but the easier answer is to ignore it and rely on running the procedure from several starts, since one bad start among several does not affect the result kept. Code written for other people to use would handle it properly.</p>
 </section>
 <section id="integrated-or-alternating" class="level3">
 <h3 class="anchored" data-anchor-id="integrated-or-alternating">Integrated or alternating</h3>
 <p>Both only give a local optimal solution (not convex).</p>
-<p>Alternate more flexible:</p>
-<ul>
-<li>solving <span class="math inline">n</span> <span class="math inline">d</span>-dimensional location problems and simple allocation</li>
-<li>Nelder-Mead works well for 2-D</li>
-</ul>
-<p>Integrated solving an <span class="math inline">(n \times d)</span>-dimensional problem:</p>
-<ul>
-<li>a larger search, though not a slower one here</li>
-</ul>
-<p>When might integrated be better?</p>
-<ul>
-<li>if there are no allocation (e.g., capacity) or location constraints on the NFs</li>
-</ul>
-<p>Running both formulations from the same random starts determines it, provided both are written the same way, from the same allocation step and the same optimizer. On that footing the integrated form is the faster of the two nearly everywhere, by two to three times on the larger instances. Quality is close and the lead changes hands: over a common set of starts each form finds the better answer about as often as the other, and the best answers they reach differ by at most a couple of percent. So the cost of the choice is in the search, not in the answer.</p>
+<p>The alternating form is more flexible: it solves <span class="math inline">n</span> <span class="math inline">d</span>-dimensional location problems with a simple allocation, and Nelder-Mead works well for 2-D. The integrated form solves an <span class="math inline">(n \times d)</span>-dimensional problem, a larger search, though not a slower one here. Integrated may be better if there are no allocation (e.g., capacity) or location constraints on the NFs.</p>
+<p>Running both formulations from the same random starts determines it, provided both are written the same way, from the same allocation step and the same optimizer. On that footing the integrated form is the faster of the two while few facilities are being located, by about 1.6 times at two and three, an advantage that has gone by nine. Quality is close and the lead changes hands: over a common set of starts each form finds the better answer about as often as the other, and the best answers they reach differ by up to 6.5%. So the cost of the choice is in the search, not in the answer.</p>
 <p>The advantage of the alternating form is that it provides more flexibility in being able to easily change the allocation and the location mechanisms, so it buys flexibility at the cost of increased computation.</p>
 <p>The choice matters less than it might appear, because of the size of the problems actually being solved. A useful rule of thumb is a 10-to-1 ratio: locating ten new facilities calls for a set of about a thousand existing facilities to work with. That is a typical size of problem even for the entire country. Walmart has perhaps 20 or 30 distribution centers, and most large box retailers have 10 to 20, or even around ten.</p>
 </section>
@@ -5570,7 +5569,7 @@ from markers 200 and 500
 <div class="statement">
 <p>Determine the two locations that minimize the total population-weighted distance to every city over 10,000 people in North and South Carolina, and the territory each one serves.</p>
 </div>
-<div id="36" class="cell" data-execution_count="1">
+<div id="38" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Code block 13: the Carolinas&#39; cities and their weights</span></span>
 <span id="cb31-2"><a href="#cb31-2"></a><span class="im">using</span> <span class="bu">GeoMakie</span>, <span class="bu">Random</span></span>
 <span id="cb31-3"><a href="#cb31-3"></a>df <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="kw">in</span> <span class="fu">st2fips</span>.([<span class="op">:</span>NC, <span class="op">:</span>SC]) <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">10_000</span>,</span>
@@ -5584,7 +5583,7 @@ from markers 200 and 500
 </div>
 </div>
 <p>Starting locations are drawn at random from the box around the cities, and <code>ala</code> keeps the best of <code>nruns</code> of them.</p>
-<div id="38" class="cell" data-execution_count="1">
+<div id="40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Code block 14: two service centers by multistart</span></span>
 <span id="cb33-2"><a href="#cb33-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">8345</span>)</span>
 <span id="cb33-3"><a href="#cb33-3"></a>Xᵒ, TCᵒ, W <span class="op">=</span> <span class="fu">ala</span>(<span class="fu">randX</span>(P, <span class="fl">2</span>), w, P; nruns <span class="op">=</span> <span class="fl">5</span>)</span>
@@ -5624,7 +5623,7 @@ Figure 7: The two service centers and the cities each one serves. Charlotte tak
 </div>
 </div>
 <p>Suppose now that a pre-existing contract forces the first three cities to be served by the first facility and the next three by the second. The only thing that changes is the allocation step, which <code>ala</code> accepts as an argument.</p>
-<div id="42" class="cell" data-execution_count="1">
+<div id="44" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Code block 16: the allocation for a given pair</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a><span class="kw">function</span> <span class="fu">alloc36</span>(X)</span>
 <span id="cb36-3"><a href="#cb36-3"></a>    D <span class="op">=</span> <span class="fu">dists</span>(X, P, <span class="op">:</span>mi)</span>
@@ -5821,7 +5820,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 <div class="statement">
 <p>Determine the best locations for one, two, three and nine retail warehouses serving the continental United States in proportion to population, and compare them with <a href="#tbl-retail" class="quarto-xref">Table 4</a>.</p>
 </div>
-<div id="44" class="cell" data-execution_count="1">
+<div id="46" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Code block 17: every US population centroid</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>z <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">0</span>, <span class="fu">uszcta3</span>())</span>
 <span id="cb38-3"><a href="#cb38-3"></a><span class="fu">select!</span>(z, <span class="op">:</span>ZCTA3, <span class="op">:</span>LAT, <span class="op">:</span>LON, <span class="op">:</span>POP)</span>
@@ -5833,7 +5832,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 </div>
 </div>
 <p>The three-digit ZCTA centroids are the existing facilities, about 882 of them, and their populations are the weights. A single warehouse needs no allocation at all, so it is an ordinary single-facility minisum problem. The answer is reported as the nearest city of at least 100,000 people, since a three-digit ZIP code is not a place name.</p>
-<div id="46" class="cell" data-execution_count="1">
+<div id="48" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># Code block 18: cities for naming the answer</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>cities <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">100_000</span>, <span class="fu">usplace</span>())</span>
 <span id="cb40-3"><a href="#cb40-3"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">4161</span>)</span>
@@ -5847,7 +5846,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 </div>
 </div>
 <p>From two warehouses on, the allocation has to be determined with the locations, so <code>ala</code> does the work.</p>
-<div id="48" class="cell" data-execution_count="1">
+<div id="50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># Code block 19: one to ten warehouses</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a><span class="fu">named</span>(X) <span class="op">=</span> <span class="fu">select</span>(<span class="fu">lonlat2loc</span>(X, cities), <span class="op">:</span>NAME, <span class="op">:</span>ST, <span class="op">:</span>dist)</span>
 <span id="cb42-3"><a href="#cb42-3"></a></span>

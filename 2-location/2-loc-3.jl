@@ -189,6 +189,46 @@ prt(DataFrame(start = ["0, 200", "200, 500"],
               NFs = [join(round.(Int, vec(Xᵃ)), ", "),
                      join(round.(Int, vec(Xᵇ)), ", ")],
               TC = round.([TCᵃ, TCᵇ])))
+# Integrated against alternating, measured rather than recalled. Derived from
+# 2-location/source/measure_int_vs_alt.jl, which is the fuller study; the two
+# formulations here are written from the SAME `allocate` and the SAME `Optim`
+# call, so what is compared is the formulation and not the implementation. The
+# numbers this cell produces are the ones the paragraph below quotes.
+using Random
+dfb = filter(r -> r.STFIP in st2fips.([:NC, :SC]) && r.POP > 10_000, usplace())
+Pb, wb = hcat(dfb.LON, dfb.LAT), float(dfb.POP)
+
+TCintb(x) = allocate(dists(reshape(x, :, 2), Pb, :mi), wb)[2]
+
+function TCaltb(X₀)
+    X, best = copy(X₀), Inf
+    while true
+        α, TC = allocate(dists(X, Pb, :mi), wb)
+        TC < best - 1e-9 || return best
+        best = TC
+        for i in axes(X, 1)
+            j = findall(==(i), α)
+            isempty(j) && continue
+            g(x) = allocate(dists(reshape(x, 1, :), Pb[j, :], :mi), wb[j])[2]
+            X[i, :] = optimize(g, X[i, :]).minimizer
+        end
+    end
+end
+
+nstarts = 20
+bench = DataFrame(n = Int[], ratio = Float64[], gap = Float64[],
+                  intwins = Int[], altwins = Int[])
+for n in (2, 3, 5, 9)
+    Random.seed!(8345)
+    S = [randX(Pb, n) for _ in 1:nstarts]
+    TCintb(vec(S[1])); TCaltb(S[1])                      # warm the compiler
+    ti = @elapsed vi = [optimize(TCintb, vec(X)).minimum for X in S]
+    ta = @elapsed va = [TCaltb(X) for X in S]
+    bi, ba = minimum(vi), minimum(va)
+    push!(bench, (n, ta / ti, 100abs(bi - ba) / min(bi, ba),
+                  count(vi .< va .- 1e-6), count(va .< vi .- 1e-6)))
+end
+small = filter(r -> r.n <= 3, bench)
 
 # Sec. 7. Large-scale examples
 ## Example 7: Service centers for the Carolinas

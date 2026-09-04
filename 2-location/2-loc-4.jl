@@ -41,9 +41,8 @@ logjam_rung(:ufldrop, "UFL, DROP construction"; keywords = false)
 
 # Example 1: Warehouses on the I-40 corridor
 ## Example 1(a): Adding one site at a time, by hand
-# Determine where to locate warehouses along the I-40 corridor, and how
-# many, by adding one site at a time and then by dropping one site at a
-# time, for the five cities of @tbl-i40.
+# Determine the sites ADD opens on the corridor, by hand, and the total
+# cost after each pass.
 # Code block 1: five cities on the corridor, and the cost of serving each
 P = reshape([50, 150, 220, 295, 420], :, 1)   # mile markers along I-40
 k = [150, 200, 150, 150, 200]                 # fixed cost at each site
@@ -68,11 +67,15 @@ TC3 = [sum(k[vcat(y, i)]) + sum(minimum(C[vcat(y, i), :], dims = 1))
 prt(DataFrame(site = add, TC = TC3))
 
 ## Example 1(b): The same steps as a procedure
+# Determine the same answer by running ufladd, and confirm it against
+# the hand calculation.
 # Code block 5: ADD run on the corridor
 y, TC, _ = ufladd(k, C)   # _ is the allocation, unused here
 y, TC
 
 ## Example 1(c): Dropping one site at a time
+# Determine the sites DROP leaves open on the same corridor, by hand,
+# and whether it reaches ADD's answer.
 # Code block 6: all five open, then the cheapest site to close
 y = collect(N)
 TCall = sum(k[y]) + sum(minimum(C[y, :], dims = 1))
@@ -105,9 +108,8 @@ logjam_rung(:ufl, "UFL, hybrid algorithm")
 
 # Example 2: Exchanging and combining all three
 ## Example 2(a): Exchanging one site at a time, by hand
-# Determine whether exchanging a site improves on the sets that adding
-# and dropping produced for the I-40 corridor, and what the three
-# procedures reach when they are combined.
+# Determine whether swapping one open site for one closed site improves
+# on either construction's answer.
 # Code block 10: every swap of one open site for one closed site
 fTC(y) = sum(k[y]) + sum(minimum(C[y, :], dims = 1))
 y = [3, 1]
@@ -122,6 +124,8 @@ yx, TCx, _ = uflxchg(k, C, yadd)   # third return is the allocation
 yx, TCx
 
 ## Example 2(b): The three procedures combined
+# Determine what the three procedures reach run together, and which of
+# them finds it.
 # Code block 12: the hybrid on the corridor
 yh, TCh, _ = ufl(k, C)   # _ is the allocation, unused here
 yh, TCh

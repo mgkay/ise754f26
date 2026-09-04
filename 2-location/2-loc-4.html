@@ -4653,6 +4653,9 @@ Table 1: Mile marker and annual fixed cost of a warehouse at each of the five c
 <div id="example-1-a" class="part-heading">
 <p>Example 1(a): Adding one site at a time, by hand</p>
 </div>
+<div class="statement">
+<p>Determine the sites ADD opens on the corridor, by hand, and the total cost after each pass.</p>
+</div>
 <p>Taking the transport rate and the flow as one apiece makes cost equal to distance, so the cost matrix is the distances between the cities and the arithmetic stays visible.</p>
 <p>The procedure is worth solving by hand before any of it is written in Julia, because the table it produces is the procedure. Each pass lists every candidate set, the cost of serving each city from the nearest open site in that set, their sum <span style="white-space: nowrap"><span class="math inline">c_{Yj}</span>,</span> the fixed cost <span class="math inline">k_Y</span> of the sites it opens, and the total. The smallest total in a pass names the site to add, and the pass whose best total does not beat the one before it ends the procedure. The serving costs are <a href="#tbl-add-c" class="quarto-xref">Table 2</a>, and the three passes are <a href="#tbl-add-1" class="quarto-xref">Table 3</a>, <a href="#tbl-add-2" class="quarto-xref">Table 4</a> and <a href="#tbl-add-3" class="quarto-xref">Table 5</a>.</p>
 <p>Setup, as the slide states it:</p>
@@ -5009,6 +5012,9 @@ Table 5: Third pass, <span style="white-space: nowrap"><span class="math inline
 <div id="example-1-b" class="part-heading">
 <p>Example 1(b): The same steps as a procedure</p>
 </div>
+<div class="statement">
+<p>Determine the same answer by running <code>ufladd</code>, and confirm it against the hand calculation.</p>
+</div>
 <p>Running the procedure on the same data reproduces the hand calculation exactly.</p>
 <div id="18" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Code block 5: ADD run on the corridor</span></span>
@@ -5026,6 +5032,9 @@ Table 5: Third pass, <span style="white-space: nowrap"><span class="math inline
 </div>
 <div id="example-1-c" class="part-heading">
 <p>Example 1(c): Dropping one site at a time</p>
+</div>
+<div class="statement">
+<p>Determine the sites DROP leaves open on the same corridor, by hand, and whether it reaches ADD’s answer.</p>
 </div>
 <p>Solved by hand on the same corridor, DROP opens every site first and then closes them one at a time.</p>
 <div id="20" class="cell" data-execution_count="1">
@@ -5200,6 +5209,9 @@ Table 5: Third pass, <span style="white-space: nowrap"><span class="math inline
 <div id="example-2-a" class="part-heading">
 <p>Example 2(a): Exchanging one site at a time, by hand</p>
 </div>
+<div class="statement">
+<p>Determine whether swapping one open site for one closed site improves on either construction’s answer.</p>
+</div>
 <p>Adding gave <span class="math inline">\{3, 1\}</span> and dropping gave <span style="white-space: nowrap"><span class="math inline">\{1, 3, 5\}</span>,</span> both at 645. Exchange starts from one of them and tries every swap of an open site for a closed one. Starting from ADD’s pair, that is two open sites against three closed ones, so six swaps.</p>
 <div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Code block 10: every swap of one open site for one closed site</span></span>
@@ -5239,6 +5251,9 @@ Table 5: Third pass, <span style="white-space: nowrap"><span class="math inline
 </div>
 <div id="example-2-b" class="part-heading">
 <p>Example 2(b): The three procedures combined</p>
+</div>
+<div class="statement">
+<p>Determine what the three procedures reach run together, and which of them finds it.</p>
 </div>
 <p>Neither construction found this set. ADD opened Greensboro first because it is the cheapest single site, and having opened it never reconsidered; DROP closed Raleigh early for the same reason in reverse. Only a procedure that can move a site reaches <span style="white-space: nowrap"><span class="math inline">\{1, 4\}</span>,</span> which is the argument for having an improvement step at all.</p>
 <div id="40" class="cell" data-execution_count="1">

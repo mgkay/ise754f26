@@ -334,8 +334,12 @@
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-median": {
+  "eq-tc-1d": {
    "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-median": {
+   "label": "Eq. 5",
    "word": "Eq."
   },
   "fig-cities": {
