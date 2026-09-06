@@ -47,11 +47,10 @@ D = [ 10  20  30  40              # DC 1 to each customer
       45  35  25  15 ]            # DC 2 to each customer
 α, TD = allocate(D, w)
 
-## Example 2: Charlotte and Raleigh DCs
-# Determine the population-weighted total distance when the North
-# Carolina cities above one hundred thousand people are each served by
-# the nearer of two distribution centers at Charlotte and Raleigh, and
-# determine the reduction from adding a third at Greensboro.
+# Example 2: Charlotte and Raleigh DCs
+## Example 2(a): Two DCs, at Charlotte and Raleigh
+# Determine the population-weighted total distance when each city is
+# served by the nearer of the two DCs.
 # Code block 2: the Carolinas' larger cities
 df = filter(r -> r.STFIP == st2fips(:NC) &&
                  r.POP > 100_000, usplace())
@@ -66,8 +65,9 @@ X = vcat(name2lonlat("Charlotte")', name2lonlat("Raleigh")')
 D = dists(X, P, :mi)
 α, TC2 = allocate(D, w)
 
-# Example 2: Charlotte and Raleigh DCs
 ## Example 2(b): Adding Greensboro
+# Determine the reduction in that total from opening a third DC at
+# Greensboro.
 # Code block 4: adding a third DC
 X = vcat(X, name2lonlat("Greensboro")')
 D = dists(X, P, :mi)

@@ -140,20 +140,11 @@ p = 2
 yp, TCp, _ = pmedian(p, C)   # _ is the allocation, unused here
 yp, TCp
 
-## Example 3: How many machines to lease and where
-# EMCA Industries, LLC is considering leasing machines that can be used
-# to manufacture a single type of product. They have identified
-# customers for the product and have estimated that they will be able to
-# sell 12 million units per year to these customers. Each unit weighs 15
-# pounds and is shipped at \$0.25 per ton-mile. @tbl-emca gives the
-# number of customers $n$ grouped by three-digit ZIP code across the
-# Carolinas. They have estimated that they will be able to lease each
-# machine for \$100,000 per year; the lease cost includes the rental
-# cost of housing it in a portion of an existing manufacturing facility.
-# EMCA would like to know how many machines are needed to best serve
-# their customers and where they should locate the machines, assuming
-# that each machine can produce up to 2 million units of product per
-# year.
+# Example 3: How many machines to lease and where
+## Example 3(a): What the UFL opens, capacity ignored
+# Determine how many machines uncapacitated facility location opens and
+# where, using every ZIP centroid as both a customer and a candidate
+# site.
 # Code block 13: EMCA's customers
 zip = [
     270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283,
@@ -182,6 +173,11 @@ prt(DataFrame(ZIP = zip[yz],
               city = lonlat2loc(Pz[yz, :],
                                 filter(r -> r.ISCUS, usplace())).NAME,
               tons = round.(vec(sum(Wz .* fz', dims = 2))[yz])))
+
+## Example 3(b): Whether that answer is feasible
+# Determine whether the machines the UFL opened are within their
+# capacity, and the smallest number of machines throughput feasibility
+# allows.
 # Code block 16: what each of the six machines is asked to make
 served = vec(sum(Wz .* units', dims = 2))[yz]
 prt(DataFrame(ZIP = zip[yz], units = round.(Int, served),
@@ -194,6 +190,11 @@ TCmin = TC7 + mmin * kz              # transport plus fixed cost
 s7 = vec(sum(W7 .* units', dims = 2))[y7]
 prt(DataFrame(machines = mmin, total = usd(TCmin),
               max_pct = round(100 * maximum(s7) / K, digits = 1)))
+
+## Example 3(c): How many machines capacity requires
+# Determine the number of machines at which no machine is over its
+# capacity, and what that feasibility costs against the
+# throughput-feasible minimum.
 # Code block 18: raise the machine count until none is over capacity
 res = DataFrame(machines = Int[], transport = Int[],
                 total = Int[], max_pct = Float64[])

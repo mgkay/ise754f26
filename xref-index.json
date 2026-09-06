@@ -746,6 +746,10 @@
    "label": "Ex. 2",
    "word": "Ex."
   },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
   "example-2-b": {
    "label": "Ex. 2(b)",
    "word": "Ex."
@@ -930,6 +934,18 @@
   },
   "example-3": {
    "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
    "word": "Ex."
   },
   "example-4": {

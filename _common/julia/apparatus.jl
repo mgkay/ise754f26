@@ -14,15 +14,34 @@
 
 _apparatus_raw(ds) = try; join(string.(ds.text)); catch; ""; end
 
-# First prose line of a docstring: skip the indented signature block and any
-# leading blank lines, then take the next non-blank line.
+# First prose PARAGRAPH of a docstring: skip the indented signature block and
+# any leading blank lines, then take every line up to the next blank one and
+# join them with spaces.
+#
+# WHY A PARAGRAPH AND NOT A LINE (2026-09-04). This read the first *line*, and
+# a docstring whose summary sentence wraps therefore reached the panel cut off
+# mid-clause. Three of the thirty-one functions declared across the course were
+# affected: `wcentroid` ended at "corrected for", `ala` at "among `m`
+# weighted", and `dgca` at "between new-facility/point set `X` and". Two of
+# those are in lectures already delivered, and nothing detected it, because a
+# truncated summary is still a plausible-looking bullet.
+#
+# The paragraph is the docstring's own summary unit -- Julia's convention puts
+# the one-sentence summary in the first paragraph and the detail after a blank
+# line -- so this reads what the author meant by "the summary" rather than what
+# happened to fit on one line. Fixing a wrapping docstring instead would leave
+# the trap for the next long one.
 function _apparatus_firstprose(s::AbstractString)
     lines = split(s, '\n')
     i = 1
     while i <= length(lines) && (startswith(lines[i], "    ") || isempty(strip(lines[i])))
         i += 1
     end
-    return i <= length(lines) ? strip(lines[i]) : ""
+    j = i
+    while j <= length(lines) && !isempty(strip(lines[j]))
+        j += 1
+    end
+    return i <= length(lines) ? strip(join(strip.(lines[i:j - 1]), " ")) : ""
 end
 
 """
