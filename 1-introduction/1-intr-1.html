@@ -3886,118 +3886,265 @@ font-family: inherit;
     "search-label": "Search"
   }
 }</script>
+<!-- Track-changes review styling, and the KaTeX size pin beside it.
+
+
+
+     EXTRACTED FROM `_quarto.yml` 2026-09-06, unchanged. It lived inline in
+
+     the project's `include-in-header`, which reaches every lecture the
+
+     PROJECT renders -- and a WITHHELD lecture is not one of those. Quarto
+
+     renders a file excluded by a `project.render` negative glob as a
+
+     standalone document with only its own YAML, so 2.5's review render came
+
+     out with every region and every gray block completely unstyled. The
+
+     instructor read it that way: "I don't see any marks in color."
+
+
+
+     A withheld lecture is exactly the one being reviewed, so this is the
+
+     styling failing at the only moment it is needed. Both `_quarto.yml` and
+
+     a withheld lecture's own YAML now include this file, so the two cannot
+
+     drift and neither can lose it.
+
+
+
+     WHY IT IS RAW HTML AND NOT THEME SCSS: Quarto purges unused selectors
+
+     from the bundled theme, which strips anything a class only acquires at
+
+     runtime -- `.katex` is the case that forced this. -->
+
+
+
 <style>
 
 .katex { font-size: 1.0em !important; }
 /* track-changes whole-region insertions (Fix D). Inline <mark> is
+
      yellow by browser default, but a region renders as
+
      <section class="tc-region" data-tc-n="N" data-tc-prov="…"> and needs
+
      explicit styling. Quarto emits the fenced-div attributes as data-*,
+
      so target data-tc-n / data-tc-prov (the skill's tc-clean.css uses
+
      raw tc-n/tc-prov and so does not bind under Quarto). Injected here,
+
      not via theme SCSS, for the same purge-safety reason as KaTeX. */
+
   /* padding-top reserves a band for the absolutely-positioned
+
      provenance label (::before, top-right) so the first line of body
+
      text does not collide with it. */
+
   .tc-region { position: relative; border-left: 4px solid #d98c14;
+
     background: #fff8e6; padding: 1.4rem .75rem .35rem; margin: .6rem 0;
+
     border-radius: 3px; }
+
   .tc-region::before { content: "tracked +" attr(data-tc-n);
+
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
+
     font-weight: 700; color: #b9770f; letter-spacing: .02em; }
+
   .tc-region[data-tc-prov="imported"] { border-left-color: #1e76c8;
+
     background: #eef6ff; }
+
   .tc-region[data-tc-prov="imported"]::before {
+
     content: "imported +" attr(data-tc-n); color: #1e76c8; }
+
   /* transcript (v7): AI wording over the instructor's own spoken
+
      transcript content. Green, distinct from authored-orange and
+
      imported-blue. */
+
   .tc-region[data-tc-prov="transcript"] { border-left-color: #2e8b57;
+
     background: #edf7f0; }
+
   .tc-region[data-tc-prov="transcript"]::before {
+
     content: "transcript +" attr(data-tc-n); color: #2e8b57; }
+
   /* sourced (v9): AI interpretation grounded in a cited document
+
      source, verified against the gray .tc-verbatim excerpt beside it.
+
      Teal, distinct from authored-orange, imported-blue, transcript-
+
      green. */
+
   .tc-region[data-tc-prov="sourced"] { border-left-color: #0f7d8c;
+
     background: #e7f4f6; }
+
   .tc-region[data-tc-prov="sourced"]::before {
+
     content: "sourced +" attr(data-tc-n); color: #0b6673; }
+
   /* .tc-verbatim: TEMPORARY block holding the instructor's verbatim
+
      transcript beside a refinement, for side-by-side confirmation.
+
      Muted, dashed, self-labeled to signal it is scaffolding to delete
+
      after the refinement is confirmed. */
+
   .tc-verbatim { position: relative; border-left: 4px dashed #9a9a9a;
+
     background: #f4f4f4; color: #555; font-size: .92em;
+
     padding: 1.4rem .75rem .35rem; margin: .6rem 0 .2rem; border-radius: 3px; }
+
   .tc-verbatim::before { content: "verbatim \2014 delete after confirming";
+
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
+
     font-weight: 700; color: #777; letter-spacing: .02em; }
+
   /* .gap-draft: a passage the INSTRUCTOR has not written yet. Deliberately
+
      not a .tc-region: tc-prov is a closed whitelist and an unknown value
+
      falls back silently to "authored", which would render a hole as
+
      ordinary yellow AI prose and let /tc accept bake it in as body text.
+
      So this is its own namespace, its own numbering (G1, G2, ...), and it
+
      is resolved only by replacement with the dictated draft. Red, heavy,
+
      dashed, and unlike every other state in the palette, because the one
+
      thing it must never be mistaken for is the instructor's own material.
+
      tools/check_gaps.py refuses to publish while one is open. */
+
   .gap-draft { position: relative; border: 3px dashed #c0392b;
+
     background: #fdf0ee; color: #6b1f16; padding: 1.5rem .85rem .5rem;
+
     margin: .9rem 0; border-radius: 3px; font-size: .94em; }
+
   .gap-draft::before { content: attr(id) " - instructor draft needed";
+
     position: absolute; top: .25rem; right: .6rem; font-size: .7rem;
+
     font-weight: 700; color: #c0392b; letter-spacing: .04em;
+
     text-transform: uppercase; }
+
   /* Aligned equation groups (::: {.eq-align} + the eq-align.lua
+
      filter). The filter equalizes the label/symbol column widths
+
      inside each equation; these rules left-anchor the group so the
+
      equalized prefixes actually line up at "=". Each equation keeps
+
      its own flush-right \tag number. Injected here, not via theme
+
      SCSS, for the same purge-safety reason as KaTeX above. */
+
   .eq-align .katex-display { text-align: left !important;
+
     margin: 0.4rem 0 !important; }
+
   /* A tagged KaTeX display re-centers its body inside .katex /
+
      .katex-html (the tag layout), so the display-level text-align
+
      alone does not left-anchor the equation — pin the inner nodes
+
      too (verified: with only the rule above, the three "=" x-offsets
+
      differ; with these, they are pixel-identical). */
+
   .eq-align .katex-display > .katex { text-align: left !important;
+
     padding-left: 1.25rem; }
+
   .eq-align .katex-display > .katex > .katex-html {
+
     text-align: left !important; }
+
   /* Mermaid diagrams. When rendered client-side, mermaid writes an inline
+
      `max-width: NNNpx` onto the <svg> itself, and an inline style beats any
+
      stylesheet rule, so the diagram keeps its intrinsic width and runs off the
+
      side of a phone. Injected here rather than in the theme SCSS for the same
+
      two reasons as the KaTeX rule above: the element is JS-injected, so the
+
      selector is purged from the bundled theme, and it needs !important to
+
      override the inline attribute. */
+
   .mermaid svg, pre.mermaid svg, div.cell-output-display svg.mermaid {
+
     max-width: 100% !important; height: auto !important; }
+
   /* Definition-list case braces (e.g. r_a's two-line \left\{…\right.):
+
      the case labels are KaTeX \text, rendered in KaTeX_Main, whose
+
      x-height reads smaller than the Lora body at the same px. Force
+
      the body font on those runs so a braced label matches the rest
+
      of the definition. Injected here (not theme SCSS) because .katex
+
      is JS-injected and purged from the bundled theme. */
+
   .deflist .katex .text, .deflist .katex .text * {
+
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
+
   /* Circled matrix entries, for a hand solution that marks the chosen
+
      element of each column (the allocation of 2.3 Sec. 1, drawn this
+
      way on the source slide). KaTeX has no \enclose{circle}, so the
+
      entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
+
      ::: {.circle-min} div and the rectangle is rounded to an oval
+
      here. Scoped to the div so every other \fcolorbox in the course
+
      stays a box. Injected here, not in theme SCSS, because .katex and
+
      .fcolorbox are JS-injected and purged from the bundled theme, and
+
      !important is needed to beat KaTeX's own inline border style. */
+
   .circle-min .katex .fcolorbox {
+
     border-radius: 50% !important;
+
     border-width: 1.3px !important;
+
     padding: 0.14em 0.30em !important; }
+
 </style>
+
 
   
   <script>
@@ -4291,12 +4438,6 @@ window.Quarto = {
   </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
-  </div>
-</li>
     </ul>
     </div>
 </nav>

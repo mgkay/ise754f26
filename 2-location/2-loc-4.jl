@@ -291,7 +291,7 @@ fs = [0, maximum(f) * 1.05]
 fig = Figure(size = (620, 380))
 ax = Axis(fig[1, 1], xlabel = "production rate, molds/yr",
           ylabel = "production cost, \$/yr")
-scatter!(ax, f, tpc; color = :black, markersize = 11)
+scatter!(ax, f, tpc; color = :grey25, markersize = 11)
 lines!(ax, fs, ŷ([k, cp], fs); color = :steelblue4, label = "L2")
 lines!(ax, fs, ŷ([k₁, cp₁], fs); color = :firebrick, label = "L1")
 axislegend(ax; position = :lt)

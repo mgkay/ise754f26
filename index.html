@@ -3826,143 +3826,277 @@ vertical-align: -.125em;
     "search-label": "Search"
   }
 }</script>
+<!-- Track-changes review styling, and the KaTeX size pin beside it.
+
+
+
+     EXTRACTED FROM `_quarto.yml` 2026-09-06, unchanged. It lived inline in
+
+     the project's `include-in-header`, which reaches every lecture the
+
+     PROJECT renders -- and a WITHHELD lecture is not one of those. Quarto
+
+     renders a file excluded by a `project.render` negative glob as a
+
+     standalone document with only its own YAML, so 2.5's review render came
+
+     out with every region and every gray block completely unstyled. The
+
+     instructor read it that way: "I don't see any marks in color."
+
+
+
+     A withheld lecture is exactly the one being reviewed, so this is the
+
+     styling failing at the only moment it is needed. Both `_quarto.yml` and
+
+     a withheld lecture's own YAML now include this file, so the two cannot
+
+     drift and neither can lose it.
+
+
+
+     WHY IT IS RAW HTML AND NOT THEME SCSS: Quarto purges unused selectors
+
+     from the bundled theme, which strips anything a class only acquires at
+
+     runtime -- `.katex` is the case that forced this. -->
+
+
+
 <style>
 
 .katex { font-size: 1.0em !important; }
 /* track-changes whole-region insertions (Fix D). Inline <mark> is
+
      yellow by browser default, but a region renders as
+
      <section class="tc-region" data-tc-n="N" data-tc-prov="…"> and needs
+
      explicit styling. Quarto emits the fenced-div attributes as data-*,
+
      so target data-tc-n / data-tc-prov (the skill's tc-clean.css uses
+
      raw tc-n/tc-prov and so does not bind under Quarto). Injected here,
+
      not via theme SCSS, for the same purge-safety reason as KaTeX. */
+
   /* padding-top reserves a band for the absolutely-positioned
+
      provenance label (::before, top-right) so the first line of body
+
      text does not collide with it. */
+
   .tc-region { position: relative; border-left: 4px solid #d98c14;
+
     background: #fff8e6; padding: 1.4rem .75rem .35rem; margin: .6rem 0;
+
     border-radius: 3px; }
+
   .tc-region::before { content: "tracked +" attr(data-tc-n);
+
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
+
     font-weight: 700; color: #b9770f; letter-spacing: .02em; }
+
   .tc-region[data-tc-prov="imported"] { border-left-color: #1e76c8;
+
     background: #eef6ff; }
+
   .tc-region[data-tc-prov="imported"]::before {
+
     content: "imported +" attr(data-tc-n); color: #1e76c8; }
+
   /* transcript (v7): AI wording over the instructor's own spoken
+
      transcript content. Green, distinct from authored-orange and
+
      imported-blue. */
+
   .tc-region[data-tc-prov="transcript"] { border-left-color: #2e8b57;
+
     background: #edf7f0; }
+
   .tc-region[data-tc-prov="transcript"]::before {
+
     content: "transcript +" attr(data-tc-n); color: #2e8b57; }
+
   /* sourced (v9): AI interpretation grounded in a cited document
+
      source, verified against the gray .tc-verbatim excerpt beside it.
+
      Teal, distinct from authored-orange, imported-blue, transcript-
+
      green. */
+
   .tc-region[data-tc-prov="sourced"] { border-left-color: #0f7d8c;
+
     background: #e7f4f6; }
+
   .tc-region[data-tc-prov="sourced"]::before {
+
     content: "sourced +" attr(data-tc-n); color: #0b6673; }
+
   /* .tc-verbatim: TEMPORARY block holding the instructor's verbatim
+
      transcript beside a refinement, for side-by-side confirmation.
+
      Muted, dashed, self-labeled to signal it is scaffolding to delete
+
      after the refinement is confirmed. */
+
   .tc-verbatim { position: relative; border-left: 4px dashed #9a9a9a;
+
     background: #f4f4f4; color: #555; font-size: .92em;
+
     padding: 1.4rem .75rem .35rem; margin: .6rem 0 .2rem; border-radius: 3px; }
+
   .tc-verbatim::before { content: "verbatim \2014 delete after confirming";
+
     position: absolute; top: .2rem; right: .55rem; font-size: .7rem;
+
     font-weight: 700; color: #777; letter-spacing: .02em; }
+
   /* .gap-draft: a passage the INSTRUCTOR has not written yet. Deliberately
+
      not a .tc-region: tc-prov is a closed whitelist and an unknown value
+
      falls back silently to "authored", which would render a hole as
+
      ordinary yellow AI prose and let /tc accept bake it in as body text.
+
      So this is its own namespace, its own numbering (G1, G2, ...), and it
+
      is resolved only by replacement with the dictated draft. Red, heavy,
+
      dashed, and unlike every other state in the palette, because the one
+
      thing it must never be mistaken for is the instructor's own material.
+
      tools/check_gaps.py refuses to publish while one is open. */
+
   .gap-draft { position: relative; border: 3px dashed #c0392b;
+
     background: #fdf0ee; color: #6b1f16; padding: 1.5rem .85rem .5rem;
+
     margin: .9rem 0; border-radius: 3px; font-size: .94em; }
+
   .gap-draft::before { content: attr(id) " - instructor draft needed";
+
     position: absolute; top: .25rem; right: .6rem; font-size: .7rem;
+
     font-weight: 700; color: #c0392b; letter-spacing: .04em;
+
     text-transform: uppercase; }
+
   /* Aligned equation groups (::: {.eq-align} + the eq-align.lua
+
      filter). The filter equalizes the label/symbol column widths
+
      inside each equation; these rules left-anchor the group so the
+
      equalized prefixes actually line up at "=". Each equation keeps
+
      its own flush-right \tag number. Injected here, not via theme
+
      SCSS, for the same purge-safety reason as KaTeX above. */
+
   .eq-align .katex-display { text-align: left !important;
+
     margin: 0.4rem 0 !important; }
+
   /* A tagged KaTeX display re-centers its body inside .katex /
+
      .katex-html (the tag layout), so the display-level text-align
+
      alone does not left-anchor the equation — pin the inner nodes
+
      too (verified: with only the rule above, the three "=" x-offsets
+
      differ; with these, they are pixel-identical). */
+
   .eq-align .katex-display > .katex { text-align: left !important;
+
     padding-left: 1.25rem; }
+
   .eq-align .katex-display > .katex > .katex-html {
+
     text-align: left !important; }
+
   /* Mermaid diagrams. When rendered client-side, mermaid writes an inline
+
      `max-width: NNNpx` onto the <svg> itself, and an inline style beats any
+
      stylesheet rule, so the diagram keeps its intrinsic width and runs off the
+
      side of a phone. Injected here rather than in the theme SCSS for the same
+
      two reasons as the KaTeX rule above: the element is JS-injected, so the
+
      selector is purged from the bundled theme, and it needs !important to
+
      override the inline attribute. */
+
   .mermaid svg, pre.mermaid svg, div.cell-output-display svg.mermaid {
+
     max-width: 100% !important; height: auto !important; }
+
   /* Definition-list case braces (e.g. r_a's two-line \left\{…\right.):
+
      the case labels are KaTeX \text, rendered in KaTeX_Main, whose
+
      x-height reads smaller than the Lora body at the same px. Force
+
      the body font on those runs so a braced label matches the rest
+
      of the definition. Injected here (not theme SCSS) because .katex
+
      is JS-injected and purged from the bundled theme. */
+
   .deflist .katex .text, .deflist .katex .text * {
+
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
+
   /* Circled matrix entries, for a hand solution that marks the chosen
+
      element of each column (the allocation of 2.3 Sec. 1, drawn this
+
      way on the source slide). KaTeX has no \enclose{circle}, so the
+
      entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
+
      ::: {.circle-min} div and the rectangle is rounded to an oval
+
      here. Scoped to the div so every other \fcolorbox in the course
+
      stays a box. Injected here, not in theme SCSS, because .katex and
+
      .fcolorbox are JS-injected and purged from the bundled theme, and
+
      !important is needed to beat KaTeX's own inline border style. */
+
   .circle-min .katex .fcolorbox {
+
     border-radius: 50% !important;
+
     border-width: 1.3px !important;
+
     padding: 0.14em 0.30em !important; }
+
 </style>
+
 
 
 </head>
 
-<body class="quarto-light">
+<body class="fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Topics</h2>
-   
-  <ul class="collapse">
-  <li><a href="#1-introduction" id="toc-1-introduction" class="nav-link active" data-scroll-target="#1-introduction">1. Introduction</a></li>
-  <li><a href="#2-location" id="toc-2-location" class="nav-link" data-scroll-target="#2-location">2. Location</a></li>
-  <li><a href="#3-transport" id="toc-3-transport" class="nav-link" data-scroll-target="#3-transport">3. Transport</a></li>
-  <li><a href="#4-networks" id="toc-4-networks" class="nav-link" data-scroll-target="#4-networks">4. Networks</a></li>
-  <li><a href="#5-routing" id="toc-5-routing" class="nav-link" data-scroll-target="#5-routing">5. Routing</a></li>
-  <li><a href="#6-inventory" id="toc-6-inventory" class="nav-link" data-scroll-target="#6-inventory">6. Inventory</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -3991,7 +4125,7 @@ vertical-align: -.125em;
 
 </div>
 <div class="topic-jump">
-<p><a href="#1-introduction">1. Introduction</a> <a href="#2-location">2. Location</a> <a href="#3-transport">3. Transport</a> <a href="#4-networks">4. Networks</a> <a href="#5-routing">5. Routing</a> <a href="#6-inventory">6. Inventory</a> <a href="references.html">References</a></p>
+<p><a href="#1-introduction">1. Introduction</a> <a href="#2-location">2. Location</a> <a href="#3-transport">3. Transport</a> <a href="#4-networks">4. Networks</a> <a href="#5-routing">5. Routing</a> <a href="#6-inventory">6. Inventory</a> <a href="#references">References</a></p>
 </div>
 <div class="list-note">
 <p>All models follow the <a href="model-reference.html">Model Format Reference</a>. The links under a lecture are its script, holding all of the Julia code; its overview video; and its twin, the lecture’s markdown text, which an assistant can read whole.</p>
@@ -4111,6 +4245,27 @@ vertical-align: -.125em;
 <p><span class="lecture-link forthcoming"><span class="lec-num">6.3</span> <span class="lec-title">Multi-Echelon Inventory Systems</span></span><span class="tag">soon</span></p>
 </div>
 </div>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div class="page-note">
+<p>The following sources are recommended for further study. They are collected here rather than under individual lectures because most of them apply to more than one, and several apply to more than one topic. None is required: there is no textbook for this course, and everything needed to do the work is on this site. Alphabetical by first author, with the topics each applies to in parentheses, which is where it applies rather than a limit on where it is useful.</p>
+</div>
+<ol type="1">
+<li><p>Ahuja, R.K., Magnanti, T.L., and Orlin, J.B., 1993, <em>Network Flows: Theory, Algorithms, and Applications</em>, Englewood Cliffs, NJ: Prentice-Hall. (Networks)</p></li>
+<li><p>Askin, R.G., and Standridge, C.R., 1993, <em>Modeling and Analysis of Manufacturing Systems</em>, Wiley. (Lec. 1.3: Syst. Performance Est.)</p></li>
+<li><p>Bartholdi III, J.J., and Hackman, S.T., 2019, <em>Warehouse &amp; Distribution Science</em>, version 0.98.1. <a href="https://www.warehouse-science.com/book/index.html">Full text, free</a> (General)</p></li>
+<li><p>Cachon, G., and Terwiesch, C., 2006, <em>Matching Supply with Demand: An Introduction to Operations Management</em>, McGraw-Hill. (Inventory)</p></li>
+<li><p>Daganzo, C.F., 1999, <em>Logistics Systems Analysis</em>, 3rd Ed., Berlin: Springer. (Transport)</p></li>
+<li><p>Daskin, M., 1995, <em>Network and Discrete Location: Models, Algorithms, and Applications</em>, New York: Wiley. (Location)</p></li>
+<li><p>Francis, R.L., McGinnis Jr., L.F., and White, J.A., 1992, <em>Facility Layout and Location: An Analytical Approach</em>, 2nd Ed., Englewood Cliffs, NJ: Prentice-Hall. (Location)</p></li>
+<li><p>Golden, B.L., and Assad, A.A., Eds., 1988, <em>Vehicle Routing: Methods and Studies</em>, Amsterdam: North-Holland. (Routing)</p></li>
+<li><p>Hopp, W.J., and Spearman, M.L., 2000, <em>Factory Physics: Foundations of Manufacturing Management</em>, 2nd Ed., McGraw-Hill. (Lec. 1.3: Syst. Performance Est., Inventory)</p></li>
+<li><p>Larson, R.C., and Odoni, A.R., 1981, <em>Urban Operations Research</em>, Englewood Cliffs, NJ: Prentice-Hall. <a href="https://web.mit.edu/urban_or_book/www/book/">Full text, free</a> (Location)</p></li>
+<li><p>Mirchandani, P.B., and Francis, R.L., Eds., 1990, <em>Discrete Location Theory</em>, New York: Wiley. (Location)</p></li>
+<li><p>Silver, E.A., Pyke, D.F., and Peterson, R., 1998, <em>Inventory Management and Production Planning and Scheduling</em>, 3rd Ed., New York: Wiley. (Inventory)</p></li>
+<li><p>Simchi-Levi, D., Kaminsky, P., and Simchi-Levi, E., 2008, <em>Designing and Managing the Supply Chain: Concepts, Strategies, and Case Studies</em>, 3rd Ed., Boston: McGraw-Hill. (Location)</p></li>
+</ol>
 
 
 </section>
