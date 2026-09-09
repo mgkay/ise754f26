@@ -35,6 +35,16 @@ using Logjam, Optim, DataFrames
 ## Example 1(a): From the bill of material to the monetary weights
 # Determine each existing facility's monetary weight, outbound from the
 # demands and inbound through the bill of material.
+
+# apparatus.jl ships beside the lectures in the materials
+# repository. Find it from the activated project rather
+# than from this file, so the script still works from a
+# copy under work/.
+let p = dirname(Base.active_project())
+    include(joinpath(basename(p) == "env" ? dirname(p) : p,
+                     "_common", "julia", "apparatus.jl"))
+end
+
 # Code block 1: monetary weights from flows and rates
 fout = [10, 20, 30]      # ton/yr to the three customers
 rout = 1.00              # $/ton-mi outbound

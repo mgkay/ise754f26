@@ -956,5 +956,143 @@
    "label": "Ex. 5",
    "word": "Ex."
   }
+ },
+ "2.5": {
+  "eq-aggpoint": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-aggcriterion": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-da1d": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-da1dmax": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-radius": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-da2dcenter": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-da2dmax": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-daemp": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "fig-cities10k": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-foundries": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-csa": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-res-cities50k": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-res-zcta3": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-res-zcta5nc": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-res-blkgrp": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-agg2": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-agg6": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-region": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-disk": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-disk-sample": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-collocation": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "tbl-sources": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-6-a": {
+   "label": "Ex. 6(a)",
+   "word": "Ex."
+  },
+  "example-6-b": {
+   "label": "Ex. 6(b)",
+   "word": "Ex."
+  },
+  "example-6-c": {
+   "label": "Ex. 6(c)",
+   "word": "Ex."
+  },
+  "example-6-d": {
+   "label": "Ex. 6(d)",
+   "word": "Ex."
+  }
  }
 }
