@@ -5378,9 +5378,9 @@ w_\text{agg} = 13 .
 <p><strong>A facility inside the region, at mile 20</strong>, the <span class="math inline">x_\text{in}</span> of the figure. Here <span style="white-space: nowrap"><span class="math inline">d = |20 - 25| = 5</span>,</span> which is less than <span style="white-space: nowrap"><span class="math inline">r</span>,</span> so the first branch of <a href="#eq-da1d" class="quarto-xref">Eq. 3</a> applies:</p>
 <p><span class="math display">
 d_a = \frac{15}{2} + \frac{5^{2}}{2 \cdot 15}
-    = 7.5 + 0.8\overline{3} = 8.8\overline{3}\ \text{mi} .
+    = 7.5 + 0.8\overline{3} = 8.3\overline{3}\ \text{mi} .
 </span></p>
-<p>The straight-line distance to the aggregate point is 5 miles. The aggregate distance is 8.83, which is the number that belongs in a transport cost.</p>
+<p>The straight-line distance to the aggregate point is 5 miles. The aggregate distance is 8.33, which is the number that belongs in a transport cost.</p>
 <p><strong>A facility outside the region, at mile 0</strong>, its <span style="white-space: nowrap"><span class="math inline">x_\text{out}</span>.</span> Here <span style="white-space: nowrap"><span class="math inline">d = |0 - 25| = 25</span>,</span> which exceeds <span style="white-space: nowrap"><span class="math inline">r</span>,</span> so the second branch applies and <span class="math inline">d_a = 25</span> mi. Far enough away, the region’s extent stops mattering and the distance to its centroid is the whole story.</p>
 <p><strong>A facility standing on the aggregate point.</strong> Here <span class="math inline">d = 0</span> and</p>
 <p><span class="math display">
@@ -5388,7 +5388,7 @@ d_a = \frac{15}{2} + 0 = 7.5\ \text{mi},
 </span></p>
 <p>which is the result the rest of the lecture rests on. Locating on a region’s centroid does not serve it for nothing; it costs 7.5 miles of average travel, and a model that records zero there has discarded the entire cost of serving that region.</p>
 <div class="result-box">
-<p>At mile 20, <span class="math inline">d_a = 8.83</span> mi; at mile 0, <span class="math inline">d_a = 25</span> mi; at the centroid itself, <span class="math inline">d_a = 7.5</span> mi and not zero.</p>
+<p>At mile 20, <span class="math inline">d_a = 8.33</span> mi; at mile 0, <span class="math inline">d_a = 25</span> mi; at the centroid itself, <span class="math inline">d_a = 7.5</span> mi and not zero.</p>
 </div>
 <div class="example-end">
 
@@ -5864,7 +5864,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>In data wrangling, <strong>table joins</strong> are used to combine two datasets based on a common column (like a shared SKU or ID). The <strong>split-apply-combine</strong> strategy is a common approach in which the data is first split into groups (e.g., by SKU), a calculation is applied to each group (like summing quantities), and the results are then combined into a summary table.</p>
 <p>This strategy uses the function <code>groupby</code> to split the data in the table, and then apply a function to each group of split data, and then combines the result into a new dataframe using <code>combine</code>.</p>
 <p>Ex. 2 was this pattern, before it had a name. <code>groupby</code> split the three-digit ZCTAs by their first two digits, <code>combine</code> applied a sum to each group’s population and land area and <code>wcentroid</code> to its coordinates, and the result came back as one row per two-digit ZIP.</p>
-<p><strong>Joining tables:</strong> Sometimes, information is spread across multiple tables. For example, the current table may list SKUs and quantities, but not include item details like weight or cube. To bring in that additional information, a <em>join</em> is used to combine it with another table that contains those attributes. An <em>inner join</em> is used in Sec. 8 to combine only the rows with matching SKUs in both tables (this is called an <em>“inner” join</em> because it keeps only the overlapping part of the two tables).</p>
+<p><strong>Joining tables:</strong> Sometimes, information is spread across multiple tables. For example, the current table may list SKUs and quantities, but not include item details like weight or cube. To bring in that additional information, a <em>join</em> is used to combine it with another table that contains those attributes. An <em>inner join</em> combines only the rows with matching SKUs in both tables (this is called an <em>“inner” join</em> because it keeps only the overlapping part of the two tables).</p>
 </section>
 <section id="missing-data-drop-vs.-skip-vs.-impute" class="level3">
 <h3 class="anchored" data-anchor-id="missing-data-drop-vs.-skip-vs.-impute">Missing data: drop vs. skip vs. impute</h3>
