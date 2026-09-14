@@ -1094,5 +1094,75 @@
    "label": "Ex. 6(d)",
    "word": "Ex."
   }
+ },
+ "2.6": {
+  "eq-market": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-split": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-rnom": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-cost": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "fig-star": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-updown": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-popco-plants": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-popco-fit": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-popco-market": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-popco-result": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-road": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  }
  }
 }

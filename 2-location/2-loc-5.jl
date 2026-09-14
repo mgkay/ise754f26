@@ -436,7 +436,7 @@ prt(DataFrame(model = ["unadjusted", "area-adjusted"],
               opened = [join(sort(z.ZCTA3[y]), " "),
                         join(sort(z.ZCTA3[ya]), " ")]))
 
-## Example 5: EMCA's machines, on aggregate demand
+## Example 5: EMCA's machines on aggregate demand
 # Determine how many machines EMCA should lease and where, when its
 # demand points are recognized as aggregates rather than as customers.
 # Code block 19: EMCA's demand set, as lecture 2.4 built it
