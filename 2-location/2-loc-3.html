@@ -3890,41 +3890,22 @@ font-family: inherit;
 }</script>
 <!-- Track-changes review styling, and the KaTeX size pin beside it.
 
-
-
      EXTRACTED FROM `_quarto.yml` 2026-09-06, unchanged. It lived inline in
-
      the project's `include-in-header`, which reaches every lecture the
-
      PROJECT renders -- and a WITHHELD lecture is not one of those. Quarto
-
      renders a file excluded by a `project.render` negative glob as a
-
      standalone document with only its own YAML, so 2.5's review render came
-
      out with every region and every gray block completely unstyled. The
-
      instructor read it that way: "I don't see any marks in color."
 
-
-
      A withheld lecture is exactly the one being reviewed, so this is the
-
      styling failing at the only moment it is needed. Both `_quarto.yml` and
-
      a withheld lecture's own YAML now include this file, so the two cannot
-
      drift and neither can lose it.
 
-
-
      WHY IT IS RAW HTML AND NOT THEME SCSS: Quarto purges unused selectors
-
      from the bundled theme, which strips anything a class only acquires at
-
      runtime -- `.katex` is the case that forced this. -->
-
-
 
 <style>
 
@@ -3940,65 +3921,35 @@ padding-left: 1.25rem; }
 text-align: left !important; }
 /* Mermaid diagrams. When rendered client-side, mermaid writes an inline
 `max-width: NNNpx` onto the <svg> itself, and an inline style beats any
-
      stylesheet rule, so the diagram keeps its intrinsic width and runs off the
-
      side of a phone. Injected here rather than in the theme SCSS for the same
-
      two reasons as the KaTeX rule above: the element is JS-injected, so the
-
      selector is purged from the bundled theme, and it needs !important to
-
      override the inline attribute. */
-
   .mermaid svg, pre.mermaid svg, div.cell-output-display svg.mermaid {
-
     max-width: 100% !important; height: auto !important; }
-
   /* Definition-list case braces (e.g. r_a's two-line \left\{…\right.):
-
      the case labels are KaTeX \text, rendered in KaTeX_Main, whose
-
      x-height reads smaller than the Lora body at the same px. Force
-
      the body font on those runs so a braced label matches the rest
-
      of the definition. Injected here (not theme SCSS) because .katex
-
      is JS-injected and purged from the bundled theme. */
-
   .deflist .katex .text, .deflist .katex .text * {
-
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
-
   /* Circled matrix entries, for a hand solution that marks the chosen
-
      element of each column (the allocation of 2.3 Sec. 1, drawn this
-
      way on the source slide). KaTeX has no \enclose{circle}, so the
-
      entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
-
      ::: {.circle-min} div and the rectangle is rounded to an oval
-
      here. Scoped to the div so every other \fcolorbox in the course
-
      stays a box. Injected here, not in theme SCSS, because .katex and
-
      .fcolorbox are JS-injected and purged from the bundled theme, and
-
      !important is needed to beat KaTeX's own inline border style. */
-
   .circle-min .katex .fcolorbox {
-
     border-radius: 50% !important;
-
     border-width: 1.3px !important;
-
     padding: 0.14em 0.30em !important; }
-
 </style>
-
 <script>/**
  * Minified by jsDelivr using Terser v5.37.0.
  * Original file: /npm/requirejs@2.3.6/require.js
@@ -6415,371 +6366,188 @@ Figure 8: Nine warehouses over the three-digit ZCTA population centroids, with 
   </div>
 </footer>
 <!-- Presentation-mode toggle: when the URL carries ?present=1, add the
-
      `presenting` class to <body> so the body.presenting rules in
-
      _common/styles/lecture.scss kick in (larger font, narrower column,
-
      sidebar/TOC hidden). Useful for in-class projection. Runs as soon
-
      as the script is parsed, before the sticky-header init below. -->
-
 <script>
-
 if (new URLSearchParams(location.search).has('present')) {
-
   document.body.classList.add('presenting');
-
 }
-
 </script>
 
-
-
 <!-- Sticky lecture header: injected at load time, tracks the active H2.
-
      Reads the lecture title from <h1 class="title"> and the current
-
      section from the topmost H2 above the sticky bar. CSS for
-
      #lecture-sticky lives in _common/styles/lecture.scss. -->
-
 <script>
-
 (function () {
-
   function init() {
-
     var main = document.querySelector('main');
-
     if (!main) return;
 
-
-
     // Lecture title is whatever Quarto rendered from the YAML `title:`.
-
     var titleEl = document.querySelector('h1.title');
-
     var titleText = titleEl ? titleEl.textContent.trim() : (document.title || '');
 
-
-
     var sticky = document.createElement('div');
-
     sticky.id = 'lecture-sticky';
-
-
 
     var left = document.createElement('div');
 
-
-
     // HOME BUTTON, on every page (instructor, 2026-08-15). Until now the link graph ran
-
     // one way only -- course home to lectures, course home to schedule -- and nothing
-
     // came back, so a reader who bookmarked a lecture, which is the page most likely to
-
     // be bookmarked, had no route to anything else. A rendered lecture contained no
-
     // occurrence of the course home address at all.
-
     //
-
     // IT NAMES THE COURSE, NOT THE OFFERING, and that is deliberate. This bar is baked
-
     // into lectures that are archived permanently, so in a later year the button lands on
-
     // whatever term the course home then fronts. "ISE 754" stays true; "Fall 2026 home"
-
     // would become a lie on the page that most needs to be trustworthy. The page's own
-
     // edition line supplies the offering.
-
     //
-
     // *** THE URL IS DUPLICATED FROM site_identity.COURSE_HOME_URL *** because this file
-
     // is static HTML injected by _quarto.yml rather than generated output. check_course.py
-
     // compares the two and fails the push when they disagree, which is the same
-
     // detect-and-refuse treatment the page footer already gets.
-
     // The course home marks itself with `.home`, and that is what suppresses the button
-
     // there. It used to be detected by URL, matching /semester.html and the site root --
-
     // which broke twice over: semester.html no longer exists, and a URL test cannot be
-
     // true for a page opened as a local file, so the home page showed a link to itself
-
     // in every local preview. A marker in the document is true wherever the page is.
-
     var HOME_URL = 'https://mgkay.github.io/ise754/';
-
     if (!document.querySelector('.home')) {
-
       var home = document.createElement('a');
-
       home.id = 'sticky-home';
-
       home.href = HOME_URL;
-
       home.textContent = '← ISE 754';
-
       left.appendChild(home);
-
     }
 
-
-
     var titleSpan = document.createElement('span');
-
     titleSpan.id = 'sticky-title';
-
     titleSpan.textContent = titleText;
-
     left.appendChild(titleSpan);
-
     sticky.appendChild(left);
 
-
-
     var right = document.createElement('div');
-
     right.id = 'lecture-sticky-section';
-
     sticky.appendChild(right);
-
-
 
     main.insertBefore(sticky, main.firstChild);
 
-
-
     // WHAT THE RIGHT-HAND SIDE NAMES. On most pages it is the current H2, which is what
-
     // this bar has always tracked. The SCHEDULE has no H2s at all -- the page is one
-
     // table -- so the right-hand side sat empty there. What a reader wants named while
-
     // scrolling a calendar is the TOPIC its rows belong to, which build_schedule.py
-
     // stamps on the first row of each topic as `data-topic`, taking the label from the
-
     // sidebar so the two never disagree.
-
     //
-
     // It matters most on a phone (instructor, 2026-08-16). At that width each row becomes
-
     // a stacked card, the table runs to several screens, and a topic boundary scrolls out
-
     // of view long before the topic ends, leaving no way to tell Location from Transport
-
     // without scrolling back.
-
     //
-
     // `.topic-start` is read directly and the row found with closest(), rather than
-
     // selecting `tr:has(.topic-start)`. :has() in a querySelectorAll is newer than the
-
     // rest of this file needs to be, and the span already knows its own row.
-
     var marks = [];
-
     var topicMarks = main.querySelectorAll('.schedule .topic-start');
-
     if (topicMarks.length) {
-
       for (var t = 0; t < topicMarks.length; t++) {
-
         marks.push({
-
           el: topicMarks[t].closest('tr') || topicMarks[t],
-
           label: topicMarks[t].getAttribute('data-topic') || ''
-
         });
-
       }
-
     } else {
-
       var hs = main.querySelectorAll('h2');
-
       for (var j = 0; j < hs.length; j++) {
-
         marks.push({ el: hs[j], label: hs[j].textContent.replace(/¶.*$/, '').trim() });
-
       }
-
     }
-
-
 
     function update() {
-
       var active = null;
-
       for (var i = 0; i < marks.length; i++) {
-
         // Pick the topmost mark whose top has crossed above the sticky header.
-
         if (marks[i].el.getBoundingClientRect().top < 90) active = marks[i];
-
         else break;
-
       }
-
       right.textContent = active ? active.label : '';
-
     }
 
-
-
     window.addEventListener('scroll', update, { passive: true });
-
     window.addEventListener('hashchange', update);
-
     update();
-
   }
-
-
 
   if (document.readyState === 'loading') {
-
     document.addEventListener('DOMContentLoaded', init);
-
   } else {
-
     init();
-
   }
-
 })();
-
 </script>
-
-
 
 <!-- Disclosure-state persistence: remember which top-of-lecture apparatus
-
      panels (the .lecture-meta <details> rows) the reader has expanded, per
-
      lecture, across reloads. Keyed by pathname + the summary text, so the
-
      remembered state survives the panels being reordered or restyled. No
-
      dependency; runs at load. -->
-
 <script>
-
 (function () {
-
   function init() {
-
     var KEY = 'ise754-meta-open:' + location.pathname;
-
     var saved;
-
     try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); }
-
     catch (e) { saved = {}; }
 
-
-
     var panels = document.querySelectorAll('.lecture-meta details');
-
     panels.forEach(function (d) {
-
       var sum = d.querySelector('summary');
-
       var label = sum ? sum.textContent.trim() : '';
-
       if (saved[label]) d.open = true;
-
       d.addEventListener('toggle', function () {
-
         try {
-
           var cur = JSON.parse(localStorage.getItem(KEY) || '{}');
-
           cur[label] = d.open;
-
           localStorage.setItem(KEY, JSON.stringify(cur));
-
         } catch (e) {}
-
       });
-
     });
-
   }
-
   if (document.readyState === 'loading') {
-
     document.addEventListener('DOMContentLoaded', init);
-
   } else {
-
     init();
-
   }
-
 })();
-
 </script>
-
-
 
 <!-- Print helper: before a Ctrl+P / Save-as-PDF, expand every <details>
-
      (apparatus panels, dropdowns) so their content prints, then restore the
-
      prior state afterward. Complements the @media print CSS in lecture.scss,
-
      which handles collapsed callouts and is the fallback for print paths that
-
      dispatch no beforeprint event (e.g. some headless renderers). -->
-
 <script>
-
 (function () {
-
   var prior = [];
-
   window.addEventListener('beforeprint', function () {
-
     prior = [];
-
     document.querySelectorAll('details').forEach(function (d, i) {
-
       prior[i] = d.open;
-
       d.open = true;
-
     });
-
   });
-
   window.addEventListener('afterprint', function () {
-
     document.querySelectorAll('details').forEach(function (d, i) {
-
       d.open = prior[i];
-
     });
-
   });
-
 })();
-
 </script>
-
 <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
