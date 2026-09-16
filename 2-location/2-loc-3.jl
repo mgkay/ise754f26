@@ -128,7 +128,7 @@ function majority(W, V)
     return at, filter(!isempty, group)
 end
 
-## Example 4: Locating a production chain
+## Example 4: Five-operation production chain
 # Determine which of heat treat, pressing and finishing must share a
 # site, and where each of the three operations belongs, given drop forge
 # fixed at Nagoya and painting fixed at Detroit.
@@ -281,7 +281,7 @@ Random.seed!(8345)
 Xᶜ, TCᶜ, = ala(randX(P, 2), w, P; alloc = alloc36, nruns = 5)
 prt(lonlat2loc(Xᶜ, df))
 
-## Example 8: Reproducing the warehouse table
+## Example 8: Retail warehouse table
 # Determine the best locations for one, two, three and nine retail
 # warehouses serving the continental United States in proportion to
 # population, and compare them with @tbl-retail.

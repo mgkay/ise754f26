@@ -119,7 +119,7 @@ end
 fig
 
 # Sec. 2. Bottom-up vs. top-down analysis
-# Example 1: One firm evaluated two ways
+# Example 1: Cary firm
 ## Example 1(a): The rate is given (bottom-up)
 # Determine the optimum, the cost at Cary, and the difference between
 # them, for three customers receiving 40, 25 and 35 truckloads a year at

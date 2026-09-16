@@ -4173,8 +4173,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">2.7: Discrete Location and MILP</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../2-location/2-loc-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.7: Discrete Location and MILP</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4283,7 +4286,7 @@ window.Quarto = {
   <li><a href="#stationarity" id="toc-stationarity" class="nav-link" data-scroll-target="#stationarity">8. Stationarity</a></li>
   <li><a href="#where-variability-goes-in-a-line" id="toc-where-variability-goes-in-a-line" class="nav-link" data-scroll-target="#where-variability-goes-in-a-line">9. Where variability goes in a line</a></li>
   </ul>
-<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-poisson" class="toc-list-link">1. Poisson arrival simulation</a></li><li><a href="#mdl-queue" class="toc-list-link">2. Single-server queue simulation</a></li><li><a href="#mdl-spt" class="toc-list-link">3. Single-server SPT queue simulation</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Waiting time for a bus</a></li><li><a href="#example-2" class="toc-list-link">2. Time in production</a></li><li><a href="#example-3" class="toc-list-link">3. Students in a department</a></li><li><a href="#example-4" class="toc-list-link">4. The price of utilization</a></li><li><a href="#example-5" class="toc-list-link">5. Pizza delivery time</a></li><li><a href="#example-6" class="toc-list-link">6. Where should the variable station go?</a></li></ul></div></nav>
+<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-poisson" class="toc-list-link">1. Poisson arrival simulation</a></li><li><a href="#mdl-queue" class="toc-list-link">2. Single-server queue simulation</a></li><li><a href="#mdl-spt" class="toc-list-link">3. Single-server SPT queue simulation</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Bus waiting time</a></li><li><a href="#example-2" class="toc-list-link">2. Time in production</a></li><li><a href="#example-3" class="toc-list-link">3. Students in a department</a></li><li><a href="#example-4" class="toc-list-link">4. Price of utilization</a></li><li><a href="#example-5" class="toc-list-link">5. Pizza delivery time</a></li><li><a href="#example-6" class="toc-list-link">6. Variable station placement</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -4349,7 +4352,7 @@ Companion script
 <p><strong>Bracketing</strong> is the first and most general way to estimate a system’s performance, and it needs no detailed model. For many systems that resist a direct model, two extreme cases are each easy to model. <strong>Perfect control</strong>, the most orderly the system could run, has no variability and gives the best-case (lower) bound. <strong>No control</strong>, fully random behavior, is the “totally random” case (a Poisson process, Sec. 4) and gives a practical worst-case (upper) bound. A single estimate then follows from the geometric mean of the two, the same lower-bound/upper-bound move used for a single parameter in Guesstimation (<a href="1-intr-1.html#example-1" class="xref" data-lec="1.1" data-id="example-1" title="Modeling">Ex. 1 in Lecture 1.1</a>), now applied to whole-system performance. A real system sits between the extremes, and the geometric mean places the estimate there. (Genuinely <em>bad</em> control, which actively bunches or batches work, can be worse even than no control, so “no control” is a practical upper bound, not an absolute one.) This is a general-purpose failsafe; it has rescued many systems that would otherwise be almost impossible to model.</p>
 <p>The waiting time for a bus is the canonical instance. The <em>headway</em> is the time between consecutive buses. Under perfect control the buses run on an evenly spaced schedule, so a passenger arriving at a random moment waits, on average, half the headway. Under no control the buses arrive at random (a Poisson process, Sec. 4), and the average wait is the <em>full</em> headway, not half. The reason is the memorylessness of random arrivals: however long the wait has already lasted, the expected time to the next bus is still a full average headway; equivalently, a passenger is more likely to arrive during a long gap than a short one, so the long gaps dominate the average wait.</p>
 <div id="example-1" class="example-heading">
-<p>Example 1: Waiting time for a bus</p>
+<p>Example 1: Bus waiting time</p>
 </div>
 <div class="statement">
 <p>Estimate the waiting time for a bus when the headway (the average time between buses) is 8 minutes and passengers arrive at random, with no real-time bus tracking.</p>
@@ -4814,7 +4817,7 @@ Table 1: Throughput-feasible capacity plan for the four-workstation line.
 <p>For the arrival SCV, <span class="math inline">\sigma_a^2 = 0</span> for deterministic arrivals and <span class="math inline">\sigma_a^2 = t_a^2</span> for exponential ones.</p>
 <p>The single-machine form <a href="#eq-vut" class="quarto-xref">Eq. 6</a> is <strong>Kingman’s approximation</strong>, named for this lecture’s epigraph author; the <span class="math inline">m</span>-machine results (<a href="#eq-vutm" class="quarto-xref">Eq. 7</a>, <a href="#eq-cd" class="quarto-xref">Eq. 8</a>, <a href="#eq-ce" class="quarto-xref">Eq. 9</a>) are further factory-physics formulas, quoted here rather than derived. These formulas are checked against a simulation in Sec. 7, where simulation is introduced as a modeling level in its own right.</p>
 <div id="example-4" class="example-heading">
-<p>Example 4: The price of utilization</p>
+<p>Example 4: Price of utilization</p>
 </div>
 <div class="statement">
 <p>How does the cycle time of a single-machine station (<span class="math inline">t_e = 0.1</span> hr, <span style="white-space: nowrap"><span class="math inline">c_a^2 = c_e^2 = 1</span>)</span> behave as utilization rises toward 1?</p>
@@ -5335,7 +5338,7 @@ Figure 8: Barber-shop mean cycle time in queue (<span style="white-space: nowra
 <h2 class="anchored" data-anchor-id="where-variability-goes-in-a-line">9. Where variability goes in a line</h2>
 <p>The departure SCV (<a href="#eq-cd" class="quarto-xref">Eq. 8</a>) means a station’s variability does not stay put: the variability of what leaves one station becomes the variability of what arrives at the next. A highly variable station placed <em>early</em> inflates the queue of every station downstream, while the same station placed <em>last</em> corrupts nothing beyond itself. This is the <strong>corrupting influence of variability</strong>: variability early in a line is far more damaging than variability late. When the order of operations is a design choice, that choice matters.</p>
 <div id="example-6" class="example-heading">
-<p>Example 6: Where should the variable station go?</p>
+<p>Example 6: Variable station placement</p>
 </div>
 <div class="statement">
 <p>Three single-machine stations run in series, each at utilization <span class="math inline">u = 0.9</span> and the same mean process time <span class="math inline">t_e = 0.1</span> hr, but with process-time variabilities <span style="white-space: nowrap"><span class="math inline">c_e^2 = 0.25</span>,</span> <span style="white-space: nowrap"><span class="math inline">1</span>,</span> and <span style="white-space: nowrap"><span class="math inline">4</span>;</span> work enters the first at <span style="white-space: nowrap"><span class="math inline">c_a^2 = 1</span>.</span> Compare the line’s total cycle time when the most variable station is run last versus first.</p>

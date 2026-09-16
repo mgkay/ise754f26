@@ -4173,8 +4173,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">2.7: Discrete Location and MILP</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../2-location/2-loc-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.7: Discrete Location and MILP</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4281,7 +4284,7 @@ window.Quarto = {
   <li><a href="#ala-procedure" id="toc-ala-procedure" class="nav-link" data-scroll-target="#ala-procedure">6. ALA procedure</a></li>
   <li><a href="#large-scale-examples" id="toc-large-scale-examples" class="nav-link" data-scroll-target="#large-scale-examples">7. Large-scale examples</a></li>
   </ul>
-<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-alloc" class="toc-list-link">1. Distance-based allocation</a></li><li><a href="#mdl-majority" class="toc-list-link">2. Multifacility majority theorem</a></li><li><a href="#mdl-la" class="toc-list-link">3. Location–allocation problem</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Two DCs serving four customers</a></li><li><a href="#example-2" class="toc-list-link">2. Charlotte and Raleigh DCs</a></li><li><a href="#example-3" class="toc-list-link">3. Limits of the majority theorem</a></li><li><a href="#example-4" class="toc-list-link">4. Locating a production chain</a></li><li><a href="#example-5" class="toc-list-link">5. Two facilities along I-40</a></li><li><a href="#example-6" class="toc-list-link">6. ALA procedure by hand</a></li><li><a href="#example-7" class="toc-list-link">7. Service centers for the Carolinas</a></li><li><a href="#example-8" class="toc-list-link">8. Reproducing the warehouse table</a></li></ul></div></nav>
+<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-alloc" class="toc-list-link">1. Distance-based allocation</a></li><li><a href="#mdl-majority" class="toc-list-link">2. Multifacility majority theorem</a></li><li><a href="#mdl-la" class="toc-list-link">3. Location–allocation problem</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Two DCs and four customers</a></li><li><a href="#example-2" class="toc-list-link">2. Charlotte and Raleigh DCs</a></li><li><a href="#example-3" class="toc-list-link">3. Limits of the majority theorem</a></li><li><a href="#example-4" class="toc-list-link">4. Five-operation production chain</a></li><li><a href="#example-5" class="toc-list-link">5. Two facilities along I-40</a></li><li><a href="#example-6" class="toc-list-link">6. ALA procedure by hand</a></li><li><a href="#example-7" class="toc-list-link">7. Service centers for the Carolinas</a></li><li><a href="#example-8" class="toc-list-link">8. Retail warehouse table</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -4451,7 +4454,7 @@ TD &amp;= \sum_{j \in M} w_j \, d_{\alpha_j j}
 </div>
 <p>The allocation is read down the columns: column <span class="math inline">j</span> holds EF <span class="math inline">j</span>’s distance to every NF, and the smallest entry names its server.</p>
 <div id="example-1" class="example-heading">
-<p>Example 1: Two DCs serving four customers</p>
+<p>Example 1: Two DCs and four customers</p>
 </div>
 <div class="statement">
 <p>Determine the allocation and the total weekly distance for two DCs serving four customers with weights <span style="white-space: nowrap"><span class="math inline">w = (2, 4, 6, 8)</span>,</span> each representing the number of truckloads per week.</p>
@@ -4933,7 +4936,7 @@ Figure 4: Five operations from Nagoya to Detroit, with the per-mile cost of mov
 <p>The four rates along the chain in <a href="#fig-production-chain" class="quarto-xref">Fig. 4</a> are not equal, and that is worth a moment before the theorem is applied to them.</p>
 <p>The four rates differ. The reason for the difference is that the quantities and characteristics of the materials being moved into an operation in general differ from what comes out of the operation. As a result of the operation, material might be removed, and so the physical weight decreases. Alternatively, materials could be added as part of the operation, and the physical weight would increase. Also, characteristics of the materials could change, resulting in more expensive or cheaper transport alternatives. All of that nets out to differences in transport rates in terms of dollars per mile. This can be seen most clearly by referring back to <a href="2-loc-2.html#eq-minisum" class="xref" data-lec="2.2" data-id="eq-minisum" title="Single-Facility Minisum">Eq. 2 in Lecture 2.2</a>, where the monetary weight <span style="white-space: nowrap"><span class="math inline">w_i</span>,</span> in terms of dollars per mile, is the product of the physical weight <span class="math inline">q_i</span> (tons) and the transport rate <span class="math inline">r_i</span> ($/ton-mi), both of which can change on the input and output sides of each operation. More details of how to determine these values are discussed in Transport.</p>
 <div id="example-4" class="example-heading">
-<p>Example 4: Locating a production chain</p>
+<p>Example 4: Five-operation production chain</p>
 </div>
 <div class="statement">
 <p>Determine which of heat treat, pressing and finishing must share a site, and where each of the three operations belongs, given drop forge fixed at Nagoya and painting fixed at Detroit.</p>
@@ -5783,7 +5786,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 </div>
 <p>The table is roughly twenty years old, which makes it a test of the method rather than a lookup: the same problem solved against current population data should land in much the same places, and where it does not, the population has moved.</p>
 <div id="example-8" class="example-heading">
-<p>Example 8: Reproducing the warehouse table</p>
+<p>Example 8: Retail warehouse table</p>
 </div>
 <div class="statement">
 <p>Determine the best locations for one, two, three and nine retail warehouses serving the continental United States in proportion to population, and compare them with <a href="#tbl-retail" class="quarto-xref">Table 4</a>.</p>

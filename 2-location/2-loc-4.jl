@@ -116,7 +116,7 @@ yp, TCp, _ = ufladd(k, C; p = 3)     # or stop once three sites are open
 logjam_rung(:ufldrop, "UFL, modified DROP construction")
 logjam_rung(:ufl, "UFL, hybrid algorithm")
 
-# Example 2: Exchanging and combining all three
+# Example 2: Exchange and hybrid on the corridor
 ## Example 2(a): Exchanging one site at a time, by hand
 # Determine whether swapping one open site for one closed site improves
 # on either construction's answer.
@@ -150,7 +150,7 @@ p = 2
 yp, TCp, _ = pmedian(p, C)   # _ is the allocation, unused here
 yp, TCp
 
-# Example 3: How many machines to lease and where
+# Example 3: EMCA machine location
 ## Example 3(a): What the UFL opens, capacity ignored
 # Determine how many machines uncapacitated facility location opens and
 # where, using every ZIP centroid as both a customer and a candidate

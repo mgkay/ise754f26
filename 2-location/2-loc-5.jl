@@ -243,7 +243,7 @@ tick!(ax, xagg, L"x_\mathrm{agg}", "$(Int(xagg))", L"w_\mathrm{agg} = 3";
 fig
 
 # Sec. 4. Aggregating demand points
-## Example 2: Building a two-digit ZCTA demand set
+## Example 2: Two-digit ZCTA demand set
 # Determine an aggregate demand set for the continental United States at
 # two-digit ZIP resolution, by grouping the three-digit ZCTAs and
 # computing the weight, location and extent of each group.
@@ -410,7 +410,7 @@ prt(DataFrame(coefficients = ["least squares", "as fractions"],
               rmse = round.([rmse(p), rmse([1/48, 9/20])], digits = 5)))
 
 # Sec. 6. Aggregate demand in a location model
-## Example 4: Locating with and without the area adjustment
+## Example 4: Area adjustment on North Carolina ZIPs
 # Determine how the solution to an uncapacitated facility location
 # problem over North Carolina's three-digit ZIP codes changes when the
 # area adjustment is applied.
@@ -436,7 +436,7 @@ prt(DataFrame(model = ["unadjusted", "area-adjusted"],
               opened = [join(sort(z.ZCTA3[y]), " "),
                         join(sort(z.ZCTA3[ya]), " ")]))
 
-## Example 5: EMCA's machines on aggregate demand
+## Example 5: Aggregate EMCA
 # Determine how many machines EMCA should lease and where, when its
 # demand points are recognized as aggregates rather than as customers.
 # Code block 19: EMCA's demand set, as lecture 2.4 built it

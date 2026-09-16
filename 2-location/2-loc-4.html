@@ -4173,8 +4173,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">2.7: Discrete Location and MILP</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../2-location/2-loc-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.7: Discrete Location and MILP</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4282,7 +4285,7 @@ window.Quarto = {
   <li><a href="#p-median-facility-location" id="toc-p-median-facility-location" class="nav-link" data-scroll-target="#p-median-facility-location">7. p-median facility location</a></li>
   <li><a href="#estimating-nf-fixed-cost" id="toc-estimating-nf-fixed-cost" class="nav-link" data-scroll-target="#estimating-nf-fixed-cost">8. Estimating NF fixed cost</a></li>
   </ul>
-<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-ufl" class="toc-list-link">1. Uncapacitated facility location</a></li><li><a href="#mdl-pmedian" class="toc-list-link">2. p-median location</a></li><li><a href="#mdl-lsq" class="toc-list-link">3. Least-squares line</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Warehouses on the I-40 corridor</a></li><li><a href="#example-2" class="toc-list-link">2. Exchanging and combining all three</a></li><li><a href="#example-3" class="toc-list-link">3. How many machines to lease and where</a></li><li><a href="#example-4" class="toc-list-link">4. Discrete retail warehouses</a></li><li><a href="#example-5" class="toc-list-link">5. SP3D’s fixed cost</a></li></ul></div></nav>
+<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-ufl" class="toc-list-link">1. Uncapacitated facility location</a></li><li><a href="#mdl-pmedian" class="toc-list-link">2. p-median location</a></li><li><a href="#mdl-lsq" class="toc-list-link">3. Least-squares line</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Warehouses on the I-40 corridor</a></li><li><a href="#example-2" class="toc-list-link">2. Exchange and hybrid on the corridor</a></li><li><a href="#example-3" class="toc-list-link">3. EMCA machine location</a></li><li><a href="#example-4" class="toc-list-link">4. Discrete retail warehouses</a></li><li><a href="#example-5" class="toc-list-link">5. SP3D’s fixed cost</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -5157,7 +5160,7 @@ Table 5: Third pass, <span style="white-space: nowrap"><span class="math inline
 <span id="cb30-6"><a href="#cb30-6"></a>ufl        <span class="co"># (k, C; verbose) -&gt; (y, TC, W)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="example-2" class="example-heading">
-<p>Example 2: Exchanging and combining all three</p>
+<p>Example 2: Exchange and hybrid on the corridor</p>
 </div>
 <div class="statement">
 <p>Determine whether exchanging a site improves on the sets that adding and dropping produced for the I-40 corridor, and what the three procedures reach when they are combined.</p>
@@ -5299,7 +5302,7 @@ Y^\star = \arg\min_{Y \subseteq N}
 <p>On the I-40 corridor, asking for exactly two warehouses and charging nothing for them gives a different pair than the UFL did.</p>
 <p>Sites 2 and 5, Statesville and Wilmington, rather than the UFL’s Asheville and Raleigh. With the fixed costs gone there is nothing to trade against distance, so the sites move outward to sit among the cities they serve.</p>
 <div id="example-3" class="example-heading">
-<p>Example 3: How many machines to lease and where</p>
+<p>Example 3: EMCA machine location</p>
 </div>
 <div class="statement">
 <p>EMCA Industries, LLC is considering leasing machines that can be used to manufacture a single type of product. They have identified customers for the product and have estimated that they will be able to sell 12 million units per year to these customers. Each unit weighs 15 pounds and is shipped at $0.25 per ton-mile. <a href="#tbl-emca" class="quarto-xref">Table 6</a> gives the number of customers <span class="math inline">n</span> grouped by three-digit ZIP code across the Carolinas. They have estimated that they will be able to lease each machine for $100,000 per year; the lease cost includes the rental cost of housing it in a portion of an existing manufacturing facility. EMCA would like to know how many machines are needed to best serve their customers and where they should locate the machines, assuming that each machine can produce up to 2 million units of product per year.</p>

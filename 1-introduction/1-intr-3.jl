@@ -229,7 +229,7 @@ let
 end
 
 # Sec. 9. Where variability goes in a line
-## Example 6: Where should the variable station go?
+## Example 6: Variable station placement
 # Three single-machine stations run in series, each at utilization $u =
 # 0.9$ and the same mean process time $t_e = 0.1$ hr, but with
 # process-time variabilities $c_e^2 = 0.25$, $1$, and $4$; work enters

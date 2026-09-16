@@ -4173,8 +4173,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">2.7: Discrete Location and MILP</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../2-location/2-loc-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.7: Discrete Location and MILP</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4282,7 +4285,7 @@ window.Quarto = {
   <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">7. Data wrangling</a></li>
   <li><a href="#joining-other-data-to-a-demand-set" id="toc-joining-other-data-to-a-demand-set" class="nav-link" data-scroll-target="#joining-other-data-to-a-demand-set">8. Joining other data to a demand set</a></li>
   </ul>
-<div class="toc-lists"><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Demand points for North Carolina</a></li><li><a href="#example-2" class="toc-list-link">2. Building a two-digit ZCTA demand set</a></li><li><a href="#example-3" class="toc-list-link">3. Average distance along a corridor</a></li><li><a href="#example-4" class="toc-list-link">4. Locating with and without the area adjustment</a></li><li><a href="#example-5" class="toc-list-link">5. EMCA’s machines on aggregate demand</a></li><li><a href="#example-6" class="toc-list-link">6. Per-capita income across the Raleigh CSA</a></li></ul></div></nav>
+<div class="toc-lists"><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Demand points for North Carolina</a></li><li><a href="#example-2" class="toc-list-link">2. Two-digit ZCTA demand set</a></li><li><a href="#example-3" class="toc-list-link">3. Average distance along a corridor</a></li><li><a href="#example-4" class="toc-list-link">4. Area adjustment on North Carolina ZIPs</a></li><li><a href="#example-5" class="toc-list-link">5. Aggregate EMCA</a></li><li><a href="#example-6" class="toc-list-link">6. Per-capita income across the Raleigh CSA</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -4954,7 +4957,7 @@ Figure 8: Two existing facilities and the single point that replaces them. The 
 </ul>
 <p>That last one is the same property as this section’s, stated in the language of regression rather than of geography. An aggregate demand point has to preserve the total it stands for, or every cost computed from it is wrong; residuals summing to zero <em>is</em> that preservation; and the point at which it holds is the weighted centroid. Lecture 2.1 puts it in one line: equalize-the-burden, center of gravity, arithmetic mean, and least squares are four names for one balance condition.</p>
 <div id="example-2" class="example-heading">
-<p>Example 2: Building a two-digit ZCTA demand set</p>
+<p>Example 2: Two-digit ZCTA demand set</p>
 </div>
 <div class="statement">
 <p>Determine an aggregate demand set for the continental United States at two-digit ZIP resolution, by grouping the three-digit ZCTAs and computing the weight, location and extent of each group.</p>
@@ -5635,7 +5638,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 </figure>
 </div>
 <div id="example-4" class="example-heading">
-<p>Example 4: Locating with and without the area adjustment</p>
+<p>Example 4: Area adjustment on North Carolina ZIPs</p>
 </div>
 <div class="statement">
 <p>Determine how the solution to an uncapacitated facility location problem over North Carolina’s three-digit ZIP codes changes when the area adjustment is applied.</p>
@@ -5701,7 +5704,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>How much the adjustment matters depends on how coarse the aggregation is, and it is worth knowing which way. Twenty demand points is where it bites: each one stands for a large region, so the distance it hides is large. Push the same problem to a hundred points and then to a thousand and the effect shrinks steadily, because each region is smaller and the distance inside it is a smaller share of the distance between them. At a thousand points, skipping the adjustment changes very little.</p>
 <p>That is a threshold rather than a rule, and it joins the two halves of this lecture: the resolution chosen in Sec. 3 decides how much the correction of Sec. 5 is worth. A coarse demand set needs it and a fine one nearly does not, which is another reason the resolution question is not a detail.</p>
 <div id="example-5" class="example-heading">
-<p>Example 5: EMCA’s machines on aggregate demand</p>
+<p>Example 5: Aggregate EMCA</p>
 </div>
 <div class="statement">
 <p>Determine how many machines EMCA should lease and where, when its demand points are recognized as aggregates rather than as customers.</p>

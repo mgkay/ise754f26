@@ -808,11 +808,11 @@
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-mmin": {
+  "eq-mmin-emca": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-cost-ladder": {
+  "eq-tpc-act": {
    "label": "Eq. 4",
    "word": "Eq."
   },
@@ -1162,6 +1162,164 @@
   },
   "example-4": {
    "label": "Ex. 4",
+   "word": "Ex."
+  }
+ },
+ "2.7": {
+  "eq-lp": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-milp-family": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-tlc": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-ufl-strong": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-ufl-weak": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-cfl": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-pmedian": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-setcover-sets": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-setcover": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-setpack": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-binpack-sets": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-binpack": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "fig-lp-region": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-bb": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-cut": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-ufl-rungs-milp": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-set-cover": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-set-pack": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-transmitters": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-clinics": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-binpack": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "tbl-milp-types": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-solvers": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "mdl-lp": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "mdl-ufl-milp": {
+   "label": "Model 2",
+   "word": "Model"
+  },
+  "mdl-cfl": {
+   "label": "Model 3",
+   "word": "Model"
+  },
+  "mdl-setcover": {
+   "label": "Model 4",
+   "word": "Model"
+  },
+  "mdl-setpack": {
+   "label": "Model 5",
+   "word": "Model"
+  },
+  "mdl-binpack": {
+   "label": "Model 6",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  },
+  "example-8": {
+   "label": "Ex. 8",
    "word": "Ex."
   }
  }

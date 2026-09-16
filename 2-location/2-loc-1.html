@@ -4157,8 +4157,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">2.7: Discrete Location and MILP</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../2-location/2-loc-7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.7: Discrete Location and MILP</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4264,7 +4267,7 @@ window.Quarto = {
   <li><a href="#other-location-objectives" id="toc-other-location-objectives" class="nav-link" data-scroll-target="#other-location-objectives">5. Other location objectives</a></li>
   <li><a href="#a-taxonomy-of-objectives" id="toc-a-taxonomy-of-objectives" class="nav-link" data-scroll-target="#a-taxonomy-of-objectives">6. A taxonomy of objectives</a></li>
   </ul>
-<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-hotdog-comp" class="toc-list-link">1. Competitive beach</a></li><li><a href="#mdl-hotdog-coop" class="toc-list-link">2. Cooperative beach</a></li><li><a href="#mdl-beach-choice" class="toc-list-link">3. A customer’s choice of beach</a></li><li><a href="#mdl-apt-equity" class="toc-list-link">4. Fair (equitable) apartment location</a></li><li><a href="#mdl-apt-centroid" class="toc-list-link">5. Equitable location by least squares</a></li><li><a href="#mdl-apt-minisum" class="toc-list-link">6. Efficient apartment location</a></li><li><a href="#mdl-apt-expanded" class="toc-list-link">7. Best-of-both apartment location</a></li><li><a href="#mdl-minisum1d" class="toc-list-link">8. Minisum in one dimension</a></li><li><a href="#mdl-minimax" class="toc-list-link">9. Minimax location</a></li><li><a href="#mdl-maximin" class="toc-list-link">10. Maximin location</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Minisum location along I-40</a></li><li><a href="#example-2" class="toc-list-link">2. Rectilinear location in the plane</a></li><li><a href="#example-3" class="toc-list-link">3. Approximating great-circle distance</a></li></ul></div></nav>
+<div class="toc-lists"><h2 class="toc-list-title">Models</h2><ul class="toc-list toc-list-models"><li><a href="#mdl-hotdog-comp" class="toc-list-link">1. Competitive beach</a></li><li><a href="#mdl-hotdog-coop" class="toc-list-link">2. Cooperative beach</a></li><li><a href="#mdl-beach-choice" class="toc-list-link">3. A customer’s choice of beach</a></li><li><a href="#mdl-apt-equity" class="toc-list-link">4. Fair (equitable) apartment location</a></li><li><a href="#mdl-apt-centroid" class="toc-list-link">5. Equitable location by least squares</a></li><li><a href="#mdl-apt-minisum" class="toc-list-link">6. Efficient apartment location</a></li><li><a href="#mdl-apt-expanded" class="toc-list-link">7. Best-of-both apartment location</a></li><li><a href="#mdl-minisum1d" class="toc-list-link">8. Minisum in one dimension</a></li><li><a href="#mdl-minimax" class="toc-list-link">9. Minimax location</a></li><li><a href="#mdl-maximin" class="toc-list-link">10. Maximin location</a></li></ul><h2 class="toc-list-title">Examples</h2><ul class="toc-list toc-list-examples"><li><a href="#example-1" class="toc-list-link">1. Minisum location along I-40</a></li><li><a href="#example-2" class="toc-list-link">2. Snack machine on a factory floor</a></li><li><a href="#example-3" class="toc-list-link">3. Great-circle approximation</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -4784,7 +4787,7 @@ Figure 8: The seven cities along I-40, west to east (top), with the weighted-me
 </div>
 <p>The same procedure reaches into two dimensions whenever distance is measured <em>rectilinearly</em>, as the sum of the horizontal and vertical displacements rather than the straight-line distance. Rectilinear distance is the natural model inside a facility, where a worker moving between departments follows the aisles and turns at right angles instead of cutting across the floor. Because a rectilinear distance is the sum of an <span class="math inline">x</span>-distance and a <span class="math inline">y</span>-distance, the two axes do not interact, and the two-dimensional problem separates into two independent one-dimensional problems: solve for the best <span class="math inline">x</span> by the median procedure, solve for the best <span class="math inline">y</span> the same way, and combine the two.</p>
 <div id="example-2" class="example-heading">
-<p>Example 2: Rectilinear location in the plane</p>
+<p>Example 2: Snack machine on a factory floor</p>
 </div>
 <div class="statement">
 <p>A snack machine will be placed on a factory floor to serve eight departments (<a href="#fig-rect2d" class="quarto-xref">Fig. 9</a>). The number of trips per shift is 19, 53, 82, 42, 9, 8, 39, and 6 for departments 1 through 8, located at <span style="white-space: nowrap"><span class="math inline">(5,70)</span>,</span> <span style="white-space: nowrap"><span class="math inline">(70,95)</span>,</span> <span style="white-space: nowrap"><span class="math inline">(5,25)</span>,</span> <span style="white-space: nowrap"><span class="math inline">(15,60)</span>,</span> <span style="white-space: nowrap"><span class="math inline">(60,95)</span>,</span> <span style="white-space: nowrap"><span class="math inline">(15,25)</span>,</span> <span style="white-space: nowrap"><span class="math inline">(60,15)</span>,</span> and <span style="white-space: nowrap"><span class="math inline">(90,60)</span>.</span> Assuming rectilinear travel, determine the minisum location.</p>
@@ -4809,7 +4812,7 @@ Figure 9: The eight departments, trips per shift beside each, with the two inde
 </div>
 <p>The rectilinear method is useful even when the true distances are not rectilinear at all, but great-circle distances across the curved surface of the earth, as long as only a rough location is needed.</p>
 <div id="example-3" class="example-heading">
-<p>Example 3: Approximating great-circle distance</p>
+<p>Example 3: Great-circle approximation</p>
 </div>
 <div class="statement">
 <p>A distribution center will serve six customers, shipping 25, 42, 24, 10, 24, and 11 truckloads per year to Raleigh, NC; Atlanta, GA; Louisville, KY; Greenville, SC; Richmond, VA; and Savannah, GA, at (36°N, 79°W), (34°N, 84°W), (38°N, 86°W), (35°N, 82°W), (38°N, 77°W), and (32°N, 81°W). Find an approximate minisum location by treating latitude and longitude as rectilinear coordinates.</p>
