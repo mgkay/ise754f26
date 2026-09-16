@@ -3890,22 +3890,41 @@ font-family: inherit;
 }</script>
 <!-- Track-changes review styling, and the KaTeX size pin beside it.
 
+
+
      EXTRACTED FROM `_quarto.yml` 2026-09-06, unchanged. It lived inline in
+
      the project's `include-in-header`, which reaches every lecture the
+
      PROJECT renders -- and a WITHHELD lecture is not one of those. Quarto
+
      renders a file excluded by a `project.render` negative glob as a
+
      standalone document with only its own YAML, so 2.5's review render came
+
      out with every region and every gray block completely unstyled. The
+
      instructor read it that way: "I don't see any marks in color."
 
+
+
      A withheld lecture is exactly the one being reviewed, so this is the
+
      styling failing at the only moment it is needed. Both `_quarto.yml` and
+
      a withheld lecture's own YAML now include this file, so the two cannot
+
      drift and neither can lose it.
 
+
+
      WHY IT IS RAW HTML AND NOT THEME SCSS: Quarto purges unused selectors
+
      from the bundled theme, which strips anything a class only acquires at
+
      runtime -- `.katex` is the case that forced this. -->
+
+
 
 <style>
 
@@ -3921,35 +3940,65 @@ padding-left: 1.25rem; }
 text-align: left !important; }
 /* Mermaid diagrams. When rendered client-side, mermaid writes an inline
 `max-width: NNNpx` onto the <svg> itself, and an inline style beats any
+
      stylesheet rule, so the diagram keeps its intrinsic width and runs off the
+
      side of a phone. Injected here rather than in the theme SCSS for the same
+
      two reasons as the KaTeX rule above: the element is JS-injected, so the
+
      selector is purged from the bundled theme, and it needs !important to
+
      override the inline attribute. */
+
   .mermaid svg, pre.mermaid svg, div.cell-output-display svg.mermaid {
+
     max-width: 100% !important; height: auto !important; }
+
   /* Definition-list case braces (e.g. r_a's two-line \left\{…\right.):
+
      the case labels are KaTeX \text, rendered in KaTeX_Main, whose
+
      x-height reads smaller than the Lora body at the same px. Force
+
      the body font on those runs so a braced label matches the rest
+
      of the definition. Injected here (not theme SCSS) because .katex
+
      is JS-injected and purged from the bundled theme. */
+
   .deflist .katex .text, .deflist .katex .text * {
+
     font-family: Lora, Bookman, "Bookman Old Style", serif !important; }
+
   /* Circled matrix entries, for a hand solution that marks the chosen
+
      element of each column (the allocation of 2.3 Sec. 1, drawn this
+
      way on the source slide). KaTeX has no \enclose{circle}, so the
+
      entry is written \fcolorbox{#d21f26}{#ffffff}{…} inside a
+
      ::: {.circle-min} div and the rectangle is rounded to an oval
+
      here. Scoped to the div so every other \fcolorbox in the course
+
      stays a box. Injected here, not in theme SCSS, because .katex and
+
      .fcolorbox are JS-injected and purged from the bundled theme, and
+
      !important is needed to beat KaTeX's own inline border style. */
+
   .circle-min .katex .fcolorbox {
+
     border-radius: 50% !important;
+
     border-width: 1.3px !important;
+
     padding: 0.14em 0.30em !important; }
+
 </style>
+
 <script>/**
  * Minified by jsDelivr using Terser v5.37.0.
  * Original file: /npm/requirejs@2.3.6/require.js
@@ -4555,7 +4604,7 @@ x₁ = 3.5, x₂ = 1.3333333333333333, obj = 31.666666666666664</code></pre>
 <section id="integer-variables-and-internal-decisions" class="level3">
 <h3 class="anchored" data-anchor-id="integer-variables-and-internal-decisions">1.2 Integer variables and internal decisions</h3>
 <p>Mixed-integer programming is used when some of the decision variables need to be integer-valued and/or, more importantly, decisions need to be made as part of the solution procedure, and these “internal decisions” can only be implemented using discrete, typically binary, decision variables. <a href="#tbl-milp-types" class="quarto-xref">Table 1</a> is the family, and the name a model takes depends on how much of it is restricted.</p>
-<div id="tbl-milp-types" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[38,12,50]">
+<div id="tbl-milp-types" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[43,13,44]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-milp-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table 1: The four names, and what each restricts.
@@ -4563,9 +4612,9 @@ Table 1: The four names, and what each restricts.
 <div aria-describedby="tbl-milp-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
-<col style="width: 38%">
-<col style="width: 12%">
-<col style="width: 50%">
+<col style="width: 43%">
+<col style="width: 13%">
+<col style="width: 44%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -5032,7 +5081,7 @@ Solving report
   Primal bound      30
   Dual bound        30
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.00013958586878
+  P-D integral      0.000154114540971
   Solution status   feasible
                     30 (objective)
                     0 (bound viol.)
@@ -5617,7 +5666,8 @@ M &amp; = &amp; \{1, \ldots, m\}, \quad \text{objects to be covered} \\
 M_i \subseteq M,\; i \in N &amp; = &amp; \{1, \ldots, n\}, \quad \text{subsets of } M \\
 c_i &amp; = &amp; \text{cost of using } M_i \text{ in cover} \\
 I^{\star} &amp; = &amp; \displaystyle\arg\min_{I}\Bigl\{ \sum_{i \in I} c_i \;:\;
-\bigcup_{i \in I} M_i = M \Bigr\}, \quad \text{min cost covering of } M
+\bigcup_{i \in I} M_i = M \Bigr\} \\
+&amp; &amp; \text{min cost covering of } M
 \end{array}
 \tag{8}</span></span></p>
 </div>
@@ -5991,8 +6041,8 @@ M &amp; = &amp; \{1, \ldots, m\}, \quad \text{objects to be packed into bins} \\
 v_j &amp; = &amp; \text{volume of object } j \\
 V &amp; = &amp; \text{volume of each bin } B_i, \quad \max_j v_j \leq V \\
 B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
-\sum_{j \in B_i} v_j \leq V, \; \bigcup_{B_i \in B} B_i = M \Bigr\},
-\quad \text{min cost bin packing of } M
+\sum_{j \in B_i} v_j \leq V, \; \bigcup_{B_i \in B} B_i = M \Bigr\} \\
+&amp; &amp; \text{min cost bin packing of } M
 \end{array}
 \tag{11}</span></span></p>
 </div>
@@ -6076,9 +6126,9 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <pre><code>   objects  binaries  bins  seconds
 ───────────────────────────────────
 1       20       420     6     0.00
-2       50     2,550    15     0.21
-3      100    10,100    31     1.20
-4      200    40,200    61    10.25</code></pre>
+2       50     2,550    15     0.20
+3      100    10,100    31     1.12
+4      200    40,200    61     9.11</code></pre>
 </div>
 </div>
 <p>Ten times the objects is a hundred times the variables and rather more than a hundred times the work. Sixty seconds covers two hundred objects several times over and three hundred comfortably, and stops somewhere past that rather than running all afternoon on an instance nobody meant to pose. A limit that is never reached costs nothing, which is the argument for always setting one.</p>
@@ -6098,10 +6148,10 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="cell-output cell-output-stdout">
 <pre><code>    gap  bins  seconds
 ──────────────────────
-  exact    61    10.12
-     1%    61     9.97
-     2%    62     6.47
-     5%    62     6.49</code></pre>
+  exact    61     8.99
+     1%    61     9.01
+     2%    62     5.57
+     5%    62     5.51</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Reading a solve that stopped early">
@@ -6134,17 +6184,23 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <span id="cb79-3"><a href="#cb79-3"></a>mB, VB <span class="op">=</span> <span class="fl">20</span>, <span class="fl">10</span></span>
 <span id="cb79-4"><a href="#cb79-4"></a>vB <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, mB)</span>
 <span id="cb79-5"><a href="#cb79-5"></a>lbB <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int</span>, <span class="fu">sum</span>(vB) <span class="op">/</span> VB)      <span class="co"># no packing can use fewer than this</span></span>
-<span id="cb79-6"><a href="#cb79-6"></a>(sizes <span class="op">=</span> vB<span class="op">&#39;</span>, total <span class="op">=</span> <span class="fu">sum</span>(vB), bound <span class="op">=</span> lbB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb79-6"><a href="#cb79-6"></a><span class="fu">prt</span>(vB<span class="op">&#39;</span>)                           <span class="co"># the twenty sizes, one row</span></span>
+<span id="cb79-7"><a href="#cb79-7"></a>(total <span class="op">=</span> <span class="fu">sum</span>(vB), bound <span class="op">=</span> lbB)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  16  17  18  19  20
+────────────────────────────────────────────────────────────────────────
+1  2  4  4  5  4  3  3  3  1   5   5   4   2   3   1   4   1   2   1   3</code></pre>
+</div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>(sizes = adjoint([2, 4, 4, 5, 4, 3, 3, 3, 1, 5, 5, 4, 2, 3, 1, 4, 1, 2, 1, 3]), total = 60, bound = 6)</code></pre>
+<pre><code>(total = 60, bound = 6)</code></pre>
 </div>
 </div>
 <p>The bound is a <strong>Bounds</strong> check and it is free: the objects have to go somewhere, so the bins used cannot be fewer than the total volume divided by the capacity of one bin, rounded up. It is worth writing down before the solve, because it is also the answer whenever the objects happen to fill the bins exactly, and the distance between it and the optimum is the only thing the model has to find.</p>
 <div id="94" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb81-1"><a href="#cb81-1"></a><span class="co"># Code block 31: the fewest bins that hold them</span></span>
-<span id="cb81-2"><a href="#cb81-2"></a>packed <span class="op">=</span> <span class="fu">binpack</span>(vB, VB)</span>
-<span id="cb81-3"><a href="#cb81-3"></a>binsB <span class="op">=</span> packed.bins</span>
-<span id="cb81-4"><a href="#cb81-4"></a>packed.used</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb82-1"><a href="#cb82-1"></a><span class="co"># Code block 31: the fewest bins that hold them</span></span>
+<span id="cb82-2"><a href="#cb82-2"></a>packed <span class="op">=</span> <span class="fu">binpack</span>(vB, VB)</span>
+<span id="cb82-3"><a href="#cb82-3"></a>binsB <span class="op">=</span> packed.bins</span>
+<span id="cb82-4"><a href="#cb82-4"></a>packed.used</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>6</code></pre>
 </div>
@@ -6156,28 +6212,28 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div id="cell-fig-binpack" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code that draws this figure</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb83-1"><a href="#cb83-1"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">720</span>, <span class="fl">400</span>))</span>
-<span id="cb83-2"><a href="#cb83-2"></a>ax  <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>]; xlabel <span class="op">=</span> <span class="st">&quot;bin&quot;</span>, ylabel <span class="op">=</span> <span class="st">&quot;volume used&quot;</span>,</span>
-<span id="cb83-3"><a href="#cb83-3"></a>           xticks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(binsB), yticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span><span class="op">:</span>VB,</span>
-<span id="cb83-4"><a href="#cb83-4"></a>           title <span class="op">=</span> <span class="pp">@sprintf</span>(<span class="st">&quot;%d objects, capacity %d: the bound is %d&quot;</span>,</span>
-<span id="cb83-5"><a href="#cb83-5"></a>                            mB, VB, lbB))</span>
-<span id="cb83-6"><a href="#cb83-6"></a><span class="fu">hidespines!</span>(ax, <span class="op">:</span>t, <span class="op">:</span>r)</span>
-<span id="cb83-7"><a href="#cb83-7"></a><span class="cf">for</span> (bi, bin) <span class="kw">in</span> <span class="fu">enumerate</span>(binsB)</span>
-<span id="cb83-8"><a href="#cb83-8"></a>    base <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb83-9"><a href="#cb83-9"></a>    <span class="cf">for</span> j <span class="kw">in</span> bin</span>
-<span id="cb83-10"><a href="#cb83-10"></a>        <span class="fu">poly!</span>(ax, <span class="fu">Rect2f</span>(bi <span class="op">-</span> <span class="fl">0.33</span>, base, <span class="fl">0.66</span>, vB[j]);</span>
-<span id="cb83-11"><a href="#cb83-11"></a>              color <span class="op">=</span> (feasible, <span class="fl">0.16</span> <span class="op">+</span> <span class="fl">0.10</span> <span class="op">*</span> (vB[j] <span class="op">%</span> <span class="fl">3</span>)),</span>
-<span id="cb83-12"><a href="#cb83-12"></a>              strokecolor <span class="op">=</span> feasible, strokewidth <span class="op">=</span> <span class="fl">1.1</span>)</span>
-<span id="cb83-13"><a href="#cb83-13"></a>        <span class="fu">text!</span>(ax, bi, base <span class="op">+</span> vB[j] <span class="op">/</span> <span class="fl">2</span>; text <span class="op">=</span> <span class="fu">string</span>(vB[j]),</span>
-<span id="cb83-14"><a href="#cb83-14"></a>              align <span class="op">=</span> (<span class="op">:</span>center, <span class="op">:</span>center), fontsize <span class="op">=</span> <span class="fl">11</span>, color <span class="op">=</span> lattice)</span>
-<span id="cb83-15"><a href="#cb83-15"></a>        base <span class="op">+=</span> vB[j]</span>
-<span id="cb83-16"><a href="#cb83-16"></a>    <span class="cf">end</span></span>
-<span id="cb83-17"><a href="#cb83-17"></a><span class="cf">end</span></span>
-<span id="cb83-18"><a href="#cb83-18"></a><span class="fu">hlines!</span>(ax, [VB]; color <span class="op">=</span> relaxed, linewidth <span class="op">=</span> <span class="fl">1.6</span>, linestyle <span class="op">=</span> <span class="op">:</span>dash)</span>
-<span id="cb83-19"><a href="#cb83-19"></a><span class="fu">text!</span>(ax, <span class="fu">length</span>(binsB) <span class="op">+</span> <span class="fl">0.40</span>, VB <span class="op">*</span> <span class="fl">0.94</span>; text <span class="op">=</span> <span class="st">&quot;capacity&quot;</span>,</span>
-<span id="cb83-20"><a href="#cb83-20"></a>      align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>top), color <span class="op">=</span> relaxed, fontsize <span class="op">=</span> <span class="fl">12</span>)</span>
-<span id="cb83-21"><a href="#cb83-21"></a><span class="fu">limits!</span>(ax, <span class="fl">0.3</span>, <span class="fu">length</span>(binsB) <span class="op">+</span> <span class="fl">1.4</span>, <span class="fl">0</span>, VB <span class="op">*</span> <span class="fl">1.12</span>)</span>
-<span id="cb83-22"><a href="#cb83-22"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb84-1"><a href="#cb84-1"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">720</span>, <span class="fl">400</span>))</span>
+<span id="cb84-2"><a href="#cb84-2"></a>ax  <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>]; xlabel <span class="op">=</span> <span class="st">&quot;bin&quot;</span>, ylabel <span class="op">=</span> <span class="st">&quot;volume used&quot;</span>,</span>
+<span id="cb84-3"><a href="#cb84-3"></a>           xticks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(binsB), yticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span><span class="op">:</span>VB,</span>
+<span id="cb84-4"><a href="#cb84-4"></a>           title <span class="op">=</span> <span class="pp">@sprintf</span>(<span class="st">&quot;%d objects, capacity %d: the bound is %d&quot;</span>,</span>
+<span id="cb84-5"><a href="#cb84-5"></a>                            mB, VB, lbB))</span>
+<span id="cb84-6"><a href="#cb84-6"></a><span class="fu">hidespines!</span>(ax, <span class="op">:</span>t, <span class="op">:</span>r)</span>
+<span id="cb84-7"><a href="#cb84-7"></a><span class="cf">for</span> (bi, bin) <span class="kw">in</span> <span class="fu">enumerate</span>(binsB)</span>
+<span id="cb84-8"><a href="#cb84-8"></a>    base <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb84-9"><a href="#cb84-9"></a>    <span class="cf">for</span> j <span class="kw">in</span> bin</span>
+<span id="cb84-10"><a href="#cb84-10"></a>        <span class="fu">poly!</span>(ax, <span class="fu">Rect2f</span>(bi <span class="op">-</span> <span class="fl">0.33</span>, base, <span class="fl">0.66</span>, vB[j]);</span>
+<span id="cb84-11"><a href="#cb84-11"></a>              color <span class="op">=</span> (feasible, <span class="fl">0.16</span> <span class="op">+</span> <span class="fl">0.10</span> <span class="op">*</span> (vB[j] <span class="op">%</span> <span class="fl">3</span>)),</span>
+<span id="cb84-12"><a href="#cb84-12"></a>              strokecolor <span class="op">=</span> feasible, strokewidth <span class="op">=</span> <span class="fl">1.1</span>)</span>
+<span id="cb84-13"><a href="#cb84-13"></a>        <span class="fu">text!</span>(ax, bi, base <span class="op">+</span> vB[j] <span class="op">/</span> <span class="fl">2</span>; text <span class="op">=</span> <span class="fu">string</span>(vB[j]),</span>
+<span id="cb84-14"><a href="#cb84-14"></a>              align <span class="op">=</span> (<span class="op">:</span>center, <span class="op">:</span>center), fontsize <span class="op">=</span> <span class="fl">11</span>, color <span class="op">=</span> lattice)</span>
+<span id="cb84-15"><a href="#cb84-15"></a>        base <span class="op">+=</span> vB[j]</span>
+<span id="cb84-16"><a href="#cb84-16"></a>    <span class="cf">end</span></span>
+<span id="cb84-17"><a href="#cb84-17"></a><span class="cf">end</span></span>
+<span id="cb84-18"><a href="#cb84-18"></a><span class="fu">hlines!</span>(ax, [VB]; color <span class="op">=</span> relaxed, linewidth <span class="op">=</span> <span class="fl">1.6</span>, linestyle <span class="op">=</span> <span class="op">:</span>dash)</span>
+<span id="cb84-19"><a href="#cb84-19"></a><span class="fu">text!</span>(ax, <span class="fu">length</span>(binsB) <span class="op">+</span> <span class="fl">0.40</span>, VB <span class="op">*</span> <span class="fl">0.94</span>; text <span class="op">=</span> <span class="st">&quot;capacity&quot;</span>,</span>
+<span id="cb84-20"><a href="#cb84-20"></a>      align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>top), color <span class="op">=</span> relaxed, fontsize <span class="op">=</span> <span class="fl">12</span>)</span>
+<span id="cb84-21"><a href="#cb84-21"></a><span class="fu">limits!</span>(ax, <span class="fl">0.3</span>, <span class="fu">length</span>(binsB) <span class="op">+</span> <span class="fl">1.4</span>, <span class="fl">0</span>, VB <span class="op">*</span> <span class="fl">1.12</span>)</span>
+<span id="cb84-22"><a href="#cb84-22"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="fig-binpack" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -6672,188 +6728,371 @@ Figure 9: Twenty objects into bins of capacity ten. Every bin comes out exactly
   </div>
 </footer>
 <!-- Presentation-mode toggle: when the URL carries ?present=1, add the
+
      `presenting` class to <body> so the body.presenting rules in
+
      _common/styles/lecture.scss kick in (larger font, narrower column,
+
      sidebar/TOC hidden). Useful for in-class projection. Runs as soon
+
      as the script is parsed, before the sticky-header init below. -->
+
 <script>
+
 if (new URLSearchParams(location.search).has('present')) {
+
   document.body.classList.add('presenting');
+
 }
+
 </script>
 
+
+
 <!-- Sticky lecture header: injected at load time, tracks the active H2.
+
      Reads the lecture title from <h1 class="title"> and the current
+
      section from the topmost H2 above the sticky bar. CSS for
+
      #lecture-sticky lives in _common/styles/lecture.scss. -->
+
 <script>
+
 (function () {
+
   function init() {
+
     var main = document.querySelector('main');
+
     if (!main) return;
 
+
+
     // Lecture title is whatever Quarto rendered from the YAML `title:`.
+
     var titleEl = document.querySelector('h1.title');
+
     var titleText = titleEl ? titleEl.textContent.trim() : (document.title || '');
 
+
+
     var sticky = document.createElement('div');
+
     sticky.id = 'lecture-sticky';
+
+
 
     var left = document.createElement('div');
 
+
+
     // HOME BUTTON, on every page (instructor, 2026-08-15). Until now the link graph ran
+
     // one way only -- course home to lectures, course home to schedule -- and nothing
+
     // came back, so a reader who bookmarked a lecture, which is the page most likely to
+
     // be bookmarked, had no route to anything else. A rendered lecture contained no
+
     // occurrence of the course home address at all.
+
     //
+
     // IT NAMES THE COURSE, NOT THE OFFERING, and that is deliberate. This bar is baked
+
     // into lectures that are archived permanently, so in a later year the button lands on
+
     // whatever term the course home then fronts. "ISE 754" stays true; "Fall 2026 home"
+
     // would become a lie on the page that most needs to be trustworthy. The page's own
+
     // edition line supplies the offering.
+
     //
+
     // *** THE URL IS DUPLICATED FROM site_identity.COURSE_HOME_URL *** because this file
+
     // is static HTML injected by _quarto.yml rather than generated output. check_course.py
+
     // compares the two and fails the push when they disagree, which is the same
+
     // detect-and-refuse treatment the page footer already gets.
+
     // The course home marks itself with `.home`, and that is what suppresses the button
+
     // there. It used to be detected by URL, matching /semester.html and the site root --
+
     // which broke twice over: semester.html no longer exists, and a URL test cannot be
+
     // true for a page opened as a local file, so the home page showed a link to itself
+
     // in every local preview. A marker in the document is true wherever the page is.
+
     var HOME_URL = 'https://mgkay.github.io/ise754/';
+
     if (!document.querySelector('.home')) {
+
       var home = document.createElement('a');
+
       home.id = 'sticky-home';
+
       home.href = HOME_URL;
+
       home.textContent = '← ISE 754';
+
       left.appendChild(home);
+
     }
 
+
+
     var titleSpan = document.createElement('span');
+
     titleSpan.id = 'sticky-title';
+
     titleSpan.textContent = titleText;
+
     left.appendChild(titleSpan);
+
     sticky.appendChild(left);
 
+
+
     var right = document.createElement('div');
+
     right.id = 'lecture-sticky-section';
+
     sticky.appendChild(right);
+
+
 
     main.insertBefore(sticky, main.firstChild);
 
+
+
     // WHAT THE RIGHT-HAND SIDE NAMES. On most pages it is the current H2, which is what
+
     // this bar has always tracked. The SCHEDULE has no H2s at all -- the page is one
+
     // table -- so the right-hand side sat empty there. What a reader wants named while
+
     // scrolling a calendar is the TOPIC its rows belong to, which build_schedule.py
+
     // stamps on the first row of each topic as `data-topic`, taking the label from the
+
     // sidebar so the two never disagree.
+
     //
+
     // It matters most on a phone (instructor, 2026-08-16). At that width each row becomes
+
     // a stacked card, the table runs to several screens, and a topic boundary scrolls out
+
     // of view long before the topic ends, leaving no way to tell Location from Transport
+
     // without scrolling back.
+
     //
+
     // `.topic-start` is read directly and the row found with closest(), rather than
+
     // selecting `tr:has(.topic-start)`. :has() in a querySelectorAll is newer than the
+
     // rest of this file needs to be, and the span already knows its own row.
+
     var marks = [];
+
     var topicMarks = main.querySelectorAll('.schedule .topic-start');
+
     if (topicMarks.length) {
+
       for (var t = 0; t < topicMarks.length; t++) {
+
         marks.push({
+
           el: topicMarks[t].closest('tr') || topicMarks[t],
+
           label: topicMarks[t].getAttribute('data-topic') || ''
+
         });
+
       }
+
     } else {
+
       var hs = main.querySelectorAll('h2');
+
       for (var j = 0; j < hs.length; j++) {
+
         marks.push({ el: hs[j], label: hs[j].textContent.replace(/¶.*$/, '').trim() });
+
       }
+
     }
+
+
 
     function update() {
+
       var active = null;
+
       for (var i = 0; i < marks.length; i++) {
+
         // Pick the topmost mark whose top has crossed above the sticky header.
+
         if (marks[i].el.getBoundingClientRect().top < 90) active = marks[i];
+
         else break;
+
       }
+
       right.textContent = active ? active.label : '';
+
     }
 
+
+
     window.addEventListener('scroll', update, { passive: true });
+
     window.addEventListener('hashchange', update);
+
     update();
+
   }
 
+
+
   if (document.readyState === 'loading') {
+
     document.addEventListener('DOMContentLoaded', init);
+
   } else {
+
     init();
+
   }
+
 })();
+
 </script>
+
+
 
 <!-- Disclosure-state persistence: remember which top-of-lecture apparatus
+
      panels (the .lecture-meta <details> rows) the reader has expanded, per
+
      lecture, across reloads. Keyed by pathname + the summary text, so the
+
      remembered state survives the panels being reordered or restyled. No
+
      dependency; runs at load. -->
+
 <script>
+
 (function () {
+
   function init() {
+
     var KEY = 'ise754-meta-open:' + location.pathname;
+
     var saved;
+
     try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); }
+
     catch (e) { saved = {}; }
 
+
+
     var panels = document.querySelectorAll('.lecture-meta details');
+
     panels.forEach(function (d) {
+
       var sum = d.querySelector('summary');
+
       var label = sum ? sum.textContent.trim() : '';
+
       if (saved[label]) d.open = true;
+
       d.addEventListener('toggle', function () {
+
         try {
+
           var cur = JSON.parse(localStorage.getItem(KEY) || '{}');
+
           cur[label] = d.open;
+
           localStorage.setItem(KEY, JSON.stringify(cur));
+
         } catch (e) {}
+
       });
+
     });
+
   }
+
   if (document.readyState === 'loading') {
+
     document.addEventListener('DOMContentLoaded', init);
+
   } else {
+
     init();
+
   }
+
 })();
+
 </script>
 
+
+
 <!-- Print helper: before a Ctrl+P / Save-as-PDF, expand every <details>
+
      (apparatus panels, dropdowns) so their content prints, then restore the
+
      prior state afterward. Complements the @media print CSS in lecture.scss,
+
      which handles collapsed callouts and is the fallback for print paths that
+
      dispatch no beforeprint event (e.g. some headless renderers). -->
+
 <script>
+
 (function () {
+
   var prior = [];
+
   window.addEventListener('beforeprint', function () {
+
     prior = [];
+
     document.querySelectorAll('details').forEach(function (d, i) {
+
       prior[i] = d.open;
+
       d.open = true;
+
     });
+
   });
+
   window.addEventListener('afterprint', function () {
+
     document.querySelectorAll('details').forEach(function (d, i) {
+
       d.open = prior[i];
+
     });
+
   });
+
 })();
+
 </script>
+
 <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;

@@ -774,7 +774,8 @@ Random.seed!(1244)                 # the same twenty objects every build
 mB, VB = 20, 10
 vB = rand(1:5, mB)
 lbB = ceil(Int, sum(vB) / VB)      # no packing can use fewer than this
-(sizes = vB', total = sum(vB), bound = lbB)
+prt(vB')                           # the twenty sizes, one row
+(total = sum(vB), bound = lbB)
 # Code block 31: the fewest bins that hold them
 packed = binpack(vB, VB)
 binsB = packed.bins
