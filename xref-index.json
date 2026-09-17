@@ -1214,6 +1214,14 @@
    "label": "Eq. 12",
    "word": "Eq."
   },
+  "eq-coloring": {
+   "label": "Eq. 13",
+   "word": "Eq."
+  },
+  "eq-tardiness": {
+   "label": "Eq. 14",
+   "word": "Eq."
+  },
   "fig-lp-region": {
    "label": "Fig. 1",
    "word": "Fig."
@@ -1250,6 +1258,18 @@
    "label": "Fig. 9",
    "word": "Fig."
   },
+  "fig-qe-graph": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-qe-coloring": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-tardiness": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
   "tbl-milp-types": {
    "label": "Table 1",
    "word": "Table"
@@ -1280,6 +1300,14 @@
   },
   "mdl-binpack": {
    "label": "Model 6",
+   "word": "Model"
+  },
+  "mdl-coloring": {
+   "label": "Model 7",
+   "word": "Model"
+  },
+  "mdl-tardiness": {
+   "label": "Model 8",
    "word": "Model"
   },
   "example-1": {
