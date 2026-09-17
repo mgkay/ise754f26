@@ -5116,38 +5116,41 @@ Table 1: The whole training corpus: each context token paired with the token th
 <p>Each of the 4000 passes computes the predictions, measures the error <code>P .- Y</code>, and nudges the readout weights, the biases, and the embeddings one <em>learning-rate</em> (<code>lr</code>) step downhill.</p>
 <div id="52" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># Code block 27: training the next-token model</span></span>
-<span id="cb50-2"><a href="#cb50-2"></a>vocab <span class="op">=</span> [<span class="st">&quot;van&quot;</span>, <span class="st">&quot;rig&quot;</span>, <span class="st">&quot;parcel&quot;</span>, <span class="st">&quot;pallet&quot;</span>,</span>
-<span id="cb50-3"><a href="#cb50-3"></a>         <span class="st">&quot;depot&quot;</span>, <span class="st">&quot;yard&quot;</span>, <span class="st">&quot;dock&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;wait&quot;</span>]</span>
-<span id="cb50-4"><a href="#cb50-4"></a></span>
-<span id="cb50-5"><a href="#cb50-5"></a><span class="fu">id</span>(w) <span class="op">=</span> <span class="fu">findfirst</span>(<span class="op">==</span>(w), vocab)      <span class="co"># token -&gt; column</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a><span class="im">using</span> <span class="bu">Random</span></span>
+<span id="cb50-3"><a href="#cb50-3"></a></span>
+<span id="cb50-4"><a href="#cb50-4"></a>vocab <span class="op">=</span> [<span class="st">&quot;van&quot;</span>, <span class="st">&quot;rig&quot;</span>, <span class="st">&quot;parcel&quot;</span>, <span class="st">&quot;pallet&quot;</span>,</span>
+<span id="cb50-5"><a href="#cb50-5"></a>         <span class="st">&quot;depot&quot;</span>, <span class="st">&quot;yard&quot;</span>, <span class="st">&quot;dock&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;wait&quot;</span>]</span>
 <span id="cb50-6"><a href="#cb50-6"></a></span>
-<span id="cb50-7"><a href="#cb50-7"></a><span class="co"># corpus: each context token -&gt; the next token</span></span>
-<span id="cb50-8"><a href="#cb50-8"></a>ctx <span class="op">=</span> [<span class="st">&quot;van&quot;</span>, <span class="st">&quot;rig&quot;</span>, <span class="st">&quot;parcel&quot;</span>, <span class="st">&quot;pallet&quot;</span>, <span class="st">&quot;depot&quot;</span>, <span class="st">&quot;yard&quot;</span>, <span class="st">&quot;dock&quot;</span>]</span>
-<span id="cb50-9"><a href="#cb50-9"></a>nxt <span class="op">=</span> [<span class="st">&quot;go&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;wait&quot;</span>, <span class="st">&quot;wait&quot;</span>, <span class="st">&quot;wait&quot;</span>]</span>
-<span id="cb50-10"><a href="#cb50-10"></a></span>
-<span id="cb50-11"><a href="#cb50-11"></a>V <span class="op">=</span> <span class="fu">length</span>(vocab);  N <span class="op">=</span> <span class="fu">length</span>(ctx)</span>
-<span id="cb50-12"><a href="#cb50-12"></a>cols <span class="op">=</span> <span class="fu">id</span>.(ctx)                      <span class="co"># context columns of E</span></span>
-<span id="cb50-13"><a href="#cb50-13"></a>Y <span class="op">=</span> <span class="fu">zeros</span>(V, N)                      <span class="co"># one-hot targets</span></span>
-<span id="cb50-14"><a href="#cb50-14"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N</span>
-<span id="cb50-15"><a href="#cb50-15"></a>    Y[<span class="fu">id</span>(nxt[j]), j] <span class="op">=</span> <span class="fl">1</span></span>
-<span id="cb50-16"><a href="#cb50-16"></a><span class="cf">end</span></span>
-<span id="cb50-17"><a href="#cb50-17"></a></span>
-<span id="cb50-18"><a href="#cb50-18"></a><span class="co"># E: a 2-D embedding per token, learned from scratch</span></span>
-<span id="cb50-19"><a href="#cb50-19"></a>E <span class="op">=</span> <span class="fl">0.4</span> <span class="op">.*</span> <span class="fu">randn</span>(<span class="fl">2</span>, V)</span>
-<span id="cb50-20"><a href="#cb50-20"></a>W <span class="op">=</span> <span class="fu">zeros</span>(V, <span class="fl">2</span>);  b <span class="op">=</span> <span class="fu">zeros</span>(V, <span class="fl">1</span>);  lr <span class="op">=</span> <span class="fl">0.5</span></span>
-<span id="cb50-21"><a href="#cb50-21"></a></span>
-<span id="cb50-22"><a href="#cb50-22"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4000</span></span>
-<span id="cb50-23"><a href="#cb50-23"></a>    X  <span class="op">=</span> E[<span class="op">:</span>, cols]                  <span class="co"># current embeddings</span></span>
-<span id="cb50-24"><a href="#cb50-24"></a>    P  <span class="op">=</span> <span class="fu">softmax</span>(W <span class="op">*</span> X <span class="op">.+</span> b)         <span class="co"># next-token probs</span></span>
-<span id="cb50-25"><a href="#cb50-25"></a>    dZ <span class="op">=</span> P <span class="op">.-</span> Y                      <span class="co"># cross-entropy gradient</span></span>
-<span id="cb50-26"><a href="#cb50-26"></a>    dX <span class="op">=</span> W<span class="op">&#39;</span> <span class="op">*</span> dZ                     <span class="co"># error back to embeddings</span></span>
-<span id="cb50-27"><a href="#cb50-27"></a>    W <span class="op">.-=</span> lr <span class="op">.*</span> (dZ <span class="op">*</span> X<span class="op">&#39;</span>)            <span class="co"># readout weights</span></span>
-<span id="cb50-28"><a href="#cb50-28"></a>    b <span class="op">.-=</span> lr <span class="op">.*</span> <span class="fu">sum</span>(dZ, dims <span class="op">=</span> <span class="fl">2</span>)    <span class="co"># readout biases</span></span>
-<span id="cb50-29"><a href="#cb50-29"></a>    E[<span class="op">:</span>, cols] <span class="op">.-=</span> lr <span class="op">.*</span> dX          <span class="co"># move the embeddings too</span></span>
-<span id="cb50-30"><a href="#cb50-30"></a><span class="cf">end</span></span>
-<span id="cb50-31"><a href="#cb50-31"></a></span>
-<span id="cb50-32"><a href="#cb50-32"></a><span class="fu">pred</span>(c) <span class="op">=</span> vocab[<span class="fu">argmax</span>(W <span class="op">*</span> E[<span class="op">:</span>, <span class="fu">id</span>(c)] <span class="op">.+</span> <span class="fu">vec</span>(b))]</span>
-<span id="cb50-33"><a href="#cb50-33"></a><span class="pp">@show</span> <span class="fu">pred</span>.(ctx);                    <span class="co"># all seven correct</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb50-7"><a href="#cb50-7"></a><span class="fu">id</span>(w) <span class="op">=</span> <span class="fu">findfirst</span>(<span class="op">==</span>(w), vocab)      <span class="co"># token -&gt; column</span></span>
+<span id="cb50-8"><a href="#cb50-8"></a></span>
+<span id="cb50-9"><a href="#cb50-9"></a><span class="co"># corpus: each context token -&gt; the next token</span></span>
+<span id="cb50-10"><a href="#cb50-10"></a>ctx <span class="op">=</span> [<span class="st">&quot;van&quot;</span>, <span class="st">&quot;rig&quot;</span>, <span class="st">&quot;parcel&quot;</span>, <span class="st">&quot;pallet&quot;</span>, <span class="st">&quot;depot&quot;</span>, <span class="st">&quot;yard&quot;</span>, <span class="st">&quot;dock&quot;</span>]</span>
+<span id="cb50-11"><a href="#cb50-11"></a>nxt <span class="op">=</span> [<span class="st">&quot;go&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;go&quot;</span>, <span class="st">&quot;wait&quot;</span>, <span class="st">&quot;wait&quot;</span>, <span class="st">&quot;wait&quot;</span>]</span>
+<span id="cb50-12"><a href="#cb50-12"></a></span>
+<span id="cb50-13"><a href="#cb50-13"></a>V <span class="op">=</span> <span class="fu">length</span>(vocab);  N <span class="op">=</span> <span class="fu">length</span>(ctx)</span>
+<span id="cb50-14"><a href="#cb50-14"></a>cols <span class="op">=</span> <span class="fu">id</span>.(ctx)                      <span class="co"># context columns of E</span></span>
+<span id="cb50-15"><a href="#cb50-15"></a>Y <span class="op">=</span> <span class="fu">zeros</span>(V, N)                      <span class="co"># one-hot targets</span></span>
+<span id="cb50-16"><a href="#cb50-16"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>N</span>
+<span id="cb50-17"><a href="#cb50-17"></a>    Y[<span class="fu">id</span>(nxt[j]), j] <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb50-18"><a href="#cb50-18"></a><span class="cf">end</span></span>
+<span id="cb50-19"><a href="#cb50-19"></a></span>
+<span id="cb50-20"><a href="#cb50-20"></a><span class="co"># E: a 2-D embedding per token, learned from scratch</span></span>
+<span id="cb50-21"><a href="#cb50-21"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1</span>)                      <span class="co"># same starting points every build</span></span>
+<span id="cb50-22"><a href="#cb50-22"></a>E <span class="op">=</span> <span class="fl">0.4</span> <span class="op">.*</span> <span class="fu">randn</span>(<span class="fl">2</span>, V)</span>
+<span id="cb50-23"><a href="#cb50-23"></a>W <span class="op">=</span> <span class="fu">zeros</span>(V, <span class="fl">2</span>);  b <span class="op">=</span> <span class="fu">zeros</span>(V, <span class="fl">1</span>);  lr <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb50-24"><a href="#cb50-24"></a></span>
+<span id="cb50-25"><a href="#cb50-25"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4000</span></span>
+<span id="cb50-26"><a href="#cb50-26"></a>    X  <span class="op">=</span> E[<span class="op">:</span>, cols]                  <span class="co"># current embeddings</span></span>
+<span id="cb50-27"><a href="#cb50-27"></a>    P  <span class="op">=</span> <span class="fu">softmax</span>(W <span class="op">*</span> X <span class="op">.+</span> b)         <span class="co"># next-token probs</span></span>
+<span id="cb50-28"><a href="#cb50-28"></a>    dZ <span class="op">=</span> P <span class="op">.-</span> Y                      <span class="co"># cross-entropy gradient</span></span>
+<span id="cb50-29"><a href="#cb50-29"></a>    dX <span class="op">=</span> W<span class="op">&#39;</span> <span class="op">*</span> dZ                     <span class="co"># error back to embeddings</span></span>
+<span id="cb50-30"><a href="#cb50-30"></a>    W <span class="op">.-=</span> lr <span class="op">.*</span> (dZ <span class="op">*</span> X<span class="op">&#39;</span>)            <span class="co"># readout weights</span></span>
+<span id="cb50-31"><a href="#cb50-31"></a>    b <span class="op">.-=</span> lr <span class="op">.*</span> <span class="fu">sum</span>(dZ, dims <span class="op">=</span> <span class="fl">2</span>)    <span class="co"># readout biases</span></span>
+<span id="cb50-32"><a href="#cb50-32"></a>    E[<span class="op">:</span>, cols] <span class="op">.-=</span> lr <span class="op">.*</span> dX          <span class="co"># move the embeddings too</span></span>
+<span id="cb50-33"><a href="#cb50-33"></a><span class="cf">end</span></span>
+<span id="cb50-34"><a href="#cb50-34"></a></span>
+<span id="cb50-35"><a href="#cb50-35"></a><span class="fu">pred</span>(c) <span class="op">=</span> vocab[<span class="fu">argmax</span>(W <span class="op">*</span> E[<span class="op">:</span>, <span class="fu">id</span>(c)] <span class="op">.+</span> <span class="fu">vec</span>(b))]</span>
+<span id="cb50-36"><a href="#cb50-36"></a><span class="pp">@show</span> <span class="fu">pred</span>.(ctx);                    <span class="co"># all seven correct</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>pred.(ctx) = [&quot;go&quot;, &quot;go&quot;, &quot;go&quot;, &quot;go&quot;, &quot;wait&quot;, &quot;wait&quot;, &quot;wait&quot;]</code></pre>
 </div>
@@ -5241,23 +5244,24 @@ Figure 8: The hidden-layer network: two inputs, three sigmoid units, two output
 <span id="cb52-13"><a href="#cb52-13"></a>Y <span class="op">=</span> [<span class="fl">1.0</span>  <span class="fl">1</span>   <span class="fl">0</span>   <span class="fl">0</span></span>
 <span id="cb52-14"><a href="#cb52-14"></a>     <span class="fl">0</span>    <span class="fl">0</span>   <span class="fl">1</span>   <span class="fl">1</span>]</span>
 <span id="cb52-15"><a href="#cb52-15"></a></span>
-<span id="cb52-16"><a href="#cb52-16"></a>W1 <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">3</span>, <span class="fl">2</span>);  b1 <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span>, <span class="fl">1</span>)   <span class="co"># hidden (3 units)</span></span>
-<span id="cb52-17"><a href="#cb52-17"></a>W2 <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">2</span>, <span class="fl">3</span>);  b2 <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">2</span>, <span class="fl">1</span>)   <span class="co"># output (2 tokens)</span></span>
-<span id="cb52-18"><a href="#cb52-18"></a>lr <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb52-19"><a href="#cb52-19"></a></span>
-<span id="cb52-20"><a href="#cb52-20"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20_000</span></span>
-<span id="cb52-21"><a href="#cb52-21"></a>    a1 <span class="op">=</span> <span class="fu">σ</span>.(W1 <span class="op">*</span> X <span class="op">.+</span> b1)             <span class="co"># hidden activations</span></span>
-<span id="cb52-22"><a href="#cb52-22"></a>    P  <span class="op">=</span> <span class="fu">softmax</span>(W2 <span class="op">*</span> a1 <span class="op">.+</span> b2)       <span class="co"># next-token probs</span></span>
-<span id="cb52-23"><a href="#cb52-23"></a>    d2 <span class="op">=</span> P <span class="op">.-</span> Y                       <span class="co"># cross-entropy gradient</span></span>
-<span id="cb52-24"><a href="#cb52-24"></a>    d1 <span class="op">=</span> (W2<span class="op">&#39;</span> <span class="op">*</span> d2) <span class="op">.*</span> a1 <span class="op">.*</span> (<span class="fl">1</span> <span class="op">.-</span> a1)</span>
-<span id="cb52-25"><a href="#cb52-25"></a>    W2 <span class="op">.-=</span> lr <span class="op">.*</span> (d2 <span class="op">*</span> a1<span class="op">&#39;</span>); b2 <span class="op">.-=</span> lr <span class="op">.*</span> <span class="fu">sum</span>(d2, dims <span class="op">=</span> <span class="fl">2</span>)</span>
-<span id="cb52-26"><a href="#cb52-26"></a>    W1 <span class="op">.-=</span> lr <span class="op">.*</span> (d1 <span class="op">*</span> X<span class="op">&#39;</span>);  b1 <span class="op">.-=</span> lr <span class="op">.*</span> <span class="fu">sum</span>(d1, dims <span class="op">=</span> <span class="fl">2</span>)</span>
-<span id="cb52-27"><a href="#cb52-27"></a><span class="cf">end</span></span>
-<span id="cb52-28"><a href="#cb52-28"></a></span>
-<span id="cb52-29"><a href="#cb52-29"></a>P <span class="op">=</span> <span class="fu">softmax</span>(W2 <span class="op">*</span> <span class="fu">σ</span>.(W1 <span class="op">*</span> X <span class="op">.+</span> b1) <span class="op">.+</span> b2)</span>
-<span id="cb52-30"><a href="#cb52-30"></a><span class="pp">@show</span> <span class="fu">round</span>.(P, digits <span class="op">=</span> <span class="fl">2</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb52-16"><a href="#cb52-16"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1</span>)                       <span class="co"># same starting weights every build</span></span>
+<span id="cb52-17"><a href="#cb52-17"></a>W1 <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">3</span>, <span class="fl">2</span>);  b1 <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span>, <span class="fl">1</span>)   <span class="co"># hidden (3 units)</span></span>
+<span id="cb52-18"><a href="#cb52-18"></a>W2 <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">2</span>, <span class="fl">3</span>);  b2 <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">2</span>, <span class="fl">1</span>)   <span class="co"># output (2 tokens)</span></span>
+<span id="cb52-19"><a href="#cb52-19"></a>lr <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb52-20"><a href="#cb52-20"></a></span>
+<span id="cb52-21"><a href="#cb52-21"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20_000</span></span>
+<span id="cb52-22"><a href="#cb52-22"></a>    a1 <span class="op">=</span> <span class="fu">σ</span>.(W1 <span class="op">*</span> X <span class="op">.+</span> b1)             <span class="co"># hidden activations</span></span>
+<span id="cb52-23"><a href="#cb52-23"></a>    P  <span class="op">=</span> <span class="fu">softmax</span>(W2 <span class="op">*</span> a1 <span class="op">.+</span> b2)       <span class="co"># next-token probs</span></span>
+<span id="cb52-24"><a href="#cb52-24"></a>    d2 <span class="op">=</span> P <span class="op">.-</span> Y                       <span class="co"># cross-entropy gradient</span></span>
+<span id="cb52-25"><a href="#cb52-25"></a>    d1 <span class="op">=</span> (W2<span class="op">&#39;</span> <span class="op">*</span> d2) <span class="op">.*</span> a1 <span class="op">.*</span> (<span class="fl">1</span> <span class="op">.-</span> a1)</span>
+<span id="cb52-26"><a href="#cb52-26"></a>    W2 <span class="op">.-=</span> lr <span class="op">.*</span> (d2 <span class="op">*</span> a1<span class="op">&#39;</span>); b2 <span class="op">.-=</span> lr <span class="op">.*</span> <span class="fu">sum</span>(d2, dims <span class="op">=</span> <span class="fl">2</span>)</span>
+<span id="cb52-27"><a href="#cb52-27"></a>    W1 <span class="op">.-=</span> lr <span class="op">.*</span> (d1 <span class="op">*</span> X<span class="op">&#39;</span>);  b1 <span class="op">.-=</span> lr <span class="op">.*</span> <span class="fu">sum</span>(d1, dims <span class="op">=</span> <span class="fl">2</span>)</span>
+<span id="cb52-28"><a href="#cb52-28"></a><span class="cf">end</span></span>
+<span id="cb52-29"><a href="#cb52-29"></a></span>
+<span id="cb52-30"><a href="#cb52-30"></a>P <span class="op">=</span> <span class="fu">softmax</span>(W2 <span class="op">*</span> <span class="fu">σ</span>.(W1 <span class="op">*</span> X <span class="op">.+</span> b1) <span class="op">.+</span> b2)</span>
+<span id="cb52-31"><a href="#cb52-31"></a><span class="pp">@show</span> <span class="fu">round</span>.(P, digits <span class="op">=</span> <span class="fl">2</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>round.(P, digits = 2) = [1.0 0.5 0.5 0.0; 0.0 0.5 0.5 1.0]</code></pre>
+<pre><code>round.(P, digits = 2) = [1.0 1.0 0.0 0.0; 0.0 0.0 1.0 1.0]</code></pre>
 </div>
 </div>
 <p>The new line <code>d1 = ...</code> carries the output error <code>d2</code> back through the hidden layer, scaled by the sigmoid’s own slope <code>a1 .* (1 .- a1)</code>; that is how the hidden cuts learn which way to move.</p>

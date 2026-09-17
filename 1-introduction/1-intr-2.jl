@@ -181,6 +181,8 @@ softmax(Z) = exp.(Z) ./ sum(exp.(Z), dims = 1)
 # single layer by gradient descent until it predicts the next token
 # correctly.
 # Code block 27: training the next-token model
+using Random
+
 vocab = ["van", "rig", "parcel", "pallet",
          "depot", "yard", "dock", "go", "wait"]
 
@@ -198,6 +200,7 @@ for j in 1:N
 end
 
 # E: a 2-D embedding per token, learned from scratch
+Random.seed!(1)                      # same starting points every build
 E = 0.4 .* randn(2, V)
 W = zeros(V, 2);  b = zeros(V, 1);  lr = 0.5
 
@@ -234,6 +237,7 @@ X = E[:, veh] .+ E[:, load]   # summed: the XOR corners
 Y = [1.0  1   0   0
      0    0   1   1]
 
+Random.seed!(1)                       # same starting weights every build
 W1 = randn(3, 2);  b1 = zeros(3, 1)   # hidden (3 units)
 W2 = randn(2, 3);  b2 = zeros(2, 1)   # output (2 tokens)
 lr = 1.0

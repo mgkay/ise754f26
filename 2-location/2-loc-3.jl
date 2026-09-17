@@ -239,6 +239,17 @@ for n in (2, 3, 5, 9)
                   count(vi .< va .- 1e-6), count(va .< vi .- 1e-6)))
 end
 small = filter(r -> r.n <= 3, bench)
+# WALL CLOCK IS NOT REPRODUCIBLE, so the figure the paragraph quotes is bucketed
+# to the nearest half rather than rounded to one decimal. Repeating this same
+# seeded measurement five times swings the n = 3 ratio from 1.50 to 1.78 and the
+# two-point mean from 1.48 to 1.68; at one decimal that renders 1.5 one night and
+# 1.6 the next, and it did, on 2026-09-16. A half-wide bucket spans 1.25 to 1.75,
+# so every observed value falls in the same one and the sentence states the
+# measurement at the precision the measurement supports. Do not restore `digits`.
+# Counting distance computations instead is reproducible exactly and gives 1.2,
+# but that is a claim about work rather than about speed, which is what is asked
+# here.
+speedup = round(2 * sum(small.ratio) / nrow(small)) / 2
 
 # Sec. 7. Large-scale examples
 ## Example 7: Service centers for the Carolinas
