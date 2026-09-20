@@ -1350,5 +1350,135 @@
    "label": "Ex. 8",
    "word": "Ex."
   }
+ },
+ "3.1": {
+  "eq-carrying": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "fig-dirt": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-country": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-knight": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-mule": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-dagen-h": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-mclean": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-iso": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-bic": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-fbx": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-twistlock": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-intermodal": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-maritime-rates": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-transit-times": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "fig-panamax-teu": {
+   "label": "Fig. 14",
+   "word": "Fig."
+  },
+  "fig-canal-effect": {
+   "label": "Fig. 15",
+   "word": "Fig."
+  },
+  "fig-doublestack": {
+   "label": "Fig. 16",
+   "word": "Fig."
+  },
+  "fig-rail-corridors": {
+   "label": "Fig. 17",
+   "word": "Fig."
+  },
+  "fig-alameda": {
+   "label": "Fig. 18",
+   "word": "Fig."
+  },
+  "fig-rmd-canal": {
+   "label": "Fig. 19",
+   "word": "Fig."
+  },
+  "fig-kartrak": {
+   "label": "Fig. 20",
+   "word": "Fig."
+  },
+  "fig-aei": {
+   "label": "Fig. 21",
+   "word": "Fig."
+  },
+  "fig-transloading": {
+   "label": "Fig. 22",
+   "word": "Fig."
+  },
+  "fig-savannah": {
+   "label": "Fig. 23",
+   "word": "Fig."
+  },
+  "fig-i75": {
+   "label": "Fig. 24",
+   "word": "Fig."
+  },
+  "fig-inland-port": {
+   "label": "Fig. 25",
+   "word": "Fig."
+  },
+  "fig-truck-types": {
+   "label": "Fig. 26",
+   "word": "Fig."
+  },
+  "fig-doubles": {
+   "label": "Fig. 27",
+   "word": "Fig."
+  },
+  "tbl-modes": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-logcost": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-gdp": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "example-8": {
+   "label": "Ex. 8",
+   "word": "Ex."
+  }
  }
 }
