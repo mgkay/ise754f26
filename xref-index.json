@@ -1416,52 +1416,56 @@
    "label": "Fig. 15",
    "word": "Fig."
   },
-  "fig-doublestack": {
+  "fig-boxcar": {
    "label": "Fig. 16",
    "word": "Fig."
   },
-  "fig-rail-corridors": {
+  "fig-doublestack": {
    "label": "Fig. 17",
    "word": "Fig."
   },
-  "fig-alameda": {
+  "fig-rail-corridors": {
    "label": "Fig. 18",
    "word": "Fig."
   },
-  "fig-rmd-canal": {
+  "fig-alameda": {
    "label": "Fig. 19",
    "word": "Fig."
   },
-  "fig-kartrak": {
+  "fig-rmd-canal": {
    "label": "Fig. 20",
    "word": "Fig."
   },
-  "fig-aei": {
+  "fig-kartrak": {
    "label": "Fig. 21",
    "word": "Fig."
   },
-  "fig-transloading": {
+  "fig-aei": {
    "label": "Fig. 22",
    "word": "Fig."
   },
-  "fig-savannah": {
+  "fig-transloading": {
    "label": "Fig. 23",
    "word": "Fig."
   },
-  "fig-i75": {
+  "fig-savannah": {
    "label": "Fig. 24",
    "word": "Fig."
   },
-  "fig-inland-port": {
+  "fig-i75": {
    "label": "Fig. 25",
    "word": "Fig."
   },
-  "fig-truck-types": {
+  "fig-inland-port": {
    "label": "Fig. 26",
    "word": "Fig."
   },
-  "fig-doubles": {
+  "fig-truck-types": {
    "label": "Fig. 27",
+   "word": "Fig."
+  },
+  "fig-doubles": {
+   "label": "Fig. 28",
    "word": "Fig."
   },
   "tbl-modes": {
