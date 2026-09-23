@@ -1484,5 +1484,219 @@
    "label": "Ex. 8",
    "word": "Ex."
   }
+ },
+ "3.2": {
+  "eq-value-ratio": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-kwt": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-kcu": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-iveff": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-caprecovery": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-avgcost": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-rtl": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-maxpayld": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-ctl": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-agg": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-cltl": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-rltl": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-qi": {
+   "label": "Eq. 13",
+   "word": "Eq."
+  },
+  "eq-univariate": {
+   "label": "Eq. 14",
+   "word": "Eq."
+  },
+  "eq-mincharge": {
+   "label": "Eq. 15",
+   "word": "Eq."
+  },
+  "eq-c0": {
+   "label": "Eq. 16",
+   "word": "Eq."
+  },
+  "eq-ctariff": {
+   "label": "Eq. 17",
+   "word": "Eq."
+  },
+  "eq-weightbreak": {
+   "label": "Eq. 18",
+   "word": "Eq."
+  },
+  "fig-trailer": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-tl-routing": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-ltl-network": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-ltl-terminal": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-dollar-item": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-deadhead": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-ltl-residuals": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-tl-vs-ltl": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-rate-by-class": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-independent-charge": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-nmfc": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-carton-pallet": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "tbl-services": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-distance-thresholds": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-h": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-tl-cost-2004": {
+   "label": "Table 4",
+   "word": "Table"
+  },
+  "tbl-ppi-tl": {
+   "label": "Table 5",
+   "word": "Table"
+  },
+  "tbl-ppi-ltl": {
+   "label": "Table 6",
+   "word": "Table"
+  },
+  "tbl-ltl-steps": {
+   "label": "Table 7",
+   "word": "Table"
+  },
+  "tbl-class-density": {
+   "label": "Table 8",
+   "word": "Table"
+  },
+  "tbl-mode-density": {
+   "label": "Table 9",
+   "word": "Table"
+  },
+  "tbl-tariff": {
+   "label": "Table 10",
+   "word": "Table"
+  },
+  "tbl-quote-premium": {
+   "label": "Table 11",
+   "word": "Table"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
+  "example-1-d": {
+   "label": "Ex. 1(d)",
+   "word": "Ex."
+  },
+  "example-1-e": {
+   "label": "Ex. 1(e)",
+   "word": "Ex."
+  },
+  "example-1-f": {
+   "label": "Ex. 1(f)",
+   "word": "Ex."
+  },
+  "example-1-g": {
+   "label": "Ex. 1(g)",
+   "word": "Ex."
+  },
+  "example-1-h": {
+   "label": "Ex. 1(h)",
+   "word": "Ex."
+  },
+  "example-1-i": {
+   "label": "Ex. 1(i)",
+   "word": "Ex."
+  },
+  "example-1-j": {
+   "label": "Ex. 1(j)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  }
  }
 }
