@@ -4398,7 +4398,7 @@ New Logjam functions used
 <summary>
 Companion script
 </summary>
-<p><a href="3-tran-2.jl"><code>3-tran-2.jl</code></a>, runnable Julia extracted from the lecture’s code blocks. (<a href="data/ppi-truckload.csv"><code>ppi-truckload.csv</code></a>, the Producer Price Index snapshot Sec. 2.8 reads.)</p>
+<p><a href="3-tran-2.jl"><code>3-tran-2.jl</code></a>, runnable Julia extracted from the lecture’s code blocks. (<a href="data/ppi-trucking.csv"><code>ppi-trucking.csv</code></a>, the Producer Price Index snapshot Sec. 2.8 reads.)</p>
 </details>
 </div>
 <section id="trucking-services-and-operations" class="level2 page-columns page-full">
@@ -4723,8 +4723,10 @@ Figure 5: A $1 treat pail, and its label. It is made in the USA for one reason:
 <p><strong>5. TL weight capacity:</strong> <span class="math inline">K_{wt} = 25</span> ton <span id="dc-kwt"></span></p>
 <div class="constant-detail">
 <p><span id="eq-kwt"><span class="math display">
-(40\ \text{ton max per regulation}) - (15\ \text{ton tare for tractor-trailer})
-= 25\ \text{ton max payload}
+\begin{aligned}
+(40\ &amp;\text{ton max per regulation}) - (15\ \text{ton tare for tractor-trailer}) \\
+&amp;= 25\ \text{ton max payload}
+\end{aligned}
 \tag{2}</span></span></p>
 <p>Weight capacity is <strong>100% of physical capacity</strong>: there is little to lose to packing, because weight does not leave gaps.</p>
 <p>Lecture 3.1 gives the vehicle limit as 80,000 lb gross against a tare of about 30,000 lb. This is the payload that remains, and Sec. 3.1 of this lecture is where it enters <a href="#eq-maxpayld" class="quarto-xref">Eq. 8</a>.</p>
@@ -4877,7 +4879,7 @@ Figure 6: Why revenue per LOADED mile exceeds cost per mile. Every truck moveme
 </dd>
 <dt><span class="math inline">\$1.60</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">cost per mile in 2004, what it costs a carrier to move a truck one mile, loaded or not</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">cost per mile in 2004, loaded or not</span>
 </dd>
 <dt><span class="math inline">\dfrac{\$1.60}{1 - 0.15}</span></dt>
 <dd>
@@ -4885,7 +4887,7 @@ Figure 6: Why revenue per LOADED mile exceeds cost per mile. Every truck moveme
 </dd>
 <dt><span class="math inline">6.35\%</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">average operating margin for trucking, the carrier’s profit as a share of revenue<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></span>
+<span class="deflist-eq">=</span> <span class="deflist-text">average operating margin for trucking<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></span>
 </dd>
 <dt><span class="math inline">\dfrac{\$1.88}{1 - 0.0635}</span></dt>
 <dd>
@@ -4893,7 +4895,7 @@ Figure 6: Why revenue per LOADED mile exceeds cost per mile. Every truck moveme
 </dd>
 </dl>
 </div>
-<p>So $1.60 is the real number, and $2.00 is what it becomes once the empty miles and the margin are added back. Deadhead has come down a little as carriers have grown better at matching loads, but 15% is stable enough to plan with.</p>
+<p>So $1.60 is the real number, and $2.00 is what it becomes once the empty miles and the margin – the carrier’s profit as a share of revenue – are added back. Deadhead has come down a little as carriers have grown better at matching loads, but 15% is stable enough to plan with.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Where the \$1.60 per mile comes from">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -5227,7 +5229,7 @@ r_{TL} = \frac{PPI_{TL}}{PPI_{TL}^{2004}} \times r_{2004}
 <h3 class="anchored" data-anchor-id="producer-price-index">2.8 Producer Price Index</h3>
 <p>The two series that carry <a href="#dc-r">design constant 7</a> forward are published monthly by the Bureau of Labor Statistics.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
 <p><strong>Where the data is and how to get it.</strong> Each series has a page of its own, and the series identifier is what addresses it: <code>PCU484121484121</code> for truckload and <code>PCU484122484122</code> for less-than-truckload. Going to <code>data.bls.gov/timeseries/PCU484121484121</code> returns the whole monthly history, which is the fastest way to look at one value.</p>
-<p><a href="#tbl-ppi-tl" class="quarto-xref">Table 5</a> and <a href="#tbl-ppi-ltl" class="quarto-xref">Table 6</a> are those two series from the base month, December 2003, to the present, laid out the way BLS lays them out so that the page and this lecture are recognizably the same table. Both are <strong>built from the committed data at render</strong> rather than copied from the website as an image, so they carry whatever the last refresh of <code>data/ppi-truckload.csv</code> returned. The years 2007 to 2015 are left out to hold each table to one screen, and the rightmost column is BLS’s own annual average rather than a mean taken here. Two markings carry over from BLS: the <strong>(P)</strong> on a value that is still provisional and will be revised, and the base date, which is December 2003 = 100.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> Three entries are set in bold, and each is a number the arithmetic below stands on: the base month itself, where the index is 100 by construction; the 2004 annual average, 102.7 for TL and 104.2 for LTL, the two divisors that carry a 2004 estimate forward; and the January 2018 reading this lecture is anchored at, chosen so that its arithmetic does not change from one year to the next.</p>
+<p><a href="#tbl-ppi-tl" class="quarto-xref">Table 5</a> and <a href="#tbl-ppi-ltl" class="quarto-xref">Table 6</a> are those two series from the base month, December 2003, to the present, laid out the way BLS lays them out so that the page and this lecture are recognizably the same table. Both are <strong>built from the committed data at render</strong> rather than copied from the website as an image, so they carry whatever the last refresh of <code>data/ppi-trucking.csv</code> returned. The years 2007 to 2015 are left out to hold each table to one screen, and the rightmost column is BLS’s own annual average rather than a mean taken here. Two markings carry over from BLS: the <strong>(P)</strong> on a value that is still provisional and will be revised, and the base date, which is December 2003 = 100.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> Three entries are set in bold, and each is a number the arithmetic below stands on: the base month itself, where the index is 100 by construction; the 2004 annual average, 102.7 for TL and 104.2 for LTL, the two divisors that carry a 2004 estimate forward; and the January 2018 reading this lecture is anchored at, chosen so that its arithmetic does not change from one year to the next.</p>
 <div id="tbl-ppi-tl" class="denser quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ppi-tl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -7225,6 +7227,7 @@ q_i^W = \frac{OD(\text{class}, i+1)}{OD(\text{class}, i)}\, q_i^B
 <section id="estimate-against-quote" class="level2">
 <h2 class="anchored" data-anchor-id="estimate-against-quote">6. Estimate against quote</h2>
 <p>The estimate of Sec. 4.1 and the tariff of Sec. 5.2 are both ways of arriving at what a shipment <em>should</em> cost. Neither is what a carrier will actually charge. A one-time shipper gets a <strong>spot price</strong>; a shipper with regular volume negotiates a <strong>contract price</strong>, typically 20 to 30% below spot, because a carrier that can plan on a regular pickup can build it into its routing and genuinely does incur less cost. The estimated price is neither, and its use is to tell a shipper whether a quote it has been given is a good one.</p>
+<p>Not always, and the exception is worth knowing before a quote is judged against the estimate. A lane with a flow imbalance is cheap in the empty direction: more freight moves into Florida than out of it, so the trucks that carried it in are waiting to go back, and a one-time quote out of Florida can come in well under both the contract rate and the estimate. The same lane quoted in the other direction is the one that pays the premium <a href="#tbl-quote-premium" class="quarto-xref">Table 11</a> measures.</p>
 <!-- THE CHAPTER'S "Estimate Compared to Spot Quote" SECTION, Sec. 1.6, which
      provenance_audit.py flagged on 2026-09-22 as a DROPPED ASSUMPTION: the
      lecture covered 74% of the section while omitting the clause stating the
