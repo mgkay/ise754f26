@@ -808,11 +808,11 @@
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-mmin": {
+  "eq-mmin-emca": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-cost-ladder": {
+  "eq-tpc-act": {
    "label": "Eq. 4",
    "word": "Eq."
   },
@@ -1692,6 +1692,228 @@
   },
   "example-1-j": {
    "label": "Ex. 1(j)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  }
+ },
+ "3.3": {
+  "eq-tlc": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-payload-bound": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-interval": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-rftl": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-tcftl": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-rftl-interval": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-tcftl-interval": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-charge-range": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-tlc-parts": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-ic-parts": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-ic-cycle": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-h-parts": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-hobs": {
+   "label": "Eq. 13",
+   "word": "Eq."
+  },
+  "eq-alpha-one": {
+   "label": "Eq. 14",
+   "word": "Eq."
+  },
+  "eq-alpha": {
+   "label": "Eq. 15",
+   "word": "Eq."
+  },
+  "eq-tlc-ftl": {
+   "label": "Eq. 16",
+   "word": "Eq."
+  },
+  "eq-tlc-q": {
+   "label": "Eq. 17",
+   "word": "Eq."
+  },
+  "eq-tlc-tl": {
+   "label": "Eq. 18",
+   "word": "Eq."
+  },
+  "eq-qtl": {
+   "label": "Eq. 19",
+   "word": "Eq."
+  },
+  "eq-tlc-alloc": {
+   "label": "Eq. 20",
+   "word": "Eq."
+  },
+  "eq-tlc-ltl": {
+   "label": "Eq. 21",
+   "word": "Eq."
+  },
+  "eq-qltl": {
+   "label": "Eq. 22",
+   "word": "Eq."
+  },
+  "eq-rltl-valid": {
+   "label": "Eq. 23",
+   "word": "Eq."
+  },
+  "eq-ltl-bounds": {
+   "label": "Eq. 24",
+   "word": "Eq."
+  },
+  "eq-q0": {
+   "label": "Eq. 25",
+   "word": "Eq."
+  },
+  "eq-tlc-ltl-opt": {
+   "label": "Eq. 26",
+   "word": "Eq."
+  },
+  "eq-q0-vs": {
+   "label": "Eq. 27",
+   "word": "Eq."
+  },
+  "eq-agg-periodic": {
+   "label": "Eq. 28",
+   "word": "Eq."
+  },
+  "eq-vagg": {
+   "label": "Eq. 29",
+   "word": "Eq."
+  },
+  "eq-qtl-agg": {
+   "label": "Eq. 30",
+   "word": "Eq."
+  },
+  "fig-charge-range": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-sawtooth": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-alpha": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-cost-curves": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-lntlc0": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-cost-curves-v": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "tbl-inventory-classification": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-alpha-regimes": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-shipment-economics": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "mdl-mintlc": {
+   "label": "Model 1",
+   "word": "Model"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
+  "example-1-d": {
+   "label": "Ex. 1(d)",
+   "word": "Ex."
+  },
+  "example-1-e": {
+   "label": "Ex. 1(e)",
+   "word": "Ex."
+  },
+  "example-1-f": {
+   "label": "Ex. 1(f)",
+   "word": "Ex."
+  },
+  "example-1-g": {
+   "label": "Ex. 1(g)",
+   "word": "Ex."
+  },
+  "example-1-h": {
+   "label": "Ex. 1(h)",
+   "word": "Ex."
+  },
+  "example-1-i": {
+   "label": "Ex. 1(i)",
+   "word": "Ex."
+  },
+  "example-1-j": {
+   "label": "Ex. 1(j)",
+   "word": "Ex."
+  },
+  "example-1-k": {
+   "label": "Ex. 1(k)",
+   "word": "Ex."
+  },
+  "example-1-l": {
+   "label": "Ex. 1(l)",
+   "word": "Ex."
+  },
+  "example-1-m": {
+   "label": "Ex. 1(m)",
    "word": "Ex."
   },
   "example-2": {

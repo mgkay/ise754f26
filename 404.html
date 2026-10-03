@@ -671,6 +671,46 @@ if (new URLSearchParams(location.search).has('present')) {
 })();
 </script>
 
+<!-- BACK TO TOP (instructor, 2026-10-03): "What I find myself wanting to do frequently
+     is go back to the top of the lecture ... maybe the section header itself could be
+     linked to point me to the top of the lecture." Two places, one handler: the
+     "Sections" heading of the right-hand panel, which he asked for, and the lecture
+     title in the sticky bar above, which is still on screen when a narrow window hides
+     the panel. Quarto's own `back-to-top-navigation` puts its link at the BOTTOM of the
+     page, the wrong end for this. Runs after the sticky-bar script, which creates
+     #sticky-title. Styles in lecture.scss, "Back to top". -->
+<script>
+(function () {
+  function toTop(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Drop a section anchor from the address, so a reload stays at the top.
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+  function linkify(el) {
+    if (!el || el.querySelector('a.to-top')) return;
+    var a = document.createElement('a');
+    a.href = '#';
+    a.className = 'to-top';
+    a.title = 'Back to top';
+    while (el.firstChild) a.appendChild(el.firstChild);
+    el.appendChild(a);
+    a.addEventListener('click', toTop);
+  }
+  function init() {
+    linkify(document.getElementById('toc-title'));
+    linkify(document.getElementById('sticky-title'));
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
 <!-- Disclosure-state persistence: remember which top-of-lecture apparatus
      panels (the .lecture-meta <details> rows) the reader has expanded, per
      lecture, across reloads. Keyed by pathname + the summary text, so the
