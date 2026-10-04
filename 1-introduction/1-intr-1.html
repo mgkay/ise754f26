@@ -4186,8 +4186,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">3.4: Transshipment</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../3-transport/3-tran-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4: Transshipment</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -5729,9 +5732,49 @@ if (new URLSearchParams(location.search).has('present')) {
     el.appendChild(a);
     a.addEventListener('click', toTop);
   }
+  // THE PANEL'S HIGHLIGHT FOLLOWS THE PAGE BACK UP (instructor, 2026-10-04): "it stays
+  // highlighted on the section I was coming from, which is confusing since now the
+  // lecture is up at the top". Quarto's scroll handler (quarto.js, updateActiveLink)
+  // marks the last section scrolled past, and above the first section it finds none and
+  // changes nothing, so the old highlight stays. Above the first section this clears it;
+  // below, it restores one if none is set, since Quarto skips re-marking the section it
+  // still believes is current. Same 200 px margin as Quarto, so the two never disagree.
+  var MARGIN = 200;
+  function syncToc() {
+    var links = Array.prototype.slice.call(
+      document.querySelectorAll('nav#TOC a[data-scroll-target]'));
+    if (!links.length) return;
+    var tops = links.map(function (a) {
+      // By id, as Quarto does: a section id may open with a digit ("1-periodic-..."),
+      // which is not a valid CSS selector.
+      var t = a.getAttribute('data-scroll-target') || '';
+      var el = t.charAt(0) === '#'
+        ? document.getElementById(decodeURI(t.slice(1)))
+        : document.querySelector(decodeURI(t));
+      return el ? el.offsetTop - MARGIN : Infinity;
+    });
+    var y = window.pageYOffset;
+    var atBottom = window.innerHeight + y >= document.body.offsetHeight;
+    var current = -1;
+    tops.forEach(function (t, i) { if (y >= t) current = i; });
+    if (atBottom) current = links.length - 1;
+    if (current < 0) {
+      links.forEach(function (a) { a.classList.remove('active'); });
+    } else if (!links.some(function (a) { return a.classList.contains('active'); })) {
+      links[current].classList.add('active');
+    }
+  }
+  var pending = false;
+  function onScroll() {
+    // After Quarto's own (throttled) handler, so this has the last word.
+    if (pending) return;
+    pending = true;
+    setTimeout(function () { pending = false; syncToc(); }, 50);
+  }
   function init() {
     linkify(document.getElementById('toc-title'));
     linkify(document.getElementById('sticky-title'));
+    window.addEventListener('scroll', onScroll, { passive: true });
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

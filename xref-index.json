@@ -54,19 +54,23 @@
   },
   "mdl-loc": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Strategic facility location"
   },
   "mdl-prodinv": {
    "label": "Model 2",
-   "word": "Model"
+   "word": "Model",
+   "name": "Tactical production-inventory plan"
   },
   "mdl-vrp": {
    "label": "Model 3",
-   "word": "Model"
+   "word": "Model",
+   "name": "Operational vehicle routing"
   },
   "mdl-pizza": {
    "label": "Model 4",
-   "word": "Model"
+   "word": "Model",
+   "name": "Average delivery distance"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -286,15 +290,18 @@
   },
   "mdl-poisson": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Poisson arrival simulation"
   },
   "mdl-queue": {
    "label": "Model 2",
-   "word": "Model"
+   "word": "Model",
+   "name": "Single-server queue simulation"
   },
   "mdl-spt": {
    "label": "Model 3",
-   "word": "Model"
+   "word": "Model",
+   "name": "Single-server SPT queue simulation"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -392,43 +399,53 @@
   },
   "mdl-hotdog-comp": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Competitive beach"
   },
   "mdl-hotdog-coop": {
    "label": "Model 2",
-   "word": "Model"
+   "word": "Model",
+   "name": "Cooperative beach"
   },
   "mdl-beach-choice": {
    "label": "Model 3",
-   "word": "Model"
+   "word": "Model",
+   "name": "A customer’s choice of beach"
   },
   "mdl-apt-equity": {
    "label": "Model 4",
-   "word": "Model"
+   "word": "Model",
+   "name": "Fair (equitable) apartment location"
   },
   "mdl-apt-centroid": {
    "label": "Model 5",
-   "word": "Model"
+   "word": "Model",
+   "name": "Equitable location by least squares"
   },
   "mdl-apt-minisum": {
    "label": "Model 6",
-   "word": "Model"
+   "word": "Model",
+   "name": "Efficient apartment location"
   },
   "mdl-apt-expanded": {
    "label": "Model 7",
-   "word": "Model"
+   "word": "Model",
+   "name": "Best-of-both apartment location"
   },
   "mdl-minisum1d": {
    "label": "Model 8",
-   "word": "Model"
+   "word": "Model",
+   "name": "Minisum in one dimension"
   },
   "mdl-minimax": {
    "label": "Model 9",
-   "word": "Model"
+   "word": "Model",
+   "name": "Minimax location"
   },
   "mdl-maximin": {
    "label": "Model 10",
-   "word": "Model"
+   "word": "Model",
+   "name": "Maximin location"
   },
   "example-3": {
    "label": "Ex. 3",
@@ -622,7 +639,8 @@
   },
   "mdl-minisum": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Single-facility minisum"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -728,15 +746,18 @@
   },
   "mdl-alloc": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Distance-based allocation"
   },
   "mdl-majority": {
    "label": "Model 2",
-   "word": "Model"
+   "word": "Model",
+   "name": "Multifacility majority theorem"
   },
   "mdl-la": {
    "label": "Model 3",
-   "word": "Model"
+   "word": "Model",
+   "name": "Location–allocation problem"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -808,11 +829,11 @@
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-mmin": {
+  "eq-mmin-emca": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-cost-ladder": {
+  "eq-tpc-act": {
    "label": "Eq. 4",
    "word": "Eq."
   },
@@ -894,15 +915,18 @@
   },
   "mdl-ufl": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Uncapacitated facility location"
   },
   "mdl-pmedian": {
    "label": "Model 2",
-   "word": "Model"
+   "word": "Model",
+   "name": "p-median location"
   },
   "mdl-lsq": {
    "label": "Model 3",
-   "word": "Model"
+   "word": "Model",
+   "name": "Least-squares line"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -1280,35 +1304,43 @@
   },
   "mdl-lp": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Linear program"
   },
   "mdl-ufl-milp": {
    "label": "Model 2",
-   "word": "Model"
+   "word": "Model",
+   "name": "Uncapacitated facility location"
   },
   "mdl-cfl": {
    "label": "Model 3",
-   "word": "Model"
+   "word": "Model",
+   "name": "Capacitated facility location"
   },
   "mdl-setcover": {
    "label": "Model 4",
-   "word": "Model"
+   "word": "Model",
+   "name": "Set covering"
   },
   "mdl-setpack": {
    "label": "Model 5",
-   "word": "Model"
+   "word": "Model",
+   "name": "Set packing"
   },
   "mdl-binpack": {
    "label": "Model 6",
-   "word": "Model"
+   "word": "Model",
+   "name": "Bin packing"
   },
   "mdl-coloring": {
    "label": "Model 7",
-   "word": "Model"
+   "word": "Model",
+   "name": "Graph coloring"
   },
   "mdl-tardiness": {
    "label": "Model 8",
-   "word": "Model"
+   "word": "Model",
+   "name": "Single-machine total tardiness"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -1808,7 +1840,7 @@
    "label": "Eq. 27",
    "word": "Eq."
   },
-  "eq-agg": {
+  "eq-agg-periodic": {
    "label": "Eq. 28",
    "word": "Eq."
   },
@@ -1858,7 +1890,8 @@
   },
   "mdl-mintlc": {
    "label": "Model 1",
-   "word": "Model"
+   "word": "Model",
+   "name": "Minimum-TLC shipment size"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -1918,6 +1951,187 @@
   },
   "example-2": {
    "label": "Ex. 2",
+   "word": "Ex."
+  }
+ },
+ "3.4": {
+  "eq-ftl-weights": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-tlc-ftl-x": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-ftl-monthly": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-alpha-uc": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-tlc-single-dc": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-tlc-uc": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-tlc-xd": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-unit-value": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-tlc-allocftl": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-tlc-tl-x": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-qtl": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-automation": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "fig-i40-network": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-median-ftl": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-median-monthly": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-transshipment": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-dc-inventory": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-memphis": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-tlc-location": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-lowes": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-warehouse-types": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-warehouse-functions": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-example-dc": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-wms": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-kiva": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "tbl-statesville": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-codes": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "mdl-transship": {
+   "label": "Model 1",
+   "word": "Model",
+   "name": "Single-DC transshipment"
+  },
+  "mdl-uc": {
+   "label": "Model 2",
+   "word": "Model",
+   "name": "Uncoordinated transshipment"
+  },
+  "mdl-xd": {
+   "label": "Model 3",
+   "word": "Model",
+   "name": "Perfect cross-docking"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
+  "example-1-d": {
+   "label": "Ex. 1(d)",
+   "word": "Ex."
+  },
+  "example-1-e": {
+   "label": "Ex. 1(e)",
+   "word": "Ex."
+  },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  },
+  "example-2-c": {
+   "label": "Ex. 2(c)",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
    "word": "Ex."
   }
  }
