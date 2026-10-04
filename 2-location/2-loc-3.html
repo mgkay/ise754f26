@@ -5255,7 +5255,7 @@ Figure 6: The integrated objective for the corridor, contoured over the two mil
 </div>
 </div>
 <p>Starting the search in each basin reaches each optimum.</p>
-<div id="28" class="cell" data-execution_count="1">
+<div id="30" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Code block 10: two starts, two local optima</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a>Xᵒ¹ <span class="op">=</span> <span class="fu">optimize</span>(TCint, [<span class="fl">0.0</span>, <span class="fl">200.0</span>]).minimizer</span>
 <span id="cb23-3"><a href="#cb23-3"></a>Xᵒ² <span class="op">=</span> <span class="fu">optimize</span>(TCint, [<span class="fl">200.0</span>, <span class="fl">500.0</span>]).minimizer</span>
@@ -5452,7 +5452,7 @@ TC = 1(220) + 2(120) + 3(80) + 4(50) + 5(0) + 6(25) + 7(0) = 1{,}050.
 
 </div>
 <p>The hand work is worth checking, and the check is short because both halves are already written. <code>allocate</code> is <a href="#mdl-alloc" class="quarto-xref">Model 1</a>, and the one-dimensional <code>locate</code> is one line: the cumulative weight, and the first city at which it reaches half.</p>
-<div id="30" class="cell" data-execution_count="1">
+<div id="32" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Code block 11: locate in one dimension, the median of Lecture 2.1</span></span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="fu">median1</span>(p, wt) <span class="op">=</span> p[<span class="fu">findfirst</span>(<span class="fu">≥</span>(<span class="fu">sum</span>(wt) <span class="op">/</span> <span class="fl">2</span>), <span class="fu">cumsum</span>(wt))]</span>
 <span id="cb26-3"><a href="#cb26-3"></a></span>
@@ -5503,7 +5503,7 @@ from markers 200 and 500
 <span id="cb28-13"><a href="#cb28-13"></a><span class="co">#    returned.</span></span>
 <span id="cb28-14"><a href="#cb28-14"></a>ala        <span class="co"># (X0, w, P; dist, alloc, locate, nruns) -&gt; (X, TC, W)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="34" class="cell" data-execution_count="1">
+<div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Code block 12: the same two starts through ala</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a>Xᵃ, TCᵃ, <span class="op">=</span> <span class="fu">ala</span>([<span class="fl">0.0</span>; <span class="fl">200.0</span>;;], <span class="fu">float</span>(w), <span class="fu">float</span>(P); dist <span class="op">=</span> <span class="fl">1</span>)</span>
 <span id="cb29-3"><a href="#cb29-3"></a>Xᵇ, TCᵇ, <span class="op">=</span> <span class="fu">ala</span>([<span class="fl">200.0</span>; <span class="fl">500.0</span>;;], <span class="fu">float</span>(w), <span class="fu">float</span>(P); dist <span class="op">=</span> <span class="fl">1</span>)</span>
@@ -5543,7 +5543,7 @@ from markers 200 and 500
 <div class="statement">
 <p>Determine the two locations that minimize the total population-weighted distance to every city over 10,000 people in North and South Carolina, and the territory each one serves.</p>
 </div>
-<div id="38" class="cell" data-execution_count="1">
+<div id="40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Code block 13: the Carolinas&#39; cities and their weights</span></span>
 <span id="cb31-2"><a href="#cb31-2"></a><span class="im">using</span> <span class="bu">GeoMakie</span>, <span class="bu">Random</span></span>
 <span id="cb31-3"><a href="#cb31-3"></a>df <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="kw">in</span> <span class="fu">st2fips</span>.([<span class="op">:</span>NC, <span class="op">:</span>SC]) <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">10_000</span>,</span>
@@ -5557,7 +5557,7 @@ from markers 200 and 500
 </div>
 </div>
 <p>Starting locations are drawn at random from the box around the cities, and <code>ala</code> keeps the best of <code>nruns</code> of them.</p>
-<div id="40" class="cell" data-execution_count="1">
+<div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Code block 14: two service centers by multistart</span></span>
 <span id="cb33-2"><a href="#cb33-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">8345</span>)</span>
 <span id="cb33-3"><a href="#cb33-3"></a>Xᵒ, TCᵒ, W <span class="op">=</span> <span class="fu">ala</span>(<span class="fu">randX</span>(P, <span class="fl">2</span>), w, P; nruns <span class="op">=</span> <span class="fl">5</span>)</span>
@@ -5597,7 +5597,7 @@ Figure 7: The two service centers and the cities each one serves. Charlotte tak
 </div>
 </div>
 <p>Suppose now that a pre-existing contract forces the first three cities to be served by the first facility and the next three by the second. The only thing that changes is the allocation step, which <code>ala</code> accepts as an argument.</p>
-<div id="44" class="cell" data-execution_count="1">
+<div id="46" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Code block 16: the allocation for a given pair</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a><span class="kw">function</span> <span class="fu">alloc36</span>(X)</span>
 <span id="cb36-3"><a href="#cb36-3"></a>    D <span class="op">=</span> <span class="fu">dists</span>(X, P, <span class="op">:</span>mi)</span>
@@ -5794,7 +5794,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 <div class="statement">
 <p>Determine the best locations for one, two, three and nine retail warehouses serving the continental United States in proportion to population, and compare them with <a href="#tbl-retail" class="quarto-xref">Table 4</a>.</p>
 </div>
-<div id="46" class="cell" data-execution_count="1">
+<div id="48" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Code block 17: every US population centroid</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>z <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">0</span>, <span class="fu">uszcta3</span>())</span>
 <span id="cb38-3"><a href="#cb38-3"></a><span class="fu">select!</span>(z, <span class="op">:</span>ZCTA3, <span class="op">:</span>LAT, <span class="op">:</span>LON, <span class="op">:</span>POP)</span>
@@ -5806,7 +5806,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 </div>
 </div>
 <p>The three-digit ZCTA centroids are the existing facilities, about 882 of them, and their populations are the weights. A single warehouse needs no allocation at all, so it is an ordinary single-facility minisum problem. The answer is reported as the nearest city of at least 100,000 people, since a three-digit ZIP code is not a place name.</p>
-<div id="48" class="cell" data-execution_count="1">
+<div id="50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># Code block 18: cities for naming the answer</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a>cities <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">100_000</span>, <span class="fu">usplace</span>())</span>
 <span id="cb40-3"><a href="#cb40-3"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">4161</span>)</span>
@@ -5820,7 +5820,7 @@ Table 4: Best Retail Warehouse Locations.<a href="#fn1" class="footnote-ref" id
 </div>
 </div>
 <p>From two warehouses on, the allocation has to be determined with the locations, so <code>ala</code> does the work.</p>
-<div id="50" class="cell" data-execution_count="1">
+<div id="52" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># Code block 19: one to ten warehouses</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a><span class="fu">named</span>(X) <span class="op">=</span> <span class="fu">select</span>(<span class="fu">lonlat2loc</span>(X, cities), <span class="op">:</span>NAME, <span class="op">:</span>ST, <span class="op">:</span>dist)</span>
 <span id="cb42-3"><a href="#cb42-3"></a></span>

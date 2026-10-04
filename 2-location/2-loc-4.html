@@ -5604,7 +5604,7 @@ m_{\min} = \lfloor 6 + 1 \rfloor = 7 .
 <div class="result-box">
 <p>17 machines, at a total annual cost of $1,796,918.</p>
 </div>
-<p>It took 17 machines to find a feasible solution. The throughput-feasible minimum number of machines was 7, but this number of machines would only work if each customer were able to be served from any of the machines. In this problem, each customer is allocated to only one machine, and each machine is capacity-limited. This increased the cost 44% (from $1,249,936 to $1,796,918). The reason the number of machines had to be increased so much is that the allocation did not account for capacity. In lecture 2.7, capacity constraints will be added to the UFL model, enabling a more effective solution by accounting for machine capacity.</p>
+<p>It took 17 machines to find a feasible solution. The throughput-feasible minimum number of machines was 7, but this number of machines would only work if each customer were able to be served from any of the machines. In this problem, each customer is allocated to only one machine, and each machine is capacity-limited. This increased the cost 44% (from $1,249,936 to $1,796,918). The reason the number of machines had to be increased so much is that the allocation did not account for capacity. In Lecture 2.7, capacity constraints will be added to the UFL model, enabling a more effective solution by accounting for machine capacity.</p>
 <div class="example-end">
 
 </div>
@@ -6012,7 +6012,7 @@ Figure 6: SP3D’s four hubs fitted twice, under L2 and L1 loss. The lines diff
 </div>
 </div>
 <p>The two intercepts are not the same number: L2 puts the fixed cost at $198,570 and L1 at $266,543. Running the L1 fit through the same table as code block 26 shows which one a UFL can use.</p>
-<div id="76" class="cell" data-execution_count="1">
+<div id="78" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href="#cb70-1"></a><span class="co"># Code block 28: the same table under L1, where the totals disagree</span></span>
 <span id="cb70-2"><a href="#cb70-2"></a>fit₁ <span class="op">=</span> <span class="fu">ŷ</span>([k₁, cp₁], f)</span>
 <span id="cb70-3"><a href="#cb70-3"></a>res₁ <span class="op">=</span> tpc <span class="op">.-</span> fit₁</span>

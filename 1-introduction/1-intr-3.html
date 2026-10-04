@@ -5065,7 +5065,7 @@ Model 1: Poisson arrival simulation
 </figure>
 </div>
 <div class="model-implementation" data-mdl-for="mdl-poisson" id="rung-mdl-poisson-implementation"><div class="model-rung-label">Model 1 implementation: Poisson arrival simulation</div>
-<div id="10" class="cell" data-execution_count="1">
+<div id="12" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Model: Poisson arrival simulation</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">simulate</span>(rₐ, n) <span class="op">=</span> [<span class="fu">-log</span>(<span class="fu">rand</span>()) <span class="op">/</span> rₐ for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -5074,7 +5074,7 @@ Model 1: Poisson arrival simulation
 </div>
 </div>
 <p>Drawing the times and reading back their mean and SCV recovers the analytic values of Sec. 4:</p>
-<div id="12" class="cell" data-execution_count="1">
+<div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Code block 1: arrivals simulated, mean and SCV</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">using</span> <span class="bu">Random</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1</span>)                             <span class="co"># reproducible draws</span></span>
@@ -5102,7 +5102,7 @@ Model 2: Single-server queue simulation
 </figure>
 </div>
 <div class="model-implementation" data-mdl-for="mdl-queue" id="rung-mdl-queue-implementation"><div class="model-rung-label">Model 2 implementation: Single-server queue simulation</div>
-<div id="14" class="cell" data-execution_count="1">
+<div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Model: single-server FIFO queue simulation</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">function</span> <span class="fu">queue</span>(rₐ, tₑ, n)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    ct <span class="op">=</span> <span class="fu">zeros</span>(n)                  <span class="co"># cycle time of each job</span></span>
@@ -5120,7 +5120,7 @@ Model 2: Single-server queue simulation
 </div>
 </div>
 </div>
-<div id="16" class="cell" data-execution_count="1">
+<div id="18" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Code block 2: simulated cycle time against the VUT formula</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>ct  <span class="op">=</span> <span class="fu">queue</span>(<span class="fl">8</span>, <span class="fl">0.1</span>, <span class="fl">10_000</span>)    <span class="co"># rₐ = 8/hr, tₑ = 0.1 hr, so u = 0.8</span></span>
@@ -5145,7 +5145,7 @@ Figure 6: Running average of the simulated cycle time over 10,000 jobs through 
 </div>
 </div>
 <p><strong>One run is one draw.</strong> The convergence in <a href="#fig-queue" class="quarto-xref">Fig. 6</a> is a single <em>run</em>: one seed, one stream of random draws, one simulated history. A different seed produces a different history whose average lands somewhere else, so a single run, however long, is one noisy estimate of the long-run mean. The remedy is a <strong>simulation experiment</strong>: several independent <em>replications</em>, averaged. The spread across replications shows how much any single run can be trusted, and the grand mean, reported with a 95% confidence interval, brackets the known analytic value of 0.5:</p>
-<div id="20" class="cell" data-execution_count="1">
+<div id="22" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Code block 3: twenty replications and a confidence interval</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">2</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a>nrep <span class="op">=</span> <span class="fl">20</span>                      <span class="co"># independent replications</span></span>
@@ -5176,7 +5176,7 @@ Model 3: Single-server SPT queue simulation
 </figure>
 </div>
 <div class="model-implementation" data-mdl-for="mdl-spt" id="rung-mdl-spt-implementation"><div class="model-rung-label">Model 3 implementation: Single-server SPT queue simulation</div>
-<div id="22" class="cell" data-execution_count="1">
+<div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Model: single-server SPT queue simulation</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="kw">function</span> <span class="fu">queue_spt</span>(rₐ, tₑ, n)</span>
 <span id="cb11-3"><a href="#cb11-3"></a>    at <span class="op">=</span> <span class="fu">cumsum</span>([<span class="fu">-log</span>(<span class="fu">rand</span>()) <span class="op">/</span> rₐ for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n])  <span class="co"># arrivals</span></span>
@@ -5203,7 +5203,7 @@ Model 3: Single-server SPT queue simulation
 </div>
 </div>
 </div>
-<div id="24" class="cell" data-execution_count="1">
+<div id="26" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Code block 4: FIFO against SPT at the same station</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1</span>)</span>
 <span id="cb13-3"><a href="#cb13-3"></a>fifo <span class="op">=</span> <span class="fu">queue</span>(<span class="fl">8</span>, <span class="fl">0.1</span>, <span class="fl">100_000</span>)      <span class="co"># FIFO baseline</span></span>
@@ -5346,7 +5346,7 @@ Figure 8: Barber-shop mean cycle time in queue (<span style="white-space: nowra
 <div class="statement">
 <p>Three single-machine stations run in series, each at utilization <span class="math inline">u = 0.9</span> and the same mean process time <span class="math inline">t_e = 0.1</span> hr, but with process-time variabilities <span style="white-space: nowrap"><span class="math inline">c_e^2 = 0.25</span>,</span> <span style="white-space: nowrap"><span class="math inline">1</span>,</span> and <span style="white-space: nowrap"><span class="math inline">4</span>;</span> work enters the first at <span style="white-space: nowrap"><span class="math inline">c_a^2 = 1</span>.</span> Compare the line’s total cycle time when the most variable station is run last versus first.</p>
 </div>
-<div id="32" class="cell" data-execution_count="1">
+<div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Code block 5: station order and its effect on cycle time</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>u  <span class="op">=</span> <span class="fl">0.9</span>  <span class="co"># utilization at each station</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a>tₑ <span class="op">=</span> <span class="fl">0.1</span>  <span class="co"># hr, same mean process time</span></span>

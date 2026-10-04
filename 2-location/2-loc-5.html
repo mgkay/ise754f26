@@ -4526,7 +4526,7 @@ Figure 3: Census Bureau combined statistical area wall map.<a href="#fn2" class
 <p>The data source does not call it city data. The table is <strong>places</strong>, because many of the entities in it are not cities: towns, villages and census-designated places too small to be incorporated as one.</p>
 <p>Consider locating a single store in Georgia. A ranking of U.S. cities by population is consulted, Georgia appears nowhere near the top of it, and the state is set aside as rural. Atlanta’s city limits hold under half a million people, fewer than Memphis, because a mile from downtown Atlanta the county has already changed: several counties converge within a few miles of the center, and the city proper never grew to cover them. Jacksonville is the mirror image. Florida consolidated the city with the whole of Duval County, so everyone in the county counts as living in the city, and Jacksonville ranks among the largest cities in the country while its metropolitan area does not. The equivalent would be declaring all of Wake County to be Raleigh.</p>
 <p>The two cases can be checked directly, and the arithmetic is the argument.</p>
-<div id="10" class="cell" data-execution_count="1">
+<div id="12" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Code block 1: two cities against the metropolitan areas they name</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>pl, cs <span class="op">=</span> <span class="fu">usplace</span>(), <span class="fu">uscsa</span>()</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="fu">pop</span>(df, s) <span class="op">=</span> <span class="fu">maximum</span>(<span class="fu">filter</span>(r <span class="op">-&gt;</span> <span class="fu">occursin</span>(s, r.NAME), df).POP)</span>
@@ -4551,7 +4551,7 @@ Figure 3: Census Bureau combined statistical area wall map.<a href="#fn2" class
 <h2 class="anchored" data-anchor-id="choosing-a-resolution">3. Choosing a resolution</h2>
 <p>The units of Sec. 2 form a ladder, and every rung is a usable demand set for some problem. Choosing among them is the decision this lecture exists to teach, and it is genuinely a decision: there is no resolution that is right in general.</p>
 <p>Every count below is measured rather than quoted, which matters because these figures move with each census.</p>
-<div id="12" class="cell" data-execution_count="1">
+<div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Code block 2: how many demand points each source yields</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>OFF <span class="op">=</span> [<span class="fl">2</span>, <span class="fl">15</span>, <span class="fl">60</span>, <span class="fl">66</span>, <span class="fl">69</span>, <span class="fl">72</span>, <span class="fl">78</span>]  <span class="co"># non-continental state FIPS</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="fu">cus</span>(df) <span class="op">=</span> <span class="st">&quot;ISCUS&quot;</span> <span class="kw">in</span> <span class="fu">names</span>(df) ? <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS, df) <span class="op">:</span></span>
@@ -4583,7 +4583,7 @@ Figure 3: Census Bureau combined statistical area wall map.<a href="#fn2" class
 <h3 class="anchored" data-anchor-id="the-other-constraint-runs-the-other-way">The other constraint runs the other way</h3>
 <p>Everything above sets a floor. There is also a ceiling, and it comes from the method rather than from the data: a demand set has to be small enough that the problem can actually be solved.</p>
 <p>The two constraints are in tension, and which one binds depends on what is going to be run.</p>
-<p>With the heuristics of lecture 2.4 the ceiling is high and forgiving: erring toward too much data costs running time and nothing else. A mixed-integer linear program is the opposite, and the difference is not a matter of degree. A hundred demand points might solve in a minute; a hundred and twenty can take twenty. The growth is not linear, so a set that is comfortably solvable does not warn that the next increment is not, and a demand set chosen purely for fidelity can put a problem out of reach.</p>
+<p>With the heuristics of Lecture 2.4 the ceiling is high and forgiving: erring toward too much data costs running time and nothing else. A mixed-integer linear program is the opposite, and the difference is not a matter of degree. A hundred demand points might solve in a minute; a hundred and twenty can take twenty. The growth is not linear, so a set that is comfortably solvable does not warn that the next increment is not, and a demand set chosen purely for fidelity can put a problem out of reach.</p>
 <p>So the rule of a thousand points is a <strong>fidelity</strong> statement, and it is the right one when the method tolerates it. When the method is a MILP the binding constraint is tractability instead, and the resolution has to come down to meet it. Lecture 2.7 takes up mixed-integer formulations and the choice of scale that goes with them; this lecture supplies the data and the vocabulary for that choice.</p>
 </section>
 <section id="what-each-resolution-looks-like" class="level3">
@@ -4679,7 +4679,7 @@ Figure 7: Census block groups in the Raleigh CSA. The finest public resolution,
 <p>Determine the number of demand points each of the six census sources provides for North Carolina.</p>
 </div>
 <p>One state makes the ladder concrete, because the counts differ by three orders of magnitude over the same ground.</p>
-<div id="22" class="cell" data-execution_count="1">
+<div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Code block 3: five sources, one state</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>NC <span class="op">=</span> <span class="fu">st2fips</span>(<span class="op">:</span>NC)</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="fu">bystate</span>(df) <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="op">==</span> NC, df)</span>
@@ -4712,8 +4712,8 @@ Figure 7: Census block groups in the Raleigh CSA. The finest public resolution,
 <div class="statement">
 <p>Determine the population-weighted minisum location for North Carolina using every census block group as a demand point.</p>
 </div>
-<p>With the demand points chosen, the single-facility minisum of lecture 2.2 runs unchanged. The weights are block-group populations, the distances are great-circle, and the search starts from the weighted centroid.</p>
-<div id="24" class="cell" data-execution_count="1">
+<p>With the demand points chosen, the single-facility minisum of Lecture 2.2 runs unchanged. The weights are block-group populations, the distances are great-circle, and the search starts from the weighted centroid.</p>
+<div id="26" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Code block 4: minisum over every North Carolina block group</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>bg <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="op">==</span> NC, <span class="fu">uscenblkgrp</span>())</span>
 <span id="cb12-3"><a href="#cb12-3"></a>pt <span class="op">=</span> <span class="fu">eachrow</span>(<span class="fu">hcat</span>(bg.LON, bg.LAT))</span>
@@ -4726,7 +4726,7 @@ Figure 7: Census block groups in the Raleigh CSA. The finest public resolution,
   35.64396320544796</code></pre>
 </div>
 </div>
-<div id="26" class="cell" data-execution_count="1">
+<div id="28" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Code block 5: how many points, how many people, and where</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(points <span class="op">=</span> <span class="fu">nrow</span>(bg), population <span class="op">=</span> <span class="fu">sum</span>(bg.POP),</span>
 <span id="cb14-3"><a href="#cb14-3"></a>              nearest <span class="op">=</span> <span class="fu">lonlat2loc</span>(xᵒ, <span class="fu">usplace</span>()).desc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -4745,7 +4745,7 @@ Figure 7: Census block groups in the Raleigh CSA. The finest public resolution,
 
 </div>
 <p>That agreement is the point of the example rather than a curiosity, and it has been checked before on the same ground. Going from under a hundred cities to several thousand aggregate demand points barely moves the answer. The finer set is arguably a little more accurate, and for the size of the increase it is probably not worth the effort.</p>
-<p>Which is not the same as saying resolution never matters, and the distinction is what makes the rule usable. For a continuous minisum, a large demand set costs nothing but time and buys almost nothing, so the choice is free. For the discrete problems of lecture 2.4 and the mixed-integer ones of 2.7, the same extra points are paid for twice over: once in run time, and again in Sec. 6’s area adjustment, which matters most exactly where the demand set is coarse. The resolution decision matters most for what a model can <em>represent</em>, and least for where a single facility lands.</p>
+<p>Which is not the same as saying resolution never matters, and the distinction is what makes the rule usable. For a continuous minisum, a large demand set costs nothing but time and buys almost nothing, so the choice is free. For the discrete problems of Lecture 2.4 and the mixed-integer ones of 2.7, the same extra points are paid for twice over: once in run time, and again in Sec. 6’s area adjustment, which matters most exactly where the demand set is coarse. The resolution decision matters most for what a model can <em>represent</em>, and least for where a single facility lands.</p>
 <p><a href="#tbl-sources" class="quarto-xref">Table 1</a> puts the six sources and all three scales in one place. Only the three sources that nest in a county can be cut to a CSA at all.</p>
 <div id="tbl-sources" class="dense quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[18,12,9,9,52]">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -4857,9 +4857,9 @@ Table 1: Aggregate demand point data sources.
 \tag{2}</span></span></p>
 <p>That is a requirement rather than a definition, and it names no particular point. Solving it is what produces one.</p>
 <p>Doing the algebra produces the <strong>centroid</strong>, and that is the justification for using it: not that it is the obvious middle, but that it is the point the substitution requires. Once it is in hand, a whole region of population can stand at one location and the location analysis proceeds exactly as before, so long as the objective is minimizing the sum of distances.</p>
-<p>That claim is checkable on a single instance, and checking it is more convincing than the algebra. Take the seven I-40 cities of lecture 2.1, measure from an arbitrary point, and total the weighted distances: the answer is 7,860. Now replace all seven by the centroid alone and multiply by the total weight. The answer is 7,860 again, which is what <a href="#eq-aggcriterion" class="quarto-xref">Eq. 2</a> demanded.</p>
+<p>That claim is checkable on a single instance, and checking it is more convincing than the algebra. Take the seven I-40 cities of Lecture 2.1, measure from an arbitrary point, and total the weighted distances: the answer is 7,860. Now replace all seven by the centroid alone and multiply by the total weight. The answer is 7,860 again, which is what <a href="#eq-aggcriterion" class="quarto-xref">Eq. 2</a> demanded.</p>
 <p>Substitute the median instead and the total comes out lower, and that is the useful half of the demonstration rather than a footnote to it. A smaller number is not a better answer here; it is the wrong answer to a different question. The median minimizes total weighted distance, so of course it gives less. What the aggregate point has to do is <em>reproduce</em> the total, not improve it.</p>
-<div id="32" class="cell" data-execution_count="1">
+<div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Code block 6: the aggregate reproduces the total, the median does not</span></span>
 <span id="cb16-2"><a href="#cb16-2"></a>mi <span class="op">=</span> [<span class="fl">50</span>, <span class="fl">150</span>, <span class="fl">190</span>, <span class="fl">220</span>, <span class="fl">270</span>, <span class="fl">295</span>, <span class="fl">420</span>]   <span class="co"># I-40 mile markers, lecture 2.1</span></span>
 <span id="cb16-3"><a href="#cb16-3"></a>wi <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span>                                  <span class="co"># illustrative weights</span></span>
@@ -4967,7 +4967,7 @@ Figure 8: Two existing facilities and the single point that replaces them. The 
 </div>
 <p>Sec. 3 gave the reason to want this: at three-digit resolution the continental United States has about nine hundred demand points, which is comfortable for a heuristic and too many for a mixed-integer program. Grouping them by their first two digits reduces the count by roughly an order of magnitude without leaving the census data or changing the region covered.</p>
 <p>The construction is the definition of <a href="#eq-aggpoint" class="quarto-xref">Eq. 1</a>, applied to every group.</p>
-<div id="36" class="cell" data-execution_count="1">
+<div id="38" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Code block 7: group the three-digit ZCTAs by their first two digits</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>z <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS, <span class="fu">uszcta3</span>())</span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="co"># `÷` is integer division, the floor of the quotient: 274 ÷ 10 = 27.</span></span>
@@ -5206,7 +5206,7 @@ Figure 8: Two existing facilities and the single point that replaces them. The 
 </div>
 </div>
 <p>Each group’s weight is a sum, and so is its extent. Its location is the population-weighted centroid, which Logjam supplies: <code>wcentroid</code> weights longitude by the cosine of latitude, so that a degree of longitude counts for the distance it actually spans rather than for a degree.</p>
-<div id="38" class="cell" data-execution_count="1">
+<div id="40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Code block 8: weight, location and extent of every group</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a>z2 <span class="op">=</span> <span class="fu">combine</span>(g,</span>
 <span id="cb20-3"><a href="#cb20-3"></a>    [<span class="op">:</span>LON, <span class="op">:</span>LAT, <span class="op">:</span>POP] <span class="op">=&gt;</span> ((x, y, w) <span class="op">-&gt;</span> <span class="fu">wcentroid</span>(x, y, w).LON) <span class="op">=&gt;</span> <span class="op">:</span>LON,</span>
@@ -5223,7 +5223,7 @@ Figure 8: Two existing facilities and the single point that replaces them. The 
 5      5  -72.83  44.10    643,077   9,217.25</code></pre>
 </div>
 </div>
-<div id="40" class="cell" data-execution_count="1">
+<div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Code block 9: what the aggregation cost, and what it preserved</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(level <span class="op">=</span> [<span class="st">&quot;3-digit&quot;</span>, <span class="st">&quot;2-digit&quot;</span>],</span>
 <span id="cb22-3"><a href="#cb22-3"></a>              points <span class="op">=</span> [<span class="fu">nrow</span>(z), <span class="fu">nrow</span>(z2)],</span>
@@ -5249,7 +5249,7 @@ Figure 8: Two existing facilities and the single point that replaces them. The 
 <section id="average-distance-within-a-region" class="level2">
 <h2 class="anchored" data-anchor-id="average-distance-within-a-region">5. Average distance within a region</h2>
 <p>Sec. 4 placed the aggregate point. This section answers the question the placement leaves open, which is the one Sec. 1 opened the lecture with: how far is a facility from a region it is standing on?</p>
-<p>The answer cannot be zero, and the reason is a theorem lecture 1.1 already proved. Distance is a nonlinear function of position, so the distance to the <em>mean</em> of a set of points is not the <em>mean</em> of the distances to them. That is Jensen’s inequality, and for a convex function the direction is fixed: the value at the mean falls below the mean of the values. Applied here it says the centroid distance always <strong>understates</strong>, and it says so before any region is examined. Lecture 1.1 states the working rule in general terms, that a mean may stand in for the data when the quantity of interest is linear in it but not when that function is nonlinear, “where the spread of the data itself changes the answer”. The region’s extent is that spread, which is why an aggregate demand point needed a third field at all.</p>
+<p>The answer cannot be zero, and the reason is a theorem Lecture 1.1 already proved. Distance is a nonlinear function of position, so the distance to the <em>mean</em> of a set of points is not the <em>mean</em> of the distances to them. That is Jensen’s inequality, and for a convex function the direction is fixed: the value at the mean falls below the mean of the values. Applied here it says the centroid distance always <strong>understates</strong>, and it says so before any region is examined. Lecture 1.1 states the working rule in general terms, that a mean may stand in for the data when the quantity of interest is linear in it but not when that function is nonlinear, “where the spread of the data itself changes the answer”. The region’s extent is that spread, which is why an aggregate demand point needed a third field at all.</p>
 <p>What remains is to compute the gap.</p>
 <section id="one-dimension" class="level3">
 <h3 class="anchored" data-anchor-id="one-dimension">One dimension</h3>
@@ -5554,7 +5554,7 @@ d + \dfrac{3r^{2}}{23d}, &amp; \text{otherwise}
 <div class="callout-body-container callout-body">
 <p>The technique is general: simulation supplies the observations and regression estimates the formula, which is the one to reach for when a quantity can be computed but not integrated. Each step below is followed by the Julia that carries it out.</p>
 <p><strong>Step 1. Generate the population.</strong> Scatter points uniformly over the region. The simplest way is rejection: draw them in the square that encloses the disk and discard whatever falls outside. Working in units of the radius makes the answer a multiple of <span style="white-space: nowrap"><span class="math inline">r</span>,</span> and the seed makes the whole fit reproducible.</p>
-<div id="50" class="cell" data-execution_count="1">
+<div id="52" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Code block 10: draw points uniformly over the unit disk by rejection</span></span>
 <span id="cb28-2"><a href="#cb28-2"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
 <span id="cb28-3"><a href="#cb28-3"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">82734</span>)</span>
@@ -5566,7 +5566,7 @@ d + \dfrac{3r^{2}}{23d}, &amp; \text{otherwise}
 </div>
 </div>
 <p><strong>Step 2. Sweep the independent variable.</strong> Take a series of facility positions along a line running from the centroid outward, and at each one average the distance to every point. Each position yields one observation: distance from the centroid in, aggregate distance out.</p>
-<div id="52" class="cell" data-execution_count="1">
+<div id="54" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Code block 11: one observation per facility position</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>dd <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">range</span>(<span class="fl">0</span>, <span class="fl">1</span>; length <span class="op">=</span> <span class="fl">56</span>))</span>
 <span id="cb30-3"><a href="#cb30-3"></a>da <span class="op">=</span> [<span class="fu">mean</span>(<span class="fu">dists</span>([x <span class="fl">0</span>], XY, <span class="fl">2</span>)) for x <span class="kw">in</span> dd]</span>
@@ -5582,14 +5582,14 @@ d + \dfrac{3r^{2}}{23d}, &amp; \text{otherwise}
 </div>
 </div>
 <p><strong>Step 3. Anchor what is already known.</strong> At the centroid the answer is exactly <span class="math inline">\tfrac23 r</span> by <a href="#eq-da2dcenter" class="quarto-xref">Eq. 6</a>, so that value is imposed rather than estimated, leaving one fewer parameter to fit.</p>
-<div id="54" class="cell" data-execution_count="1">
+<div id="56" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a>da[<span class="fl">1</span>] <span class="op">=</span> <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>   <span class="co"># Code block 12: the one point that needs no fitting</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>0.6666666666666666</code></pre>
 </div>
 </div>
 <p><strong>Step 4. Fit candidate forms and keep the best.</strong> A quadratic in <span class="math inline">d</span> fits the interior. Outside, what is worth fitting is not <span class="math inline">d_a</span> but its <strong>excess over <span class="math inline">d</span></strong>, since <span class="math inline">d</span> itself is already most of the answer there. Parameters come from minimizing root mean squared error, and that error is also how the choice among candidate forms is made.</p>
-<div id="56" class="cell" data-execution_count="1">
+<div id="58" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Code block 13: fit the interior, measure the exterior excess</span></span>
 <span id="cb34-2"><a href="#cb34-2"></a><span class="fu">rmse</span>(p) <span class="op">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(abs2, da <span class="op">.-</span> (<span class="fl">2</span><span class="op">/</span><span class="fl">3</span> <span class="op">.+</span> p[<span class="fl">1</span>] <span class="op">.*</span> dd <span class="op">.+</span></span>
 <span id="cb34-3"><a href="#cb34-3"></a>                                p[<span class="fl">2</span>] <span class="op">.*</span> dd <span class="op">.^</span> <span class="fl">2</span>)) <span class="op">/</span> <span class="fu">length</span>(dd))</span>
@@ -5606,7 +5606,7 @@ d + \dfrac{3r^{2}}{23d}, &amp; \text{otherwise}
 </div>
 </div>
 <p><strong>Step 5. Round the coefficients, then re-measure.</strong> The fitted decimals become the simple fractions the formula shows, and the error is measured again to see what the tidying cost. Here it costs about a thousandth of a radius, which is a good trade for a formula that can be remembered. Not every coefficient rounds equally well: the quadratic term and the exterior excess land almost exactly on their fractions, while the linear term is the one the data barely constrains, because the curve it is fitting is nearly a pure quadratic.</p>
-<div id="58" class="cell" data-execution_count="1">
+<div id="60" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Code block 14: price the rounding rather than assume it</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(coefficients <span class="op">=</span> [<span class="st">&quot;least squares&quot;</span>, <span class="st">&quot;as fractions&quot;</span>],</span>
 <span id="cb36-3"><a href="#cb36-3"></a>              linear <span class="op">=</span> [<span class="fu">round</span>(p[<span class="fl">1</span>], digits <span class="op">=</span> <span class="fl">4</span>), <span class="fl">1</span><span class="op">/</span><span class="fl">48</span>],</span>
@@ -5653,7 +5653,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
      how 7000 reached the page twice on 2026-09-09. See
      docs/lecture-conventions.md, "Suppress auto-display on
      assignment-only chunks". -->
-<div id="60" class="cell" data-execution_count="1">
+<div id="62" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Code block 15: North Carolina at three-digit ZIP resolution</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>z <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> <span class="fl">270</span> <span class="op">&lt;=</span> r.ZCTA3 <span class="op">&lt;=</span> <span class="fl">289</span> <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">0</span>, <span class="fu">uszcta3</span>())</span>
 <span id="cb38-3"><a href="#cb38-3"></a>P, f <span class="op">=</span> <span class="fu">hcat</span>(z.LON, z.LAT), <span class="fu">float</span>(z.POP)</span>
@@ -5663,7 +5663,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <span id="cb38-7"><a href="#cb38-7"></a>k <span class="op">=</span> <span class="fl">7000</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Solved first with plain great-circle distances, so that every facility serves its own ZIP code for nothing:</p>
-<div id="62" class="cell" data-execution_count="1">
+<div id="64" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># Code block 16: UFL with no area adjustment</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a>D <span class="op">=</span> <span class="fu">dists</span>(P, P, <span class="op">:</span>mi) <span class="op">.*</span> g</span>
 <span id="cb39-3"><a href="#cb39-3"></a>y, TC0, _ <span class="op">=</span> <span class="fu">ufl</span>(k, rate <span class="op">.*</span> D <span class="op">.*</span> F; verbose <span class="op">=</span> <span class="cn">false</span>)  <span class="co"># y = sites</span></span>
@@ -5673,7 +5673,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 </div>
 </div>
 <p>Then with the adjustment of <a href="#eq-da2dmax" class="quarto-xref">Eq. 7</a>, which <code>dgca</code> computes from each ZIP code’s land area:</p>
-<div id="64" class="cell" data-execution_count="1">
+<div id="66" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Code block 17: the same problem, with the area adjustment</span></span>
 <span id="cb41-2"><a href="#cb41-2"></a>Da <span class="op">=</span> <span class="fu">dgca</span>(P, P, z.ALAND) <span class="op">.*</span> g</span>
 <span id="cb41-3"><a href="#cb41-3"></a>ya, TCa, _ <span class="op">=</span> <span class="fu">ufl</span>(k, rate <span class="op">.*</span> Da <span class="op">.*</span> F; verbose <span class="op">=</span> <span class="cn">false</span>)</span>
@@ -5682,7 +5682,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <pre><code>([16, 5, 6, 11], 71905.73380604858)</code></pre>
 </div>
 </div>
-<div id="66" class="cell" data-execution_count="1">
+<div id="68" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># Code block 18: what changed</span></span>
 <span id="cb43-2"><a href="#cb43-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(model <span class="op">=</span> [<span class="st">&quot;unadjusted&quot;</span>, <span class="st">&quot;area-adjusted&quot;</span>],</span>
 <span id="cb43-3"><a href="#cb43-3"></a>              sites <span class="op">=</span> [<span class="fu">length</span>(y), <span class="fu">length</span>(ya)],</span>
@@ -5713,7 +5713,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>Determine how many machines EMCA should lease and where, when its demand points are recognized as aggregates rather than as customers.</p>
 </div>
 <p>Lecture 2.4 solved this instance, and its answer is worth returning to because nothing in it was wrong except the distances. EMCA’s customers were grouped into twenty-eight three-digit ZIP codes, each ZIP’s centroid stood for the customers in it, and every ZIP was both a customer and a candidate site. That is an aggregate demand set by the definition of Sec. 4, solved as though its points were customers, and it is the shape Sec. 6 says a discrete model cannot afford.</p>
-<div id="68" class="cell" data-execution_count="1">
+<div id="70" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># Code block 19: EMCA&#39;s demand set, as lecture 2.4 built it</span></span>
 <span id="cb45-2"><a href="#cb45-2"></a>zip <span class="op">=</span> [</span>
 <span id="cb45-3"><a href="#cb45-3"></a>    <span class="fl">270</span>, <span class="fl">271</span>, <span class="fl">272</span>, <span class="fl">273</span>, <span class="fl">274</span>, <span class="fl">275</span>, <span class="fl">276</span>, <span class="fl">277</span>, <span class="fl">278</span>, <span class="fl">279</span>, <span class="fl">280</span>, <span class="fl">281</span>, <span class="fl">282</span>, <span class="fl">283</span>,</span>
@@ -5751,7 +5751,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 </div>
 </div>
 <p>The land areas were available the whole time, in the same table the centroids came from, and they are what the earlier solution left on the floor.</p>
-<div id="70" class="cell" data-execution_count="1">
+<div id="72" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># Code block 20: the distance the unadjusted model was giving away</span></span>
 <span id="cb47-2"><a href="#cb47-2"></a>az <span class="op">=</span> zc.ALAND[iz]               <span class="co"># mi^2 of land in each ZIP</span></span>
 <span id="cb47-3"><a href="#cb47-3"></a>Dz <span class="op">=</span> <span class="fl">1.2</span> <span class="op">.*</span> <span class="fu">dists</span>(Pz, Pz, <span class="op">:</span>mi)  <span class="co"># circuity 1.2, as in lecture 2.4</span></span>
@@ -5770,7 +5770,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>A machine placed in a ZIP was serving that ZIP’s own customers over an average of 22.1 miles, and the unadjusted model charged nothing for any of it.</p>
 </div>
 <p>Everything else about the problem is unchanged: the same lease cost, the same rate, the same candidate sites.</p>
-<div id="72" class="cell" data-execution_count="1">
+<div id="74" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1"></a><span class="co"># Code block 21: the same lease decision, both ways</span></span>
 <span id="cb49-2"><a href="#cb49-2"></a>rton, kz <span class="op">=</span> <span class="fl">0.25</span>, <span class="fl">100_000.0</span>  <span class="co"># $/ton-mi and $/yr, both given</span></span>
 <span id="cb49-3"><a href="#cb49-3"></a><span class="fu">sol</span>(DD) <span class="op">=</span> <span class="fu">ufl</span>(kz, (fz <span class="op">.*</span> rton)<span class="ch">&#39; .* DD; verbose = false)</span></span>
@@ -5792,7 +5792,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>The same 6 machines, at 17.5% more, in 2 different ZIP codes.</p>
 </div>
 <p>The count did not change and the cost did, which is the pattern to expect: the adjustment adds a term that no facility can avoid, so it moves every candidate in the same direction and rarely changes how many are worth opening. Where it bites is on <em>which</em> ones, and it bit here on 2 of 6.</p>
-<p>The comparison against lecture 2.4 is the check, and it is a Landmark. The unadjusted row reproduces 2.4’s Ex. 3 exactly, on data rebuilt from the problem statement rather than carried over, which is what makes the adjusted row believable: the two rows differ in one input and nothing else. A run whose unadjusted column had come back different would mean the demand set had been rebuilt wrongly, and the adjusted answer would say nothing at all.</p>
+<p>The comparison against Lecture 2.4 is the check, and it is a Landmark. The unadjusted row reproduces 2.4’s Ex. 3 exactly, on data rebuilt from the problem statement rather than carried over, which is what makes the adjusted row believable: the two rows differ in one input and nothing else. A run whose unadjusted column had come back different would mean the demand set had been rebuilt wrongly, and the adjusted answer would say nothing at all.</p>
 <div class="example-end">
 
 </div>
@@ -5906,7 +5906,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>Determine the census tracts belonging to the Raleigh CSA, by descending the statistical-area hierarchy of Sec. 2.</p>
 </div>
 <p>The hierarchy is the route. A CSA is composed of CBSAs, a CBSA of counties, and a county of tracts, and each Logjam table carries the code of the level above it, so each step is one filter. The CSA is found by name rather than by number, because its official name is not something worth remembering:</p>
-<div id="74" class="cell" data-execution_count="1">
+<div id="76" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># Code block 22: find the Raleigh CSA</span></span>
 <span id="cb51-2"><a href="#cb51-2"></a>csa <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> <span class="fu">startswith</span>(r.NAME, <span class="st">&quot;Ral&quot;</span>), <span class="fu">uscsa</span>())</span>
 <span id="cb51-3"><a href="#cb51-3"></a><span class="fu">prt</span>(csa[!, [<span class="op">:</span>CSA, <span class="op">:</span>NAME]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -5916,7 +5916,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
   450  Raleigh-Durham-Cary, NC</code></pre>
 </div>
 </div>
-<div id="76" class="cell" data-execution_count="1">
+<div id="78" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href="#cb53-1"></a><span class="co"># Code block 23: CSA to CBSA to county to census tract</span></span>
 <span id="cb53-2"><a href="#cb53-2"></a>cbsa <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> !<span class="fu">ismissing</span>(r.CSA) <span class="op">&amp;&amp;</span> r.CSA <span class="kw">in</span> csa.CSA, <span class="fu">uscbsa</span>())</span>
 <span id="cb53-3"><a href="#cb53-3"></a>co <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> !<span class="fu">ismissing</span>(r.CBSA) <span class="op">&amp;&amp;</span> r.CBSA <span class="kw">in</span> cbsa.CBSA, <span class="fu">uscounty</span>())</span>
@@ -5924,7 +5924,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <span id="cb53-5"><a href="#cb53-5"></a>            <span class="fu">uscentract</span>());</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Two of these filters guard against a missing value, and one does not. A CBSA need not belong to any CSA, and a county need not belong to any CBSA, so both of those columns hold <code>missing</code> for the units that stand alone; a tract always belongs to a county, so no such guard is needed there.</p>
-<div id="78" class="cell" data-execution_count="1">
+<div id="80" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1"></a><span class="co"># Code block 24: how many units at each level</span></span>
 <span id="cb54-2"><a href="#cb54-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(level <span class="op">=</span> [<span class="st">&quot;CSA&quot;</span>, <span class="st">&quot;CBSA&quot;</span>, <span class="st">&quot;county&quot;</span>, <span class="st">&quot;tract&quot;</span>],</span>
 <span id="cb54-3"><a href="#cb54-3"></a>              units <span class="op">=</span> <span class="fu">nrow</span>.([csa, cbsa, co, tr]),</span>
@@ -5950,7 +5950,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 </div>
 <p>Per-capita income is not in Logjam and has to be fetched. The Census Bureau publishes it as table B19301 of the American Community Survey, downloaded here as a CSV of every census tract in North Carolina.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 <p>The file needs three repairs before it can be used, and each is representative rather than peculiar to this file. First, it carries <strong>two</strong> header rows: the machine-readable column codes, then a human-readable description of each. Read naively, the second row lands in the data and every column comes back as text, so the read skips to line 3. Second, the geographic identifier is prefixed with <code>1400000US</code>, a summary-level code that no other table carries, so it will match nothing until it is removed. Third, the income column arrives under its ACS code, <code>B19301_001E</code>, which is not a name anything downstream should have to know.</p>
-<div id="80" class="cell" data-execution_count="1">
+<div id="82" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1"></a><span class="co"># Code block 25: the ACS per-capita income file</span></span>
 <span id="cb56-2"><a href="#cb56-2"></a>inc <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/ACSDT5Y2022.B19301-Data.csv&quot;</span>, skipto <span class="op">=</span> <span class="fl">3</span>))</span>
 <span id="cb56-3"><a href="#cb56-3"></a>inc.GEO_ID <span class="op">=</span> <span class="fu">replace</span>.(inc.GEO_ID, <span class="st">r&quot;1400000US&quot;</span> <span class="op">=&gt;</span> <span class="st">&quot;&quot;</span>)</span>
@@ -5965,7 +5965,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 </div>
 </div>
 <p>The income column is still text, and that is the fourth repair. Converting it fails, and the reason it fails is the point:</p>
-<div id="82" class="cell" data-execution_count="1">
+<div id="84" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1"></a><span class="co"># Code block 26: the values that are not numbers</span></span>
 <span id="cb58-2"><a href="#cb58-2"></a>bad <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> <span class="fu">tryparse</span>(<span class="dt">Int</span>, r.INCOME) <span class="op">===</span> <span class="cn">nothing</span>, inc)</span>
 <span id="cb58-3"><a href="#cb58-3"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(value <span class="op">=</span> <span class="fu">unique</span>(bad.INCOME),</span>
@@ -5979,7 +5979,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 </div>
 </div>
 <p>A published federal data set contains 25 rows whose income is not a number. They are not corrupt: a tract with almost no residents has no meaningful per-capita income, and the survey records that as a suppressed value rather than inventing one. This is what Sec. 7 called missing data arriving as the wrong type, and the <strong>Drop</strong> treatment is the right one here, since a tract with no income figure carries no information to impute from.</p>
-<div id="84" class="cell" data-execution_count="1">
+<div id="86" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1"></a><span class="co"># Code block 27: keep the rows that parse, then parse them</span></span>
 <span id="cb60-2"><a href="#cb60-2"></a>inc <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> <span class="fu">tryparse</span>(<span class="dt">Int</span>, r.INCOME) <span class="op">!==</span> <span class="cn">nothing</span>, inc)</span>
 <span id="cb60-3"><a href="#cb60-3"></a>inc.INCOME <span class="op">=</span> <span class="fu">parse</span>.(<span class="dt">Int</span>, inc.INCOME)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -6017,14 +6017,14 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <p>Determine the joined demand set, and account for every tract the join fails to reach.</p>
 </div>
 <p>The two tables now describe the same tracts and share no column. Logjam splits the identifier into its three parts, <code>STFIP</code>, <code>COFIP</code> and <code>TRFIP</code>, while the ACS concatenates them into one string; the key is built by putting Logjam’s back together in the ACS’s format, zero-padded to two, three and six digits.</p>
-<div id="86" class="cell" data-execution_count="1">
+<div id="88" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Code block 28: build the join key, then join on it</span></span>
 <span id="cb62-2"><a href="#cb62-2"></a>tr.GEO_ID <span class="op">=</span> <span class="fu">string</span>.(tr.STFIP, pad <span class="op">=</span> <span class="fl">2</span>) <span class="op">.*</span> <span class="fu">string</span>.(tr.COFIP, pad <span class="op">=</span> <span class="fl">3</span>) <span class="op">.*</span></span>
 <span id="cb62-3"><a href="#cb62-3"></a>            <span class="fu">string</span>.(tr.TRFIP, pad <span class="op">=</span> <span class="fl">6</span>)</span>
 <span id="cb62-4"><a href="#cb62-4"></a>trinc <span class="op">=</span> <span class="fu">leftjoin</span>(tr, inc[!, [<span class="op">:</span>GEO_ID, <span class="op">:</span>INCOME]], on <span class="op">=</span> <span class="op">:</span>GEO_ID);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A <strong>left join</strong> keeps every row of the left table whether or not the right table has a match, filling the missing side with <code>missing</code>. That is the deliberate choice: an inner join would keep only the matched tracts and silently discard the rest, and what failed to match is exactly what needs looking at.</p>
-<div id="88" class="cell" data-execution_count="1">
+<div id="90" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb63-1"><a href="#cb63-1"></a><span class="co"># Code block 29: the tracts the join did not reach</span></span>
 <span id="cb63-2"><a href="#cb63-2"></a>nomatch <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> <span class="fu">ismissing</span>(r.INCOME), trinc)</span>
 <span id="cb63-3"><a href="#cb63-3"></a><span class="fu">prt</span>(nomatch[!, [<span class="op">:</span>GEO_ID, <span class="op">:</span>POP, <span class="op">:</span>ALAND]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -6035,7 +6035,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
   37183980100    2   7.24</code></pre>
 </div>
 </div>
-<div id="90" class="cell" data-execution_count="1">
+<div id="92" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1"></a><span class="co"># Code block 30: the finished demand set</span></span>
 <span id="cb65-2"><a href="#cb65-2"></a>trinc <span class="op">=</span> <span class="fu">dropmissing</span>(trinc, <span class="op">:</span>INCOME)</span>
 <span id="cb65-3"><a href="#cb65-3"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(tracts <span class="op">=</span> <span class="fu">nrow</span>(trinc), population <span class="op">=</span> <span class="fu">sum</span>(trinc.POP),</span>
@@ -6060,8 +6060,8 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
 <div class="statement">
 <p>Determine how the single-facility minisum optimum for the CSA moves when demand is weighted by total income rather than by population.</p>
 </div>
-<p>The demand set now carries two candidate weights, and the choice between them is the modeling decision the whole exercise was for. Weighting by population locates for the most people; weighting by each tract’s population times its per-capita income locates for the most money, which is what the luxury-goods store wants. Both are the minisum of lecture 2.2, differing only in the weight vector.</p>
-<div id="92" class="cell" data-execution_count="1">
+<p>The demand set now carries two candidate weights, and the choice between them is the modeling decision the whole exercise was for. Weighting by population locates for the most people; weighting by each tract’s population times its per-capita income locates for the most money, which is what the luxury-goods store wants. Both are the minisum of Lecture 2.2, differing only in the weight vector.</p>
+<div id="94" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1"></a><span class="co"># Code block 31: population weight against total-income weight</span></span>
 <span id="cb67-2"><a href="#cb67-2"></a>ptr <span class="op">=</span> <span class="fu">eachrow</span>(<span class="fu">hcat</span>(trinc.LON, trinc.LAT))</span>
 <span id="cb67-3"><a href="#cb67-3"></a><span class="fu">opt</span>(w) <span class="op">=</span> <span class="fu">optimize</span>(xy <span class="op">-&gt;</span> <span class="fu">sum</span>(w <span class="op">.*</span> <span class="fu">dgc</span>.([xy], ptr)),</span>
@@ -6075,7 +6075,7 @@ Figure 13: The unadjusted model prices collocation at zero, so its transport co
   35.82052068188928</code></pre>
 </div>
 </div>
-<div id="94" class="cell" data-execution_count="1">
+<div id="96" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1"></a><span class="co"># Code block 32: where each weighting lands</span></span>
 <span id="cb69-2"><a href="#cb69-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(weight <span class="op">=</span> [<span class="st">&quot;population&quot;</span>, <span class="st">&quot;total income&quot;</span>],</span>
 <span id="cb69-3"><a href="#cb69-3"></a>              nearest <span class="op">=</span> [<span class="fu">lonlat2loc</span>(xpop, <span class="fu">usplace</span>()).desc,</span>

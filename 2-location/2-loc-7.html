@@ -4397,7 +4397,7 @@ Companion script
 <li><strong>Programming methods:</strong> the constraints are added to an optimization model as separate functions that are used in the optimization procedure along with the objective function.</li>
 </ul>
 <p>A <em>math program</em> is the second of those: an objective function and a set of constraints, stated together and handed to a procedure that respects both. When the objective and every constraint are linear it is a <strong>linear program</strong>, and <a href="#eq-lp" class="quarto-xref">Eq. 1</a> is the one this section works with.</p>
-<p>This is the first lecture to take math programming as its subject, but it is not the first to use one. Every model in the course so far has been stated as a callout, with an objective in words, a lettered list of constraints, and a statement of what the model returns, and that format is a math program written in English. The two are worth setting beside each other once. <a href="#mdl-lp" class="quarto-xref">Model 1</a> is the linear program of <a href="#eq-lp" class="quarto-xref">Eq. 1</a> stated the way every model since lecture 1.1 has been stated, and <a href="#eq-lp" class="quarto-xref">Eq. 1</a> is the same model in symbols. Lecture 2.1 makes the same crossing in the other direction, from a callout down to the course’s first formulation.</p>
+<p>This is the first lecture to take math programming as its subject, but it is not the first to use one. Every model in the course so far has been stated as a callout, with an objective in words, a lettered list of constraints, and a statement of what the model returns, and that format is a math program written in English. The two are worth setting beside each other once. <a href="#mdl-lp" class="quarto-xref">Model 1</a> is the linear program of <a href="#eq-lp" class="quarto-xref">Eq. 1</a> stated the way every model since Lecture 1.1 has been stated, and <a href="#eq-lp" class="quarto-xref">Eq. 1</a> is the same model in symbols. Lecture 2.1 makes the same crossing in the other direction, from a callout down to the course’s first formulation.</p>
 <div id="mdl-lp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-lp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -4527,7 +4527,7 @@ Figure 1: The relaxation, the integer points it holds, and the two optima. Each
 <p>Two packages carry all of this. <code>JuMP</code> provides an algebraic modeling language for creating mathematical programming models, close enough to the notation above that the model can be read off the page; <code>HiGHS</code> is an open-source solver that implements the simplex method, and it is what the models in this course are handed to.</p>
 <p>The third rung is the same instance in code. <code>JuMP</code> is a modeling language for Julia: the program is written in it much as it is written on paper, and handed to whichever solver is named.</p>
 <div class="model-implementation" data-mdl-for="mdl-lp" id="rung-mdl-lp-implementation"><div class="model-rung-label">Model 1 implementation: Linear program</div>
-<div id="8" class="cell" data-execution_count="1">
+<div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Model: linear program</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">using</span> <span class="bu">JuMP</span>, <span class="bu">HiGHS</span>           <span class="co"># the modeling language, and a solver</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
@@ -4814,7 +4814,7 @@ Figure 2: The search twice over, the tree above and the region below.
 </figure>
 </div>
 <p>First, solve as an LP, which is branch node 0 in the tree. Every node after it is the <strong>same model</strong>: a node adds a constraint, and moving to a sibling drops it again. Nothing else changes, and that is the whole of the method.</p>
-<div id="14" class="cell" data-execution_count="1">
+<div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Code block 1: one node&#39;s report, printed the same way every time</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">function</span> <span class="fu">prtnode</span>(m, UB, LB, x₁, x₂)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    xᵒ <span class="op">=</span> <span class="fu">snapvals</span>(<span class="fu">value</span>.([x₁, x₂]))</span>
@@ -4827,7 +4827,7 @@ Figure 2: The search twice over, the tree above and the region below.
 <pre><code>prtnode (generic function with 1 method)</code></pre>
 </div>
 </div>
-<div id="16" class="cell" data-execution_count="1">
+<div id="18" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Code block 2: node 0, the relaxation</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>m <span class="op">=</span> <span class="fu">Model</span>(HiGHS.Optimizer)</span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="pp">@variable</span>(m, <span class="fl">0</span> <span class="op">&lt;=</span> x₁)  <span class="co"># continuous, for now</span></span>
@@ -4849,7 +4849,7 @@ Obj: 31.666666666666664, x₁: 3.5, x₂: 1.3333333333333333
 </div>
 <p>Next, select one of the fractional decision variables and add two integer constraints to the tree: <span class="math inline">x_1 \leq 3</span> on one side and <span class="math inline">x_1 \geq 4</span> on the other. Selection of the variable can be based on the most fractional, the least fractional, and many other criteria.</p>
 <p>One piece of syntax is new here. A constraint may be given a <strong>name</strong>, the <code>c1</code> in <code>@constraint(m, c1, x₁ &lt;= 3)</code>, and the name is how it is referred to again: <code>delete(m, c1)</code> removes it from the model, which is how the search crosses from a branch to its sibling below.</p>
-<div id="18" class="cell" data-execution_count="1">
+<div id="20" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Code block 3: node 1, adding x₁ ≤ 3</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="pp">@constraint</span>(m, c1, x₁ <span class="op">&lt;=</span> <span class="fl">3</span>)</span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="fu">optimize!</span>(m)</span>
@@ -4863,7 +4863,7 @@ Obj: 31.333333333333336, x₁: 3.0, x₂: 1.6666666666666667
 </code></pre>
 </div>
 </div>
-<div id="20" class="cell" data-execution_count="1">
+<div id="22" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Code block 4: node 2, adding x₂ ≤ 1, the first incumbent</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="pp">@constraint</span>(m, c2, x₂ <span class="op">&lt;=</span> <span class="fl">1</span>)</span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="fu">optimize!</span>(m)</span>
@@ -4878,7 +4878,7 @@ Obj: 26.0, x₁: 3.0, x₂: 1.0
 </div>
 </div>
 <p>Both variables are integer, so this is a feasible solution to the original problem: the <strong>incumbent</strong>, and the first real lower bound. The search now crosses to the sibling branch, which means <strong>dropping</strong> the constraint that defined this one.</p>
-<div id="22" class="cell" data-execution_count="1">
+<div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Code block 5: node 3, dropping x₂ ≤ 1 and adding x₂ ≥ 2</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="fu">delete</span>(m, c2)</span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="pp">@constraint</span>(m, c3, x₂ <span class="op">&gt;=</span> <span class="fl">2</span>)</span>
@@ -4893,7 +4893,7 @@ Obj: 31.0, x₁: 2.5, x₂: 2.0
 </code></pre>
 </div>
 </div>
-<div id="24" class="cell" data-execution_count="1">
+<div id="26" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Code block 6: node 4, adding x₁ ≤ 2</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="pp">@constraint</span>(m, c4, x₁ <span class="op">&lt;=</span> <span class="fl">2</span>)</span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="fu">optimize!</span>(m)</span>
@@ -4907,7 +4907,7 @@ Obj: 30.666666666666668, x₁: 2.0, x₂: 2.3333333333333335
 </code></pre>
 </div>
 </div>
-<div id="26" class="cell" data-execution_count="1">
+<div id="28" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Code block 7: node 5, adding x₂ ≤ 2, a better incumbent</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="pp">@constraint</span>(m, c5, x₂ <span class="op">&lt;=</span> <span class="fl">2</span>)</span>
 <span id="cb17-3"><a href="#cb17-3"></a><span class="fu">optimize!</span>(m)</span>
@@ -4921,7 +4921,7 @@ Obj: 28.0, x₁: 2.0, x₂: 2.0
 </code></pre>
 </div>
 </div>
-<div id="28" class="cell" data-execution_count="1">
+<div id="30" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Code block 8: node 6, dropping x₂ ≤ 2 and adding x₂ ≥ 3</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="fu">delete</span>(m, c5)</span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="pp">@constraint</span>(m, c6, x₂ <span class="op">&gt;=</span> <span class="fl">3</span>)</span>
@@ -4937,7 +4937,7 @@ Obj: 30.0, x₁: 1.0, x₂: 3.0
 </div>
 </div>
 <p>At node 6, the absolute value of the gap was less than one, and as a result, the procedure could stop. In practice, only the relative percentage gap is determined, and the search continues until the gap approaches zero or the complete tree has been searched; as a result, in practice, nodes 7 and 8 might be evaluated before being fathomed. Since the branch and bound tree can grow exponentially, in many applications the search can be stopped when the relative gap falls below a value of 1%, for example.</p>
-<div id="30" class="cell" data-execution_count="1">
+<div id="32" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Code block 9: node 7, infeasible and therefore fathomed</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="fu">delete</span>(m, [c4, c6])</span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="pp">@constraint</span>(m, c7, x₁ <span class="op">&gt;=</span> <span class="fl">3</span>)</span>
@@ -4947,7 +4947,7 @@ Obj: 30.0, x₁: 1.0, x₂: 3.0
 <pre><code>INFEASIBLE::TerminationStatusCode = 2</code></pre>
 </div>
 </div>
-<div id="32" class="cell" data-execution_count="1">
+<div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Code block 10: node 8, infeasible, and the tree is now searched</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="fu">delete</span>(m, [c1, c3, c7])</span>
 <span id="cb23-3"><a href="#cb23-3"></a><span class="pp">@constraint</span>(m, c8, x₁ <span class="op">&gt;=</span> <span class="fl">4</span>)</span>
@@ -4968,7 +4968,7 @@ Obj: 30.0, x₁: 1.0, x₂: 3.0
 <p>Determine the same optimum by declaring the variables integer and letting the solver run its own branch and bound.</p>
 </div>
 <p>During the solution of large MILP models, such as those used for production-inventory planning, small rounding errors accumulate. The function <code>snapvals(v)</code> is used in place of <code>Array(value.(v))</code> to set any solution value to an integer if it is close to an integer. A variable declared binary can come back as 0.9999999997, which is not 1 to any test that asks whether it is, and every solution read in this lecture goes through <code>snapvals</code> for that reason.</p>
-<div id="34" class="cell" data-execution_count="1">
+<div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Code block 11: the integer program, declared and solved in one step</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>m <span class="op">=</span> <span class="fu">Model</span>(HiGHS.Optimizer)</span>
 <span id="cb25-3"><a href="#cb25-3"></a><span class="pp">@variable</span>(m, <span class="fl">0</span> <span class="op">&lt;=</span> y₁, <span class="dt">Int</span>)       <span class="co"># integer variable</span></span>
@@ -4989,7 +4989,7 @@ Obj: 30.0, x₁: 1.0, x₂: 3.0
 </div>
 <p>One thing in that model is new, and it is the only thing. <code>Int</code> at the end of a <code>@variable</code> line restricts that variable to the integers, and <code>Bin</code> restricts it to zero or one; everything else is <a href="#mdl-lp" class="quarto-xref">Model 1</a>’s implementation rung unchanged. Nine nodes of branching became one word.</p>
 <p>The same answer, and the interesting part is what it cost. A solver can be asked to show its work, and on a problem this size it has to be asked twice: with the default settings its presolve and its heuristics land on the answer before any branching, so there is no search to watch. Switching presolve off and turning the heuristic effort down to zero leaves one.</p>
-<div id="36" class="cell" data-execution_count="1">
+<div id="38" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Code block 12: make the solver branch, and show what it does</span></span>
 <span id="cb27-2"><a href="#cb27-2"></a>b <span class="op">=</span> <span class="fu">Model</span>(HiGHS.Optimizer)           <span class="co"># the same model again</span></span>
 <span id="cb27-3"><a href="#cb27-3"></a><span class="pp">@variable</span>(b, <span class="fl">0</span> <span class="op">&lt;=</span> z₁, <span class="dt">Int</span>)</span>
@@ -5040,15 +5040,15 @@ Solving report
   Primal bound      30
   Dual bound        30
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.000148508123717
+  P-D integral      0.000137790597257
   Solution status   feasible
                     30 (objective)
                     0 (bound viol.)
                     2.22044604925e-16 (int. viol.)
                     0 (row viol.)
-  Timing            0.02
+  Timing            0.01
                     0.00 (Presolve)
-                    0.02 (Solve)
+                    0.01 (Solve)
                     0.00 (Postsolve)
   Max sub-MIP depth 0
   Nodes             1
@@ -5174,9 +5174,9 @@ Figure 3: A valid cut removes the fractional vertex and no integer point. The l
 </section>
 <section id="discrete-facility-location-as-a-milp" class="level2">
 <h2 class="anchored" data-anchor-id="discrete-facility-location-as-a-milp">2. Discrete facility location as a MILP</h2>
-<p>The UFL is where a mixed-integer program is worth meeting for the first time, and for two reasons. It is a problem already understood well enough to check a model against something: lecture 2.4 solved this same problem by heuristic, so there is an answer to compare with. And the formulation buys a capability no heuristic in that lecture has, which is that a constraint can simply be added to it. What comes later, network flow and production-inventory systems, is much harder to hold in the head, and arriving there already fluent in a MILP is worth the detour.</p>
+<p>The UFL is where a mixed-integer program is worth meeting for the first time, and for two reasons. It is a problem already understood well enough to check a model against something: Lecture 2.4 solved this same problem by heuristic, so there is an answer to compare with. And the formulation buys a capability no heuristic in that lecture has, which is that a constraint can simply be added to it. What comes later, network flow and production-inventory systems, is much harder to hold in the head, and arriving there already fluent in a MILP is worth the detour.</p>
 <p>One more property makes the UFL a forgiving place to start. Under the strong formulation of <a href="#eq-ufl-strong" class="quarto-xref">Eq. 4</a> the relaxation at node 0 is very often integral already, and then the optimum arrives with no branching at all. That is the exception Sec. 1.3 promised rather than a contradiction of it: a relaxation is usually fractional, and this one usually is not, because <a href="#eq-ufl-strong" class="quarto-xref">Eq. 4</a> is written tightly enough to make it so.</p>
-<p>Only part of what a facility costs bears on where it goes. Total production cost is a line in the quantity produced, an intercept plus a rate, and lecture 2.6 fits it to obtain both. The rate is charged per ton wherever the plant stands, so it is the same whatever the answer is and drops out of the comparison. What is left is the intercept, which is incurred once per facility built, and the transport cost, which is the part that depends on where the facility is. Those two together are the <strong>total logistics cost</strong> of <a href="#eq-tlc" class="quarto-xref">Eq. 3</a>, and they are what the models in this section minimize:</p>
+<p>Only part of what a facility costs bears on where it goes. Total production cost is a line in the quantity produced, an intercept plus a rate, and Lecture 2.6 fits it to obtain both. The rate is charged per ton wherever the plant stands, so it is the same whatever the answer is and drops out of the comparison. What is left is the intercept, which is incurred once per facility built, and the transport cost, which is the part that depends on where the facility is. Those two together are the <strong>total logistics cost</strong> of <a href="#eq-tlc" class="quarto-xref">Eq. 3</a>, and they are what the models in this section minimize:</p>
 <p><span id="eq-tlc"><span class="math display">
 \begin{array}{lrcl}
 \text{Total production cost:} &amp; TPC &amp; = &amp; k + c_p f \\
@@ -5211,9 +5211,9 @@ Figure 3: A valid cut removes the fractional vertex and no integer point. The l
 </div>
 <section id="uncapacitated-facility-location" class="level3">
 <h3 class="anchored" data-anchor-id="uncapacitated-facility-location">2.1 Uncapacitated facility location</h3>
-<p>The set-notation statement of the problem is lecture 2.4’s, and it is not restated here: <a href="2-loc-4.html#mdl-ufl" class="xref" data-lec="2.4" data-id="mdl-ufl" title="UFL Heuristics">Model 1 in Lecture 2.4</a> is the concept and its mathematical formulation rung carries the <span class="math inline">Y^{\star}</span> that this lecture works from. Read it as a sentence: determine the set of sites <span class="math inline">Y</span> that minimizes the fixed cost of opening them plus the cost of serving every existing facility from the site it is assigned to, subject to every existing facility being served. The bars around <span class="math inline">Y^{\star}</span> count the elements of the set rather than taking an absolute value, so the number of facilities opened is read off the answer rather than fixed in advance.</p>
+<p>The set-notation statement of the problem is Lecture 2.4’s, and it is not restated here: <a href="2-loc-4.html#mdl-ufl" class="xref" data-lec="2.4" data-id="mdl-ufl" title="UFL Heuristics">Model 1 in Lecture 2.4</a> is the concept and its mathematical formulation rung carries the <span class="math inline">Y^{\star}</span> that this lecture works from. Read it as a sentence: determine the set of sites <span class="math inline">Y</span> that minimizes the fixed cost of opening them plus the cost of serving every existing facility from the site it is assigned to, subject to every existing facility being served. The bars around <span class="math inline">Y^{\star}</span> count the elements of the set rather than taking an absolute value, so the number of facilities opened is read off the answer rather than fixed in advance.</p>
 <p>The single constraint is what forces the assignment to be complete. Without it the cheapest thing to do is open nothing and serve no one, since every cost in the objective is incurred only by doing something.</p>
-<p>Being uncapacitated allows simple heuristics to be used to solve the UFL, and <a href="#fig-ufl-rungs-milp" class="quarto-xref">Fig. 4</a> is the map of them: ADD construction adds one NF at a time, DROP construction drops one at a time, XCHG improvement moves one NF at a time to unoccupied sites, and the HYBRID algorithm combines ADD and DROP construction with XCHG improvement, repeating until no change in <span style="white-space: nowrap"><span class="math inline">Y</span>.</span> HYBRID is the default heuristic for the UFL and it is what lecture 2.4 uses.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> What this lecture adds is the branch on the left, and it is the first time the mathematical side of that tree has reached a runnable implementation.</p>
+<p>Being uncapacitated allows simple heuristics to be used to solve the UFL, and <a href="#fig-ufl-rungs-milp" class="quarto-xref">Fig. 4</a> is the map of them: ADD construction adds one NF at a time, DROP construction drops one at a time, XCHG improvement moves one NF at a time to unoccupied sites, and the HYBRID algorithm combines ADD and DROP construction with XCHG improvement, repeating until no change in <span style="white-space: nowrap"><span class="math inline">Y</span>.</span> HYBRID is the default heuristic for the UFL and it is what Lecture 2.4 uses.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> What this lecture adds is the branch on the left, and it is the first time the mathematical side of that tree has reached a runnable implementation.</p>
 <div id="fig-ufl-rungs-milp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ufl-rungs-milp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -5293,7 +5293,7 @@ Model 2: Uncapacitated facility location
 </div>
 <p>The reason to reach for it is <strong>memory</strong>, and only memory: <span class="math inline">nm</span> constraints can exhaust it on a large instance where <span class="math inline">n</span> of them fit. Machines now have enough that this is much less often the binding thing than it used to be, so the strong form is the sensible default and the weak one is what is written when the strong one will not fit. Both say that a site must be open before anything is served from it, so the concept above them does not change; what changes is how much of the work is left to the solver, which is what the rungs are for.</p>
 <div class="model-implementation" data-mdl-for="mdl-ufl-milp" id="rung-mdl-ufl-milp-implementation"><div class="model-rung-label">Model 2 implementation: Uncapacitated facility location</div>
-<div id="40" class="cell" data-execution_count="1">
+<div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Model: uncapacitated facility location, the strong formulation</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a><span class="kw">function</span> <span class="fu">uflmilp</span>(k, C)</span>
 <span id="cb30-3"><a href="#cb30-3"></a>    n, m <span class="op">=</span> <span class="fu">size</span>(C)</span>
@@ -5324,9 +5324,9 @@ Model 2: Uncapacitated facility location
 <p>Example 2: Five I-40 cities as a MILP</p>
 </div>
 <div class="statement">
-<p>Determine the sites and the total cost for the five cities of lecture 2.4, which are Asheville, Statesville, Greensboro, Raleigh and Wilmington, at mile markers 50, 150, 220, 295 and 420 along I-40, each with unit demand and costing 150, 200, 150, 150 and 200 to establish, and determine whether the answer its heuristics reached is the best one.</p>
+<p>Determine the sites and the total cost for the five cities of Lecture 2.4, which are Asheville, Statesville, Greensboro, Raleigh and Wilmington, at mile markers 50, 150, 220, 295 and 420 along I-40, each with unit demand and costing 150, 200, 150, 150 and 200 to establish, and determine whether the answer its heuristics reached is the best one.</p>
 </div>
-<div id="42" class="cell" data-execution_count="1">
+<div id="44" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Code block 13: the five I-40 cities of lecture 2.4, through the model</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a>P <span class="op">=</span> [<span class="fl">50</span> <span class="fl">150</span> <span class="fl">220</span> <span class="fl">295</span> <span class="fl">420</span>]<span class="ch">&#39;          # mile markers along I-40</span></span>
 <span id="cb32-3"><a href="#cb32-3"></a>r, f <span class="op">=</span> <span class="fl">1</span>, <span class="fl">1</span>                    <span class="co"># rate and flow, both unit here</span></span>
@@ -5348,7 +5348,7 @@ Model 2: Uncapacitated facility location
 <div class="result-box">
 <p>Sites 1 and 4 at <span class="math inline">TC =</span> 600</p>
 </div>
-<p>That is the same pair of sites, and the same total cost, that the hybrid heuristic of lecture 2.4 reached on this data by a wholly different route, and the agreement of two independent procedures is a <strong>Triangulate</strong> check on both.</p>
+<p>That is the same pair of sites, and the same total cost, that the hybrid heuristic of Lecture 2.4 reached on this data by a wholly different route, and the agreement of two independent procedures is a <strong>Triangulate</strong> check on both.</p>
 <p>It is also more than that, and the more is what this section is for. Lecture 2.4 could say that its heuristics had stopped improving; it could not say that nothing better existed, because a heuristic has no way to know. The MILP does: branch and bound terminates by proving that the bound and the incumbent have met, so 600 is not merely the best answer found but the best answer there is.</p>
 <div class="example-end">
 
@@ -5360,7 +5360,7 @@ Model 2: Uncapacitated facility location
 <p>Determine the optimal set of bottling plants for the Popco instance of lecture 2.6, and determine how much the heuristic used there left on the table.</p>
 </div>
 <p>The instance is 2.6’s. Its step 5 builds the cost matrix over 204 candidate sites and 162 customers, saved here rather than rebuilt, and its step 1 regresses the fixed cost out of what the 42 plants spend on production.</p>
-<div id="44" class="cell" data-execution_count="1">
+<div id="46" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Code block 14: Popco&#39;s cost matrix and fixed cost, from lecture 2.6</span></span>
 <span id="cb34-2"><a href="#cb34-2"></a>DC <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/PopcoData.csv&quot;</span>))</span>
 <span id="cb34-3"><a href="#cb34-3"></a>CP <span class="op">=</span> <span class="fu">Matrix</span>(<span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/PopcoCmatrix.csv&quot;</span>)))</span>
@@ -5370,7 +5370,7 @@ Model 2: Uncapacitated facility location
 <pre><code>(k = 1.0603652e7, sites = 204, customers = 162)</code></pre>
 </div>
 </div>
-<div id="46" class="cell" data-execution_count="1">
+<div id="48" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Code block 15: the same rung, at 204 sites</span></span>
 <span id="cb36-2"><a href="#cb36-2"></a>popco <span class="op">=</span> <span class="fu">uflmilp</span>(<span class="fu">fill</span>(kP, <span class="fu">size</span>(CP, <span class="fl">1</span>)), CP)</span>
 <span id="cb36-3"><a href="#cb36-3"></a>(plants <span class="op">=</span> <span class="fu">length</span>(popco.Y), TC <span class="op">=</span> <span class="fu">round</span>(popco.TC))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -5381,8 +5381,8 @@ Model 2: Uncapacitated facility location
 <div class="result-box">
 <p>24 plants at a total cost of $725.5M a year, and this one is optimal</p>
 </div>
-<p>Compare the MILP solution with the heuristic solution of lecture 2.6: which is “better”?</p>
-<div id="48" class="cell" data-execution_count="1">
+<p>Compare the MILP solution with the heuristic solution of Lecture 2.6: which is “better”?</p>
+<div id="50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Code block 16: the optimum against the heuristic, on the same data</span></span>
 <span id="cb38-2"><a href="#cb38-2"></a>yh, TCufl, Wh <span class="op">=</span> <span class="fu">ufl</span>(kP, CP)  <span class="co"># the heuristic of lecture 2.6</span></span>
 <span id="cb38-3"><a href="#cb38-3"></a>above <span class="op">=</span> <span class="fu">round</span>(<span class="fl">100</span> <span class="op">*</span> (TCufl <span class="op">-</span> popco.TC) <span class="op">/</span> popco.TC, digits <span class="op">=</span> <span class="fl">3</span>)</span>
@@ -5403,7 +5403,7 @@ Model 2: Uncapacitated facility location
 </div>
 </div>
 <p>The two answers are worth putting side by side before either is trusted. The MILP is optimal and the heuristic is not, and the distance between them is a small fraction of one percent. Against that, the data underneath is nowhere near so accurate: the rate was backed out of a single year’s spending, the customers are ZIP-code centroids standing in for the real ones, and one intercept is charged at every candidate site. A gap of that size is comfortably inside the margin of error of the inputs, which is the honest way to ask what the MILP was for.</p>
-<p>It was not for the saving. What it establishes is the quality of the heuristic: across the instances this course has run, the heuristics of lecture 2.4 have never come back worse than about three percent, and here they land within a tenth of one. Knowing that costs one solve, and it is what makes the heuristic usable on the problems where no solver will finish.</p>
+<p>It was not for the saving. What it establishes is the quality of the heuristic: across the instances this course has run, the heuristics of Lecture 2.4 have never come back worse than about three percent, and here they land within a tenth of one. Knowing that costs one solve, and it is what makes the heuristic usable on the problems where no solver will finish.</p>
 <p>The comparison doubles as a <strong>Bounds</strong> check on the MILP. The heuristic’s answer is feasible for the same model, so the optimum cannot cost more than it does. A solver returning a larger number would be reporting a defect in how the model was written rather than an answer to it.</p>
 <div class="example-end">
 
@@ -5467,9 +5467,9 @@ Model 3: Capacitated facility location
 <p>where <span class="math inline">p</span> is the number of NFs to be located and <a href="#eq-pmedian" class="quarto-xref">Eq. 7</a> is the only line added. If non-identical fixed costs are included, then the <strong><span class="math inline">p</span>-median</strong> problem generalizes to the <span class="math inline">p</span>-UFL problem, where both are special cases of it.</p>
 <p><strong>A new facility at a given site</strong> is simpler still: <span class="math inline">y_i = 1</span> fixes it open and <span class="math inline">y_i = 0</span> rules it out. In JuMP neither needs a constraint, since a variable can be fixed in place with <code>fix(y[3], 1; force = true)</code>, and the solver then optimizes around it. That is how an incumbent plant that cannot be closed, or a site already bought, enters the analysis.</p>
 <p>What the three have in common is the point of the section. Each is a line of algebra against a model that already exists, and none of them is available to a heuristic that works by choosing a set of sites and assigning each customer to the nearest open one.</p>
-<p>A site that can produce only so much takes one more constraint: whatever is served from it must not exceed its capacity. That is the whole of the capacitated problem, and it is the clearest illustration of what the formulation buys. None of the heuristics in lecture 2.4 can be pointed at it. They choose a set of sites and let each existing facility go to its nearest open one; there is nowhere in that procedure to put a limit on how much any one site absorbs. The MILP takes the limit as a line of algebra.</p>
+<p>A site that can produce only so much takes one more constraint: whatever is served from it must not exceed its capacity. That is the whole of the capacitated problem, and it is the clearest illustration of what the formulation buys. None of the heuristics in Lecture 2.4 can be pointed at it. They choose a set of sites and let each existing facility go to its nearest open one; there is nowhere in that procedure to put a limit on how much any one site absorbs. The MILP takes the limit as a line of algebra.</p>
 <div class="model-implementation" data-mdl-for="mdl-cfl" id="rung-mdl-cfl-implementation"><div class="model-rung-label">Model 3 implementation: Capacitated facility location</div>
-<div id="50" class="cell" data-execution_count="1">
+<div id="52" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># Model: capacitated facility location</span></span>
 <span id="cb40-2"><a href="#cb40-2"></a><span class="kw">function</span> <span class="fu">cflmilp</span>(k, C, f, K)</span>
 <span id="cb40-3"><a href="#cb40-3"></a>    n, m <span class="op">=</span> <span class="fu">size</span>(C)</span>
@@ -5499,12 +5499,12 @@ Model 3: Capacitated facility location
 <p>Example 4: Capacitated EMCA</p>
 </div>
 <div class="statement">
-<p>Determine how many machines EMCA should lease and where to locate them with each machine’s capacity accounted for, on the instance of lecture 2.4: twelve million units a year sold to customers grouped by the twenty-eight three-digit ZIP codes of the Carolinas, each unit weighing 15 pounds and shipped at $0.25 per ton-mile, each machine leased for $100,000 per year and able to produce up to two million units a year.</p>
+<p>Determine how many machines EMCA should lease and where to locate them with each machine’s capacity accounted for, on the instance of Lecture 2.4: twelve million units a year sold to customers grouped by the twenty-eight three-digit ZIP codes of the Carolinas, each unit weighing 15 pounds and shipped at $0.25 per ton-mile, each machine leased for $100,000 per year and able to produce up to two million units a year.</p>
 </div>
-<p>This is the example lecture 2.4 left open. The heuristics there have nowhere to put a capacity, so what that lecture did instead was raise the number of machines until no machine was over its limit, and it closed by saying the capacity would be handled once this lecture had covered it. The data is 2.4’s, unchanged.</p>
-<p>One thing is not 2.4’s, and it has to be determined before the model is given a capacity. A machine that can make two million units a year cannot be <em>planned</em> to make two million: lecture 1.3 has cycle time running away as utilization approaches one, which is why 2.4 rejects six machines for this instance, saying that six would carry “a utilization of exactly one, and a workstation is designed to run with its utilization strictly below one”.</p>
-<p>So the capacity the model is handed is an <strong>effective</strong> capacity, the nameplate times a ceiling on utilization, and the ceiling comes from lecture 1.3 rather than from nowhere. Its feasible minimum <span class="math inline">m_{\min} = \lfloor r_a t_e + 1 \rfloor</span> is the rule that forces the utilization below one by adding a machine, and the utilization it implies here is <span style="white-space: nowrap"><span class="math inline">6/7</span>.</span></p>
-<div id="52" class="cell" data-execution_count="1">
+<p>This is the example Lecture 2.4 left open. The heuristics there have nowhere to put a capacity, so what that lecture did instead was raise the number of machines until no machine was over its limit, and it closed by saying the capacity would be handled once this lecture had covered it. The data is 2.4’s, unchanged.</p>
+<p>One thing is not 2.4’s, and it has to be determined before the model is given a capacity. A machine that can make two million units a year cannot be <em>planned</em> to make two million: Lecture 1.3 has cycle time running away as utilization approaches one, which is why 2.4 rejects six machines for this instance, saying that six would carry “a utilization of exactly one, and a workstation is designed to run with its utilization strictly below one”.</p>
+<p>So the capacity the model is handed is an <strong>effective</strong> capacity, the nameplate times a ceiling on utilization, and the ceiling comes from Lecture 1.3 rather than from nowhere. Its feasible minimum <span class="math inline">m_{\min} = \lfloor r_a t_e + 1 \rfloor</span> is the rule that forces the utilization below one by adding a machine, and the utilization it implies here is <span style="white-space: nowrap"><span class="math inline">6/7</span>.</span></p>
+<div id="54" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># Code block 17: EMCA&#39;s customers, as lecture 2.4 sets them up</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>zips <span class="op">=</span> [</span>
 <span id="cb42-3"><a href="#cb42-3"></a>    <span class="fl">270</span>, <span class="fl">271</span>, <span class="fl">272</span>, <span class="fl">273</span>, <span class="fl">274</span>, <span class="fl">275</span>, <span class="fl">276</span>, <span class="fl">277</span>, <span class="fl">278</span>, <span class="fl">279</span>, <span class="fl">280</span>, <span class="fl">281</span>, <span class="fl">282</span>, <span class="fl">283</span>,</span>
@@ -5529,7 +5529,7 @@ Model 3: Capacitated facility location
 <pre><code>(sites = 28, mmin = 7, umax = 0.857)</code></pre>
 </div>
 </div>
-<div id="54" class="cell" data-execution_count="1">
+<div id="56" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># Code block 18: the same decision with the capacity in the model</span></span>
 <span id="cb44-2"><a href="#cb44-2"></a>cfl <span class="op">=</span> <span class="fu">cflmilp</span>(kz, Cz, fz, Kmach)</span>
 <span id="cb44-3"><a href="#cb44-3"></a>cflraw <span class="op">=</span> <span class="fu">cflmilp</span>(kz, Cz, fz, <span class="fu">fill</span>(K <span class="op">*</span> uwt, <span class="fu">length</span>(zips)))  <span class="co"># no ceiling</span></span>
@@ -5553,8 +5553,8 @@ Model 3: Capacitated facility location
 <div class="result-box">
 <p>8 machines at a total annual cost of $1,346,321</p>
 </div>
-<p>Code block 19 puts that beside the four other answers this instance has, and the spread is the point of the section. The arithmetic floor is twelve million units over two million a machine, and it is not achievable: it is the utilization of one that lecture 1.3 rules out, which is why the feasible minimum sits a machine above it. The UFL opens the floor’s six anyway and is no solution at all, its busiest machine asked for more than a machine can make. Lecture 2.4’s sweep is feasible and expensive: with no way to put the capacity into the heuristic it buys feasibility with machines. The CFL puts the capacity where it belongs and lands one machine above 1.3’s minimum.</p>
-<div id="56" class="cell" data-execution_count="1">
+<p>Code block 19 puts that beside the four other answers this instance has, and the spread is the point of the section. The arithmetic floor is twelve million units over two million a machine, and it is not achievable: it is the utilization of one that Lecture 1.3 rules out, which is why the feasible minimum sits a machine above it. The UFL opens the floor’s six anyway and is no solution at all, its busiest machine asked for more than a machine can make. Lecture 2.4’s sweep is feasible and expensive: with no way to put the capacity into the heuristic it buys feasibility with machines. The CFL puts the capacity where it belongs and lands one machine above 1.3’s minimum.</p>
+<div id="58" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># Code block 19: four answers to the same question</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a>yu, TCu, Wu <span class="op">=</span> <span class="fu">ufl</span>(kz[<span class="fl">1</span>], Cz; verbose <span class="op">=</span> <span class="cn">false</span>)  <span class="co"># no capacity</span></span>
 <span id="cb46-3"><a href="#cb46-3"></a>su <span class="op">=</span> <span class="fu">vec</span>(<span class="fu">sum</span>(Wu <span class="op">.*</span> units<span class="op">&#39;</span>, dims <span class="op">=</span> <span class="fl">2</span>))[yu]</span>
@@ -5667,7 +5667,7 @@ Figure 5: Six objects, and the five subsets available to cover them. Where two 
 </div>
 <p>Unweighted is the usual case, <span class="math inline">c_i = 1</span> for every subset, and then the objective counts subsets. The implementation takes the whole instance as the one matrix <span style="white-space: nowrap"><span class="math inline">\mathbf{A} = [\,a_{ji}\,]</span>,</span> since that is the only thing that changes from one application to the next. It prints its termination status, because the messaging is otherwise off and there would be nothing to say whether an optimal solution was found.</p>
 <div class="model-implementation" data-mdl-for="mdl-setcover" id="rung-mdl-setcover-implementation"><div class="model-rung-label">Model 4 implementation: Set covering</div>
-<div id="60" class="cell" data-execution_count="1">
+<div id="62" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1"></a><span class="co"># Model: set covering, given any object-by-subset matrix</span></span>
 <span id="cb48-2"><a href="#cb48-2"></a><span class="kw">function</span> <span class="fu">setcover</span>(A)</span>
 <span id="cb48-3"><a href="#cb48-3"></a>    M, N <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">1</span>), <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">2</span>)</span>
@@ -5720,7 +5720,7 @@ Model 5: Set packing
 </div>
 <p>Set packing is the mirror of covering rather than a problem in its own right: it asks for the most subsets that can be chosen with no object in two of them, where covering asks for the fewest that leave no object in none. It is carried here for the contrast, and a use for it has yet to come up in practice.</p>
 <div class="model-implementation" data-mdl-for="mdl-setpack" id="rung-mdl-setpack-implementation"><div class="model-rung-label">Model 5 implementation: Set packing</div>
-<div id="62" class="cell" data-execution_count="1">
+<div id="64" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># Model: set packing, which is set covering with two characters changed</span></span>
 <span id="cb50-2"><a href="#cb50-2"></a><span class="kw">function</span> <span class="fu">setpack</span>(A)</span>
 <span id="cb50-3"><a href="#cb50-3"></a>    M, N <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">1</span>), <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">2</span>)</span>
@@ -5761,7 +5761,7 @@ Figure 6: The largest packing of the same six objects. No object lies in two ch
 <p>Determine the smallest collection of the five subsets whose union is all six objects, where the subsets are <span style="white-space: nowrap"><span class="math inline">M_1 = \{1,2\}</span>,</span> <span style="white-space: nowrap"><span class="math inline">M_2 = \{1,4,5\}</span>,</span> <span style="white-space: nowrap"><span class="math inline">M_3 = \{3,5\}</span>,</span> <span class="math inline">M_4 = \{2,3,6\}</span> and <span style="white-space: nowrap"><span class="math inline">M_5 = \{6\}</span>,</span> each costing the same.</p>
 </div>
 <p><a href="#fig-set-cover" class="quarto-xref">Fig. 5</a>, drawn above, is this instance. <code>Mi</code> holds the five subsets it draws, and the model wants them as the matrix <span class="math inline">\mathbf{A}</span> instead.</p>
-<div id="66" class="cell" data-execution_count="1">
+<div id="68" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Code block 20: the five subsets as an object-by-subset matrix</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a>m, n <span class="op">=</span> <span class="fl">6</span>, <span class="fl">5</span></span>
 <span id="cb52-3"><a href="#cb52-3"></a>A <span class="op">=</span> <span class="fu">zeros</span>(m, n)       <span class="co"># A = objects x subsets</span></span>
@@ -5779,7 +5779,7 @@ Figure 6: The largest packing of the same six objects. No object lies in two ch
  0.0  0.0  0.0  1.0  1.0</code></pre>
 </div>
 </div>
-<div id="68" class="cell" data-execution_count="1">
+<div id="70" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1"></a>Iᵒ <span class="op">=</span> <span class="fu">setcover</span>(A)  <span class="co"># Code block 21: the cheapest cover</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>OPTIMAL</code></pre>
@@ -5805,7 +5805,7 @@ Figure 6: The largest packing of the same six objects. No object lies in two ch
 </div>
 <p>Assume that a transmitter would be located at the population center of each county. It covers another county if the distance to the far end of the other county is less than 100 miles, where the far end is approximated by adding the radius of circular land and water area to the distance to the county.</p>
 <p>Coverage is a distance question, so the subsets are built rather than given. Every county is a candidate site and every county is an object to be covered; the subset belonging to a county is every county its transmitter reaches. That makes the matrix a distance comparison, and the cover follows from <a href="#eq-setcover" class="quarto-xref">Eq. 9</a> with no change to the model at all.</p>
-<div id="70" class="cell" data-execution_count="1">
+<div id="72" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb57-1"><a href="#cb57-1"></a><span class="co"># Code block 22: the counties, and the distances between their centers</span></span>
 <span id="cb57-2"><a href="#cb57-2"></a>df <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="op">==</span> <span class="fu">st2fips</span>(<span class="op">:</span>NC), <span class="fu">uscounty</span>())</span>
 <span id="cb57-3"><a href="#cb57-3"></a>P <span class="op">=</span> <span class="fu">hcat</span>(df.LON, df.LAT)</span>
@@ -5815,7 +5815,7 @@ Figure 6: The largest packing of the same six objects. No object lies in two ch
 <pre><code>(counties = 100, D = (100, 100))</code></pre>
 </div>
 </div>
-<div id="72" class="cell" data-execution_count="1">
+<div id="74" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb59-1"><a href="#cb59-1"></a><span class="co"># Code block 23: each county as a circle of the same area</span></span>
 <span id="cb59-2"><a href="#cb59-2"></a>a <span class="op">=</span> df.ALAND <span class="op">.+</span> df.AWATER  <span class="co"># area (sq mi)</span></span>
 <span id="cb59-3"><a href="#cb59-3"></a>r <span class="op">=</span> <span class="fu">sqrt</span>.(a <span class="op">./</span> <span class="cn">pi</span>)         <span class="co"># radius (mi)</span></span>
@@ -5831,7 +5831,7 @@ Figure 6: The largest packing of the same six objects. No object lies in two ch
 </div>
 </div>
 <p>The radius deserves a <strong>Landmark</strong> check before it is used, since it is the one quantity here that is an approximation rather than data. A North Carolina county runs to a few hundred square miles, so its equivalent circle should come out at roughly ten to twenty miles in the radius, not at two and not at forty. The four above sit in that range. The check costs a glance and it catches both of the ways this line goes wrong: taking the square root before the division by <span class="math inline">\pi</span> rather than after it, which is off by a factor of <span style="white-space: nowrap"><span class="math inline">\sqrt{\pi}</span>,</span> and leaving the area in square kilometers, which is off by 2.6.</p>
-<div id="74" class="cell" data-execution_count="1">
+<div id="76" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href="#cb61-1"></a><span class="co"># Code block 24: which counties each transmitter reaches, and the cover</span></span>
 <span id="cb61-2"><a href="#cb61-2"></a>A <span class="op">=</span> r[<span class="op">:</span>] <span class="op">.+</span> D <span class="op">.&lt;</span> <span class="fl">100</span>  <span class="co"># radius broadcasts down the rows</span></span>
 <span id="cb61-3"><a href="#cb61-3"></a>idx <span class="op">=</span> <span class="fu">setcover</span>(A)</span>
@@ -5886,8 +5886,8 @@ Figure 7: The counties each selected transmitter reaches, one color per transmi
 <div class="statement">
 <p>Determine the minimum number of clinics at which the analysis equipment would need to remain in order to allow specimens from clinics without equipment to be delivered within a twenty-five minute time window. DWT, Inc., has clinics located throughout the Triangle, and each currently does some of its most common laboratory specimen analysis using equipment located onsite; the equipment is expensive and is not heavily utilized. The file <a href="data/DWTclinics.csv"><code>DWTclinics.csv</code></a> gives the latitude and longitude of each clinic, and nothing else.</p>
 </div>
-<p>Nothing in that statement is a distance, and the model needs one. Two assumptions close the gap, and both are the reader’s to make rather than the problem’s to supply. Road distance is taken as great-circle distance times a <strong>circuity factor of 1.2</strong>, as in lectures 2.4 and 2.5. And a <strong>speed</strong> turns twenty-five minutes into miles; 30 miles per hour is the figure used below, which is ordinary in-town driving between appointments rather than highway travel.</p>
-<div id="78" class="cell" data-execution_count="1">
+<p>Nothing in that statement is a distance, and the model needs one. Two assumptions close the gap, and both are the reader’s to make rather than the problem’s to supply. Road distance is taken as great-circle distance times a <strong>circuity factor of 1.2</strong>, as in Lectures 2.4 and 2.5. And a <strong>speed</strong> turns twenty-five minutes into miles; 30 miles per hour is the figure used below, which is ordinary in-town driving between appointments rather than highway travel.</p>
+<div id="80" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1"></a><span class="co"># Code block 25: the clinics, and the road distance between them</span></span>
 <span id="cb65-2"><a href="#cb65-2"></a>DWT <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/DWTclinics.csv&quot;</span>))</span>
 <span id="cb65-3"><a href="#cb65-3"></a>P <span class="op">=</span> <span class="fu">hcat</span>(DWT.LON, DWT.LAT)</span>
@@ -5897,7 +5897,7 @@ Figure 7: The counties each selected transmitter reaches, one color per transmi
 <pre><code>(clinics = 47, longest = 46.6)</code></pre>
 </div>
 </div>
-<div id="80" class="cell" data-execution_count="1">
+<div id="82" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1"></a><span class="co"># Code block 26: which clinics keep the equipment</span></span>
 <span id="cb67-2"><a href="#cb67-2"></a>mph <span class="op">=</span> <span class="fl">30</span>               <span class="co"># in-town driving</span></span>
 <span id="cb67-3"><a href="#cb67-3"></a>reach <span class="op">=</span> mph <span class="op">*</span> <span class="fl">25</span> <span class="op">/</span> <span class="fl">60</span>  <span class="co"># miles in a 25-minute window</span></span>
@@ -5943,7 +5943,7 @@ Figure 8: The Triangle clinics, and the five that keep the analysis equipment u
 </div>
 </div>
 <p>The speed was an assumption, so the answer is worth an <strong>Assumptions</strong> check before it is reported, and this one does not survive quietly. At 20 miles per hour the cover needs eight clinics, at 25 it needs six, at 30 it needs five, and at 35 it needs three. The recommendation therefore turns on a number the problem never gave, and the honest deliverable is not “five” but five <strong>at thirty miles an hour</strong>, with the range beside it. A client who drives faster than the analyst assumed closes clinics that did not need closing.</p>
-<div id="84" class="cell" data-execution_count="1">
+<div id="86" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb71-1"><a href="#cb71-1"></a><span class="co"># Code block 27: how much the answer turns on the assumption</span></span>
 <span id="cb71-2"><a href="#cb71-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(MPH <span class="op">=</span> [<span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">35</span>, <span class="fl">40</span>],</span>
 <span id="cb71-3"><a href="#cb71-3"></a>              Reach <span class="op">=</span> <span class="fu">round</span>.([m <span class="op">*</span> <span class="fl">25</span> <span class="op">/</span> <span class="fl">60</span> for m <span class="kw">in</span> [<span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">35</span>, <span class="fl">40</span>]],</span>
@@ -5972,7 +5972,7 @@ OPTIMAL
 <section id="bin-packing" class="level2">
 <h2 class="anchored" data-anchor-id="bin-packing">4. Bin packing</h2>
 <p>The bin packing problem involves determining the minimum number of equal-capacity bins required to pack different size objects so that all of the objects assigned to a bin do not exceed its capacity. The 1-D bin packing problem refers to the bins having a single scalar capacity and each object having a single scalar size. The 2-D bin packing problem can, for example, refer to each bin having both weight and cubic volume restrictions on its capacity and each object having a weight and cubic volume.</p>
-<p>Solving a bin packing problem would be a way of determining the minimum number of machines. It would determine the allocation but would not, by itself, involve the location, so the bin packing would have to be combined with the location heuristic. A much easier approach is just to directly model this as a mixed-integer linear program. This gets to the promise in lecture 2.4 that the constraints for the EMCA problem would be handled once capacity constraints were covered, which is what Sec. 2.2 does.</p>
+<p>Solving a bin packing problem would be a way of determining the minimum number of machines. It would determine the allocation but would not, by itself, involve the location, so the bin packing would have to be combined with the location heuristic. A much easier approach is just to directly model this as a mixed-integer linear program. This gets to the promise in Lecture 2.4 that the constraints for the EMCA problem would be handled once capacity constraints were covered, which is what Sec. 2.2 does.</p>
 <div id="mdl-binpack" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-binpack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -6040,7 +6040,7 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <p><a href="#mdl-binpack" class="quarto-xref">Model 6</a> is resolved the same two ways as <a href="#mdl-setcover" class="quarto-xref">Model 4</a>: <a href="#eq-binpack-sets" class="quarto-xref">Eq. 11</a> states it over sets and <a href="#eq-binpack" class="quarto-xref">Eq. 12</a> states it over indicators. In the formulation there is a set of potential bins, at most one per object, which is why the bins are indexed by <span class="math inline">M</span> as well. Constraints (a) ensure that, for each bin, the total volume of the assigned objects does not exceed its capacity, and constraints (b) ensure that, for each object, it is assigned to one bin.</p>
 <p>Two things are worth seeing against Sec. 2.2. Constraint (a) of <a href="#mdl-binpack" class="quarto-xref">Model 6</a> is a capacity limit with a binary open-or-closed multiplier, which is exactly the shape of the CFL’s capacity constraint, and constraint (b) is the coverage constraint of <a href="#mdl-setcover" class="quarto-xref">Model 4</a> under another name. Bin packing is a capacitated assignment with no transport cost in the objective, which is what makes it a bound on a facility count and not only on a bin count.</p>
 <div class="model-implementation" data-mdl-for="mdl-binpack" id="rung-mdl-binpack-implementation"><div class="model-rung-label">Model 6 implementation: Bin packing</div>
-<div id="86" class="cell" data-execution_count="1">
+<div id="88" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href="#cb73-1"></a><span class="co"># Model: bin packing</span></span>
 <span id="cb73-2"><a href="#cb73-2"></a><span class="kw">function</span> <span class="fu">binpack</span>(v, V; tlim <span class="op">=</span> <span class="fl">60.0</span>, gap <span class="op">=</span> <span class="fl">1e-4</span>)</span>
 <span id="cb73-3"><a href="#cb73-3"></a>    M <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(v)</span>
@@ -6071,7 +6071,7 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 </div>
 <p><strong>Two settings are not optional here, and this is the first model in the lecture where that is true.</strong> The model declares <span class="math inline">m^2 + m</span> binary variables, one per object-and-bin pair plus one per bin, so an instance a script writes in one line is not an instance a solver can finish. Set covering does not raise the question, because its relaxation is tight and it solves outright; the UFL does not raise it either, since a large UFL instance takes real data to build. Twenty thousand bin packing objects take one call to <code>rand</code>.</p>
 <p>Both are the ones Sec. 1.3 named. <code>set_time_limit_sec</code> is what keeps a runaway from being an accident, and the default of sixty seconds above is measured rather than chosen: code block 28 is what the model costs as the instance grows.</p>
-<div id="88" class="cell" data-execution_count="1">
+<div id="90" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb75-1"><a href="#cb75-1"></a><span class="co"># Code block 28: what the model costs as the instance grows</span></span>
 <span id="cb75-2"><a href="#cb75-2"></a>grow <span class="op">=</span> <span class="fu">DataFrame</span>(objects <span class="op">=</span> <span class="dt">Int</span>[], binaries <span class="op">=</span> <span class="dt">Int</span>[], bins <span class="op">=</span> <span class="dt">Int</span>[],</span>
 <span id="cb75-3"><a href="#cb75-3"></a>                 seconds <span class="op">=</span> <span class="dt">Float64</span>[])</span>
@@ -6085,15 +6085,15 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <pre><code>   objects  binaries  bins  seconds
 ───────────────────────────────────
 1       20       420     6     0.00
-2       50     2,550    15     0.20
-3      100    10,100    31     1.11
-4      200    40,200    61     9.03</code></pre>
+2       50     2,550    15     0.21
+3      100    10,100    31     1.15
+4      200    40,200    61     9.19</code></pre>
 </div>
 </div>
 <p>Ten times the objects is a hundred times the variables and rather more than a hundred times the work. Sixty seconds covers two hundred objects several times over and three hundred comfortably, and stops somewhere past that rather than running all afternoon on an instance nobody meant to pose. A limit that is never reached costs nothing, which is the argument for always setting one.</p>
 <p>The gap tolerance is the other, and the attribute that sets it is <code>mip_rel_gap</code>, against which <code>relative_gap(bp)</code> reports what the search actually achieved.</p>
 <p>Bin packing makes the setting behave in a way a cost objective does not, and it is worth seeing once. The objective counts bins, so it is a small integer, and a percentage of a small integer buys nothing at all until it exceeds one whole unit of it. On the two-hundred-object instance above the answer is 61 bins, so one bin is 1.6% of the objective and that is the crossing. Below it the solver must still prove the answer exactly and the tolerance costs nothing and saves nothing. Above it the saving arrives all at once and is paid for in whole bins, which the table shows: the same answer either side of the crossing would be a coincidence, and a cost objective, being continuous, has no crossing at all.</p>
-<div id="90" class="cell" data-execution_count="1">
+<div id="92" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb77-1"><a href="#cb77-1"></a><span class="co"># Code block 29: what a looser gap buys, and what it costs</span></span>
 <span id="cb77-2"><a href="#cb77-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">9</span>)  <span class="co"># the two hundred objects again</span></span>
 <span id="cb77-3"><a href="#cb77-3"></a>v200 <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>)</span>
@@ -6107,10 +6107,10 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="cell-output cell-output-stdout">
 <pre><code>    gap  bins  seconds
 ──────────────────────
-  exact    61     9.18
-     1%    61     9.17
-     2%    62     5.89
-     5%    62     5.89</code></pre>
+  exact    61     9.40
+     1%    61     9.49
+     2%    62     5.85
+     5%    62     5.97</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Reading a solve that stopped early">
@@ -6137,7 +6137,7 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="statement">
 <p>Determine the fewest bins of capacity ten that hold twenty objects whose sizes are whole numbers from one to five, and compare the answer with the bound that counting gives.</p>
 </div>
-<div id="92" class="cell" data-execution_count="1">
+<div id="94" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb79-1"><a href="#cb79-1"></a><span class="co"># Code block 30: the instance, and the bound that costs nothing</span></span>
 <span id="cb79-2"><a href="#cb79-2"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1244</span>)             <span class="co"># the same twenty objects every build</span></span>
 <span id="cb79-3"><a href="#cb79-3"></a>mB, VB <span class="op">=</span> <span class="fl">20</span>, <span class="fl">10</span></span>
@@ -6155,7 +6155,7 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 </div>
 </div>
 <p>The bound is a <strong>Bounds</strong> check and it is free: the objects have to go somewhere, so the bins used cannot be fewer than the total volume divided by the capacity of one bin, rounded up. It is worth writing down before the solve, because it is also the answer whenever the objects happen to fill the bins exactly, and the distance between it and the optimum is the only thing the model has to find.</p>
-<div id="94" class="cell" data-execution_count="1">
+<div id="96" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb82-1"><a href="#cb82-1"></a><span class="co"># Code block 31: the fewest bins that hold them</span></span>
 <span id="cb82-2"><a href="#cb82-2"></a>packed <span class="op">=</span> <span class="fu">binpack</span>(vB, VB)</span>
 <span id="cb82-3"><a href="#cb82-3"></a>binsB <span class="op">=</span> packed.bins</span>
@@ -6247,8 +6247,8 @@ Model 7: Graph coloring
 </figcaption>
 </figure>
 </div>
-<p>The graph itself is the input, so it is worth seeing before the algebra. Code block 32 builds it. The roster is small enough to write down, so it is carried as a ragged array rather than read from a file. Two of the thirty rows are shorter than four: those students are retaking, and sit only the areas they have left. Read from a file instead, those two rows would arrive as missing values and would need the drop, skip or impute treatment of lecture 2.5 Sec. 7 before anything else could happen. Written down, they need none of it, which keeps this example on the model.</p>
-<div id="98" class="cell" data-execution_count="1">
+<p>The graph itself is the input, so it is worth seeing before the algebra. Code block 32 builds it. The roster is small enough to write down, so it is carried as a ragged array rather than read from a file. Two of the thirty rows are shorter than four: those students are retaking, and sit only the areas they have left. Read from a file instead, those two rows would arrive as missing values and would need the drop, skip or impute treatment of Lecture 2.5 Sec. 7 before anything else could happen. Written down, they need none of it, which keeps this example on the model.</p>
+<div id="100" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb85-1"><a href="#cb85-1"></a><span class="co"># Code block 32: the roster, and the conflict graph it implies</span></span>
 <span id="cb85-2"><a href="#cb85-2"></a><span class="im">using</span> <span class="bu">Graphs</span>, <span class="bu">SimpleWeightedGraphs</span></span>
 <span id="cb85-3"><a href="#cb85-3"></a>L <span class="op">=</span> [[<span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>], [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">8</span>], [<span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">7</span>, <span class="fl">8</span>], [<span class="fl">5</span>, <span class="fl">6</span>], [<span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>],</span>
@@ -6337,7 +6337,7 @@ Figure 10: The conflict graph of the qualifying exam. Each vertex is one of the
 <p>Constraints (a) ensure that, for each vertex, it is assigned to one color. Constraints (b) ensure that, for each edge <span class="math inline">(i,j)</span> of the graph, if vertex <span class="math inline">i</span> is assigned to color <span class="math inline">k</span> then vertex <span class="math inline">j</span> is not assigned to <span style="white-space: nowrap"><span class="math inline">k</span>,</span> that is, <em>if X then not Y</em>. Constraints (c) ensure that a vertex can be colored <span class="math inline">k</span> only if color <span class="math inline">k</span> is being used.</p>
 <p>Constraint (b) is the packing constraint of <a href="#eq-setpack" class="quarto-xref">Eq. 10</a> under another name, and constraint (c) is the linking constraint of <a href="#eq-ufl-strong" class="quarto-xref">Eq. 4</a>. Nothing in this model is new. What is new is the graph it is handed.</p>
 <div class="model-implementation" data-mdl-for="mdl-coloring" id="rung-mdl-coloring-implementation"><div class="model-rung-label">Model 7 implementation: Graph coloring</div>
-<div id="102" class="cell" data-execution_count="1">
+<div id="104" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb88-1"><a href="#cb88-1"></a><span class="co"># Model: minimum graph coloring</span></span>
 <span id="cb88-2"><a href="#cb88-2"></a><span class="kw">function</span> <span class="fu">colormin</span>(g)</span>
 <span id="cb88-3"><a href="#cb88-3"></a>    model <span class="op">=</span> <span class="fu">Model</span>(HiGHS.Optimizer)</span>
@@ -6361,7 +6361,7 @@ Figure 10: The conflict graph of the qualifying exam. Each vertex is one of the
 </div>
 </div>
 </div>
-<div id="104" class="cell" data-execution_count="1">
+<div id="106" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb90-1"><a href="#cb90-1"></a><span class="co"># Code block 33: the exam schedule the coloring produces</span></span>
 <span id="cb90-2"><a href="#cb90-2"></a>qe <span class="op">=</span> <span class="fu">colormin</span>(g)</span>
 <span id="cb90-3"><a href="#cb90-3"></a>Kᵒ <span class="op">=</span> qe.K</span>
@@ -6428,7 +6428,7 @@ Figure 11: The same conflict graph with a minimum coloring on it. No edge joins
 <div class="callout-body-container callout-body">
 <p>The single-machine total tardiness scheduling problem involves determining the order in which a set of jobs should be processed on a single machine to minimize the total tardiness relative to their due dates. Each job has a known processing time and due date, and only one job can be processed at a time. Since no preemption or parallelism is allowed, the key decision is the sequence in which jobs are executed. The objective function is the sum of tardiness values, where a job’s tardiness equals the amount of time its completion exceeds its due date, if any. The feasible set of schedules corresponds exactly to the set of permutations of the job set, making the problem a pure sequencing combinatorial problem.</p>
 <p>Nine jobs, then, and a sequence to choose. Job 5 is the awkward one: it takes 18 units, which is more than the four shortest jobs together, and it is due at 12.</p>
-<div id="108" class="cell" data-execution_count="1">
+<div id="110" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb93-1"><a href="#cb93-1"></a><span class="co"># Code block 34: the instance, and the two rules that need no solver</span></span>
 <span id="cb93-2"><a href="#cb93-2"></a><span class="im">using</span> <span class="bu">Combinatorics</span></span>
 <span id="cb93-3"><a href="#cb93-3"></a><span class="fu">tardiness</span>(α, p, d) <span class="op">=</span> <span class="fu">sum</span>(<span class="fu">max</span>.(<span class="fl">0</span>, <span class="fu">cumsum</span>(p[α]) <span class="op">.-</span> d[α]))</span>
@@ -6531,7 +6531,7 @@ Model 8: Single-machine total tardiness
 <p>Two lines of that are worth slowing down for, because both turn something that is not linear into something that is. Constraint (e) has to say that a job completes when the position holding it completes, and <span class="math inline">M</span> is what makes that a linear statement: where <span class="math inline">y_{jk} = 1</span> it reads <span style="white-space: nowrap"><span class="math inline">C_j \geq t_k</span>,</span> and where <span class="math inline">y_{jk} = 0</span> the <span class="math inline">M</span> term drives the right side so far negative that the constraint says nothing at all. Taking <span class="math inline">M = \sum_j p_j</span> is enough, since no completion time can exceed the total work.</p>
 <p>Constraint (f) is quieter. Tardiness is <span style="white-space: nowrap"><span class="math inline">\max(0,\, C_j - d_j)</span>,</span> and a maximum is not linear either, but <span class="math inline">T_j</span> is being minimized and is already bounded below by zero, so the solver drives it down to exactly that maximum without being told to. A maximum the objective pushes against needs only an inequality.</p>
 <div class="model-implementation" data-mdl-for="mdl-tardiness" id="rung-mdl-tardiness-implementation"><div class="model-rung-label">Model 8 implementation: Single-machine total tardiness</div>
-<div id="110" class="cell" data-execution_count="1">
+<div id="112" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb95-1"><a href="#cb95-1"></a><span class="co"># Model: single-machine total tardiness</span></span>
 <span id="cb95-2"><a href="#cb95-2"></a><span class="kw">function</span> <span class="fu">tardymilp</span>(p, d)</span>
 <span id="cb95-3"><a href="#cb95-3"></a>    n, M <span class="op">=</span> <span class="fu">length</span>(p), <span class="fu">sum</span>(p)</span>
@@ -6562,7 +6562,7 @@ Model 8: Single-machine total tardiness
 </div>
 </div>
 </div>
-<div id="112" class="cell" data-execution_count="1">
+<div id="114" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb97-1"><a href="#cb97-1"></a><span class="co"># Code block 35: the sequence the model proves is best</span></span>
 <span id="cb97-2"><a href="#cb97-2"></a>sm <span class="op">=</span> <span class="fu">tardymilp</span>(p, d)</span>
 <span id="cb97-3"><a href="#cb97-3"></a>αᵗ <span class="op">=</span> sm.α</span>
@@ -6610,7 +6610,7 @@ Figure 12: The optimal sequence, one bar per job, with each job’s due date ma
 </figure>
 </div>
 </div>
-<p>The solver proves this is the best sequence there is. What is worth noticing is what it proves it against: lecture 2.4’s kind of local search, moving one job at a time, reaches the same total on this instance and the same sequence. The solve did not find a better answer. It established that there was none to find, which is what makes the search usable on the instances where no solver will finish.</p>
+<p>The solver proves this is the best sequence there is. What is worth noticing is what it proves it against: Lecture 2.4’s kind of local search, moving one job at a time, reaches the same total on this instance and the same sequence. The solve did not find a better answer. It established that there was none to find, which is what makes the search usable on the instances where no solver will finish.</p>
 </div>
 </div>
 </div>

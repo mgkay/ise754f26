@@ -398,7 +398,7 @@ function uflmilp(k, C)
 end
 
 ## Example 2: Five I-40 cities as a MILP
-# Determine the sites and the total cost for the five cities of lecture
+# Determine the sites and the total cost for the five cities of Lecture
 # 2.4, which are Asheville, Statesville, Greensboro, Raleigh and
 # Wilmington, at mile markers 50, 150, 220, 295 and 420 along I-40, each
 # with unit demand and costing 150, 200, 150, 150 and 200 to establish,
@@ -460,7 +460,7 @@ end
 
 ## Example 4: Capacitated EMCA
 # Determine how many machines EMCA should lease and where to locate them
-# with each machine's capacity accounted for, on the instance of lecture
+# with each machine's capacity accounted for, on the instance of Lecture
 # 2.4: twelve million units a year sold to customers grouped by the
 # twenty-eight three-digit ZIP codes of the Carolinas, each unit
 # weighing 15 pounds and shipped at \$0.25 per ton-mile, each machine

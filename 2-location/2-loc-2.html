@@ -4888,7 +4888,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 <h2 class="anchored" data-anchor-id="other-types-of-location-objectives">4. Other types of location objectives</h2>
 <p>Lecture 2.1 set six objectives side by side in <a href="2-loc-1.html#tbl-objectives" class="xref" data-lec="2.1" data-id="tbl-objectives" title="Types of Location Problems">Table 1 in Lecture 2.1</a> without solving any. Three more of them can be solved here, on the same three facilities, by changing one line.</p>
 <p><strong>Minimax.</strong> The distances from the centroid to the three facilities are not equal, and the largest of them is what a minimax objective answers to.</p>
-<div id="20" class="cell" data-execution_count="1">
+<div id="22" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Code block 7: the centroid as a starting point</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a>x0 <span class="op">=</span> <span class="fu">mean</span>.(<span class="fu">eachcol</span>(P))              <span class="co"># centroid start</span></span>
@@ -4900,14 +4900,14 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
  3.1446603773522015</code></pre>
 </div>
 </div>
-<div id="22" class="cell" data-execution_count="1">
+<div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">maximum</span>(<span class="fu">d2</span>.([x0], <span class="fu">eachrow</span>(P)))  <span class="co"># Code block 8: farthest from centroid</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3.5901098714230026</code></pre>
 </div>
 </div>
 <p>Minimizing that maximum is the whole change: <code>sum</code> becomes <code>maximum</code>.</p>
-<div id="24" class="cell" data-execution_count="1">
+<div id="26" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Code block 9: minimax, the smallest largest distance</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="fu">TC</span>(x) <span class="op">=</span> <span class="fu">maximum</span>(<span class="fu">d2</span>.([x], <span class="fu">eachrow</span>(P)))</span>
 <span id="cb19-3"><a href="#cb19-3"></a>res <span class="op">=</span> <span class="fu">optimize</span>(TC, x0)</span>
@@ -4923,7 +4923,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 </div>
 </div>
 <p>At the optimum the three distances are nearly equal, which is what minimizing the largest of them does.</p>
-<div id="26" class="cell" data-execution_count="1">
+<div id="28" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">d2</span>.([xᵒ], <span class="fu">eachrow</span>(P))  <span class="co"># Code block 10: distances at the minimax point</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Float64}:
@@ -4933,7 +4933,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 </div>
 </div>
 <p><strong>Maximin.</strong> The mirror image, for a facility everyone wants to be far from. Optim only minimizes, so the objective is negated.</p>
-<div id="28" class="cell" data-execution_count="1">
+<div id="30" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Code block 11: maximin, pushing the facility away</span></span>
 <span id="cb24-2"><a href="#cb24-2"></a><span class="fu">TC</span>(x) <span class="op">=</span> <span class="fu">-minimum</span>(<span class="fu">d2</span>.([x], <span class="fu">eachrow</span>(P)))  <span class="co"># minus converts min to max</span></span>
 <span id="cb24-3"><a href="#cb24-3"></a>res <span class="op">=</span> <span class="fu">optimize</span>(TC, x0)</span>
@@ -4950,7 +4950,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 </div>
 <p>The answer is nonsense, and loudly so: the facility has run off to <span class="math inline">10^{154}</span> and the objective to <span style="white-space: nowrap"><span class="math inline">-\infty</span>.</span> Nothing was wrong with the code. On its own the maximin problem has no finite answer, since there is always somewhere further away.</p>
 <p><strong>A feasible region.</strong> Confining the facility to a rectangle makes the problem well posed. Outside the rectangle the objective is <span style="white-space: nowrap"><span class="math inline">\infty</span>,</span> which the optimizer will not accept.</p>
-<div id="30" class="cell" data-execution_count="1">
+<div id="32" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Code block 12: a feasible region for the maximin</span></span>
 <span id="cb27-2"><a href="#cb27-2"></a>r <span class="op">=</span> [(<span class="fl">0</span>, <span class="fl">0</span>), (<span class="fl">7</span>, <span class="fl">6</span>)]   <span class="co"># SW and NE corners of feasible region</span></span>
 <span id="cb27-3"><a href="#cb27-3"></a><span class="fu">isinrect</span>(x, r) <span class="op">=</span> r[<span class="fl">1</span>][<span class="fl">1</span>] <span class="op">&lt;=</span> x[<span class="fl">1</span>] <span class="op">&lt;=</span> r[<span class="fl">2</span>][<span class="fl">1</span>] <span class="op">&amp;&amp;</span></span>
@@ -4961,7 +4961,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 <pre><code>(-2.23606797749979, Inf)</code></pre>
 </div>
 </div>
-<div id="32" class="cell" data-execution_count="1">
+<div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Code block 13: the bounded maximin solution</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a>res <span class="op">=</span> <span class="fu">optimize</span>(TC, x0)</span>
 <span id="cb29-3"><a href="#cb29-3"></a><span class="pp">@show</span> TCᵒ <span class="op">=</span> res.minimum</span>
@@ -4976,7 +4976,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 </div>
 </div>
 <p><strong>Center of gravity.</strong> One more, and the gentlest: squaring each distance before summing gives the objective of <a href="2-loc-1.html#mdl-apt-centroid" class="xref" data-lec="2.1" data-id="mdl-apt-centroid" title="Types of Location Problems">Model 5 in Lecture 2.1</a>. <code>sum</code> stays, and <code>.^ 2</code> is the whole change.</p>
-<div id="34" class="cell" data-execution_count="1">
+<div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Code block 14: center of gravity, minimizing squared distance</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a><span class="fu">TC</span>(x) <span class="op">=</span> <span class="fu">sum</span>(<span class="fu">d2</span>.([x], <span class="fu">eachrow</span>(P)) <span class="op">.^</span> <span class="fl">2</span>)</span>
 <span id="cb32-3"><a href="#cb32-3"></a>res <span class="op">=</span> <span class="fu">optimize</span>(TC, x0)</span>
@@ -4992,7 +4992,7 @@ Figure 15: The four moves on a two-dimensional simplex, with <span class="math 
 </div>
 </div>
 <p>The search returns its own starting point, because it began at the answer. Lecture 2.1 derived the closed form at <a href="2-loc-1.html#eq-centroid" class="xref" data-lec="2.1" data-id="eq-centroid" title="Types of Location Problems">Eq. 3 in Lecture 2.1</a>: with equal weights the minimizer of squared distance is the plain centroid, which is exactly the <code>x0</code> used throughout this section. Starting somewhere else and arriving at the same place is the check worth making.</p>
-<div id="36" class="cell" data-execution_count="1">
+<div id="38" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">optimize</span>(TC, [<span class="fl">0.0</span>, <span class="fl">0.0</span>]).minimizer  <span class="co"># Code block 15: a different start</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>2-element Vector{Float64}:
@@ -5089,7 +5089,7 @@ Figure 17: Contours of equal <span class="math inline">l_p</span> distance from
 </figure>
 </div>
 <p>Logjam computes each of these directly. <code>d1</code> and <code>d2</code> take two points; the unified <code>dists</code> takes point <em>sets</em> and a metric parameter, so a single call covers the whole family, down to the Chebychev limit at <code>Inf</code>.</p>
-<div id="40" class="cell" data-execution_count="1">
+<div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># Code block 18: rectilinear and Euclidean distance</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a>P1 <span class="op">=</span> [<span class="fl">0</span>, <span class="fl">0</span>]                 <span class="co"># two points in the plane</span></span>
 <span id="cb39-3"><a href="#cb39-3"></a>P2 <span class="op">=</span> [<span class="fl">4</span>, <span class="fl">3</span>]</span>
@@ -5098,7 +5098,7 @@ Figure 17: Contours of equal <span class="math inline">l_p</span> distance from
 <pre><code>(7.0, 5.0)</code></pre>
 </div>
 </div>
-<div id="42" class="cell" data-execution_count="1">
+<div id="44" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Code block 19: the l1, l2 and l-infinity metrics</span></span>
 <span id="cb41-2"><a href="#cb41-2"></a>X1 <span class="op">=</span> [<span class="fl">0</span> <span class="fl">0</span>]                  <span class="co"># point sets, one row per point</span></span>
 <span id="cb41-3"><a href="#cb41-3"></a>X2 <span class="op">=</span> [<span class="fl">4</span> <span class="fl">3</span>]</span>
@@ -5233,8 +5233,8 @@ d_{rad} = c = \cos^{-1}\!\left[\sin(y_2)\sin(y_1)
 </div>
 </div>
 </div>
-<p>The formula applied to a few points shows how far apart the distances can be. The chapter’s worked example measures three cities from Raleigh, each given as a <code>(longitude, latitude)</code> pair in decimal degrees; <code>dists</code> with the <code>:mi</code> unit (or <code>:rad</code>) returns the great-circle distance to each. <a href="#fig-greatcircle" class="quarto-xref">Fig. 22</a> draws the same three distances on the globe. Each arc is the shortest path there is between its two points, and none of them is the straight line a flat map would draw between the same pair.</p>
-<div id="44" class="cell" data-execution_count="1">
+<p>The formula applied to a few points shows how far apart the distances can be. A worked example measures three cities from Raleigh, each given as a <code>(longitude, latitude)</code> pair in decimal degrees; <code>dists</code> with the <code>:mi</code> unit (or <code>:rad</code>) returns the great-circle distance to each. <a href="#fig-greatcircle" class="quarto-xref">Fig. 22</a> draws the same three distances on the globe. Each arc is the shortest path there is between its two points, and none of them is the straight line a flat map would draw between the same pair.</p>
+<div id="46" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># Code block 20: great-circle distance to three cities</span></span>
 <span id="cb43-2"><a href="#cb43-2"></a>Raleigh <span class="op">=</span> [<span class="op">-</span><span class="fl">78.659</span> <span class="fl">35.8219</span>]        <span class="co"># one point, as a row</span></span>
 <span id="cb43-3"><a href="#cb43-3"></a>XY <span class="op">=</span> [<span class="op">-</span><span class="fl">82.336</span>  <span class="fl">29.6742</span>             <span class="co"># Gainesville, FL</span></span>
@@ -5263,7 +5263,7 @@ Figure 22: Great-circle distances from Raleigh, drawn as arcs on the globe: 475
 </figure>
 </div>
 <p>A great-circle distance needs coordinates, and Logjam carries a built-in gazetteer of U.S. places to supply them. <code>usplace()</code> returns every city, town, and census-designated place as a table of names, coordinates, and populations; <code>filter</code> with <code>st2fips</code>, the state’s numeric code, narrows it to the places of interest, here the ten North Carolina cities above one hundred thousand people.</p>
-<div id="46" class="cell" data-execution_count="1">
+<div id="48" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># Code block 21: NC cities over 100k, from the Logjam gazetteer</span></span>
 <span id="cb45-2"><a href="#cb45-2"></a>df <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="op">==</span> <span class="fu">st2fips</span>(<span class="op">:</span>NC) <span class="op">&amp;&amp;</span></span>
 <span id="cb45-3"><a href="#cb45-3"></a>                 r.POP <span class="op">&gt;</span> <span class="fl">100_000</span>, <span class="fu">usplace</span>())</span>
@@ -5285,7 +5285,7 @@ Figure 22: Great-circle distances from Raleigh, drawn as arcs on the globe: 475
 </div>
 </div>
 <p>Each row’s longitude and latitude are one point <span style="white-space: nowrap"><span class="math inline">P_i</span>,</span> and <code>dgc</code> returns the great-circle distance between two of them. Raleigh to Charlotte is about one hundred thirty miles, as the crow flies.</p>
-<div id="48" class="cell" data-execution_count="1">
+<div id="50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># Code block 22: Raleigh to Charlotte</span></span>
 <span id="cb47-2"><a href="#cb47-2"></a><span class="fu">ll</span>(nm) <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">filter</span>(r <span class="op">-&gt;</span> r.NAME <span class="op">==</span> nm,</span>
 <span id="cb47-3"><a href="#cb47-3"></a>                        df)[<span class="fl">1</span>, [<span class="op">:</span>LON, <span class="op">:</span>LAT]])</span>
@@ -5296,7 +5296,7 @@ Figure 22: Great-circle distances from Raleigh, drawn as arcs on the globe: 475
 </div>
 </div>
 <p>Broadcasting <code>dgc</code> over the whole set gives Raleigh’s distance to every city at once, and the standard index queries answer the natural questions: the farthest city, and the three nearest.</p>
-<div id="50" class="cell" data-execution_count="1">
+<div id="52" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1"></a><span class="co"># Code block 23: the farthest city from Raleigh</span></span>
 <span id="cb49-2"><a href="#cb49-2"></a>pt <span class="op">=</span> <span class="fu">collect</span>.(<span class="fu">zip</span>(df.LON, df.LAT))   <span class="co"># one [lon,lat] per city</span></span>
 <span id="cb49-3"><a href="#cb49-3"></a>d  <span class="op">=</span> <span class="fu">dgc</span>.([xyR], pt)                 <span class="co"># Raleigh to each city</span></span>
@@ -5305,7 +5305,7 @@ Figure 22: Great-circle distances from Raleigh, drawn as arcs on the globe: 475
 <pre><code>&quot;Charlotte&quot;</code></pre>
 </div>
 </div>
-<div id="52" class="cell" data-execution_count="1">
+<div id="54" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1"></a>df[<span class="fu">sortperm</span>(d)[<span class="fl">2</span><span class="op">:</span><span class="fl">4</span>], <span class="op">:</span>NAME]  <span class="co"># Code block 24: three nearest, skip Raleigh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{String}:
@@ -5334,7 +5334,7 @@ Figure 23: The same world coastline drawn with latitude plotted directly (left)
 <p>Locate a single facility to minimize the total population-weighted great-circle distance to every place in North Carolina.</p>
 </div>
 <p>Every place enters, not just the large cities: <code>usplace</code> filtered to the state, each place weighted by its population, with the weighted centroid <code>wcentroid</code> as the starting point for the search.</p>
-<div id="54" class="cell" data-execution_count="1">
+<div id="56" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href="#cb53-1"></a><span class="co"># Code block 25: every NC place, population-weighted</span></span>
 <span id="cb53-2"><a href="#cb53-2"></a>df <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.STFIP <span class="op">==</span> <span class="fu">st2fips</span>(<span class="op">:</span>NC), <span class="fu">usplace</span>())</span>
 <span id="cb53-3"><a href="#cb53-3"></a><span class="fu">select!</span>(df, <span class="op">:</span>NAME, <span class="op">:</span>LON, <span class="op">:</span>LAT, <span class="op">:</span>POP)</span>
@@ -5349,7 +5349,7 @@ Figure 23: The same world coastline drawn with latitude plotted directly (left)
 </div>
 </div>
 <p>The nearest place names the answer. <a href="#fig-nc-minisum" class="quarto-xref">Fig. 24</a> sets that optimum against every place in the state, which is what makes the result readable: the ten largest cities are labeled, and the population-weighted optimum sits near none of them.</p>
-<div id="56" class="cell" data-execution_count="1">
+<div id="58" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href="#cb55-1"></a><span class="co"># Code block 26: the place nearest that optimum</span></span>
 <span id="cb55-2"><a href="#cb55-2"></a>d <span class="op">=</span> <span class="fu">dgc</span>.([xyᵒ], pt)                      <span class="co"># optimum to each place</span></span>
 <span id="cb55-3"><a href="#cb55-3"></a>df[<span class="fu">argmin</span>(d), <span class="op">:</span>NAME], <span class="fu">round</span>(<span class="fu">minimum</span>(d))  <span class="co"># nearest place, miles</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -5448,7 +5448,7 @@ d_{road} \approx g \cdot d_{GC}(P_1, P_2).
 <p>The circuity factor depends on both the trip density and the directness of the travel network. A good default value for road travel is <strong>1.2</strong>. The factor in high-density areas is usually lower, because there are more direct roads between two large cities. Circuity factors for rail travel are higher than for road travel, because the rail network is far less dense. In sparse country, where the roads are few, they also run less directly, so the factor there is higher than in a dense region.</p>
 <p>Just 5 to 10 sampled road pairs give a reasonable estimate, as long as the samples are independent and do not overlap, because the overestimates tend to cancel the underestimates. The sample can be smaller than that rule of thumb suggests, since three pairs are already serviceable. Where a factor is to be used extensively, the samples can be weighted toward the higher trip densities, but in practice that refinement is rarely needed.</p>
 <p>The procedure is short enough to run in full. Take the three cities of <a href="#fig-circuity-triangle" class="quarto-xref">Fig. 26</a>, sample the three pairs among them, and average the ratios. The great-circle distances are computed; the road distances are looked up once and taken as data, which is what a handful of samples means in practice.</p>
-<div id="60" class="cell" data-execution_count="1">
+<div id="62" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1"></a><span class="co"># Code block 28: three cities, road against great-circle</span></span>
 <span id="cb58-2"><a href="#cb58-2"></a>Detroit     <span class="op">=</span> [<span class="op">-</span><span class="fl">83.1022</span>, <span class="fl">42.3830</span>]   <span class="co"># (lon, lat), degrees</span></span>
 <span id="cb58-3"><a href="#cb58-3"></a>Gainesville <span class="op">=</span> [<span class="op">-</span><span class="fl">82.3492</span>, <span class="fl">29.6807</span>]</span>
@@ -5467,7 +5467,7 @@ d_{road} \approx g \cdot d_{GC}(P_1, P_2).
 <pre><code>1.1314763826552756</code></pre>
 </div>
 </div>
-<div id="62" class="cell" data-execution_count="1">
+<div id="64" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1"></a><span class="co"># Code block 29: circuity for each pair</span></span>
 <span id="cb60-2"><a href="#cb60-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(</span>
 <span id="cb60-3"><a href="#cb60-3"></a>    <span class="dt">Pair</span> <span class="op">=</span> [<span class="st">&quot;Detroit-Gainesville&quot;</span>, <span class="st">&quot;Detroit-Memphis&quot;</span>,</span>
@@ -5488,7 +5488,7 @@ d_{road} \approx g \cdot d_{GC}(P_1, P_2).
 <p><span class="math inline">\bar g</span> = 1.13</p>
 </div>
 <p>An average of three ratios is a claim, and it can be checked. The pair this section opened with, Goldsboro to High Point, took no part in the calibration: different state, shorter trip, and a road distance measured over the network rather than looked up. Applying the estimate to it and comparing against what that pair actually gives is the test.</p>
-<div id="64" class="cell" data-execution_count="1">
+<div id="66" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Code block 30: the estimate against a held-out pair</span></span>
 <span id="cb62-2"><a href="#cb62-2"></a>gGH <span class="op">=</span> <span class="fl">137.7</span> <span class="op">/</span> <span class="fl">121.0</span>                 <span class="co"># road / great-circle, held out</span></span>
 <span id="cb62-3"><a href="#cb62-3"></a>(held_out <span class="op">=</span> <span class="fu">round</span>(gGH, digits <span class="op">=</span> <span class="fl">3</span>),</span>
@@ -5534,7 +5534,7 @@ Figure 26: Locating for existing facilities at Detroit, Gainesville and Memphis
 <p>The framing is a consulting one. A company whose owners are already in Cary would prefer to stay there, everything else being equal. Transport cost is not the whole of their decision: for a distribution company it is close to everything, but for a company that has to hire engineers and technical staff it might be half, with the rest going to who is willing to live in the location, the cost of energy, tax policy, and a long list besides. So the question put to the logistics engineer is not where to locate. It is what staying in Cary costs per year against the transport-optimal site. If the answer is a few hundred dollars a month the company stays; if it is millions, it moves. Producing that differential is the whole of the engineer’s task, and the trade against wages, taxes and energy is management’s.</p>
 <p>In order to determine the differential, the transport rate is needed and is the piece of information a firm usually does have: say $2 per mile for a truck on the road. Evaluated against great-circle distance, the resulting estimate of transport cost is too low, because those are not the miles the truck drives. Where that rate comes from is taken up in Transport.</p>
 <p>The three customers are the cities sampled for circuity in code block 28, each defined there as a <code>[longitude, latitude]</code> pair in degrees. Those cities and their truckloads are the data; the factor <span class="math inline">\bar g</span> just estimated turns great-circle miles into road miles, and the rate turns road miles into dollars.</p>
-<div id="66" class="cell" data-execution_count="1">
+<div id="68" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># Code block 31: truckload weights and the annual cost</span></span>
 <span id="cb64-2"><a href="#cb64-2"></a>P <span class="op">=</span> <span class="fu">permutedims</span>(<span class="fu">hcat</span>(Detroit, Gainesville, Memphis))  <span class="co"># lon/lat, blk 28</span></span>
 <span id="cb64-3"><a href="#cb64-3"></a>wTL <span class="op">=</span> [<span class="fl">40.0</span>, <span class="fl">25.0</span>, <span class="fl">35.0</span>]           <span class="co"># truckloads per year</span></span>
@@ -5547,7 +5547,7 @@ Figure 26: Locating for existing facilities at Detroit, Gainesville and Memphis
 </div>
 </div>
 <p>The optimum is found the way 2.2 found one, a downhill search from the weighted centroid.</p>
-<div id="68" class="cell" data-execution_count="1">
+<div id="70" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1"></a><span class="co"># Code block 32: the optimum site</span></span>
 <span id="cb66-2"><a href="#cb66-2"></a>c0 <span class="op">=</span> <span class="fu">wcentroid</span>(P[<span class="op">:</span>, <span class="fl">1</span>], P[<span class="op">:</span>, <span class="fl">2</span>], wTL)</span>
 <span id="cb66-3"><a href="#cb66-3"></a>xᵒ <span class="op">=</span> Optim.<span class="fu">minimizer</span>(<span class="fu">optimize</span>(TCyr, [c0.LON, c0.LAT]))</span>
@@ -5557,7 +5557,7 @@ Figure 26: Locating for existing facilities at Detroit, Gainesville and Memphis
 </div>
 </div>
 <p>Evaluating the two sites is then one call each.</p>
-<div id="70" class="cell" data-execution_count="1">
+<div id="72" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># Code block 33: what an alternative site would cost</span></span>
 <span id="cb68-2"><a href="#cb68-2"></a>Cary <span class="op">=</span> [<span class="op">-</span><span class="fl">78.8190</span>, <span class="fl">35.7814</span>]</span>
 <span id="cb68-3"><a href="#cb68-3"></a>Δ <span class="op">=</span> <span class="fu">TCyr</span>(Cary) <span class="op">-</span> <span class="fu">TCyr</span>(xᵒ)</span>
@@ -5607,7 +5607,7 @@ Figure 27: FedEx hub choice: Greensboro (star) at the I-40/I-85 crossroads vers
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Endnotes</h2>
 
 <ol>
-<li id="fn1"><p>“What are FOB shipping terms?” simplestudies.com, <a href="http://simplestudies.com/what-are-fob-shipping-terms.html" class="uri">http://simplestudies.com/what-are-fob-shipping-terms.html</a> (accessed January 2012); carried from the Facility Location chapter.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>“What are FOB shipping terms?” simplestudies.com, <a href="http://simplestudies.com/what-are-fob-shipping-terms.html" class="uri">http://simplestudies.com/what-are-fob-shipping-terms.html</a> (accessed January 2012).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Animation generated by P.A. Simionescu and contributed to Wikimedia Commons, <a href="https://commons.wikimedia.org/wiki/File:Nelder_Mead1.gif" class="uri">https://commons.wikimedia.org/wiki/File:Nelder_Mead1.gif</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>J. C. Lagarias, J. A. Reeds, M. H. Wright, and P. E. Wright, “Convergence Properties of the Nelder-Mead Simplex Method in Low Dimensions,” <em>SIAM Journal on Optimization</em> 9, no. 1 (1998): 112–147.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Cranes, Fig. 103 in <em>Reference Guide to Overhead Material Handling Systems</em>, Charlotte, NC: Material Handling Institute, 1993. Storage-and-retrieval machine, Fig. 6-14, and lift truck, Fig. 7-7, both in R.A. Kulwiec, <em>Advanced Material Handling</em>, Pittsburgh, PA: Material Handling Institute, 1983.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

@@ -413,8 +413,10 @@ function costcurves!(ax, v)
     lab!(xT, TLC_TL(xT), L"TLC_{TL}", (:left, :bottom), (6, 2))
     lab!(0.99UB, TLC_LTL(0.99UB), L"TLC_{LTL}", (:right, :bottom), (0, 6))
     lab!(at(0.32), TC_TL(at(0.32)), L"TC_{TL}", (:left, :bottom), (6, 2))
-    lab!(at(0.18), TC_LTL(at(0.18)), L"TC_{LTL}", (:right, :top),
-         (-2, -6))
+    # TC_LTL hangs under its curve at the left edge, below the curve's
+    # height a fifth of the way in, so the steep TC_TL stays clear even
+    # in the narrow panels of the next figure.
+    lab!(at(0.0), TC_LTL(at(0.2)), L"TC_{LTL}", (:left, :top), (4, -8))
     lab!(at(0.35), IC(at(0.35), v), L"IC", (:left, :top), (6, -4))
     xlims!(ax, x0, x1)
     ylims!(ax, IC(x0, v), top)

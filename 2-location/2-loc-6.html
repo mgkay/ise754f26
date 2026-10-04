@@ -4396,7 +4396,7 @@ Figure 1: The network of lecture 2.2’s procurement-and-distribution example. 
 <p>Logistics networks have been used in several of the examples considered in previous lectures. <a href="#fig-star" class="quarto-xref">Fig. 1</a> from <a href="2-loc-2.html#example-1" class="xref" data-lec="2.2" data-id="example-1" title="Single-Facility Minisum">Ex. 1 in Lecture 2.2</a> is a good example. Six nodes, five fixed and one, the new facility, determined by the problem. Five arcs. And the flow on each was not given: it followed from the demand at each customer and from the bill-of-materials relationships setting how much raw material the plant draws from each supplier to meet it. The logistics network was designed and used to determine the monetary weights needed to locate the new facility.</p>
 <p>Uncertainty is not what makes logistics network design hard. It matters, and a proper logistics engineer accounts for it, but it does not drive the gross, macroscopic shape of a network. What drives that shape is <strong>lumpiness</strong>: the resources a network is built out of do not come in arbitrary sizes. And the lumpiest resource of all, the one that drives everything else, is people.</p>
 <p>What the modeling has to carry is that lumpiness drives <strong>economies of scale</strong>, so that more of one thing is cheaper per unit, and <strong>economies of scope</strong>, so that making many things together is cheaper than making them apart, because the same lumpy resources serve all of them. Between them those reduce the cost of a network to two components: a <strong>fixed production cost</strong> at each facility, and a <strong>variable transport cost</strong> that depends on where the facilities are. That is the pair the uncapacitated facility location model takes as input, so the UFL determines the number and location of the new facilities.</p>
-<p>The fixed production cost never has to be identified directly, and that is what makes the data obtainable. Before, when the UFL heuristics were the subject, a fixed cost and a variable cost were simply put in to illustrate the mechanics. For a real problem, separating the part of a plant’s cost that genuinely does not depend on output, the people and the leases, is difficult and somewhat arbitrary, and it is not where the economies mostly come from: those come from operating a larger machine at a lower cost per unit, and from running larger batches. So the parts are not separated at all. Total production cost is added up, a linear regression is fitted, and the intercept stands in for the fixed component, as in lecture 2.4 Sec. 8.</p>
+<p>The fixed production cost never has to be identified directly, and that is what makes the data obtainable. Before, when the UFL heuristics were the subject, a fixed cost and a variable cost were simply put in to illustrate the mechanics. For a real problem, separating the part of a plant’s cost that genuinely does not depend on output, the people and the leases, is difficult and somewhat arbitrary, and it is not where the economies mostly come from: those come from operating a larger machine at a lower cost per unit, and from running larger batches. So the parts are not separated at all. Total production cost is added up, a linear regression is fitted, and the intercept stands in for the fixed component, as in Lecture 2.4 Sec. 8.</p>
 <p>Lumpiness has a third consequence alongside those two: a facility has a <strong>minimum effective size</strong>, below which it is not worth having at all.</p>
 </section>
 <section id="bottom-up-vs.-top-down-analysis" class="level2 page-columns page-full">
@@ -4422,7 +4422,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 <p>Read the arrows and the asymmetry is plain. Bottom-up has one input and fans out to as many sites as are worth evaluating. Top-down is a chain: nothing can be evaluated until the rate exists, and the rate cannot exist until something has already been spent.</p>
 <section id="three-city-total-logistics-cost" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="three-city-total-logistics-cost">Three-city total logistics cost</h3>
-<p>The two analyses are easiest to tell apart on one instance rather than two, and lecture 2.2 already built the instance: a company whose owners are in Cary, and three customers it ships to. What follows evaluates that firm twice, changing only what is known about it.</p>
+<p>The two analyses are easiest to tell apart on one instance rather than two, and Lecture 2.2 already built the instance: a company whose owners are in Cary, and three customers it ships to. What follows evaluates that firm twice, changing only what is known about it.</p>
 <div id="example-1" class="example-heading">
 <p>Example 1: Cary firm</p>
 </div>
@@ -4435,7 +4435,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 <div class="statement">
 <p>Determine the optimum, the cost at Cary, and the difference between them, for three customers receiving 40, 25 and 35 truckloads a year at $2.00 per loaded mile.</p>
 </div>
-<div id="8" class="cell" data-execution_count="1">
+<div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Code block 1: three cities, road against great-circle</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>Detroit     <span class="op">=</span> [<span class="op">-</span><span class="fl">83.1022</span>, <span class="fl">42.3830</span>]   <span class="co"># (lon, lat), degrees</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>Gainesville <span class="op">=</span> [<span class="op">-</span><span class="fl">82.3492</span>, <span class="fl">29.6807</span>]</span>
@@ -4454,7 +4454,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 <pre><code>1.1314763826552756</code></pre>
 </div>
 </div>
-<div id="10" class="cell" data-execution_count="1">
+<div id="12" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Code block 2: truckload weights and the annual cost</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>P <span class="op">=</span> <span class="fu">permutedims</span>(<span class="fu">hcat</span>(Detroit, Gainesville, Memphis))  <span class="co"># lon/lat, blk 1</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>wTL <span class="op">=</span> [<span class="fl">40.0</span>, <span class="fl">25.0</span>, <span class="fl">35.0</span>]           <span class="co"># truckloads per year</span></span>
@@ -4467,7 +4467,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 </div>
 <p>The optimum is found the way 2.2 found one, a downhill search from the weighted centroid.</p>
-<div id="12" class="cell" data-execution_count="1">
+<div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Code block 3: the optimum site</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>c0 <span class="op">=</span> <span class="fu">wcentroid</span>(P[<span class="op">:</span>, <span class="fl">1</span>], P[<span class="op">:</span>, <span class="fl">2</span>], wTL)</span>
 <span id="cb6-3"><a href="#cb6-3"></a>xᵒ <span class="op">=</span> Optim.<span class="fu">minimizer</span>(<span class="fu">optimize</span>(TCyr, [c0.LON, c0.LAT]))</span>
@@ -4477,7 +4477,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 </div>
 <p>Evaluating the two sites is then one call each.</p>
-<div id="14" class="cell" data-execution_count="1">
+<div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Code block 4: what an alternative site would cost</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>Cary <span class="op">=</span> [<span class="op">-</span><span class="fl">78.8190</span>, <span class="fl">35.7814</span>]</span>
 <span id="cb8-3"><a href="#cb8-3"></a>Δ <span class="op">=</span> <span class="fu">TCyr</span>(Cary) <span class="op">-</span> <span class="fu">TCyr</span>(xᵒ)</span>
@@ -4506,7 +4506,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 <p>Nothing about the firm changes. What changes is what is known about it: the $2.00 per loaded mile is withdrawn, and in its place is a single figure for what the Cary operation spent on outbound transport last year, together with the tonnage behind it at ten tons per truckload.</p>
 <p>The circuity factor does not appear anywhere below, and its absence is not an approximation. A nominal rate is calibrated against the same distances the model will later evaluate, so multiplying every distance by a constant inflates the distances and deflates the rate by exactly the same factor. It cancels. Applying it consistently would not be wrong, merely extra work for an unchanged answer, and great-circle distance is used throughout.</p>
-<div id="16" class="cell" data-execution_count="1">
+<div id="18" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Code block 5: what the firm knows, and the rate it implies</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>tonperTL <span class="op">=</span> <span class="fl">10.0</span>                    <span class="co"># ton per truckload</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a>f <span class="op">=</span> wTL <span class="op">.*</span> tonperTL                <span class="co"># ton/yr to each customer</span></span>
@@ -4519,7 +4519,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 </div>
 <p>The objective is rebuilt from the nominal rate, and re-solved exactly as before.</p>
-<div id="18" class="cell" data-execution_count="1">
+<div id="20" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Code block 6: the optimum, priced at the nominal rate</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="fu">TCnom</span>(xy) <span class="op">=</span> rnom <span class="op">*</span> <span class="fu">sum</span>(f[i] <span class="op">*</span> <span class="fu">dgc</span>(xy, P[i, <span class="op">:</span>]) <span class="cf">for</span> i <span class="kw">in</span> <span class="fu">eachindex</span>(f))</span>
 <span id="cb12-3"><a href="#cb12-3"></a>xᵒn <span class="op">=</span> Optim.<span class="fu">minimizer</span>(<span class="fu">optimize</span>(TCnom, [c0.LON, c0.LAT]))</span>
@@ -4536,7 +4536,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 </div>
 <p>Three things in that table are worth checking rather than reading past, and each is one of the nine checks the course names.</p>
-<div id="20" class="cell" data-execution_count="1">
+<div id="22" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Code block 7: three checks on the top-down answer</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    Check <span class="op">=</span> [<span class="st">&quot;Landmark: Cary re-priced equals what was spent&quot;</span>,</span>
@@ -4575,7 +4575,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 <p>Determine the number and location of plants Kudde should build, given a transport rate of $2.5523 per ton-mile and a production cost subject to economies of scale.</p>
 </div>
 <p>Two quantities convert the statement into model data. A box of 24 pillows weighs 35 lb, which fixes the weight of a pillow; and one pillow per hundred people a year turns a census population into a tonnage.</p>
-<div id="22" class="cell" data-execution_count="1">
+<div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Code block 8: from the statement to demand, by ZIP code</span></span>
 <span id="cb16-2"><a href="#cb16-2"></a>ubox <span class="op">=</span> <span class="fl">24</span>                       <span class="co"># pillows per box</span></span>
 <span id="cb16-3"><a href="#cb16-3"></a>uwt  <span class="op">=</span> <span class="fl">35</span> <span class="op">/</span> ubox                <span class="co"># lb per pillow</span></span>
@@ -4592,7 +4592,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 </div>
 <p>The cost matrix is built once and never changes: only the fixed cost moves as the analysis proceeds.</p>
-<div id="24" class="cell" data-execution_count="1">
+<div id="26" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Code block 9: the variable cost of serving every ZIP from every site</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>D <span class="op">=</span> g <span class="op">.*</span> <span class="fu">dgca</span>(P, P, z.ALAND)</span>
 <span id="cb18-3"><a href="#cb18-3"></a>C <span class="op">=</span> rton <span class="op">.*</span> (f<span class="op">&#39;</span> <span class="op">.*</span> D)</span>
@@ -4603,7 +4603,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 <p>Lecture 2.4 obtained the fixed cost by fitting a line to the production costs of plants that already existed, and taking its intercept. Kudde has no plants to fit. What it has instead is a statement of how cost varies with size, and a line can be fitted to that curve just as well as to a scatter of observations: the intercept of the fit is the fixed component either way.</p>
 <p>But a line fitted to a curve depends on the range it is fitted over,<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and the relevant range is the demand a single plant would see. That is precisely what the location problem is trying to determine. So the fixed cost and the plant count are solved alternately: assume a range, fit, solve, then re-fit over the demand the solution actually gives its largest plant.</p>
-<div id="26" class="cell" data-execution_count="1">
+<div id="28" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Code block 10: the scale curve, linearized over a demand range</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a>f0   <span class="op">=</span> <span class="fl">1e6</span> <span class="op">*</span> uwt <span class="op">/</span> <span class="fl">2000</span>         <span class="co"># ton: what one million pillows weigh</span></span>
 <span id="cb20-3"><a href="#cb20-3"></a>TPC0 <span class="op">=</span> <span class="fl">2e6</span>                      <span class="co"># $/yr to produce that million</span></span>
@@ -4620,7 +4620,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 <pre><code>fitk (generic function with 1 method)</code></pre>
 </div>
 </div>
-<div id="28" class="cell" data-execution_count="1">
+<div id="30" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Code block 11: alternate between the fixed cost and the UFL</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a><span class="kw">function</span> <span class="fu">alternate</span>(C, f)</span>
 <span id="cb22-3"><a href="#cb22-3"></a>    tr <span class="op">=</span> <span class="fu">DataFrame</span>(iter <span class="op">=</span> <span class="dt">Int</span>[], fmax <span class="op">=</span> <span class="dt">Float64</span>[], k <span class="op">=</span> <span class="dt">Float64</span>[],</span>
@@ -4651,7 +4651,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 </div>
 <p>The first row is the analysis a reader would do without the alternation: assume one plant serves the country, and the implied fixed cost is large enough that only five are opened. Each subsequent row re-fits over a demand no plant actually exceeds, the fixed cost falls, and more plants become worth opening.</p>
 <p>The trace is printed rather than the answer alone because it carries a <strong>Nudge</strong> check for free. Down the table the fixed cost falls and the plant count rises, and that is the one direction the model is allowed to move: a cheaper facility can only make more of them worth opening. A row where both fell would mean the fixed cost was not reaching the objective, and a single printed answer would have hidden it.</p>
-<div id="30" class="cell" data-execution_count="1">
+<div id="32" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Code block 12: where the plants go</span></span>
 <span id="cb24-2"><a href="#cb24-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(Plant <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(best.y),</span>
 <span id="cb24-3"><a href="#cb24-3"></a>              Site <span class="op">=</span> [<span class="fu">lonlat2loc</span>(P[i, <span class="op">:</span>], <span class="fu">usplace</span>()).desc</span>
@@ -4716,7 +4716,7 @@ Figure 2: Bottom-up begins with a known rate and fans out to evaluate each cand
 <p>The customers are not households. They are convenience stores, grocery chains and their distribution centers, and the quantities are carried in tons even though a bottler thinks in volume, because tons keep the units of the rate simple.</p>
 <p>Because Popco’s plants are bottling plants, they are <strong>monetarily weight gaining</strong>: syrup arrives concentrated and leaves as filled bottles, so a truckload in becomes many truckloads out. The inbound procurement cost is therefore small beside the outbound distribution cost, and it barely depends on where the plant stands. The UFL can ignore it, which is what lets <span class="math inline">TPC_i</span> and <span class="math inline">TDC_i</span> be treated separately above.</p>
 <p>That is an <strong>Assumptions</strong> check, and it is made here rather than at the end because it is what justifies the model that follows. Two assumptions carry the whole analysis. Weight gain is the first: it is what justifies dropping inbound procurement from the objective, and a plant that shipped out less than it took in would need the inbound leg evaluated. The second is that the fixed cost <span class="math inline">k</span> is the same at every candidate site, which is what lets one number stand for every plant and every candidate location. The second is false in any real engagement: land and labor do not cost the same across the West. It is adopted because the alternative is a site-by-site cost estimate nobody has, and the place to say so is here rather than in a footnote to the answer.</p>
-<div id="32" class="cell" data-execution_count="1">
+<div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Code block 13: the 42 plants, as the company keeps them</span></span>
 <span id="cb26-2"><a href="#cb26-2"></a>DC <span class="op">=</span> <span class="fu">DataFrame</span>(CSV.<span class="fu">File</span>(<span class="st">&quot;data/PopcoData.csv&quot;</span>))</span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="fu">rename!</span>(DC, <span class="op">:</span>DEMAND <span class="op">=&gt;</span> <span class="op">:</span>fDC, <span class="op">:</span>PROD_COST <span class="op">=&gt;</span> <span class="op">:</span>TPC, <span class="op">:</span>DIST_COST <span class="op">=&gt;</span> <span class="op">:</span>TDC)</span>
@@ -4771,8 +4771,8 @@ Figure 3: Popco’s 42 bottling plants. A century of acquisitions, and nobody h
 <li>Evaluate every candidate site against every customer at that rate, with the incumbent plants among the candidates.</li>
 <li>Run the UFL on the fixed cost and the cost matrix, and compare the result with the original network.</li>
 </ol>
-<p><strong>Step 1, the fixed cost.</strong> With 42 plants it is the regression of lecture 2.4, and the intercept is what is kept.</p>
-<div id="36" class="cell" data-execution_count="1">
+<p><strong>Step 1, the fixed cost.</strong> With 42 plants it is the regression of Lecture 2.4, and the intercept is what is kept.</p>
+<div id="38" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Code block 14: regress production cost on output, keep the intercept</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a><span class="fu">ŷ</span>(p, x) <span class="op">=</span> p[<span class="fl">1</span>] <span class="op">.+</span> p[<span class="fl">2</span>] <span class="op">.*</span> x</span>
 <span id="cb29-3"><a href="#cb29-3"></a><span class="fu">loss</span>(p) <span class="op">=</span> <span class="fu">sum</span>((DC.TPC <span class="op">.-</span> <span class="fu">ŷ</span>(p, DC.fDC)) <span class="op">.^</span> <span class="fl">2</span>)</span>
@@ -4827,7 +4827,7 @@ M_i = \bigl\{\, j : \arg\min_h d_{hj} = i \ \text{ and } \ d_{ij} \le d_{\max} \
 \tag{1}</span></span></p>
 <p>The customers the analysis works on are <span style="white-space: nowrap"><span class="math inline">M = \bigcup_{i \in N} M_i</span>,</span> which is smaller than the set of ZIP codes the country has. Running the screen over the whole country rather than the western states costs nothing and saves a judgment: the 200 miles removes the east automatically.</p>
 <p>The screen also answers a question Sec. 2 left open. Circuity cancels out of a <em>rate</em> that is calibrated against the same distances it will later evaluate, which is why the top-down rate needs no circuity factor. It does not cancel out of a <em>constraint</em>. Two hundred miles is a distance a truck actually drives, so the comparison has to be made in road miles, so the circuity factor appears in the screen below even though it is absent from <a href="#eq-rnom" class="quarto-xref">Eq. 3</a>.</p>
-<div id="40" class="cell" data-execution_count="1">
+<div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Code block 15: allocate ZIP codes to plants, within range</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a>z3 <span class="op">=</span> <span class="fu">filter</span>(r <span class="op">-&gt;</span> r.ISCUS <span class="op">&amp;&amp;</span> r.POP <span class="op">&gt;</span> <span class="fl">0</span>, <span class="fu">uszcta3</span>())</span>
 <span id="cb32-3"><a href="#cb32-3"></a>XDC <span class="op">=</span> <span class="fu">hcat</span>(DC.LON, DC.LAT)</span>
@@ -4887,7 +4887,7 @@ f_{j \in M_i} = f^{DC}_i \, \frac{q_j}{\sum_{h \in M_i} q_h}
 </dl>
 </div>
 <p>So if a plant’s market holds half a million people and one of its ZIP codes holds a hundred thousand, that ZIP code is allocated a fifth of the plant’s tonnage. This is the one step in which population appears at all.</p>
-<div id="44" class="cell" data-execution_count="1">
+<div id="46" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Code block 16: population-proportional demand, and the Balance check</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>z3 <span class="op">=</span> <span class="fu">transform</span>(<span class="fu">groupby</span>(z3, <span class="op">:</span>IDX), <span class="op">:</span>POP <span class="op">=&gt;</span> sum <span class="op">=&gt;</span> <span class="op">:</span>DCPOP)</span>
 <span id="cb35-3"><a href="#cb35-3"></a>DC.IDX <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>nDC</span>
@@ -4916,7 +4916,7 @@ r_\text{nom} = \frac{\sum_{i \in N} TDC_i}
 </div>
 <p>The adjustment matters here and nowhere more: a ZIP code served by a plant standing inside it is not served at zero cost, and without the floor of lecture 2.5 the denominator would be too small and the rate too high.</p>
 <p>Reading <a href="#eq-rnom" class="quarto-xref">Eq. 3</a> as a <strong>Units</strong> check is the cheapest guard the lecture has. Dollars per year over ton-miles per year gives dollars per ton-mile, which is what a transport rate is. The failure the check catches is a denominator that is only miles, because the demand weight was left out of the sum: the quotient is then dollars per mile, a different quantity of a different size, and it multiplies a ton-mile cost matrix downstream without complaint from anything but the units.</p>
-<div id="46" class="cell" data-execution_count="1">
+<div id="48" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1"></a><span class="co"># Code block 17: back out the rate, and re-price the incumbent network</span></span>
 <span id="cb37-2"><a href="#cb37-2"></a>XZ <span class="op">=</span> <span class="fu">hcat</span>(z3.LON, z3.LAT)</span>
 <span id="cb37-3"><a href="#cb37-3"></a>dsv <span class="op">=</span> [<span class="fu">dgca</span>(XDC[z3.IDX[j]<span class="op">:</span>z3.IDX[j], <span class="op">:</span>], XZ[j<span class="op">:</span>j, <span class="op">:</span>], [z3.ALAND[j]])[<span class="fl">1</span>]</span>
@@ -4936,7 +4936,7 @@ r_\text{nom} = \frac{\sum_{i \in N} TDC_i}
 \qquad i \in M \cup N, \ \ j \in M
 \tag{4}</span></span></p>
 <p>The row index runs over <span class="math inline">M \cup N</span> and the column index over <span class="math inline">M</span> alone, which is the asymmetry that lets an incumbent plant be kept: a plant is a candidate site without being a customer.</p>
-<div id="48" class="cell" data-execution_count="1">
+<div id="50" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># Code block 18: candidate sites are ZIP centroids plus incumbent plants</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a>NF <span class="op">=</span> <span class="fu">vcat</span>(XZ, XDC)</span>
 <span id="cb39-3"><a href="#cb39-3"></a>CP <span class="op">=</span> rnomP <span class="op">.*</span> (z3.f<span class="op">&#39;</span> <span class="op">.*</span> <span class="fu">dgca</span>(NF, XZ, z3.ALAND))</span>
@@ -4946,7 +4946,7 @@ r_\text{nom} = \frac{\sum_{i \in N} TDC_i}
 </div>
 </div>
 <p><strong>Step 6, the UFL.</strong> Before reading the answer, write down a guess: how many of the 42 plants survive, and does distribution cost rise or fall. That is a <strong>Prior</strong>, and it is worth spending here because the answer is genuinely hard to anticipate. Most people guess a mild consolidation and a saving in freight. One of those is wrong, and committing to the guess first is what makes the surprise informative rather than invisible.</p>
-<div id="50" class="cell" data-execution_count="1">
+<div id="52" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Code block 19: solve, and read the result against what Popco has</span></span>
 <span id="cb41-2"><a href="#cb41-2"></a>y, TC, W <span class="op">=</span> <span class="fu">ufl</span>(k, CP)</span>
 <span id="cb41-3"><a href="#cb41-3"></a>TDCnew <span class="op">=</span> TC <span class="op">-</span> k <span class="op">*</span> <span class="fu">length</span>(y)</span>
@@ -4971,7 +4971,7 @@ r_\text{nom} = \frac{\sum_{i \in N} TDC_i}
 <p>The rise is not a defect, it is arithmetic. Serving the same demand from roughly half as many plants means shipping further, so distribution cost had to increase. What was bought with it is fixed cost: the variable production cost <span class="math inline">c_p</span> is the same per ton wherever a plant stands, so it never entered the comparison, and what remains is one intercept <span class="math inline">k</span> per plant. Halving the plants halves that, and the saving more than offsets the extra freight. The result is a rise of 4.9% in distribution against a fall of 18.9% in the total.</p>
 <p>So the saving is not in the trucks. It is in the plants that no longer have to be paid for, and a reader who takes the first column alone will get the sign of the whole analysis wrong.</p>
 <p>Two checks belong here, where a number has just been produced by a heuristic that carries no guarantee. The first is a <strong>Bounds</strong> check, and the bound is free: keeping every plant Popco already has is a feasible solution to the same UFL, so its cost is a ceiling the recommendation cannot exceed. A heuristic that returns more than the incumbent network costs has failed, and the comparison costs one line.</p>
-<div id="52" class="cell" data-execution_count="1">
+<div id="54" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># Code block 20: Bounds, against the network Popco already runs</span></span>
 <span id="cb43-2"><a href="#cb43-2"></a>inc <span class="op">=</span> <span class="fu">nrow</span>(z3) <span class="op">.+</span> (<span class="fl">1</span><span class="op">:</span>nDC)        <span class="co"># the incumbents, as candidate sites</span></span>
 <span id="cb43-3"><a href="#cb43-3"></a>TCceil <span class="op">=</span> k <span class="op">*</span> nDC <span class="op">+</span> <span class="fu">sum</span>(<span class="fu">minimum</span>(CP[inc, <span class="op">:</span>], dims <span class="op">=</span> <span class="fl">1</span>))</span>
@@ -4986,7 +4986,7 @@ r_\text{nom} = \frac{\sum_{i \in N} TDC_i}
 </div>
 <p>The ceiling lands on the existing network’s cost to the dollar, which is worth noticing rather than passing over. It was computed a different way: the table above added one intercept per plant to what Popco actually spent, while this one lets the solver allocate every ZIP code to whichever of the 42 is cheapest. The two agree because evaluating by cost and evaluating by distance rank the same sites in the same order, so the bound is tight and the Landmark check of step 4 holds at the level of the whole objective, not only the rate.</p>
 <p>The second is a <strong>Nudge</strong>, and the direction is predictable before it runs, which is what makes it a check rather than an experiment. A plant that costs more to have should mean fewer plants, never more.</p>
-<div id="54" class="cell" data-execution_count="1">
+<div id="56" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># Code block 21: Nudge, on the one parameter the answer turns on</span></span>
 <span id="cb45-2"><a href="#cb45-2"></a><span class="fu">nopen</span>(kmul) <span class="op">=</span> <span class="fu">length</span>(<span class="fu">first</span>(<span class="fu">ufl</span>(kmul <span class="op">*</span> k, CP; verbose <span class="op">=</span> <span class="cn">false</span>)))</span>
 <span id="cb45-3"><a href="#cb45-3"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(Fixed_cost <span class="op">=</span> [<span class="st">&quot;k/2&quot;</span>, <span class="st">&quot;k&quot;</span>, <span class="st">&quot;2k&quot;</span>],</span>
@@ -5000,7 +5000,7 @@ r_\text{nom} = \frac{\sum_{i \in N} TDC_i}
 </div>
 </div>
 <p>Halving the fixed cost opens more plants and doubling it opens fewer, which is the monotone response the model must have. A run that moved the other way would mean the fixed cost had been wired into the objective with the wrong sign, and no amount of staring at a map would have shown it.</p>
-<div id="56" class="cell" data-execution_count="1">
+<div id="58" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># Code block 22: what kind of site each recommendation is</span></span>
 <span id="cb47-2"><a href="#cb47-2"></a>kept <span class="op">=</span> <span class="fu">count</span>(i <span class="op">-&gt;</span> i <span class="op">&gt;</span> <span class="fu">nrow</span>(z3), y)</span>
 <span id="cb47-3"><a href="#cb47-3"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(</span>
@@ -5056,8 +5056,8 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 <li><p>Question: If an original plant is kept, will it have sufficient capacity (since fewer plants)</p></li>
 <li><p>Question: If Popco was planning to expand to serve the entire continental U.S., how could the current results be utilized</p></li>
 </ul>
-<p>The first is a real gap in the model rather than a caution about it. The uncapacitated facility location problem is uncapacitated by construction: it places facilities as though each could make whatever is allocated to it, and nothing in <a href="#eq-cost" class="quarto-xref">Eq. 4</a> or in the solve says otherwise. Closing 42 plants down to 24 over the same total tonnage therefore hands each surviving site more work, and the model has no opinion about whether it can be done. Some of these plants would be asked to double their production rate, and a plant already running two or three shifts cannot. That is a capacity constraint, and the UFL carries no constraints at all, which is what the mixed-integer formulation of lecture 2.7 changes.</p>
-<div id="60" class="cell" data-execution_count="1">
+<p>The first is a real gap in the model rather than a caution about it. The uncapacitated facility location problem is uncapacitated by construction: it places facilities as though each could make whatever is allocated to it, and nothing in <a href="#eq-cost" class="quarto-xref">Eq. 4</a> or in the solve says otherwise. Closing 42 plants down to 24 over the same total tonnage therefore hands each surviving site more work, and the model has no opinion about whether it can be done. Some of these plants would be asked to double their production rate, and a plant already running two or three shifts cannot. That is a capacity constraint, and the UFL carries no constraints at all, which is what the mixed-integer formulation of Lecture 2.7 changes.</p>
+<div id="62" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># Code block 23: what each site would have to produce</span></span>
 <span id="cb50-2"><a href="#cb50-2"></a>load <span class="op">=</span> W <span class="op">*</span> z3.f                       <span class="co"># ton/yr allocated to each open site</span></span>
 <span id="cb50-3"><a href="#cb50-3"></a>kept <span class="op">=</span> [i for i <span class="kw">in</span> y if i <span class="op">&gt;</span> <span class="fu">nrow</span>(z3)]</span>
@@ -5074,7 +5074,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 </div>
 </div>
 <p>The mean rises by a factor of 1.75, which is the arithmetic and is not the interesting part. Two things in that table matter more. The largest site would have to produce more than any plant Popco runs today, so the recommendation quietly asks the company to operate at a scale it has never operated at. And the mean hides the spread: the plants that survive do not grow uniformly.</p>
-<div id="62" class="cell" data-execution_count="1">
+<div id="64" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Code block 24: how much each kept plant would grow</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a><span class="fu">prt</span>(<span class="fu">DataFrame</span>(</span>
 <span id="cb52-3"><a href="#cb52-3"></a>    Plant <span class="op">=</span> [i <span class="op">-</span> <span class="fu">nrow</span>(z3) for i <span class="kw">in</span> kept],</span>
@@ -5099,7 +5099,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 <p>The kept plants do not move together at all: the ratio of planned to current output runs from 0.76 to 2.42. So the question is asked per site and not of the average, and the sites it flags are not the ones the average would suggest.</p>
 <p><strong>The first evidence that it may be answerable is already on the page.</strong> <a href="#fig-popco-fit" class="quarto-xref">Fig. 4</a> scatters the plants across a wide span of annual output, and a firm whose plants already run at very different scales is a firm whose plant capacity is flexible. Extra lines and second shifts are how that flexibility is usually realized. Had every plant sat at the same output, the span would have said the opposite, and a fixed capacity would have to be modeled rather than assumed away.</p>
 <p>Lecture 1.3 Sec. 5 turns that from an impression into a test. A plant’s nameplate rate is optimistic: the throughput-feasible minimum inflates the arrival rate by yield loss and the process time by availability, so a site that looks adequate against its rated output can still be infeasible. Running it against the table above produces something more useful than a yes or a no. It produces <em>pointed questions</em>: whether the plant asked to more than double its current output can be taken there at all, and what it would cost. Those are questions a client can answer in a phone call, which a request for all their customer data is not.</p>
-<p>Where the constraint genuinely cannot be met, the answer is not to re-run the UFL and hope. It is to say what capacity each site may have and let the model respect it, which is a mixed-integer formulation and is lecture 2.7.</p>
+<p>Where the constraint genuinely cannot be met, the answer is not to re-run the UFL and hope. It is to say what capacity each site may have and let the model respect it, which is a mixed-integer formulation and is Lecture 2.7.</p>
 <p>The second question has an answer that costs surprisingly little. A national Popco needs no new method: take every three-digit ZIP in the continental United States as a candidate site, keep the western plants among the candidates, let each candidate’s market be the ZIPs within 200 miles of it, carry the same fixed cost, and solve the same UFL. The rate transfers on the assumption that a firm whose fleet, product and service pattern are unchanged buys miles at about the same rate in a new region, which is the transfer case of Sec. 2.</p>
 <p>Two cautions come with it, and both are the kind that should be said aloud rather than discovered later. The eastern market may simply not behave like the western one, so this is a first cut and not a plan. And a national run raises a question the western one never had to face: whether every ZIP code should be served at all, since some are sparse enough that covering them cannot pay. The model as written assumes they all must be.</p>
 <p>The whole of this analysis takes less than a week for a real company, and that speed is not a boast about efficiency. It is what makes the result useful. Presenting a number is what causes a client to say that the number is wrong, and to explain why: some constraint nobody thought to mention, a plant that cannot be closed for reasons that have nothing to do with cost, a customer who must be served from a particular site. That information is not withheld. It is latent, and a concrete recommendation is what brings it out.</p>
@@ -5118,7 +5118,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 <p>Determine the change in total cost from closing both of a firm’s plants and opening a single plant at zone 2.</p>
 </div>
 <p>A firm has two plants, A and B, serving four zones that lie along one road. Everything is read off the road: plant A sits at mile 0, the zones at miles 30, 90, 160 and 420, and plant B at mile 200.</p>
-<div id="64" class="cell" data-execution_count="1">
+<div id="66" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1"></a><span class="co"># Code block 25: the instance, read off one road</span></span>
 <span id="cb54-2"><a href="#cb54-2"></a>pos <span class="op">=</span> (A <span class="op">=</span> <span class="fl">0.0</span>, Z1 <span class="op">=</span> <span class="fl">30.0</span>, Z2 <span class="op">=</span> <span class="fl">90.0</span>, Z3 <span class="op">=</span> <span class="fl">160.0</span>, B <span class="op">=</span> <span class="fl">200.0</span>, Z4 <span class="op">=</span> <span class="fl">420.0</span>)</span>
 <span id="cb54-3"><a href="#cb54-3"></a>zone, plant <span class="op">=</span> [<span class="op">:</span>Z1, <span class="op">:</span>Z2, <span class="op">:</span>Z3, <span class="op">:</span>Z4], [<span class="op">:</span>A, <span class="op">:</span>B]</span>
@@ -5141,7 +5141,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 </div>
 </div>
 <p><strong>Step 1.</strong> With two plants the regression of Sec. 3 is a line through two points, so the intercept can be read off directly and no fitting is needed.</p>
-<div id="66" class="cell" data-execution_count="1">
+<div id="68" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1"></a><span class="co"># Code block 26: the fixed cost, from two points</span></span>
 <span id="cb56-2"><a href="#cb56-2"></a>cp <span class="op">=</span> (prodcost[<span class="fl">1</span>] <span class="op">-</span> prodcost[<span class="fl">2</span>]) <span class="op">/</span> (output[<span class="fl">1</span>] <span class="op">-</span> output[<span class="fl">2</span>])</span>
 <span id="cb56-3"><a href="#cb56-3"></a>k <span class="op">=</span> prodcost[<span class="fl">2</span>] <span class="op">-</span> cp <span class="op">*</span> output[<span class="fl">2</span>]</span>
@@ -5151,7 +5151,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 </div>
 </div>
 <p><strong>Step 2.</strong> Each zone goes to its nearer plant, and anything beyond 200 miles is dropped.</p>
-<div id="68" class="cell" data-execution_count="1">
+<div id="70" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1"></a><span class="co"># Code block 27: the market, and what falls outside it</span></span>
 <span id="cb58-2"><a href="#cb58-2"></a>nearest <span class="op">=</span> [<span class="fu">argmin</span>(<span class="pp">@view</span> Dpz[<span class="op">:</span>, j]) for j <span class="kw">in</span> <span class="fu">eachindex</span>(zone)]</span>
 <span id="cb58-3"><a href="#cb58-3"></a>served <span class="op">=</span> [Dpz[nearest[j], j] <span class="op">&lt;=</span> <span class="fl">200</span> for j <span class="kw">in</span> <span class="fu">eachindex</span>(zone)]</span>
@@ -5168,7 +5168,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 </div>
 </div>
 <p><strong>Step 3.</strong> Each plant’s tonnage is split among its zones in proportion to population, by <a href="#eq-split" class="quarto-xref">Eq. 2</a>.</p>
-<div id="70" class="cell" data-execution_count="1">
+<div id="72" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1"></a><span class="co"># Code block 28: population-proportional demand</span></span>
 <span id="cb60-2"><a href="#cb60-2"></a>f <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">length</span>(zone))</span>
 <span id="cb60-3"><a href="#cb60-3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fu">eachindex</span>(plant)</span>
@@ -5181,8 +5181,8 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 </div>
 </div>
 <p>The second figure is there to be compared with the first. Splitting a total among zones cannot change it, so printing both is a <strong>Balance</strong> check on the one step where tonnage changes hands. It costs a line, and it guards the step most likely to lose some: a zone dropped by the screen must have had its tonnage reassigned to the zones that remain, never simply discarded.</p>
-<p><strong>Step 4.</strong> The nominal rate is what was spent over the ton-miles delivered, by <a href="#eq-rnom" class="quarto-xref">Eq. 3</a>, with the area floor of lecture 2.5 standing in wherever a zone is served from inside itself.</p>
-<div id="72" class="cell" data-execution_count="1">
+<p><strong>Step 4.</strong> The nominal rate is what was spent over the ton-miles delivered, by <a href="#eq-rnom" class="quarto-xref">Eq. 3</a>, with the area floor of Lecture 2.5 standing in wherever a zone is served from inside itself.</p>
+<div id="74" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Code block 29: the nominal rate</span></span>
 <span id="cb62-2"><a href="#cb62-2"></a>floorz <span class="op">=</span> (<span class="fl">2</span> <span class="op">/</span> <span class="fl">3</span>) <span class="op">.*</span> <span class="fu">sqrt</span>.(area <span class="op">./</span> <span class="cn">π</span>)</span>
 <span id="cb62-3"><a href="#cb62-3"></a><span class="fu">da</span>(dist, j) <span class="op">=</span> <span class="fu">max</span>(dist, floorz[j])</span>
@@ -5196,7 +5196,7 @@ Figure 6: The recommendation against the incumbent network. Red dots are Popco�
 </div>
 <p>All three quantities are printed so the division can be read as a <strong>Units</strong> check: dollars a year over ton-miles a year is dollars per ton-mile, and a rate that came out in dollars per mile would mean the demand weight had been left out of the denominator. The rate itself is high for freight, which is the second reason to print it: these are short hauls carrying small tonnages, and a number that looks wrong is worth explaining rather than passing over.</p>
 <p><strong>Steps 5 and 6.</strong> With four zones there is no need for a solver: the question asks what one specific configuration costs, so it is evaluated directly against the network the firm runs today.</p>
-<div id="74" class="cell" data-execution_count="1">
+<div id="76" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># Code block 30: closing both plants for one at zone 2</span></span>
 <span id="cb64-2"><a href="#cb64-2"></a>Dzz <span class="op">=</span> [<span class="fu">d</span>(a, b) for a <span class="kw">in</span> zone, b <span class="kw">in</span> zone]</span>
 <span id="cb64-3"><a href="#cb64-3"></a>served_idx <span class="op">=</span> <span class="fu">findall</span>(served)</span>
