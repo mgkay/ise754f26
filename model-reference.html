@@ -4000,7 +4000,7 @@ vertical-align: -.125em;
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>return:</code></td>
-<td style="text-align: left;">what comes back</td>
+<td style="text-align: left;">what a model that decides nothing computes</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>assumptions:</code></td>
@@ -4019,7 +4019,7 @@ vertical-align: -.125em;
 <li><strong><code>minimize:</code>/<code>maximize:</code> and <code>return:</code> take exactly one entity.</strong> If a return seems to need three things, it is one composite thing: name it.</li>
 <li><strong><code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are always lettered lists</strong>, <code>(a) (b)   (c)</code>, one item per line, <em>even at a single item</em>.</li>
 <li><strong><code>where:</code> is a definition list keyed by symbol</strong>, not lettered, since every entry is a symbol and its meaning.</li>
-<li><strong>The six are the whole list.</strong> A seventh keyword is an error, however plausible it reads. The temptation comes with a model that has nothing to optimize, which seems to need an opening word of its own; it does not, and the table below says why. What a new keyword would say belongs in <code>return:</code> if it names what the model hands back, or in <code>solve for:</code> if it names an unknown.</li>
+<li><strong>The six are the whole list.</strong> A seventh keyword is an error, however plausible it reads. The temptation comes with a model that has nothing to optimize, which seems to need an opening word of its own; it does not, and the table below says why. What a new keyword would say belongs in <code>solve for:</code> if it names an unknown, or in <code>return:</code> if it names what a model that decides nothing computes.</li>
 </ul>
 <p>And the first line tells you what kind of model it is:</p>
 <table class="caption-top table">
@@ -4052,6 +4052,7 @@ vertical-align: -.125em;
 </tr>
 </tbody>
 </table>
+<p><strong>A model that decides has no <code>return:</code>.</strong> Its output is the unknowns, and <code>solve for:</code> already names them, so a <code>return:</code> would only say it again. The optimal value of the objective is not a separate output either: it is the <code>minimize:</code> line evaluated at the solution. <code>return:</code> belongs to the descriptive model, where nothing is decided and it is the only statement of what the model produces. The lectures follow this from Lecture 3.4; the earlier lectures still write a <code>return:</code> in models that decide, and this semester either form is accepted.</p>
 <p>Everything below is the detail behind these three tables. A model written this way can be checked mechanically; see <a href="#checking-a-model-mechanically">Sec. 10</a>.</p>
 </section>
 <section id="why-the-slots-are-shaped-this-way" class="level2">
@@ -4095,8 +4096,8 @@ vertical-align: -.125em;
 <tr class="even">
 <td><code>return:</code></td>
 <td>required</td>
-<td>required</td>
-<td>required</td>
+<td>absent</td>
+<td>absent</td>
 </tr>
 <tr class="odd">
 <td><code>assumptions:</code></td>
@@ -4138,9 +4139,10 @@ vertical-align: -.125em;
 <p><strong>The test against a constraint is falsifiability.</strong> A constraint cannot be untrue: it is a condition being imposed. An assumption can, because it is a claim about how things are. So <em>a constraint binds the solution; an assumption binds the model</em> — and if an assumption turns out to be false, the consequence is not a worse answer but <strong>the wrong model</strong>.</p>
 <p>That is also why the assumptions are what a result is checked against. When an answer looks wrong, the first question is usually not “was the arithmetic right?” but “is one of these still true?”</p>
 </section>
-<section id="is-it-what-comes-back-return" class="level3">
-<h3 class="anchored" data-anchor-id="is-it-what-comes-back-return">5. Is it what comes back? → <code>return:</code></h3>
-<p>One entity. Naming it in words is real modeling work, and it is often the most consequential line in the concept, because it is where “what would I actually do with this answer?” gets determined.</p>
+<section id="is-it-what-a-model-that-decides-nothing-computes-return" class="level3">
+<h3 class="anchored" data-anchor-id="is-it-what-a-model-that-decides-nothing-computes-return">5. Is it what a model that decides nothing computes? → <code>return:</code></h3>
+<p>Only a descriptive model has this slot. A model that decides something has already named its output in <code>solve for:</code>.</p>
+<p>One entity. Naming it in words is real modeling work, and in a descriptive model it is the most consequential line in the concept, because it is where “what would I actually do with this answer?” gets determined.</p>
 <p><code>return:</code> is not a place for by-products. If a quantity is computed along the way and is worth reporting, it belongs inside the one composite thing being returned, described as part of it.</p>
 </section>
 <section id="is-it-a-symbol-definition-or-given-data-where" class="level3">
@@ -4152,7 +4154,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="the-three-mistakes-this-form-catches">3. The three mistakes this form catches</h2>
 <p><strong>A domain choice written as a constraint.</strong> If a warehouse must sit at one of eight existing stores, the wrong repair is adding a constraint. The right repair is changing what the unknown <em>is</em>, from a point in the plane to a choice among eight sites, in <code>solve for:</code>. That single change makes it a different kind of problem with a different solution method, and putting it in <code>solve for:</code> makes the consequence visible instead of burying it in a list.</p>
 <p><strong>An assumption written as a constraint.</strong> <em>“The warehouse has no capacity limit”</em> sounds restrictive and is not. It asserts something falsifiable about the world and justifies the <em>absence</em> of a capacity constraint. It is an assumption, and if it is wrong the model is wrong rather than merely the answer.</p>
-<p><strong>A decision hidden in <code>return:</code>.</strong> Writing <em>“return: which six locations to open and the hub each demand point uses”</em> puts the decision in the output slot and leaves <code>solve for:</code> empty. The decision goes in <code>solve for:</code>; <code>return:</code> names the one thing handed back.</p>
+<p><strong>A decision hidden in <code>return:</code>.</strong> Writing <em>“return: which six locations to open and the hub each demand point uses”</em> puts the decision in the output slot and leaves <code>solve for:</code> empty. The decision goes in <code>solve for:</code>, and once it is there the model needs no <code>return:</code> at all.</p>
 </section>
 <section id="worked-a-descriptive-model" class="level2">
 <h2 class="anchored" data-anchor-id="worked-a-descriptive-model">4. Worked: a descriptive model</h2>
@@ -4169,8 +4171,8 @@ assumptions:
 <pre><code>solve for:
   (a) the apartment location, a point along the corridor
 subject to:
-  (a) equity: the two partners&#39; weighted travel is equal
-return:      the apartment location</code></pre>
+  (a) equity: the two partners&#39; weighted travel is equal</code></pre>
+<p>No <code>return:</code>: the apartment location is the unknown, and <code>solve for:</code> has named it.</p>
 </section>
 <section id="worked-an-optimization-model-mixed-variable-types" class="level2">
 <h2 class="anchored" data-anchor-id="worked-an-optimization-model-mixed-variable-types">6. Worked: an optimization model, mixed variable types</h2>
@@ -4185,8 +4187,6 @@ subject to:
   (a) demand:   every store&#39;s demand is fully served;
   (b) capacity: no hub exceeds its throughput limit;
   (c) linkage:  a site serves demand only if it is open
-return:     a hub plan: the opened sites, the demand each
-            serves, and its fleet size
 assumptions:
   (a) store demands are known and constant;
   (b) transport cost is proportional to weighted distance</code></pre>
@@ -4335,7 +4335,7 @@ script implementing it, and run it.</code></pre>
 <p>Because the form is strict, a program can check whether a model statement follows it. One ships with the course materials:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">julia</span> ../materials/env/check_model.jl model.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Run from the folder holding the model, so the relative path reaches across to <code>materials</code>. It prints a line per finding with its line number, and exits nonzero when any finding is an error, so it can also be used inside a loop.</p>
-<p><strong>What it checks.</strong> That every keyword is one of the six and spelled as such; that the keywords appear in the order above; that <code>minimize:</code>, <code>maximize:</code> and <code>return:</code> carry exactly one entity; that <code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are lettered lists running from <code>(a)</code> without gaps, or read <code>none</code>; that every constraint carries a name; that <code>where:</code> is keyed by symbol rather than lettered; that a model has a <code>return:</code>; and that the slots are mutually coherent, so an objective without <code>solve for:</code> is an error and <code>solve for:</code> without <code>subject to:</code> is queried.</p>
+<p><strong>What it checks.</strong> That every keyword is one of the six and spelled as such; that the keywords appear in the order above; that <code>minimize:</code>, <code>maximize:</code> and <code>return:</code> carry exactly one entity; that <code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are lettered lists running from <code>(a)</code> without gaps, or read <code>none</code>; that every constraint carries a name; that <code>where:</code> is keyed by symbol rather than lettered; that a model deciding nothing has a <code>return:</code>; and that the slots are mutually coherent, so an objective without <code>solve for:</code> is an error and <code>solve for:</code> without <code>subject to:</code> is queried.</p>
 <p><strong>What it cannot check, and this is the important half.</strong> It reads the shape, not the modeling. It cannot tell that something written as a constraint is really an assumption, that a domain choice was buried in <code>subject to:</code> instead of <code>solve for:</code>, that a <code>return:</code> is naming a by-product, or that an assumption is false. Every one of those is a judgment, they are what the rest of this page is about, and a clean report says only that the statement is well formed:</p>
 <pre><code>OK  model.md conforms to the model format.
     Note: the format is checked, not the modeling. Whether a
