@@ -3940,7 +3940,7 @@ vertical-align: -.125em;
   <li><a href="#worked-a-descriptive-model" id="toc-worked-a-descriptive-model" class="nav-link" data-scroll-target="#worked-a-descriptive-model">4. Worked: a descriptive model</a></li>
   <li><a href="#worked-a-feasibility-model" id="toc-worked-a-feasibility-model" class="nav-link" data-scroll-target="#worked-a-feasibility-model">5. Worked: a feasibility model</a></li>
   <li><a href="#worked-an-optimization-model-mixed-variable-types" id="toc-worked-an-optimization-model-mixed-variable-types" class="nav-link" data-scroll-target="#worked-an-optimization-model-mixed-variable-types">6. Worked: an optimization model, mixed variable types</a></li>
-  <li><a href="#the-three-depths" id="toc-the-three-depths" class="nav-link" data-scroll-target="#the-three-depths">7. The three depths</a></li>
+  <li><a href="#the-model-ladder" id="toc-the-model-ladder" class="nav-link" data-scroll-target="#the-model-ladder">7. The model ladder</a></li>
   <li><a href="#two-cases-the-five-slots-stretch-to-and-one-they-do-not" id="toc-two-cases-the-five-slots-stretch-to-and-one-they-do-not" class="nav-link" data-scroll-target="#two-cases-the-five-slots-stretch-to-and-one-they-do-not">8. Two cases the five slots stretch to, and one they do not</a></li>
   <li><a href="#using-this-as-a-prompt" id="toc-using-this-as-a-prompt" class="nav-link" data-scroll-target="#using-this-as-a-prompt">9. Using this as a prompt</a></li>
   <li><a href="#checking-a-model-mechanically" id="toc-checking-a-model-mechanically" class="nav-link" data-scroll-target="#checking-a-model-mechanically">10. Checking a model mechanically</a></li>
@@ -4008,11 +4008,11 @@ vertical-align: -.125em;
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>where:</code></td>
-<td style="text-align: left;">what was given: data and symbol meanings (formulation depth only)</td>
+<td style="text-align: left;">what was given: data and symbol meanings (formulation rung only)</td>
 </tr>
 </tbody>
 </table>
-<p>One word in that table needs introducing before it is used. A model can be written at up to three <strong>depths</strong>: the <strong>concept</strong>, in words only; the <strong>formulation</strong>, the same model committed to symbols or pseudocode; and the <strong>implementation</strong>, runnable Julia. Five of the six keywords are used at every depth. <code>where:</code> is the exception, because it defines symbols and the concept has none, so <strong>the first appearance of <code>where:</code> is the signal that a model has descended past the concept</strong>. <a href="#the-three-depths">Sec. 7</a> sets the depths out in full.</p>
+<p>One word in that table needs introducing before it is used. A model can be written on up to three <strong>rungs</strong>, which together make up the <strong>model ladder</strong>: the <strong>concept</strong>, in words only; the <strong>formulation</strong>, the same model committed to symbols or pseudocode; and the <strong>implementation</strong>, runnable Julia. The six keywords are the <strong>model format</strong>, and five of them are used on every rung. <code>where:</code> is the exception, because it defines symbols and the concept has none, so <strong>the first appearance of <code>where:</code> is the signal that a model has descended past the concept</strong>. <a href="#the-model-ladder">Sec. 7</a> sets the ladder out in full.</p>
 <p>The pair to keep straight is <code>subject to:</code> against <code>assumptions:</code>. <strong>A constraint restricts the solutions; an assumption is something that has to be true about the world.</strong> A constraint cannot be untrue, because it is being imposed. An assumption can, which is why a false one leaves the wrong model rather than merely a worse answer.</p>
 <p>Four rules govern the slots:</p>
 <ul>
@@ -4202,9 +4202,9 @@ where:
   cₖ  annual fixed cost of operating site k, in dollars</code></pre>
 <p>The unknowns stayed in <code>solve for:</code> and did not migrate into <code>where:</code>. The two slots answer different questions: what is being determined, and what was given.</p>
 </section>
-<section id="the-three-depths" class="level2">
-<h2 class="anchored" data-anchor-id="the-three-depths">7. The three depths</h2>
-<p>One model can be written at three depths. They are not three models and not three stages of a process: they are the same model committed to in increasing detail, and each is a complete statement of it at that detail.</p>
+<section id="the-model-ladder" class="level2">
+<h2 class="anchored" data-anchor-id="the-model-ladder">7. The model ladder</h2>
+<p>One model can be written on three rungs, and together they make up its <strong>model ladder</strong>. They are not three models and not three stages of a process: they are the same model stated three ways: in words, in mathematics, and in code. Each is a complete statement of it. (The ladder is not Lecture 1.1’s levels of modeling, which rank different models by cost and faithfulness; every rung here holds the same model.)</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -4213,7 +4213,7 @@ where:
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Depth</th>
+<th style="text-align: left;">Rung</th>
 <th style="text-align: left;">Content</th>
 <th style="text-align: left;">What it determines</th>
 </tr>
@@ -4238,18 +4238,18 @@ where:
 </table>
 <p><strong>Not every model goes all the way down</strong>, and how far it goes is shown by which parts are present rather than by any numbering. A concept alone is a legitimate model, and often the only one worth writing: it is what a decision needs stated before anyone argues about method. A concept with a formulation and no implementation is equally legitimate when the point is the mathematics rather than an answer.</p>
 <p><strong>The first appearance of <code>where:</code> is the signal that a model has descended.</strong> Nothing else marks the boundary, because the concept’s job is to be free of symbols and <code>where:</code> exists only to define them.</p>
-<section id="how-the-depths-are-titled" class="level3">
-<h3 class="anchored" data-anchor-id="how-the-depths-are-titled">How the depths are titled</h3>
-<p><strong>The concept carries no depth word.</strong> A model float is captioned <em>“Model 3: Poisson arrival simulation”</em> and nothing more, because the concept is what a model <em>is</em>; naming it would be like labelling a book “book.” The other two are labelled precisely to distinguish them from it, and from each other:</p>
+<section id="how-the-rungs-are-titled" class="level3">
+<h3 class="anchored" data-anchor-id="how-the-rungs-are-titled">How the rungs are titled</h3>
+<p><strong>The concept carries no rung word.</strong> A model float is captioned <em>“Model 3: Poisson arrival simulation”</em> and nothing more, because the concept is what a model <em>is</em>; naming it would be like labelling a book “book.” The other two are labelled precisely to distinguish them from it, and from each other:</p>
 <pre><code>Model 3: Poisson arrival simulation                 &lt;- the concept
 Model 3 formulation: Poisson arrival simulation
 Model 3 implementation: Poisson arrival simulation</code></pre>
-<p>The number and the name are the concept’s; the deeper parts borrow both and add only the depth word. So everything carrying <em>“Model 3”</em> is one model, and the reader never has to work out which parts belong together.</p>
+<p>The number and the name are the concept’s; the lower rungs borrow both and add only the rung word. So everything carrying <em>“Model 3”</em> is one model, and the reader never has to work out which parts belong together.</p>
 </section>
 <section id="descending-is-a-fill-in-not-a-rewrite" class="level3">
 <h3 class="anchored" data-anchor-id="descending-is-a-fill-in-not-a-rewrite">Descending is a fill-in, not a rewrite</h3>
-<p>Each depth commits detail the one above left open; it must not change what the one above said. <strong>If the formulation carries a constraint the concept never mentioned, something was decided silently</strong>, and that is worth stopping over rather than smoothing past. The same holds further down: an implementation that quietly assumes a bound the formulation did not state is not an implementation of that model.</p>
-<p>This is the only reason the depths are worth separating at all. Written as one document they cannot be checked against each other; written as three, the check is a reading.</p>
+<p>Each rung commits detail the one above left open; it must not change what the one above said. <strong>If the formulation carries a constraint the concept never mentioned, something was decided silently</strong>, and that is worth stopping over rather than smoothing past. The same holds further down: an implementation that quietly assumes a bound the formulation did not state is not an implementation of that model.</p>
+<p>This is the only reason the rungs are worth separating at all. Written as one document they cannot be checked against each other; written as three, the check is a reading.</p>
 </section>
 <section id="when-one-concept-has-more-than-one-formulation" class="level3">
 <h3 class="anchored" data-anchor-id="when-one-concept-has-more-than-one-formulation">When one concept has more than one formulation</h3>
@@ -4290,10 +4290,10 @@ script implementing it, and run it.</code></pre>
 <p><strong>It separates the specification from the task.</strong> <code>model.md</code> says what the model <em>is</em>. The prompt says what to do with it <em>now</em>: formulate it, implement it, vary a parameter, check a result against it. Those are different things, and keeping them apart is what stops a prompt from quietly becoming the model.</p>
 <p><strong>It leaves a history.</strong> The file can be committed, so the model’s evolution is visible and a slot that was silently dropped can be found. A decision reached after an hour of argument is in the file, not in a conversation nobody can reopen.</p>
 <p>The last of these is the one that matters most by the end of a project, and it is the same argument the course makes about session notes: what must survive has to be written down, and what changed is a question only version control can answer.</p>
-<section id="where-each-depth-lives" class="level3">
-<h3 class="anchored" data-anchor-id="where-each-depth-lives">Where each depth lives</h3>
-<p>The concept and the formulation are <strong>one model at two depths, so they share one file.</strong> The formulation goes into <code>model.md</code> beneath the concept, exactly as a lecture’s model callout shows both in a single object.</p>
-<p><strong>The concept is the only depth written by hand.</strong> The assistant produces the formulation and the implementation; both are then checked.</p>
+<section id="where-each-rung-lives" class="level3">
+<h3 class="anchored" data-anchor-id="where-each-rung-lives">Where each rung lives</h3>
+<p>The concept and the formulation are <strong>one model on two rungs, so they share one file.</strong> The formulation goes into <code>model.md</code> beneath the concept, exactly as a lecture’s model callout shows both in a single object.</p>
+<p><strong>The concept is the only rung written by hand.</strong> The assistant produces the formulation and the implementation; both are then checked.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 23%">

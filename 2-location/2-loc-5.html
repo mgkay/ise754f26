@@ -4552,7 +4552,7 @@ Figure 3: Census Bureau combined statistical area wall map.<a href="#fn2" class
 </section>
 <section id="choosing-a-resolution" class="level2">
 <h2 class="anchored" data-anchor-id="choosing-a-resolution">3. Choosing a resolution</h2>
-<p>The units of Sec. 2 form a ladder, and every rung is a usable demand set for some problem. Choosing among them is the decision this lecture exists to teach, and it is genuinely a decision: there is no resolution that is right in general.</p>
+<p>The units of Sec. 2 form a hierarchy, and every unit is a usable demand set for some problem. Choosing among them is the decision this lecture exists to teach, and it is genuinely a decision: there is no resolution that is right in general.</p>
 <p>Every count below is measured rather than quoted, which matters because these figures move with each census.</p>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Code block 2: how many demand points each source yields</span></span>
@@ -4681,7 +4681,7 @@ Figure 7: Census block groups in the Raleigh CSA. The finest public resolution,
 <div class="statement">
 <p>Determine the number of demand points each of the six census sources provides for North Carolina.</p>
 </div>
-<p>One state makes the ladder concrete, because the counts differ by three orders of magnitude over the same ground.</p>
+<p>One state makes the hierarchy concrete, because the counts differ by three orders of magnitude over the same ground.</p>
 <div id="24" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Code block 3: five sources, one state</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>NC <span class="op">=</span> <span class="fu">st2fips</span>(<span class="op">:</span>NC)</span>
