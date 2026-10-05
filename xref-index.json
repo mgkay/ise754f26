@@ -2003,56 +2003,64 @@
    "label": "Eq. 12",
    "word": "Eq."
   },
-  "fig-i40-network": {
+  "fig-i40": {
    "label": "Fig. 1",
    "word": "Fig."
   },
-  "fig-median-ftl": {
+  "fig-ftl-network": {
    "label": "Fig. 2",
    "word": "Fig."
   },
-  "fig-median-monthly": {
+  "fig-ftl-weights": {
    "label": "Fig. 3",
    "word": "Fig."
   },
-  "fig-transshipment": {
+  "fig-median-ftl": {
    "label": "Fig. 4",
    "word": "Fig."
   },
-  "fig-dc-inventory": {
+  "fig-median-monthly": {
    "label": "Fig. 5",
    "word": "Fig."
   },
-  "fig-memphis": {
+  "fig-transshipment": {
    "label": "Fig. 6",
    "word": "Fig."
   },
-  "fig-tlc-location": {
+  "fig-dc-inventory": {
    "label": "Fig. 7",
    "word": "Fig."
   },
-  "fig-lowes": {
+  "fig-memphis": {
    "label": "Fig. 8",
    "word": "Fig."
   },
-  "fig-warehouse-types": {
+  "fig-tlc-location": {
    "label": "Fig. 9",
    "word": "Fig."
   },
-  "fig-warehouse-functions": {
+  "fig-lowes": {
    "label": "Fig. 10",
    "word": "Fig."
   },
-  "fig-example-dc": {
+  "fig-warehouse-types": {
    "label": "Fig. 11",
    "word": "Fig."
   },
-  "fig-wms": {
+  "fig-warehouse-functions": {
    "label": "Fig. 12",
    "word": "Fig."
   },
-  "fig-kiva": {
+  "fig-example-dc": {
    "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "fig-wms": {
+   "label": "Fig. 14",
+   "word": "Fig."
+  },
+  "fig-kiva": {
+   "label": "Fig. 15",
    "word": "Fig."
   },
   "tbl-statesville": {
@@ -2090,10 +2098,6 @@
    "label": "Ex. 1(b)",
    "word": "Ex."
   },
-  "example-2": {
-   "label": "Ex. 2",
-   "word": "Ex."
-  },
   "example-1-c": {
    "label": "Ex. 1(c)",
    "word": "Ex."
@@ -2102,8 +2106,20 @@
    "label": "Ex. 1(d)",
    "word": "Ex."
   },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
   "example-1-e": {
    "label": "Ex. 1(e)",
+   "word": "Ex."
+  },
+  "example-1-f": {
+   "label": "Ex. 1(f)",
+   "word": "Ex."
+  },
+  "example-1-g": {
+   "label": "Ex. 1(g)",
    "word": "Ex."
   },
   "example-2-a": {
