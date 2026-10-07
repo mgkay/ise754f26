@@ -4414,7 +4414,7 @@ Companion script
 <p><strong>return:</strong> pair of quantities giving the greatest total value</p>
 <p><strong>assumptions:</strong><br>
 (a) value contributed and supply consumed are proportional to the quantity chosen;<br>
-(b) a quantity may be set to any nonnegative real number.</p>
+(b) quantity may be set to any nonnegative real number.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-lp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 1: Linear program
@@ -4425,8 +4425,8 @@ Model 1: Linear program
 <p><span id="eq-lp"><span class="math display">
 \begin{array}{rlrclll}
 \textbf{LP} : &amp; \text{Maximize} &amp; 6x_1 + 8x_2 &amp;  &amp;  &amp; &amp; \\[2pt]
-&amp; \text{subject to} &amp; 2x_1 + 3x_2 &amp; \leq &amp; 11 &amp; &amp; \\[2pt]
-&amp;  &amp; 2x_1 &amp; \leq &amp; 7 &amp; &amp; \\[2pt]
+&amp; \text{subject to} &amp; 2x_1 + 3x_2 &amp; \leq &amp; 11 &amp; &amp; (a) \\[2pt]
+&amp;  &amp; 2x_1 &amp; \leq &amp; 7 &amp; &amp; (b) \\[2pt]
 &amp;  &amp; x_1,\, x_2 &amp; \geq &amp; 0 &amp; &amp;
 \end{array}
 \tag{1}</span></span></p>
@@ -5043,7 +5043,7 @@ Solving report
   Primal bound      30
   Dual bound        30
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.000125812669086
+  P-D integral      0.000153543704595
   Solution status   feasible
                     30 (objective)
                     0 (bound viol.)
@@ -5623,15 +5623,40 @@ Model 4: Set covering
 <p><a href="#mdl-setcover" class="quarto-xref">Model 4</a> is the model, and it is resolved twice. The set-theoretic statement of <a href="#eq-setcover-sets" class="quarto-xref">Eq. 8</a> comes first, and the order is deliberate: it is the form a heuristic can be read out of, where the binary program below it is the form a solver can be handed.</p>
 <div class="model-formulation" data-mdl-for="mdl-setcover" data-mdl-name="Mathematical formulation" id="rung-mdl-setcover-mathematical-formulation"><div class="model-rung-label">Model 4 formulation: Mathematical formulation</div>
 <p><span id="eq-setcover-sets"><span class="math display">
-\begin{array}{rcl}
-M &amp; = &amp; \{1, \ldots, m\}, \quad \text{objects to be covered} \\
-M_i \subseteq M,\; i \in N &amp; = &amp; \{1, \ldots, n\}, \quad \text{subsets of } M \\
-c_i &amp; = &amp; \text{cost of using } M_i \text{ in cover} \\
-I^{\star} &amp; = &amp; \displaystyle\arg\min_{I}\Bigl\{ \sum_{i \in I} c_i \;:\;
-\bigcup_{i \in I} M_i = M \Bigr\} \\
-&amp; &amp; \text{min cost covering of } M
-\end{array}
+I^{\star} = \arg\min_{I}\Bigl\{ \sum_{i \in I} c_i \;:\;
+\bigcup_{i \in I} M_i = M \Bigr\}
 \tag{8}</span></span></p>
+<p>where</p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">I^{\star}</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">min cost covering of <span class="math inline">M</span></span>
+</dd>
+<dt><span class="math inline">c_i</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">cost of using <span class="math inline">M_i</span> in cover</span>
+</dd>
+<dt><span class="math inline">M_i</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">subsets of <span style="white-space: nowrap"><span class="math inline">M</span>,</span> <span class="math inline">i \in N</span></span>
+</dd>
+<dt><span class="math inline">N</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">indices of the subsets</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">\{1, \ldots, n\}</span></span>
+</dd>
+<dt><span class="math inline">M</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">objects to be covered</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span style="white-space: nowrap"><span class="math inline">\{1, \ldots, m\}</span>.</span></span>
+</dd>
+</dl>
+</div>
 </div>
 <div class="model-formulation" data-mdl-for="mdl-setcover" data-mdl-name="Math-programming formulation" id="rung-mdl-setcover-math-programming-formulation"><div class="model-rung-label">Model 4 formulation: Math-programming formulation</div>
 <p><span id="eq-setcover"><span class="math display">
@@ -5998,15 +6023,33 @@ Model 6: Bin packing
 </div>
 <div class="model-formulation" data-mdl-for="mdl-binpack" data-mdl-name="Mathematical formulation" id="rung-mdl-binpack-mathematical-formulation"><div class="model-rung-label">Model 6 formulation: Mathematical formulation</div>
 <p><span id="eq-binpack-sets"><span class="math display">
-\begin{array}{rcl}
-M &amp; = &amp; \{1, \ldots, m\}, \quad \text{objects to be packed into bins} \\
-v_j &amp; = &amp; \text{volume of object } j \\
-V &amp; = &amp; \text{volume of each bin } B_i, \quad \max_j v_j \leq V \\
-B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
-\sum_{j \in B_i} v_j \leq V, \; \bigcup_{B_i \in B} B_i = M \Bigr\} \\
-&amp; &amp; \text{min cost bin packing of } M
-\end{array}
+B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
+\sum_{j \in B_i} v_j \leq V, \; \bigcup_{B_i \in B} B_i = M \Bigr\}
 \tag{11}</span></span></p>
+<p>where</p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">B^{\star}</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">min cost bin packing of <span class="math inline">M</span></span>
+</dd>
+<dt><span class="math inline">v_j</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">volume of object <span class="math inline">j</span></span>
+</dd>
+<dt><span class="math inline">V</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">volume of each bin <span style="white-space: nowrap"><span class="math inline">B_i</span>,</span> <span class="math inline">\max_j v_j \leq V</span></span>
+</dd>
+<dt><span class="math inline">M</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">objects to be packed into bins</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span style="white-space: nowrap"><span class="math inline">\{1, \ldots, m\}</span>.</span></span>
+</dd>
+</dl>
+</div>
 </div>
 <p>The binary program below is the same problem with an indicator per bin and per object-bin pair, which is the form a solver takes.</p>
 <div class="model-formulation" data-mdl-for="mdl-binpack" data-mdl-name="Math-programming formulation" id="rung-mdl-binpack-math-programming-formulation"><div class="model-rung-label">Model 6 formulation: Math-programming formulation</div>
@@ -6089,8 +6132,8 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 ───────────────────────────────────
 1       20       420     6     0.00
 2       50     2,550    15     0.20
-3      100    10,100    31     1.09
-4      200    40,200    61     8.86</code></pre>
+3      100    10,100    31     1.12
+4      200    40,200    61     9.10</code></pre>
 </div>
 </div>
 <p>Ten times the objects is a hundred times the variables and rather more than a hundred times the work. Sixty seconds covers two hundred objects several times over and three hundred comfortably, and stops somewhere past that rather than running all afternoon on an instance nobody meant to pose. A limit that is never reached costs nothing, which is the argument for always setting one.</p>
@@ -6110,10 +6153,10 @@ B^{\star} &amp; = &amp; \displaystyle\arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="cell-output cell-output-stdout">
 <pre><code>    gap  bins  seconds
 ──────────────────────
-  exact    61     8.84
-     1%    61     8.95
-     2%    62     5.57
-     5%    62     5.51</code></pre>
+  exact    61     9.27
+     1%    61     9.32
+     2%    62     5.77
+     5%    62     5.85</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Reading a solve that stopped early">
@@ -6242,8 +6285,8 @@ Figure 9: Twenty objects into bins of capacity ten. Every bin comes out exactly
 (c) linking: a vertex is given a color only if that color is used.</p>
 <p><strong>return:</strong> colors used, and the vertices of each</p>
 <p><strong>assumptions:</strong><br>
-(a) the graph is given;<br>
-(b) a color is available for every vertex, so a coloring always exists.</p>
+(a) graph is given;<br>
+(b) color is available for every vertex, so a coloring always exists.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-coloring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 7: Graph coloring

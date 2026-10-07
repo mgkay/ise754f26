@@ -4523,11 +4523,11 @@ TH = \frac{WIP}{CT} = \frac{360}{9} = 40 \text{ graduates per semester}.
 <p>The <strong>squared coefficient of variation</strong> (SCV) provides a normalized measure used to estimate the variance of a process (demand, production, etc.):</p>
 <p><span id="eq-scv"><span class="math display">
 \begin{aligned}
-c   &amp;= \frac{\sigma}{t} = \text{coefficient of variation (CV)}, \\
-c^2 &amp;= \frac{\sigma^2}{t^2} = \text{squared coefficient of variation (SCV)},
+c   &amp;= \frac{\sigma}{t}, \\
+c^2 &amp;= \frac{\sigma^2}{t^2},
 \end{aligned}
 \tag{2}</span></span></p>
-<p>where <span class="math inline">\sigma</span> is the standard deviation of the process, <span class="math inline">t</span> its mean, and <span class="math inline">\sigma^2</span> its variance. The SCV places a process on a scale of variability:</p>
+<p>where <span class="math inline">c</span> is the coefficient of variation (CV), <span class="math inline">c^2</span> the squared coefficient of variation (SCV), <span class="math inline">\sigma</span> the standard deviation of the process, <span class="math inline">t</span> its mean, and <span class="math inline">\sigma^2</span> its variance. The SCV places a process on a scale of variability:</p>
 <ul>
 <li><span style="white-space: nowrap"><span class="math inline">c^2 = 0</span>:</span> deterministic / exactly spaced (best case, lower bound);</li>
 <li><span style="white-space: nowrap"><span class="math inline">c^2 &lt; 0.75</span>:</span> low variability;</li>
@@ -4614,11 +4614,17 @@ m_{\min} &amp;= \left\lfloor \frac{\text{machine hours needed to meet demand}}{\
 </dd>
 <dt><span class="math inline">A</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\text{MTTF}/(\text{MTTF}+\text{MTTR})</span>,</span></span> <span class="deflist-text">availability</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">availability</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">\text{MTTF}/(\text{MTTF}+\text{MTTR})</span></span>
 </dd>
 <dt><span class="math inline">t_e</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">t_0/A</span>,</span></span> <span class="deflist-text">effective mean process time with failures</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">effective mean process time with failures</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">t_0/A</span></span>
 </dd>
 <dt><span class="math inline">H</span></dt>
 <dd>
@@ -4630,7 +4636,10 @@ m_{\min} &amp;= \left\lfloor \frac{\text{machine hours needed to meet demand}}{\
 </dd>
 <dt><span class="math inline">r_e</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">m/t_e</span>,</span></span> <span class="deflist-text">service rate (<em>effective capacity</em>)</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">service rate (<em>effective capacity</em>)</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">m/t_e</span></span>
 </dd>
 <dt><span class="math inline">\text{MTTF}</span></dt>
 <dd>
@@ -4796,15 +4805,24 @@ Table 1: Throughput-feasible capacity plan for the four-workstation line.
 <dl>
 <dt><span class="math inline">u</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">r_a\,t_e / m</span>,</span></span> <span class="deflist-text">utilization</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">utilization</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">r_a\,t_e / m</span></span>
 </dd>
 <dt><span class="math inline">c_a^2</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\sigma_a^2 / t_a^2</span>,</span></span> <span class="deflist-text">arrival SCV</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">arrival SCV</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">\sigma_a^2 / t_a^2</span></span>
 </dd>
 <dt><span class="math inline">t_a</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">1/r_a</span>,</span></span> <span class="deflist-text">mean time between arrivals</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">mean time between arrivals</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">1/r_a</span></span>
 </dd>
 <dt><span class="math inline">c_e^2</span></dt>
 <dd>
@@ -4812,11 +4830,17 @@ Table 1: Throughput-feasible capacity plan for the four-workstation line.
 </dd>
 <dt><span class="math inline">c_0^2</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\sigma_0^2 / t_0^2</span>,</span></span> <span class="deflist-text">natural process-time SCV</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">natural process-time SCV</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">\sigma_0^2 / t_0^2</span></span>
 </dd>
 <dt><span class="math inline">c_r^2</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\sigma_r^2 / \text{MTTR}^2</span>,</span></span> <span class="deflist-text">repair-time SCV.</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">repair-time SCV</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span style="white-space: nowrap"><span class="math inline">\sigma_r^2 / \text{MTTR}^2</span>.</span></span>
 </dd>
 </dl>
 </div>
@@ -5057,10 +5081,10 @@ t = -\frac{\ln(1 - u)}{r_a}.
 <div id="mdl-poisson" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-poisson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<p><strong>return:</strong> a sample of <span class="math inline">n</span> inter-arrival times from a Poisson stream at rate <span class="math inline">r_a</span></p>
+<p><strong>return:</strong> sample of <span class="math inline">n</span> inter-arrival times from a Poisson stream at rate <span class="math inline">r_a</span></p>
 <p><strong>assumptions:</strong><br>
 (a) inter-arrival times are independent exponential draws at rate <span style="white-space: nowrap"><span class="math inline">r_a</span>;</span><br>
-(b) the rate <span class="math inline">r_a</span> is constant over the run (homogeneous).</p>
+(b) rate <span class="math inline">r_a</span> is constant over the run (homogeneous).</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-poisson-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 1: Poisson arrival simulation
@@ -5097,7 +5121,7 @@ Model 1: Poisson arrival simulation
 <p><strong>assumptions:</strong><br>
 (a) exponential inter-arrivals at rate <span class="math inline">r_a</span> and exponential service at mean <span style="white-space: nowrap"><span class="math inline">t_e</span>,</span> so <span style="white-space: nowrap"><span class="math inline">c_a^2 = c_e^2 = 1</span>;</span><br>
 (b) one server, first-in-first-out, one job at a time;<br>
-(c) the queue starts empty.</p>
+(c) queue starts empty.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-queue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 2: Single-server queue simulation
@@ -5171,7 +5195,7 @@ Figure 6: Running average of the simulated cycle time over 10,000 jobs through 
 <p><strong>assumptions:</strong><br>
 (a) exponential inter-arrivals at rate <span class="math inline">r_a</span> and exponential service at mean <span style="white-space: nowrap"><span class="math inline">t_e</span>,</span> so <span style="white-space: nowrap"><span class="math inline">c_a^2 = c_e^2 = 1</span>;</span><br>
 (b) one server, non-preemptive: a job in service finishes before the next choice is made;<br>
-(c) the queue starts empty.</p>
+(c) queue starts empty.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-spt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 3: Single-server SPT queue simulation

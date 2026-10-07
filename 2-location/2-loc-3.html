@@ -4418,11 +4418,17 @@ TD &amp;= \sum_{j \in M} w_j \, d_{\alpha_j j}
 <dl>
 <dt><span class="math inline">N</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\{1, \dots, n\}</span>,</span></span> <span class="deflist-text">NFs</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">NFs</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">\{1, \dots, n\}</span></span>
 </dd>
 <dt><span class="math inline">M</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\{1, \dots, m\}</span>,</span></span> <span class="deflist-text">EFs</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">EFs</span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">\{1, \dots, m\}</span></span>
 </dd>
 <dt><span class="math inline">d_{ij}</span></dt>
 <dd>
@@ -4724,7 +4730,7 @@ Figure 3: With the manufacturing sites given, they join the existing facilities
 <div aria-describedby="mdl-majority-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <p><strong>solve for:</strong><br>
 (a) co-located groups among the <span class="math inline">n</span> NFs;<br>
-(b) an EF for each group the theorem can place.</p>
+(b) EF for each group the theorem can place.</p>
 <p><strong>subject to:</strong><br>
 (a) majority: co-location or placement of a facility is determined only when one weight reaches half of that facility’s own total.</p>
 <p><strong>return:</strong> placements and co-locations the theorem determines, together with the facilities it leaves open</p>
@@ -4759,7 +4765,10 @@ Model 2: Multifacility majority theorem
 </dd>
 <dt><span class="math inline">\gamma_i</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">\sum_{j=1}^{m} w_{ij} + \sum_{k=1}^{n} v_{ik}</span>,</span></span> <span class="deflist-text">total weight on NF <span style="white-space: nowrap"><span class="math inline">i</span>.</span></span>
+<span class="deflist-eq">=</span> <span class="deflist-text">total weight on NF <span class="math inline">i</span></span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span style="white-space: nowrap"><span class="math inline">\sum_{j=1}^{m} w_{ij} + \sum_{k=1}^{n} v_{ik}</span>.</span></span>
 </dd>
 </dl>
 </div>
@@ -5049,8 +5058,8 @@ Model 3: Location–allocation problem
 \text{Minimize} \quad &amp; f(X, W) = \sum_{i=1}^{m} \sum_{j=1}^{n}
   w_{ji} \, d(X_j, P_i) &amp;&amp;\\[2pt]
 \text{subject to} \quad &amp; \sum_{j=1}^{n} w_{ji} = w_i,
-  &amp;&amp; i = 1, \ldots, m\\[2pt]
-&amp; w_{ji} \ge 0, &amp;&amp; j = 1, \ldots, n; \ i = 1, \ldots, m
+  &amp;&amp; i = 1, \ldots, m \quad (a)\\[2pt]
+&amp; w_{ji} \ge 0, &amp;&amp; j = 1, \ldots, n; \ i = 1, \ldots, m \quad (b)
 \end{aligned}
 </span></p>
 <p>where</p>
@@ -5072,7 +5081,10 @@ Model 3: Location–allocation problem
 </dd>
 <dt><span class="math inline">P_i</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-formula"><span style="white-space: nowrap"><span class="math inline">(a_i, b_i)</span>,</span></span> <span class="deflist-text">location of EF <span class="math inline">i</span></span>
+<span class="deflist-eq">=</span> <span class="deflist-text">location of EF <span class="math inline">i</span></span>
+</dd>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">(a_i, b_i)</span></span>
 </dd>
 <dt><span class="math inline">d(X_j, P_i)</span></dt>
 <dd>
@@ -5533,7 +5545,7 @@ from markers 200 and 500
 <h3 class="anchored" data-anchor-id="integrated-or-alternating">Integrated or alternating</h3>
 <p>Both only give a local optimal solution (not convex).</p>
 <p>The alternating form is more flexible: it solves <span class="math inline">n</span> <span class="math inline">d</span>-dimensional location problems with a simple allocation, and Nelder-Mead works well for 2-D. The integrated form solves an <span class="math inline">(n \times d)</span>-dimensional problem, a larger search, though not a slower one here. Integrated may be better if there are no allocation (e.g., capacity) or location constraints on the NFs.</p>
-<p>Running both formulations from the same random starts determines it, provided both are written the same way, from the same allocation step and the same optimizer. On that footing the integrated form is the faster of the two while few facilities are being located, by about 2.0 times at two and three, an advantage that has gone by nine. Quality is close and the lead changes hands: over a common set of starts each form finds the better answer about as often as the other, and the best answers they reach differ by up to 6.5%. So the cost of the choice is in the search, not in the answer.</p>
+<p>Running both formulations from the same random starts determines it, provided both are written the same way, from the same allocation step and the same optimizer. On that footing the integrated form is the faster of the two while few facilities are being located, by about 1.5 times at two and three, an advantage that has gone by nine. Quality is close and the lead changes hands: over a common set of starts each form finds the better answer about as often as the other, and the best answers they reach differ by up to 6.5%. So the cost of the choice is in the search, not in the answer.</p>
 <p>The advantage of the alternating form is that it provides more flexibility in being able to easily change the allocation and the location mechanisms, so it buys flexibility at the cost of increased computation.</p>
 <p>The choice matters less than it might appear, because of the size of the problems actually being solved. A useful rule of thumb is a 10-to-1 ratio: locating ten new facilities calls for a set of about a thousand existing facilities to work with. That is a typical size of problem even for the entire country. Walmart has perhaps 20 or 30 distribution centers, and most large box retailers have 10 to 20, or even around ten.</p>
 </section>

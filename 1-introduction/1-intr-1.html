@@ -4441,16 +4441,16 @@ Figure 4: Multi-vehicle VRP (savings + 2-opt): nine deliveries served by three 
 <div id="mdl-loc" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-loc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<p><strong>minimize:</strong> the total population-weighted distance (people-miles) from the demand points to the hubs that serve them</p>
+<p><strong>minimize:</strong> total population-weighted distance (people-miles) from the demand points to the hubs that serve them</p>
 <p><strong>solve for:</strong><br>
 (a) which six of the candidate locations to open;<br>
 (b) which hub serves each demand point.</p>
 <p><strong>subject to:</strong><br>
 (a) assignment: every demand point is served by exactly one of the six hubs.</p>
-<p><strong>return:</strong> a hub plan: the six locations opened and the hub serving each demand point</p>
+<p><strong>return:</strong> hub plan: the six locations opened and the hub serving each demand point</p>
 <p><strong>assumptions:</strong><br>
 (a) demand is located at the 3-digit ZIP code centroids, weighted by population;<br>
-(b) the number of hubs is fixed in advance, here six.</p>
+(b) number of hubs is fixed in advance, here six.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-loc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 1: Strategic facility location
@@ -4471,7 +4471,7 @@ Model 1: Strategic facility location
 (a) demand: each product’s demand is met every period;<br>
 (b) capacity: production stays within capacity every period;<br>
 (c) startup: a product incurs a startup cost when its production begins, not in every period it continues.</p>
-<p><strong>return:</strong> a production-inventory plan: what to make and what to hold, by product and period</p>
+<p><strong>return:</strong> production-inventory plan: what to make and what to hold, by product and period</p>
 <p><strong>assumptions:</strong><br>
 (a) demand for each product in each period is known;<br>
 (b) each product’s price is fixed, independent of the plan.</p>
@@ -4493,10 +4493,10 @@ Model 2: Tactical production-inventory plan
 <p><strong>subject to:</strong><br>
 (a) coverage: every delivery is made exactly once;<br>
 (b) capacity: each vehicle makes at most three drop-offs.</p>
-<p><strong>return:</strong> a day’s routing plan: the vehicles used and the ordered stops of each</p>
+<p><strong>return:</strong> day’s routing plan: the vehicles used and the ordered stops of each</p>
 <p><strong>assumptions:</strong><br>
 (a) all routes start and end at the single central depot;<br>
-(b) the travel distance between every pair of stops is known.</p>
+(b) travel distance between every pair of stops is known.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-vrp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 3: Operational vehicle routing
@@ -4917,10 +4917,10 @@ Figure 8: Fuel per trip <span class="math inline">g(t;30)</span> vs travel time
 <div id="mdl-pizza" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-pizza-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<p><strong>return:</strong> the average round-trip distance of a delivery</p>
+<p><strong>return:</strong> average round-trip distance of a delivery</p>
 <p><strong>assumptions:</strong><br>
 (a) every customer lies within the 3-mile delivery radius;<br>
-(b) a round trip is exactly twice the one-way distance.</p>
+(b) round trip is exactly twice the one-way distance.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-pizza-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 4: Average delivery distance
