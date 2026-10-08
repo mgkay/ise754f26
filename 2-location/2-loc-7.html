@@ -5043,7 +5043,7 @@ Solving report
   Primal bound      30
   Dual bound        30
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.000160345751724
+  P-D integral      0.00015256024979
   Solution status   feasible
                     30 (objective)
                     0 (bound viol.)
@@ -6131,9 +6131,9 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <pre><code>   objects  binaries  bins  seconds
 ───────────────────────────────────
 1       20       420     6     0.00
-2       50     2,550    15     0.22
-3      100    10,100    31     1.29
-4      200    40,200    61     9.92</code></pre>
+2       50     2,550    15     0.19
+3      100    10,100    31     1.10
+4      200    40,200    61     8.74</code></pre>
 </div>
 </div>
 <p>Ten times the objects is a hundred times the variables and rather more than a hundred times the work. Sixty seconds covers two hundred objects several times over and three hundred comfortably, and stops somewhere past that rather than running all afternoon on an instance nobody meant to pose. A limit that is never reached costs nothing, which is the argument for always setting one.</p>
@@ -6153,10 +6153,10 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="cell-output cell-output-stdout">
 <pre><code>    gap  bins  seconds
 ──────────────────────
-  exact    61     9.35
-     1%    61    10.06
-     2%    62     6.50
-     5%    62     5.73</code></pre>
+  exact    61     8.69
+     1%    61     8.93
+     2%    62     5.68
+     5%    62     5.55</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Reading a solve that stopped early">
