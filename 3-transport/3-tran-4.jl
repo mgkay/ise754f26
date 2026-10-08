@@ -462,7 +462,7 @@ prt(shUC)
 # Code block 15: perfect cross-docking with the DC at Statesville
 shXD = shUC[:, Not([:qᵒ, :TLCᵒ])]
 shXD[idxin, :a] .= αS               # outbound α is unchanged
-tmax = minimum(shXD.qmax./shXD.f)   # yr, every shipment in one truck
+tmax = minimum(shXD.qmax[idxin]./shXD.f[idxin])  # yr, inbound only
 xd = tlc_xd(shXD, tr, 1/365.25, tmax)
 @show xd.t, 365.25xd.t              # yr, days
 shXD.qXD = xd.q
@@ -611,7 +611,7 @@ prt(out)
 idxin2 = 1:length(fS2)             # the three inbound shipments
 shXD2 = sh2[:, Not([:qᵒ, :TLCᵒ, :isLTL, :t])]
 shXD2[idxin2, :a] .= αS            # outbound α is unchanged
-tmax2 = minimum(shXD2.qmax./shXD2.f)  # yr, every shipment in one truck
+tmax2 = minimum(shXD2.qmax[idxin2]./shXD2.f[idxin2])  # yr, inbound only
 xd2 = tlc_xd(shXD2, tr2, 1/365.25, tmax2, ppiLTL)
 shXD2.qXD = xd2.q
 shXD2.TLC_XD = [totlogcost(r.qXD, c0(r.qXD, r, tr2, ppiLTL), r)

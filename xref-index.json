@@ -1971,7 +1971,7 @@
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-tlc-single-dc": {
+  "eq-ctl": {
    "label": "Eq. 5",
    "word": "Eq."
   },
@@ -1983,24 +1983,28 @@
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-unit-value": {
+  "eq-tmax": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-tlc-allocftl": {
+  "eq-unit-value": {
    "label": "Eq. 9",
    "word": "Eq."
   },
-  "eq-tlc-tl-x": {
+  "eq-tlc-allocftl": {
    "label": "Eq. 10",
    "word": "Eq."
   },
-  "eq-qtl": {
+  "eq-tlc-tl-x": {
    "label": "Eq. 11",
    "word": "Eq."
   },
-  "eq-automation": {
+  "eq-qtl": {
    "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-automation": {
+   "label": "Eq. 13",
    "word": "Eq."
   },
   "fig-i40": {
@@ -2063,12 +2067,16 @@
    "label": "Fig. 15",
    "word": "Fig."
   },
-  "tbl-statesville": {
+  "tbl-split-shipments": {
    "label": "Table 1",
    "word": "Table"
   },
-  "tbl-codes": {
+  "tbl-statesville": {
    "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-codes": {
+   "label": "Table 3",
    "word": "Table"
   },
   "mdl-transship": {

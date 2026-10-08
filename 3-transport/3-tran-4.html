@@ -5104,67 +5104,131 @@ Figure 7: Inventory at a DC under uncoordinated transshipment. Supplier 1 ships
      formulation, slide 184's equations landed by import, and its own
      implementation. No Logjam export computes either (change request 16). -->
 <p>With a DC between the suppliers and the customers, each product is either cross-docked or stocked at the DC, and <a href="#mdl-transship" class="quarto-xref">Model 1</a> states the problem of deciding which.</p>
+<p>A <em>cross-docking set</em> is a group of products whose suppliers all ship on one interval, the set’s own, so that its products arrive at the DC together and leave it the same day. A product in no set is <em>stocked</em>: held at the DC, and shipped in on its own interval. A <em>delivery</em> is everything a customer receives from the DC on one day. Each set makes a delivery to each customer on its interval, and a stocked product goes out either in one set’s deliveries or in a delivery that carries only stocked products. A shipment is <em>uncoordinated</em> when its size is its own optimal size, as in Lecture 3.3, and <em>coordinated</em> when its size is its annual flow times its set’s interval. Every shipment is therefore one of the four kinds in <a href="#tbl-split-shipments" class="quarto-xref">Table 1</a>.</p>
+<div id="tbl-split-shipments" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-split-shipments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 1: The four kinds of shipment through the DC, in or out and uncoordinated or coordinated, each with its inventory fraction.
+</figcaption>
+<div aria-describedby="tbl-split-shipments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Uncoordinated</th>
+<th style="text-align: left;">Coordinated</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">In from a supplier</td>
+<td style="text-align: left;">stocked product’s shipment (<span style="white-space: nowrap"><span class="math inline">\alpha_S + \frac{1}{2}</span>)</span></td>
+<td style="text-align: left;">cross-docked product’s shipment (<span style="white-space: nowrap"><span class="math inline">\alpha_S</span>)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Out to a customer</td>
+<td style="text-align: left;">delivery that carries only stocked products (<span style="white-space: nowrap"><span class="math inline">\alpha_C</span>)</span></td>
+<td style="text-align: left;">set’s delivery, with any stocked products it carries (<span style="white-space: nowrap"><span class="math inline">\alpha_C</span>)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The two columns differ in what one truck means. An uncoordinated shipment never needs more than one: two truckloads sent together cost the same transport as two sent on different days, since the TL charge of <a href="3-tran-2.html#eq-ctl" class="xref" data-lec="3.2" data-id="eq-ctl" title="One-Time Truck Shipments">Eq. 9 in Lecture 3.2</a> counts every truck, but they double the inventory, which is why <a href="3-tran-3.html#eq-payload-bound" class="xref" data-lec="3.3" data-id="eq-payload-bound" title="Periodic Truck Shipments">Eq. 2 in Lecture 3.3</a> holds a periodic shipment to one truck. A coordinated shipment can be larger. One in from a supplier is still held to one truck, which limits how long its set’s interval can be. A set’s delivery that is larger than one truck goes as two or more shipments on the same day, since its products arrived together and leave together.</p>
 <div id="mdl-transship" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-transship-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <p><strong>minimize:</strong> total logistics cost of transporting the products from their suppliers through the DC to the customers, transport plus cycle inventory</p>
 <p><strong>solve for:</strong><br>
 (a) sets of products cross-docked together, no product in two sets, and products in no set stocked at the DC (with no sets, every product is stocked);<br>
-(b) shipment interval of each set, and shipment size of each shipment of the stocked products.</p>
+(b) shipment interval of each set, and shipment size of each uncoordinated shipment;<br>
+(c) for each stocked product, the set, if any, whose deliveries to the customers also carry it.</p>
 <p><strong>subject to:</strong><br>
 (a) payload: no shipment is larger than one truck’s maximum payload;<br>
 (b) interval: each set’s interval is at least one day.</p>
 <p><strong>assumptions:</strong><br>
 (a) DC location is given;<br>
-(b) suppliers produce in batches and customers consume at a constant rate;<br>
-(c) each set’s products move together, inbound and outbound on the set’s interval, in their own outbound shipment to each customer;<br>
-(d) stocked products are held at the DC and leave it in one outbound shipment to each customer, sized on its own;<br>
-(e) suppliers and customers at the DC are served at no transport or inventory cost.</p>
+(b) each supplier’s and each customer’s inventory fraction, <span class="math inline">\alpha_S</span> and <span style="white-space: nowrap"><span class="math inline">\alpha_C</span>,</span> is given;<br>
+(c) every shipment is an independent shipment;<br>
+(d) stocked products are held at the DC, and the products of each set arrive at it together and leave it the same day.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-transship-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 1: Single-DC transshipment
 </figcaption>
 </figure>
 </div>
-<p>The decision is a split of the products: a set <span class="math inline">S</span> stocked at the DC, and a collection <span class="math inline">\mathcal{G}</span> of sets, the products of each set cross-docked together on its own interval. Any split can be evaluated by the two models that follow, <a href="#mdl-uc" class="quarto-xref">Model 2</a> for the stocked products and <a href="#mdl-xd" class="quarto-xref">Model 3</a> for each cross-docked set, so the problem is to find the split of least total cost:</p>
+<p>The decision is a split of the products: a set <span class="math inline">S</span> stocked at the DC, and a collection <span class="math inline">\mathcal{G}</span> of sets, the products of each set cross-docked together on its own interval, and the stocked products, if any, that each set’s deliveries also carry. Its shipments are the four kinds of <a href="#tbl-split-shipments" class="quarto-xref">Table 1</a>, and the problem is to find the split of least total cost:</p>
 <div class="model-formulation" data-mdl-for="mdl-transship" id="rung-mdl-transship-formulation"><div class="model-rung-label">Model 1 formulation: Single-DC transshipment</div>
 <p><span id="eq-tlc-single-dc"><span class="math display">
-\begin{array}{rlrcll}
-&amp; \text{Minimize} &amp; \displaystyle TLC_{UC}(S) + \sum_{G \in \mathcal{G}} TLC_{XD}(G) &amp;  &amp;  &amp; \\[2pt]
-&amp; \text{subject to} &amp; S \cup {\textstyle\bigcup_{G \in \mathcal{G}}} G &amp; = &amp; P &amp; \\[2pt]
-&amp;  &amp; S \cap G &amp; = &amp; \emptyset, &amp; G \in \mathcal{G} \\[2pt]
-&amp;  &amp; G \cap G&#39; &amp; = &amp; \emptyset, &amp; G \neq G&#39; \in \mathcal{G}
+\begin{array}{rlrclll}
+&amp; \text{Minimize} &amp; \displaystyle \sum_{i \in I} TLC_i(q_i) &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp; \text{subject to} &amp; 0 &lt; q_i &amp; \leq &amp; q_{\max,i}, &amp; i \in I_S &amp; (a) \\[2pt]
+&amp;  &amp; t_G &amp; \geq &amp; t_{\min}, &amp; G \in \mathcal{G} &amp; (b) \\[2pt]
+&amp;  &amp; q_i &amp; = &amp; f_i\, t_G, &amp; i \in I_G,\ G \in \mathcal{G} &amp;
 \end{array}
 \tag{5}</span></span></p>
 <p>where</p>
 <div class="deflist deflist-cols">
 <dl>
-<dt><span class="math inline">S</span></dt>
+<dt><span class="math inline">q_i</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">set of products stocked at the DC (decision variable)</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">size of shipment or delivery <span class="math inline">i</span> (decision variable, ton)</span>
+</dd>
+<dt><span class="math inline">I</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">shipments in from the suppliers, and deliveries out</span>
+</dd>
+<dt><span class="math inline">TLC_i(q)</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">total logistics cost of shipment or delivery <span class="math inline">i</span> at size <span class="math inline">q</span> ($/yr)</span>
+</dd>
+<dt><span class="math inline">I_S</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">shipments in from the suppliers</span>
+</dd>
+<dt><span class="math inline">q_{\max,i}</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">maximum payload of shipment <span class="math inline">i</span> (ton)</span>
+</dd>
+<dt><span class="math inline">t_G</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">shipment interval of set <span class="math inline">G</span> (decision variable, yr)</span>
 </dd>
 <dt><span class="math inline">\mathcal{G}</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">collection of cross-docked sets (decision variable)</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">cross-docking sets, no product in two (decision variable)</span>
 </dd>
-<dt><span class="math inline">P</span></dt>
+<dt><span class="math inline">t_{\min}</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">set of products, each from its own supplier</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">shortest interval, one day (yr)</span>
 </dd>
-<dt><span class="math inline">TLC_{UC}(S)</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">total logistics cost of <a href="#mdl-uc" class="quarto-xref">Model 2</a> for the products in <span class="math inline">S</span> ($/yr)</span>
+<span class="deflist-eq">=</span> <span class="deflist-text"><span class="math inline">1/365.25</span></span>
 </dd>
-<dt><span class="math inline">TLC_{XD}(G)</span></dt>
+<dt><span class="math inline">f_i</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">total logistics cost of <a href="#mdl-xd" class="quarto-xref">Model 3</a> for the products in <span class="math inline">G</span> ($/yr).</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">annual flow of shipment or delivery <span class="math inline">i</span> (ton/yr)</span>
+</dd>
+<dt><span class="math inline">I_G</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">shipments in of the products in <span style="white-space: nowrap"><span class="math inline">G</span>,</span> and deliveries out of <span class="math inline">G \cup S_G</span></span>
+</dd>
+<dt><span class="math inline">S_G</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">stocked products in <span class="math inline">G</span>’s deliveries (decision variable).</span>
 </dd>
 </dl>
 </div>
-<p>A model states its constraints in words, under subject to, and its formulation writes each one as a row with the same letter. <a href="#mdl-transship" class="quarto-xref">Model 1</a>’s two constraints, (a) payload and (b) interval, are about shipments: what a truck carries, and how often a set ships. This formulation sizes no shipments. It only decides which products are stocked and which are cross-docked together, and leaves the shipments to the two formulations that follow, <a href="#eq-tlc-uc" class="quarto-xref">Eq. 6</a> for the stocked products and <a href="#eq-tlc-xd" class="quarto-xref">Eq. 7</a> for each cross-docked set. So (a) and (b) are rows there, not here: (a) in both, and (b) in <a href="#eq-tlc-xd" class="quarto-xref">Eq. 7</a>.</p>
-<p>The three rows that are here have no letter, because they are not among <a href="#mdl-transship" class="quarto-xref">Model 1</a>’s constraints: they spell out what its solve-for (a) asks of the split.</p>
+<p>A model states its constraints in words, under subject to, and its formulation writes each one as a row with the same letter. <a href="#mdl-transship" class="quarto-xref">Model 1</a>’s two constraints, (a) payload and (b) interval, are about shipments: what a truck carries, and how often a set ships. Both are rows here, (a) for the shipments in from the suppliers and (b) for each set. A delivery needs no row (a), since one larger than a truck goes as two or more shipments.</p>
+<p>The row with no letter is not among <a href="#mdl-transship" class="quarto-xref">Model 1</a>’s constraints: it puts each set’s coordinated shipments, <span style="white-space: nowrap"><span class="math inline">I_G</span>,</span> on the set’s interval. The sets <span class="math inline">\mathcal{G}</span> of solve-for (a) and the stocked products <span class="math inline">S_G</span> of solve-for (c) need no rows of their own; they decide which deliveries make up <span class="math inline">I</span> and <span style="white-space: nowrap"><span class="math inline">I_G</span>,</span> and what each carries.</p>
 </div>
-<p>Together the three rows make <span class="math inline">S</span> and the sets in <span class="math inline">\mathcal{G}</span> a partition of <span style="white-space: nowrap"><span class="math inline">P</span>:</span> every product is in exactly one of them. With <span class="math inline">\mathcal{G}</span> empty, every product is stocked, which is <a href="#mdl-uc" class="quarto-xref">Model 2</a>; with <span class="math inline">S</span> empty and <span class="math inline">\mathcal{G}</span> a single set, every product is cross-docked together, which is <a href="#mdl-xd" class="quarto-xref">Model 3</a>. The formulation says how any split is evaluated and nothing about how to search for a good one; <a href="#mdl-transship" class="quarto-xref">Model 1</a> has no implementation here, on purpose.</p>
+<p>With <span class="math inline">\mathcal{G}</span> empty, every product is stocked, which is <a href="#mdl-uc" class="quarto-xref">Model 2</a>; with <span class="math inline">S</span> empty and <span class="math inline">\mathcal{G}</span> a single set, every product is cross-docked together, which is <a href="#mdl-xd" class="quarto-xref">Model 3</a>. The formulation says how any split is evaluated and nothing about how to search for a good one; <a href="#mdl-transship" class="quarto-xref">Model 1</a> has no implementation here, on purpose.</p>
 <p>In practice it is difficult to put every shipment on a single interval: the DC would sit empty most of the day, and then everything would arrive, be cross-docked and leave within a two-hour window. What happens at most DCs is a mix of stocked and cross-docked products, and the cross-docked products are usually not a single set. Coordination makes sense for certain high-value products, while low-value, more general products are probably best left uncoordinated. Seasonal goods are a classic case. A large retailer’s DC does not receive Halloween products from January on and fill a warehouse with them; they arrive over the month or two before the holiday, and a container or truckload of them, once unloaded, is not put into storage, because the stores need it quickly. It is cross-docked at once, one truckload holding enough to supply perhaps 20 to 25 stores, as whole pallets that go straight onto the store floor and are opened there. The trend is toward ever more cross-docking, since cross-docking needs good coordination and companies have become better at tracking their shipments.</p>
 <p>This lecture solves <a href="#mdl-transship" class="quarto-xref">Model 1</a> only at its two extremes, every product stocked and every product cross-docked in one set. The first is uncoordinated transshipment:</p>
 <div id="mdl-uc" class="quarto-float quarto-figure quarto-figure-center anchored" data-special-case-of="mdl-transship">
@@ -5173,17 +5237,17 @@ Model 1: Single-DC transshipment
 <p><strong>minimize:</strong> total logistics cost of transporting the products from their suppliers through the DC to the customers, transport plus cycle inventory</p>
 <p><strong>solve for:</strong><br>
 (a) sets of products cross-docked together, no product in two sets, and products in no set stocked at the DC (with no sets, every product is stocked);<br>
-(b) shipment interval of each set, and shipment size of each shipment of the stocked products.</p>
+(b) shipment interval of each set, and shipment size of each uncoordinated shipment;<br>
+(c) for each stocked product, the set, if any, whose deliveries to the customers also carry it.</p>
 <p><strong>subject to:</strong><br>
 (a) payload: no shipment is larger than one truck’s maximum payload;<br>
 (b) interval: each set’s interval is at least one day;<br>
 <span class="model-add">(c) stocked: no sets, so every product is stocked at the DC.</span></p>
 <p><strong>assumptions:</strong><br>
 (a) DC location is given;<br>
-(b) suppliers produce in batches and customers consume at a constant rate;<br>
-(c) each set’s products move together, inbound and outbound on the set’s interval, in their own outbound shipment to each customer;<br>
-(d) stocked products are held at the DC and leave it in one outbound shipment to each customer, sized on its own;<br>
-(e) suppliers and customers at the DC are served at no transport or inventory cost.</p>
+(b) each supplier’s and each customer’s inventory fraction, <span class="math inline">\alpha_S</span> and <span style="white-space: nowrap"><span class="math inline">\alpha_C</span>,</span> is given;<br>
+(c) every shipment is an independent shipment;<br>
+(d) stocked products are held at the DC, and the products of each set arrive at it together and leave it the same day.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-uc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 2: Uncoordinated transshipment
@@ -5221,7 +5285,7 @@ Model 2: Uncoordinated transshipment
 </dl>
 </div>
 <p><a href="#mdl-uc" class="quarto-xref">Model 2</a> states three constraints in words, and its formulation writes each one it needs as a row with the same letter. It needs only one. Row (a) is the payload constraint: each shipment fits in one truck. Constraint (b) limits the interval of a cross-docked set, and with every product stocked, which is constraint (c), there is no such set, so neither needs a row. Stocking does show up in the costs, as the DC’s inventory in the inbound fraction of <a href="#eq-alpha-uc" class="quarto-xref">Eq. 4</a>.</p>
-<p>No term of the objective and no row involves two shipments, so the program separates into one P2P problem per shipment, each the minimization of <a href="3-tran-3.html#eq-tlc-q" class="xref" data-lec="3.3" data-id="eq-tlc-q" title="Periodic Truck Shipments">Eq. 17 in Lecture 3.3</a> that Lecture 3.3 solved for a single shipment. Its solution is the sizes <span style="white-space: nowrap"><span class="math inline">q_i^{\star}</span>,</span> and its minimum, <span style="white-space: nowrap"><span class="math inline">TLC_{UC} = \sum_{i \in I} TLC_i(q_i^{\star})</span>,</span> is the cost <span class="math inline">TLC_{UC}(S)</span> that <a href="#eq-tlc-single-dc" class="quarto-xref">Eq. 5</a> charges for the stocked products.</p>
+<p>No term of the objective and no row involves two shipments, so the program separates into one P2P problem per shipment, each the minimization of <a href="3-tran-3.html#eq-tlc-q" class="xref" data-lec="3.3" data-id="eq-tlc-q" title="Periodic Truck Shipments">Eq. 17 in Lecture 3.3</a> that Lecture 3.3 solved for a single shipment. Its solution is the sizes <span style="white-space: nowrap"><span class="math inline">q_i^{\star}</span>,</span> and its minimum, <span style="white-space: nowrap"><span class="math inline">TLC_{UC} = \sum_{i \in I} TLC_i(q_i^{\star})</span>,</span> is the cost of <a href="#eq-tlc-single-dc" class="quarto-xref">Eq. 5</a> with no cross-docking sets, every product stocked.</p>
 </div>
 <!-- THE IMPLEMENTATION RUNGS are inline because no Logjam export computes
      either extreme; the change request is in docs/logjam-change-requests.md.
@@ -5261,17 +5325,17 @@ Model 2: Uncoordinated transshipment
 <p><strong>minimize:</strong> total logistics cost of transporting the products from their suppliers through the DC to the customers, transport plus cycle inventory</p>
 <p><strong>solve for:</strong><br>
 (a) sets of products cross-docked together, no product in two sets, and products in no set stocked at the DC (with no sets, every product is stocked);<br>
-(b) shipment interval of each set, and shipment size of each shipment of the stocked products.</p>
+(b) shipment interval of each set, and shipment size of each uncoordinated shipment;<br>
+(c) for each stocked product, the set, if any, whose deliveries to the customers also carry it.</p>
 <p><strong>subject to:</strong><br>
 (a) payload: no shipment is larger than one truck’s maximum payload;<br>
 (b) interval: each set’s interval is at least one day;<br>
 <span class="model-add">(c) single set: every product is cross-docked, all in one set.</span></p>
 <p><strong>assumptions:</strong><br>
 (a) DC location is given;<br>
-(b) suppliers produce in batches and customers consume at a constant rate;<br>
-(c) each set’s products move together, inbound and outbound on the set’s interval, in their own outbound shipment to each customer;<br>
-(d) stocked products are held at the DC and leave it in one outbound shipment to each customer, sized on its own;<br>
-(e) suppliers and customers at the DC are served at no transport or inventory cost.</p>
+(b) each supplier’s and each customer’s inventory fraction, <span class="math inline">\alpha_S</span> and <span style="white-space: nowrap"><span class="math inline">\alpha_C</span>,</span> is given;<br>
+(c) every shipment is an independent shipment;<br>
+(d) stocked products are held at the DC, and the products of each set arrive at it together and leave it the same day.</p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-mdl" id="mdl-xd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Model 3: Perfect cross-docking
@@ -5284,7 +5348,7 @@ Model 3: Perfect cross-docking
 <p><span id="eq-tlc-xd"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{i \in I} TLC_i(q_i) &amp;  &amp;  &amp;  &amp; \\[2pt]
-&amp; \text{subject to} &amp; q_i &amp; \leq &amp; q_{\max,i}, &amp; i \in I &amp; (a) \\[2pt]
+&amp; \text{subject to} &amp; q_i &amp; \leq &amp; q_{\max,i}, &amp; i \in I_S &amp; (a) \\[2pt]
 &amp;  &amp; t &amp; \geq &amp; t_{\min} &amp;  &amp; (b) \\[2pt]
 &amp;  &amp; q_i &amp; = &amp; f_i\, t, &amp; i \in I &amp; (c)
 \end{array}
@@ -5294,15 +5358,23 @@ Model 3: Perfect cross-docking
 <dl>
 <dt><span class="math inline">q_i</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">size of shipment <span class="math inline">i</span> (decision variable, ton)</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">size of shipment or delivery <span class="math inline">i</span> (decision variable, ton)</span>
 </dd>
 <dt><span class="math inline">I</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">shipments in from the suppliers and out to the customers</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">shipments in from the suppliers, and deliveries out</span>
 </dd>
 <dt><span class="math inline">TLC_i(q)</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">total logistics cost of shipment <span class="math inline">i</span> at size <span class="math inline">q</span> ($/yr)</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">total logistics cost of shipment or delivery <span class="math inline">i</span> at size <span class="math inline">q</span> ($/yr)</span>
+</dd>
+<dt><span class="math inline">I_S</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">shipments in from the suppliers</span>
+</dd>
+<dt><span class="math inline">q_{\max,i}</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">maximum payload of shipment <span class="math inline">i</span> (ton)</span>
 </dd>
 <dt><span class="math inline">t</span></dt>
 <dd>
@@ -5317,16 +5389,24 @@ Model 3: Perfect cross-docking
 </dd>
 <dt><span class="math inline">f_i</span></dt>
 <dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">annual flow of shipment <span class="math inline">i</span> (ton/yr)</span>
-</dd>
-<dt><span class="math inline">q_{\max,i}</span></dt>
-<dd>
-<span class="deflist-eq">=</span> <span class="deflist-text">maximum payload of shipment <span class="math inline">i</span> (ton).</span>
+<span class="deflist-eq">=</span> <span class="deflist-text">annual flow of shipment or delivery <span class="math inline">i</span> (ton/yr).</span>
 </dd>
 </dl>
 </div>
-<p><a href="#mdl-xd" class="quarto-xref">Model 3</a> states the same three constraints, and here all three are rows. Row (a), payload, is the row of <a href="#eq-tlc-uc" class="quarto-xref">Eq. 6</a>: each shipment fits in one truck. Row (b), interval, keeps the common interval to at least one day. Row (c), single set, puts every shipment on that one interval, so each shipment’s size is its annual flow times the interval. Rows (a) and (c) together also cap the interval: since no shipment may outgrow its truck, <span class="math inline">t</span> can be no longer than <span style="white-space: nowrap"><span class="math inline">t_{\max} = \min_{i \in I} q_{\max,i}/f_i</span>,</span> the interval at which the first shipment fills its truck, and that is the upper end of the implementation’s search. With nothing held at the DC, each shipment’s inventory fraction is <span class="math inline">\alpha_S</span> inbound and <span class="math inline">\alpha_C</span> outbound.</p>
-<p>Set beside <a href="#eq-tlc-uc" class="quarto-xref">Eq. 6</a>, the objective and row (a) are the same, and <a href="#mdl-xd" class="quarto-xref">Model 3</a> adds rows (b) and (c). Row (c) ties every size to one variable, so the program no longer separates, and the search is over <span class="math inline">t</span> alone. Its solution is the interval <span style="white-space: nowrap"><span class="math inline">t^{\star}</span>,</span> the sizes follow as <span style="white-space: nowrap"><span class="math inline">q_i^{\star} = f_i\, t^{\star}</span>,</span> and its minimum, <span style="white-space: nowrap"><span class="math inline">TLC_{XD} = \sum_{i \in I} TLC_i(q_i^{\star})</span>,</span> is the cost <span class="math inline">TLC_{XD}(G)</span> that <a href="#eq-tlc-single-dc" class="quarto-xref">Eq. 5</a> charges for a cross-docked set.</p>
+<p><a href="#mdl-xd" class="quarto-xref">Model 3</a> states the same three constraints, and here all three are rows. Row (a), payload, is the row of <a href="#eq-tlc-single-dc" class="quarto-xref">Eq. 5</a>, for the shipments in from the suppliers. Row (b), interval, keeps the common interval to at least one day. Row (c), single set, puts every shipment and delivery on that one interval, so each one’s size is its annual flow times the interval. With nothing held at the DC, each shipment’s inventory fraction is <span class="math inline">\alpha_S</span> inbound and <span class="math inline">\alpha_C</span> outbound. Rows (a) and (c) together also cap the interval: a shipment in from a supplier fills its truck at <span style="white-space: nowrap"><span class="math inline">t = q_{\max,i}/f_i</span>,</span> so <span class="math inline">t</span> can be no longer than the shortest of these, which is the upper end of the implementation’s search:</p>
+<p><span id="eq-tmax"><span class="math display">
+t_{\max} = \min_{i \in I_S} \frac{q_{\max,i}}{f_i}
+\tag{8}</span></span></p>
+<p>where</p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">t_{\max}</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">longest common interval (yr).</span>
+</dd>
+</dl>
+</div>
+<p>Set beside <a href="#eq-tlc-uc" class="quarto-xref">Eq. 6</a>, the objective is the same, row (a) is written only for the shipments in from the suppliers, and <a href="#mdl-xd" class="quarto-xref">Model 3</a> adds rows (b) and (c). Row (c) ties every size to one variable, so the program no longer separates, and the search is over <span class="math inline">t</span> alone. Its solution is the interval <span style="white-space: nowrap"><span class="math inline">t^{\star}</span>,</span> the sizes follow as <span style="white-space: nowrap"><span class="math inline">q_i^{\star} = f_i\, t^{\star}</span>,</span> and its minimum, <span style="white-space: nowrap"><span class="math inline">TLC_{XD} = \sum_{i \in I} TLC_i(q_i^{\star})</span>,</span> is the cost of <a href="#eq-tlc-single-dc" class="quarto-xref">Eq. 5</a> with every product in a single cross-docking set.</p>
 </div>
 <p>The implementation prices every shipment with the charge <code>c0</code> of <a href="#mdl-uc" class="quarto-xref">Model 2</a>.</p>
 <div class="model-implementation" data-mdl-for="mdl-xd" id="rung-mdl-xd-implementation"><div class="model-rung-label">Model 3 implementation: Perfect cross-docking</div>
@@ -5354,7 +5434,7 @@ Model 3: Perfect cross-docking
 <p>Total logistics cost needs the value of each product per ton, which follows from the value and weight of its carton, for product A:</p>
 <p><span id="eq-unit-value"><span class="math display">
 v_A = \frac{\mathit{uv}_A}{\mathit{wt}_A/2000} = \frac{300}{30/2000} = \$20{,}000\text{/ton}
-\tag{8}</span></span></p>
+\tag{9}</span></span></p>
 <p>where</p>
 <div class="deflist deflist-cols">
 <dl>
@@ -5448,12 +5528,12 @@ v_A = \frac{\mathit{uv}_A}{\mathit{wt}_A/2000} = \frac{300}{30/2000} = \$20{,}00
 <div class="statement">
 <p>Determine the total logistics cost of perfect cross-docking with the DC at Statesville, and the common shipment interval that minimizes it.</p>
 </div>
-<p>To simplify, the example uses the optimal UC location (Statesville, as Ex. 3(a) shows), which may not be optimal for XD. As a result, it can use the final <code>shUC</code> from UC since it has a column <code>d</code> with the distance from the optimal UC location to each EF. <code>shUC</code> is copied to a new DataFrame <code>shXD</code> so that the <code>a</code> column can reflect cross-docking (it cannot just add another column to <code>sh</code> because <code>totlogcost</code> is looking for the <code>a</code> column).</p>
+<p>To simplify, the example uses the optimal UC location (Statesville, as Ex. 3(a) shows), which may not be optimal for XD. As a result, it can use the final <code>shUC</code> from UC since it has a column <code>d</code> with the distance from the optimal UC location to each EF. <code>shUC</code> is copied to a new DataFrame <code>shXD</code> so that the <code>a</code> column can reflect cross-docking (it cannot just add another column to <code>sh</code> because <code>totlogcost</code> is looking for the <code>a</code> column). The upper end of the search is <span class="math inline">t_{\max}</span> of <a href="#eq-tmax" class="quarto-xref">Eq. 8</a>, taken over the inbound shipments, <code>idxin</code>.</p>
 <div id="40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Code block 15: perfect cross-docking with the DC at Statesville</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>shXD <span class="op">=</span> shUC[<span class="op">:</span>, <span class="fu">Not</span>([<span class="op">:</span>qᵒ, <span class="op">:</span>TLCᵒ])]</span>
 <span id="cb30-3"><a href="#cb30-3"></a>shXD[idxin, <span class="op">:</span>a] <span class="op">.=</span> αS               <span class="co"># outbound α is unchanged</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a>tmax <span class="op">=</span> <span class="fu">minimum</span>(shXD.qmax<span class="op">./</span>shXD.f)   <span class="co"># yr, every shipment in one truck</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a>tmax <span class="op">=</span> <span class="fu">minimum</span>(shXD.qmax[idxin]<span class="op">./</span>shXD.f[idxin])  <span class="co"># yr, inbound only</span></span>
 <span id="cb30-5"><a href="#cb30-5"></a>xd <span class="op">=</span> <span class="fu">tlc_xd</span>(shXD, tr, <span class="fl">1</span><span class="op">/</span><span class="fl">365.25</span>, tmax)</span>
 <span id="cb30-6"><a href="#cb30-6"></a><span class="pp">@show</span> xd.t, <span class="fl">365.25</span>xd.t              <span class="co"># yr, days</span></span>
 <span id="cb30-7"><a href="#cb30-7"></a>shXD.qXD <span class="op">=</span> xd.q</span>
@@ -5481,7 +5561,7 @@ r_{FTL} &amp;= \frac{r_{TL}}{q_{\max}} \\
 TLC_{\text{AllocFTL}} ( q_{TL}^{\star} ) &amp;= \frac{f}{q_{TL}^{\star}} ( q_{TL}^{\star} r_{FTL} d ) + \alpha v h\, q_{TL}^{\star} \\
 &amp;= f \frac{r_{TL}}{q_{\max}} d + \alpha v h\, q_{TL}^{\star}
 \end{aligned}
-\tag{9}</span></span></p>
+\tag{10}</span></span></p>
 <p>where</p>
 <div class="deflist deflist-cols">
 <dl>
@@ -5522,7 +5602,7 @@ TLC_{\text{AllocFTL}} ( q_{TL}^{\star} ) &amp;= \frac{f}{q_{TL}^{\star}} ( q_{TL
 <pre><code>44594.79980072833</code></pre>
 </div>
 </div>
-<p><a href="#tbl-statesville" class="quarto-xref">Table 1</a> sets the three policies side by side, shipment by shipment.</p>
+<p><a href="#tbl-statesville" class="quarto-xref">Table 2</a> sets the three policies side by side, shipment by shipment.</p>
 <details class="code-fold">
 <summary>Show the code that builds the table</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Code block 17: the three costs, shipment by shipment</span></span>
@@ -5550,7 +5630,7 @@ TLC_{\text{AllocFTL}} ( q_{TL}^{\star} ) &amp;= \frac{f}{q_{TL}^{\star}} ( q_{TL
 <div id="tbl-statesville" class="dense fit quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-statesville-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 1: Ex. 1 with the DC at Statesville, shipment by shipment: <span class="math inline">f</span> in ton/yr, <span class="math inline">d</span> in mi, sizes in ton, and the uncoordinated (UC), cross-docked (XD) and allocated full-truckload (<a href="3-tran-3.html#eq-tlc-alloc" class="xref" data-lec="3.3" data-id="eq-tlc-alloc" title="Periodic Truck Shipments">Eq. 20 in Lecture 3.3</a>) total logistics costs in $/yr.
+Table 2: Ex. 1 with the DC at Statesville, shipment by shipment: <span class="math inline">f</span> in ton/yr, <span class="math inline">d</span> in mi, sizes in ton, and the uncoordinated (UC), cross-docked (XD) and allocated full-truckload (<a href="3-tran-3.html#eq-tlc-alloc" class="xref" data-lec="3.3" data-id="eq-tlc-alloc" title="Periodic Truck Shipments">Eq. 20 in Lecture 3.3</a>) total logistics costs in $/yr.
 </figcaption>
 <div aria-describedby="tbl-statesville-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="dense fit caption-top table">
@@ -5856,7 +5936,7 @@ Figure 8: Ex. 2: three suppliers (red), four customers (blue) and the existing 
 <span id="cb46-2"><a href="#cb46-2"></a>idxin2 <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(fS2)             <span class="co"># the three inbound shipments</span></span>
 <span id="cb46-3"><a href="#cb46-3"></a>shXD2 <span class="op">=</span> sh2[<span class="op">:</span>, <span class="fu">Not</span>([<span class="op">:</span>qᵒ, <span class="op">:</span>TLCᵒ, <span class="op">:</span>isLTL, <span class="op">:</span>t])]</span>
 <span id="cb46-4"><a href="#cb46-4"></a>shXD2[idxin2, <span class="op">:</span>a] <span class="op">.=</span> αS            <span class="co"># outbound α is unchanged</span></span>
-<span id="cb46-5"><a href="#cb46-5"></a>tmax2 <span class="op">=</span> <span class="fu">minimum</span>(shXD2.qmax<span class="op">./</span>shXD2.f)  <span class="co"># yr, every shipment in one truck</span></span>
+<span id="cb46-5"><a href="#cb46-5"></a>tmax2 <span class="op">=</span> <span class="fu">minimum</span>(shXD2.qmax[idxin2]<span class="op">./</span>shXD2.f[idxin2])  <span class="co"># yr, inbound only</span></span>
 <span id="cb46-6"><a href="#cb46-6"></a>xd2 <span class="op">=</span> <span class="fu">tlc_xd</span>(shXD2, tr2, <span class="fl">1</span><span class="op">/</span><span class="fl">365.25</span>, tmax2, ppiLTL)</span>
 <span id="cb46-7"><a href="#cb46-7"></a>shXD2.qXD <span class="op">=</span> xd2.q</span>
 <span id="cb46-8"><a href="#cb46-8"></a>shXD2.TLC_XD <span class="op">=</span> [<span class="fu">totlogcost</span>(r.qXD, <span class="fu">c0</span>(r.qXD, r, tr2, ppiLTL), r)</span>
@@ -5906,7 +5986,7 @@ TLC_{TL}(\mathbf{x}) &amp;= \sum_{i=1}^{m} w_i(\mathbf{x})\, d_i(\mathbf{x}) + \
 &amp;= \sum_{i=1}^{m} \frac{f_i}{q_i(\mathbf{x})}\, r\, d_i(\mathbf{x}) + \alpha v h\, q_i(\mathbf{x}) \\
 &amp;= \sum_{i=1}^{m} \frac{f_i}{\sqrt{\dfrac{f_i\, r\, d_i(\mathbf{x})}{\alpha v h}}}\, r\, d_i(\mathbf{x}) + \alpha v h \sqrt{\frac{f_i\, r\, d_i(\mathbf{x})}{\alpha v h}}
 \end{aligned}
-\tag{10}</span></span></p>
+\tag{11}</span></span></p>
 <p>where</p>
 <div class="deflist deflist-cols">
 <dl>
@@ -5928,7 +6008,7 @@ TLC_{TL}(\mathbf{x}) &amp;= \sum_{i=1}^{m} w_i(\mathbf{x})\, d_i(\mathbf{x}) + \
 <p>Both terms reduce to the same square root, so the sum simplifies to</p>
 <p><span id="eq-tlc-tl-sqrt"><span class="math display">
 TLC_{TL}(\mathbf{x}) = \sum_{i=1}^{m} 2\sqrt{\alpha v h\, f_i\, r\, d_i(\mathbf{x})}
-\tag{11}</span></span></p>
+\tag{12}</span></span></p>
 <p>With full truckloads, <a href="#eq-tlc-ftl-x" class="quarto-xref">Eq. 2</a>, the inventory cost is a constant and each facility’s cost grows with its distance; with TL shipments sized optimally, each facility’s cost grows with the square root of its distance, and transport and inventory cannot be separated.</p>
 <p>The takeaway comes from comparing it with the full truckload. There the shipment size is known to be <span style="white-space: nowrap"><span class="math inline">q_{\max}</span>,</span> the distance stays in the transport term, and everything in the inventory term is a constant, which adds to the cost without changing the solution; transport cost alone can be minimized. With truckloads sized optimally, transport and inventory are tied together: every move of the DC changes its distances to the existing facilities, and those changes change every optimal truckload size, so the sizes change constantly as the DC moves. A computer still solves the problem easily; the difference is that it cannot be solved by looking at transport cost alone. The total logistics cost, inventory and transport together, has to be minimized, and the two cannot be separated as they can for full truckloads, which is one more reason full truckloads are good. It is remarkable how many such simple assumptions work out in practice. In fields like computer vision, simple linear assumptions do not work at all, and everything has to be modeled as highly nonlinear. In logistics, the full-truckload assumption turns out to be what real problems should do anyway, and as long as transport is paid for by the mile, a cost linear in distance is exactly what location needs.</p>
 </section>
@@ -6272,11 +6352,11 @@ Figure 14: Warehouse management system.
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><a href="#tbl-codes" class="quarto-xref">Table 2</a> lists the three major categories of codes that are used in logistics-related activities. In warehousing, item-level stock-keeping unit (SKU) codes are used for inventory control, while unit-level radio-frequency identification (RFID) tags are just starting to be used to track each individual unit of an item in a warehouse, thereby facilitating FIFO stock rotation, for example. The use of a globally unique code allows products to move through the supply chain from firm to firm without the need to apply firm-specific codes when product is received at the warehouse door. The use of commodity codes is most useful for procurement activities where, for example, a similar item from multiple vendors is being sought and each vendor has a different SKU number.</p>
+<p><a href="#tbl-codes" class="quarto-xref">Table 3</a> lists the three major categories of codes that are used in logistics-related activities. In warehousing, item-level stock-keeping unit (SKU) codes are used for inventory control, while unit-level radio-frequency identification (RFID) tags are just starting to be used to track each individual unit of an item in a warehouse, thereby facilitating FIFO stock rotation, for example. The use of a globally unique code allows products to move through the supply chain from firm to firm without the need to apply firm-specific codes when product is received at the warehouse door. The use of commodity codes is most useful for procurement activities where, for example, a similar item from multiple vendors is being sought and each vendor has a different SKU number.</p>
 <div id="tbl-codes" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-codes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 2: Logistics-related codes.
+Table 3: Logistics-related codes.
 </figcaption>
 <div aria-describedby="tbl-codes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -6353,7 +6433,7 @@ Table 2: Logistics-related codes.
 <p>With the wage and benefits paid at the start of each year of the service life, the most that can be spent is</p>
 <p><span id="eq-automation"><span class="math display">
 P = A\,\frac{1 - (1 + i)^{-n}}{1 - (1 + i)^{-1}}
-\tag{12}</span></span></p>
+\tag{13}</span></span></p>
 <p>where</p>
 <div class="deflist deflist-cols">
 <dl>
