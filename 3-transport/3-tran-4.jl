@@ -573,7 +573,7 @@ prt(shD[:, Not(:h)])
 
 # The comparison of the three ways to ship, row by row
 out = DataFrame(Method = "Direct shipments", TLC = sum(shD.TLCᵒ),
-                tavg = mean(shD.t), LTL = sum(shD.isLTL))
+                t̄ = mean(shD.t), LTL = sum(shD.isLTL))
 prt(out)
 
 ## Example 2(b): Uncoordinated inventory at Memphis
