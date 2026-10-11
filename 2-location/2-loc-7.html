@@ -5046,7 +5046,7 @@ Solving report
   Primal bound      30
   Dual bound        30
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.000143356885083
+  P-D integral      0.000129045555152
   Solution status   feasible
                     30 (objective)
                     0 (bound viol.)
@@ -5308,11 +5308,11 @@ Model 2: Uncapacitated facility location
 <span id="cb30-6"><a href="#cb30-6"></a>    <span class="fu">set_silent</span>(u)</span>
 <span id="cb30-7"><a href="#cb30-7"></a>    <span class="pp">@variable</span>(u, y[N], Bin)                  <span class="co"># open a site, or not</span></span>
 <span id="cb30-8"><a href="#cb30-8"></a>    <span class="pp">@variable</span>(u, <span class="fl">0</span> <span class="op">&lt;=</span> x[N, M] <span class="op">&lt;=</span> <span class="fl">1</span>)          <span class="co"># share of EF j served from i</span></span>
-<span id="cb30-9"><a href="#cb30-9"></a>    <span class="pp">@objective</span>(u, Min, <span class="fu">sum</span>(k[i] <span class="op">*</span> y[i] <span class="cf">for</span> i <span class="kw">in</span> N) <span class="op">+</span></span>
-<span id="cb30-10"><a href="#cb30-10"></a>                       <span class="fu">sum</span>(C[i, j] <span class="op">*</span> x[i, j] <span class="cf">for</span> i <span class="kw">in</span> N, j <span class="kw">in</span> M))</span>
-<span id="cb30-11"><a href="#cb30-11"></a>    <span class="pp">@constraint</span>(u, coverage[j <span class="kw">in</span> M],         <span class="co"># (a)</span></span>
-<span id="cb30-12"><a href="#cb30-12"></a>                <span class="fu">sum</span>(x[i, j] <span class="cf">for</span> i <span class="kw">in</span> N) <span class="op">==</span> <span class="fl">1</span>)</span>
-<span id="cb30-13"><a href="#cb30-13"></a>    <span class="pp">@constraint</span>(u, linking[i <span class="kw">in</span> N, j <span class="kw">in</span> M],  <span class="co"># (b)</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a>    <span class="pp">@objective</span>(u, Min, <span class="fu">sum</span>(k[i] <span class="op">*</span> y[i] <span class="cf">for</span> i <span class="op">∈</span> N) <span class="op">+</span></span>
+<span id="cb30-10"><a href="#cb30-10"></a>                       <span class="fu">sum</span>(C[i, j] <span class="op">*</span> x[i, j] <span class="cf">for</span> i <span class="op">∈</span> N, j <span class="op">∈</span> M))</span>
+<span id="cb30-11"><a href="#cb30-11"></a>    <span class="pp">@constraint</span>(u, coverage[j <span class="op">∈</span> M],          <span class="co"># (a)</span></span>
+<span id="cb30-12"><a href="#cb30-12"></a>                <span class="fu">sum</span>(x[i, j] <span class="cf">for</span> i <span class="op">∈</span> N) <span class="op">==</span> <span class="fl">1</span>)</span>
+<span id="cb30-13"><a href="#cb30-13"></a>    <span class="pp">@constraint</span>(u, linking[i <span class="op">∈</span> N, j <span class="op">∈</span> M],    <span class="co"># (b)</span></span>
 <span id="cb30-14"><a href="#cb30-14"></a>                y[i] <span class="op">&gt;=</span> x[i, j])</span>
 <span id="cb30-15"><a href="#cb30-15"></a>    <span class="fu">optimize!</span>(u)</span>
 <span id="cb30-16"><a href="#cb30-16"></a>    yᵒ <span class="op">=</span> <span class="fu">snapvals</span>(<span class="fu">value</span>.(y))</span>
@@ -5484,12 +5484,12 @@ Model 3: Capacitated facility location
 <span id="cb40-6"><a href="#cb40-6"></a>    <span class="fu">set_silent</span>(c)</span>
 <span id="cb40-7"><a href="#cb40-7"></a>    <span class="pp">@variable</span>(c, y[N], Bin)</span>
 <span id="cb40-8"><a href="#cb40-8"></a>    <span class="pp">@variable</span>(c, <span class="fl">0</span> <span class="op">&lt;=</span> x[N, M] <span class="op">&lt;=</span> <span class="fl">1</span>)</span>
-<span id="cb40-9"><a href="#cb40-9"></a>    <span class="pp">@objective</span>(c, Min, <span class="fu">sum</span>(k[i] <span class="op">*</span> y[i] <span class="cf">for</span> i <span class="kw">in</span> N) <span class="op">+</span></span>
-<span id="cb40-10"><a href="#cb40-10"></a>                       <span class="fu">sum</span>(C[i, j] <span class="op">*</span> x[i, j] <span class="cf">for</span> i <span class="kw">in</span> N, j <span class="kw">in</span> M))</span>
-<span id="cb40-11"><a href="#cb40-11"></a>    <span class="pp">@constraint</span>(c, coverage[j <span class="kw">in</span> M],  <span class="co"># (a) coverage</span></span>
-<span id="cb40-12"><a href="#cb40-12"></a>                <span class="fu">sum</span>(x[i, j] <span class="cf">for</span> i <span class="kw">in</span> N) <span class="op">==</span> <span class="fl">1</span>)</span>
-<span id="cb40-13"><a href="#cb40-13"></a>    <span class="pp">@constraint</span>(c, capacity[i <span class="kw">in</span> N],  <span class="co"># (b) capacity</span></span>
-<span id="cb40-14"><a href="#cb40-14"></a>                K[i] <span class="op">*</span> y[i] <span class="op">&gt;=</span> <span class="fu">sum</span>(f[j] <span class="op">*</span> x[i, j] <span class="cf">for</span> j <span class="kw">in</span> M))</span>
+<span id="cb40-9"><a href="#cb40-9"></a>    <span class="pp">@objective</span>(c, Min, <span class="fu">sum</span>(k[i] <span class="op">*</span> y[i] <span class="cf">for</span> i <span class="op">∈</span> N) <span class="op">+</span></span>
+<span id="cb40-10"><a href="#cb40-10"></a>                       <span class="fu">sum</span>(C[i, j] <span class="op">*</span> x[i, j] <span class="cf">for</span> i <span class="op">∈</span> N, j <span class="op">∈</span> M))</span>
+<span id="cb40-11"><a href="#cb40-11"></a>    <span class="pp">@constraint</span>(c, coverage[j <span class="op">∈</span> M],   <span class="co"># (a) coverage</span></span>
+<span id="cb40-12"><a href="#cb40-12"></a>                <span class="fu">sum</span>(x[i, j] <span class="cf">for</span> i <span class="op">∈</span> N) <span class="op">==</span> <span class="fl">1</span>)</span>
+<span id="cb40-13"><a href="#cb40-13"></a>    <span class="pp">@constraint</span>(c, capacity[i <span class="op">∈</span> N],   <span class="co"># (b) capacity</span></span>
+<span id="cb40-14"><a href="#cb40-14"></a>                K[i] <span class="op">*</span> y[i] <span class="op">&gt;=</span> <span class="fu">sum</span>(f[j] <span class="op">*</span> x[i, j] <span class="cf">for</span> j <span class="op">∈</span> M))</span>
 <span id="cb40-15"><a href="#cb40-15"></a>    <span class="fu">optimize!</span>(c)</span>
 <span id="cb40-16"><a href="#cb40-16"></a>    yᵒ <span class="op">=</span> <span class="fu">snapvals</span>(<span class="fu">value</span>.(y))</span>
 <span id="cb40-17"><a href="#cb40-17"></a>    res <span class="op">=</span> (Y <span class="op">=</span> <span class="fu">findall</span>(<span class="op">==</span>(<span class="fl">1.0</span>), yᵒ), X <span class="op">=</span> <span class="fu">snapvals</span>(<span class="fu">value</span>.(x)),</span>
@@ -5704,9 +5704,9 @@ Figure 5: Six objects, and the five subsets available to cover them. Where two 
 <span id="cb48-3"><a href="#cb48-3"></a>    M, N <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">1</span>), <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">2</span>)</span>
 <span id="cb48-4"><a href="#cb48-4"></a>    model <span class="op">=</span> <span class="fu">Model</span>(HiGHS.Optimizer)</span>
 <span id="cb48-5"><a href="#cb48-5"></a>    <span class="pp">@variable</span>(model, x[<span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(N)], Bin)</span>
-<span id="cb48-6"><a href="#cb48-6"></a>    <span class="pp">@objective</span>(model, Min, <span class="fu">sum</span>(x[i] <span class="cf">for</span> i <span class="kw">in</span> N))</span>
-<span id="cb48-7"><a href="#cb48-7"></a>    <span class="pp">@constraint</span>(model, coverage[j <span class="kw">in</span> M],  <span class="co"># (a)</span></span>
-<span id="cb48-8"><a href="#cb48-8"></a>                <span class="fu">sum</span>(A[j, i] <span class="op">*</span> x[i] <span class="cf">for</span> i <span class="kw">in</span> N) <span class="op">&gt;=</span> <span class="fl">1</span>)</span>
+<span id="cb48-6"><a href="#cb48-6"></a>    <span class="pp">@objective</span>(model, Min, <span class="fu">sum</span>(x[i] <span class="cf">for</span> i <span class="op">∈</span> N))</span>
+<span id="cb48-7"><a href="#cb48-7"></a>    <span class="pp">@constraint</span>(model, coverage[j <span class="op">∈</span> M],   <span class="co"># (a)</span></span>
+<span id="cb48-8"><a href="#cb48-8"></a>                <span class="fu">sum</span>(A[j, i] <span class="op">*</span> x[i] <span class="cf">for</span> i <span class="op">∈</span> N) <span class="op">&gt;=</span> <span class="fl">1</span>)</span>
 <span id="cb48-9"><a href="#cb48-9"></a>    <span class="fu">set_silent</span>(model)</span>
 <span id="cb48-10"><a href="#cb48-10"></a>    <span class="fu">set_time_limit_sec</span>(model, <span class="fl">60.0</span>)       <span class="co"># solution timeout</span></span>
 <span id="cb48-11"><a href="#cb48-11"></a>    <span class="fu">optimize!</span>(model)</span>
@@ -5757,9 +5757,9 @@ Model 5: Set packing
 <span id="cb50-3"><a href="#cb50-3"></a>    M, N <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">1</span>), <span class="fl">1</span><span class="op">:</span><span class="fu">size</span>(A, <span class="fl">2</span>)</span>
 <span id="cb50-4"><a href="#cb50-4"></a>    model <span class="op">=</span> <span class="fu">Model</span>(HiGHS.Optimizer)</span>
 <span id="cb50-5"><a href="#cb50-5"></a>    <span class="pp">@variable</span>(model, x[N], Bin)</span>
-<span id="cb50-6"><a href="#cb50-6"></a>    <span class="pp">@objective</span>(model, Max, <span class="fu">sum</span>(x[i] <span class="cf">for</span> i <span class="kw">in</span> N))</span>
-<span id="cb50-7"><a href="#cb50-7"></a>    <span class="pp">@constraint</span>(model, disjoint[j <span class="kw">in</span> M],  <span class="co"># (a)</span></span>
-<span id="cb50-8"><a href="#cb50-8"></a>                <span class="fu">sum</span>(A[j, i] <span class="op">*</span> x[i] <span class="cf">for</span> i <span class="kw">in</span> N) <span class="op">&lt;=</span> <span class="fl">1</span>)</span>
+<span id="cb50-6"><a href="#cb50-6"></a>    <span class="pp">@objective</span>(model, Max, <span class="fu">sum</span>(x[i] <span class="cf">for</span> i <span class="op">∈</span> N))</span>
+<span id="cb50-7"><a href="#cb50-7"></a>    <span class="pp">@constraint</span>(model, disjoint[j <span class="op">∈</span> M],   <span class="co"># (a)</span></span>
+<span id="cb50-8"><a href="#cb50-8"></a>                <span class="fu">sum</span>(A[j, i] <span class="op">*</span> x[i] <span class="cf">for</span> i <span class="op">∈</span> N) <span class="op">&lt;=</span> <span class="fl">1</span>)</span>
 <span id="cb50-9"><a href="#cb50-9"></a>    <span class="fu">set_silent</span>(model)</span>
 <span id="cb50-10"><a href="#cb50-10"></a>    <span class="fu">optimize!</span>(model)</span>
 <span id="cb50-11"><a href="#cb50-11"></a>    <span class="cf">return</span> <span class="fu">findall</span>(<span class="op">==</span>(<span class="fl">1.0</span>), <span class="fu">snapvals</span>(<span class="fu">value</span>.(x)))</span>
@@ -6100,14 +6100,14 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <span id="cb73-8"><a href="#cb73-8"></a>    <span class="pp">@variable</span>(bp, y[M], Bin)</span>
 <span id="cb73-9"><a href="#cb73-9"></a>    <span class="pp">@variable</span>(bp, x[M, M], Bin)</span>
 <span id="cb73-10"><a href="#cb73-10"></a>    <span class="pp">@objective</span>(bp, Min, <span class="fu">sum</span>(y))</span>
-<span id="cb73-11"><a href="#cb73-11"></a>    <span class="pp">@constraint</span>(bp, capacity[i <span class="kw">in</span> M],      <span class="co"># (a)</span></span>
-<span id="cb73-12"><a href="#cb73-12"></a>                V <span class="op">*</span> y[i] <span class="op">&gt;=</span> <span class="fu">sum</span>(v[j] <span class="op">*</span> x[i, j] <span class="cf">for</span> j <span class="kw">in</span> M))</span>
-<span id="cb73-13"><a href="#cb73-13"></a>    <span class="pp">@constraint</span>(bp, assignment[j <span class="kw">in</span> M],    <span class="co"># (b)</span></span>
-<span id="cb73-14"><a href="#cb73-14"></a>                <span class="fu">sum</span>(x[i, j] <span class="cf">for</span> i <span class="kw">in</span> M) <span class="op">==</span> <span class="fl">1</span>)</span>
+<span id="cb73-11"><a href="#cb73-11"></a>    <span class="pp">@constraint</span>(bp, capacity[i <span class="op">∈</span> M],       <span class="co"># (a)</span></span>
+<span id="cb73-12"><a href="#cb73-12"></a>                V <span class="op">*</span> y[i] <span class="op">&gt;=</span> <span class="fu">sum</span>(v[j] <span class="op">*</span> x[i, j] <span class="cf">for</span> j <span class="op">∈</span> M))</span>
+<span id="cb73-13"><a href="#cb73-13"></a>    <span class="pp">@constraint</span>(bp, assignment[j <span class="op">∈</span> M],     <span class="co"># (b)</span></span>
+<span id="cb73-14"><a href="#cb73-14"></a>                <span class="fu">sum</span>(x[i, j] <span class="cf">for</span> i <span class="op">∈</span> M) <span class="op">==</span> <span class="fl">1</span>)</span>
 <span id="cb73-15"><a href="#cb73-15"></a>    <span class="fu">optimize!</span>(bp)</span>
 <span id="cb73-16"><a href="#cb73-16"></a>    xᵒ, yᵒ <span class="op">=</span> <span class="fu">snapvals</span>(<span class="fu">value</span>.(x)), <span class="fu">snapvals</span>(<span class="fu">value</span>.(y))</span>
 <span id="cb73-17"><a href="#cb73-17"></a>    used <span class="op">=</span> <span class="fu">findall</span>(<span class="op">==</span>(<span class="fl">1.0</span>), yᵒ)</span>
-<span id="cb73-18"><a href="#cb73-18"></a>    bins <span class="op">=</span> [<span class="fu">findall</span>(<span class="op">==</span>(<span class="fl">1.0</span>), xᵒ[i, <span class="op">:</span>]) for i <span class="kw">in</span> used]</span>
+<span id="cb73-18"><a href="#cb73-18"></a>    bins <span class="op">=</span> [<span class="fu">findall</span>(<span class="op">==</span>(<span class="fl">1.0</span>), xᵒ[i, <span class="op">:</span>]) for i <span class="op">∈</span> used]</span>
 <span id="cb73-19"><a href="#cb73-19"></a>    res <span class="op">=</span> (bins <span class="op">=</span> bins, used <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">objective_value</span>(bp)),</span>
 <span id="cb73-20"><a href="#cb73-20"></a>           status <span class="op">=</span> <span class="fu">termination_status</span>(bp), gap <span class="op">=</span> <span class="fu">relative_gap</span>(bp),</span>
 <span id="cb73-21"><a href="#cb73-21"></a>           secs <span class="op">=</span> <span class="fu">solve_time</span>(bp))</span>
@@ -6134,9 +6134,9 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <pre><code>   objects  binaries  bins  seconds
 ───────────────────────────────────
 1       20       420     6     0.00
-2       50     2,550    15     0.19
-3      100    10,100    31     1.10
-4      200    40,200    61     9.10</code></pre>
+2       50     2,550    15     0.21
+3      100    10,100    31     1.09
+4      200    40,200    61     8.94</code></pre>
 </div>
 </div>
 <p>Ten times the objects is a hundred times the variables and rather more than a hundred times the work. Sixty seconds covers two hundred objects several times over and three hundred comfortably, and stops somewhere past that rather than running all afternoon on an instance nobody meant to pose. A limit that is never reached costs nothing, which is the argument for always setting one.</p>
@@ -6156,10 +6156,10 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="cell-output cell-output-stdout">
 <pre><code>    gap  bins  seconds
 ──────────────────────
-  exact    61     8.99
-     1%    61     8.96
-     2%    62     5.71
-     5%    62     5.76</code></pre>
+  exact    61     9.06
+     1%    61     9.08
+     2%    62     5.74
+     5%    62     5.82</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Reading a solve that stopped early">
@@ -6590,7 +6590,7 @@ Model 8: Single-machine total tardiness
 <span id="cb95-7"><a href="#cb95-7"></a>    <span class="pp">@variable</span>(model, t[K] <span class="op">&gt;=</span> <span class="fl">0</span>)</span>
 <span id="cb95-8"><a href="#cb95-8"></a>    <span class="pp">@variable</span>(model, C[J] <span class="op">&gt;=</span> <span class="fl">0</span>)</span>
 <span id="cb95-9"><a href="#cb95-9"></a>    <span class="pp">@variable</span>(model, T[J] <span class="op">&gt;=</span> <span class="fl">0</span>)</span>
-<span id="cb95-10"><a href="#cb95-10"></a>    <span class="pp">@objective</span>(model, Min, <span class="fu">sum</span>(T[j] <span class="cf">for</span> j <span class="kw">in</span> J))</span>
+<span id="cb95-10"><a href="#cb95-10"></a>    <span class="pp">@objective</span>(model, Min, <span class="fu">sum</span>(T[j] <span class="cf">for</span> j <span class="op">∈</span> J))</span>
 <span id="cb95-11"><a href="#cb95-11"></a>    <span class="pp">@constraint</span>(model, [j <span class="op">∈</span> J], <span class="fu">sum</span>(y[j, k] <span class="cf">for</span> k <span class="op">∈</span> K) <span class="op">==</span> <span class="fl">1</span>)</span>
 <span id="cb95-12"><a href="#cb95-12"></a>    <span class="pp">@constraint</span>(model, [k <span class="op">∈</span> K], <span class="fu">sum</span>(y[j, k] <span class="cf">for</span> j <span class="op">∈</span> J) <span class="op">==</span> <span class="fl">1</span>)</span>
 <span id="cb95-13"><a href="#cb95-13"></a>    <span class="pp">@constraint</span>(model, t[<span class="fl">1</span>] <span class="op">==</span> <span class="fu">sum</span>(p[j] <span class="op">*</span> y[j, <span class="fl">1</span>] <span class="cf">for</span> j <span class="op">∈</span> J))</span>
