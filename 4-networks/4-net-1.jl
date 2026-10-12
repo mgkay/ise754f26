@@ -667,7 +667,7 @@ isc = isequal.(L8.SOURCE, "CONNECTOR")       # the connectors
 # used to select rows.
 nnx = count(isc .& (L8.DST .> n1))           # new node to existing
 nnn = count(isc .& (L8.DST .<= n1))          # new node to new node
-prt(L8[isc .& (L8.SRC .== 1), 1:3])          # those of new node 1
+prt(sort(L8[isc .& (L8.SRC .== 1), 1:3], :DST))  # those of new node 1
 # Code block 41: the connectors, drawn with Code block 39's citynet!
 fig = Figure(size = (687, 560))
 ax = Axis(fig[1, 1]; aspect = DataAspect())

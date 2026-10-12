@@ -245,17 +245,10 @@ for n in (2, 3, 5, 9)
                   count(vi .< va .- 1e-6), count(va .< vi .- 1e-6)))
 end
 small = filter(r -> r.n <= 3, bench)
-# WALL CLOCK IS NOT REPRODUCIBLE, so the paragraph states a RANGE, his decision
-# of 2026-10-08, and this cell asserts that the measured ratio lies in it rather
-# than printing it. The figure it replaces, bucketed to the nearest half,
-# rendered 2.0 on one full render and 1.5 on the next (2026-10-05, 2026-10-11).
-# At two and three each form is timed three times, interleaved, and the fastest
-# pass of each kept: noise only ever adds time, and interleaving lets a slow
-# spell hit both forms. source/_probes/_probe-int-vs-alt-stability.jl measured
-# this estimator on 2026-10-11 at 1.56 to 1.64 on a quiet machine and 1.61 to
-# 1.79 with every core busy, inside the range with room at both ends. Counting
-# distance computations instead is reproducible exactly and gives 1.2, but that
-# is a claim about work rather than about speed, which is what is asked here.
+# Wall-clock time varies from run to run, so the paragraph below states a range
+# and this checks that the measured ratio lies in it. At two and three each
+# form is timed three times, interleaved, and the fastest pass of each is kept:
+# noise only ever adds time, and interleaving lets a slow spell hit both forms.
 speedup = sum(small.ratio) / nrow(small)
 @assert 1.5 <= speedup <= 2 "integrated against alternating measured " *
     "$(round(speedup, digits = 2)) times, outside the 1.5 to 2 the text states"
