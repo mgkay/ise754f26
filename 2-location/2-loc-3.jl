@@ -203,7 +203,8 @@ prt(DataFrame(start = ["0, 200", "200, 500"],
 # 2-location/source/measure_int_vs_alt.jl, which is the fuller study; the two
 # formulations here are written from the SAME `allocate` and the SAME `Optim`
 # call, so what is compared is the formulation and not the implementation. The
-# numbers this cell produces are the ones the paragraph below quotes.
+# gap the paragraph below quotes is computed here, and the speedup range it
+# states is checked here.
 using Random
 dfb = filter(r -> r.STFIP in st2fips.([:NC, :SC]) && r.POP > 10_000, usplace())
 Pb, wb = hcat(dfb.LON, dfb.LAT), float(dfb.POP)
@@ -232,24 +233,32 @@ for n in (2, 3, 5, 9)
     Random.seed!(8345)
     S = [randX(Pb, n) for _ in 1:nstarts]
     TCintb(vec(S[1])); TCaltb(S[1])                      # warm the compiler
-    ti = @elapsed vi = [optimize(TCintb, vec(X)).minimum for X in S]
-    ta = @elapsed va = [TCaltb(X) for X in S]
+    vi, va, ti, ta = Float64[], Float64[], Inf, Inf
+    for _ in 1:(n <= 3 ? 3 : 1)    # interleaved; the fastest pass of each kept
+        t = @elapsed vi = [optimize(TCintb, vec(X)).minimum for X in S]
+        ti = min(ti, t)
+        t = @elapsed va = [TCaltb(X) for X in S]
+        ta = min(ta, t)
+    end
     bi, ba = minimum(vi), minimum(va)
     push!(bench, (n, ta / ti, 100abs(bi - ba) / min(bi, ba),
                   count(vi .< va .- 1e-6), count(va .< vi .- 1e-6)))
 end
 small = filter(r -> r.n <= 3, bench)
-# WALL CLOCK IS NOT REPRODUCIBLE, so the figure the paragraph quotes is bucketed
-# to the nearest half rather than rounded to one decimal. Repeating this same
-# seeded measurement five times swings the n = 3 ratio from 1.50 to 1.78 and the
-# two-point mean from 1.48 to 1.68; at one decimal that renders 1.5 one night and
-# 1.6 the next, and it did, on 2026-09-16. A half-wide bucket spans 1.25 to 1.75,
-# so every observed value falls in the same one and the sentence states the
-# measurement at the precision the measurement supports. Do not restore `digits`.
-# Counting distance computations instead is reproducible exactly and gives 1.2,
-# but that is a claim about work rather than about speed, which is what is asked
-# here.
-speedup = round(2 * sum(small.ratio) / nrow(small)) / 2
+# WALL CLOCK IS NOT REPRODUCIBLE, so the paragraph states a RANGE, his decision
+# of 2026-10-08, and this cell asserts that the measured ratio lies in it rather
+# than printing it. The figure it replaces, bucketed to the nearest half,
+# rendered 2.0 on one full render and 1.5 on the next (2026-10-05, 2026-10-11).
+# At two and three each form is timed three times, interleaved, and the fastest
+# pass of each kept: noise only ever adds time, and interleaving lets a slow
+# spell hit both forms. source/_probes/_probe-int-vs-alt-stability.jl measured
+# this estimator on 2026-10-11 at 1.56 to 1.64 on a quiet machine and 1.61 to
+# 1.79 with every core busy, inside the range with room at both ends. Counting
+# distance computations instead is reproducible exactly and gives 1.2, but that
+# is a claim about work rather than about speed, which is what is asked here.
+speedup = sum(small.ratio) / nrow(small)
+@assert 1.5 <= speedup <= 2 "integrated against alternating measured " *
+    "$(round(speedup, digits = 2)) times, outside the 1.5 to 2 the text states"
 
 # Sec. 7. Large-scale examples
 ## Example 7: Service centers for the Carolinas
