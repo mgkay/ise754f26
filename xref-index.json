@@ -829,11 +829,11 @@
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-mmin": {
+  "eq-mmin-emca": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-cost-ladder": {
+  "eq-tpc-act": {
    "label": "Eq. 4",
    "word": "Eq."
   },
@@ -1840,7 +1840,7 @@
    "label": "Eq. 27",
    "word": "Eq."
   },
-  "eq-agg": {
+  "eq-agg-periodic": {
    "label": "Eq. 28",
    "word": "Eq."
   },
@@ -1971,7 +1971,7 @@
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-ctl": {
+  "eq-tlc-single-dc": {
    "label": "Eq. 5",
    "word": "Eq."
   },
@@ -1999,7 +1999,7 @@
    "label": "Eq. 11",
    "word": "Eq."
   },
-  "eq-qtl": {
+  "eq-tlc-tl-sqrt": {
    "label": "Eq. 12",
    "word": "Eq."
   },
