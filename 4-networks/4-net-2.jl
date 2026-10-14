@@ -971,8 +971,8 @@ function drawnet(XY, I, J, lab, s; off = zeros(length(I)), r = 0.17,
                 for j in [J[I .== i]; I[J .== i]])  # toward its arcs
         a = a ./ hypot(a...)
         text!(ax, x - (r + 0.16) * a[1], y - (r + 0.16) * a[2];
-              text = string(s[i]), color = c, fontsize = 13,
-              align = (:center, :center))
+              text = replace(string(s[i]), "-" => "−"),  # minus sign
+              color = c, fontsize = 13, align = (:center, :center))
     end
     lim === nothing || (xlims!(ax, lim[1]...); ylims!(ax, lim[2]...))
     return fig
@@ -1171,7 +1171,10 @@ TCᵒ, xᵒ = mcnf(A, c, s)
 @show TCᵒ
 F12 = reshape(xᵒ[1:p*m], p, m)           # plant to DC
 F23 = reshape(xᵒ[p*m+1:end], m, n)       # DC to customer
-F12, F23
+prt(F12; rows = string.(1:p), cols = string.(p+1:p+m),
+    row_title = "Plant")
+prt(F23; rows = string.(p+1:p+m), cols = string.(p+m+1:p+m+n),
+    row_title = "DC")
 # Code block 64: the three-level network, drawn with Code block 50
 XY3 = [(0.0, 1.8), (0.0, 0.6), (1.3, 2.4), (1.3, 1.2), (1.3, 0.0),
        (2.6, 2.7), (2.6, 1.8), (2.6, 0.9), (2.6, 0.0)]
