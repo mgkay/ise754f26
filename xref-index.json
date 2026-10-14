@@ -2360,8 +2360,16 @@
    "label": "Fig. 9",
    "word": "Fig."
   },
-  "fig-three-level": {
+  "fig-arc-bounds": {
    "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-multigraph-flow": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-quake": {
+   "label": "Fig. 12",
    "word": "Fig."
   },
   "tbl-osm-faf5": {
@@ -2378,6 +2386,14 @@
   },
   "tbl-five-node-data": {
    "label": "Table 4",
+   "word": "Table"
+  },
+  "tbl-quake-nodes": {
+   "label": "Table 5",
+   "word": "Table"
+  },
+  "tbl-quake-arcs": {
+   "label": "Table 6",
    "word": "Table"
   },
   "mdl-assignment": {
