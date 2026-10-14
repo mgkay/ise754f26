@@ -28,6 +28,16 @@ let dir = @__DIR__
 end
 
 ## Setup
+
+# apparatus.jl ships beside the lectures in the materials
+# repository. Find it from the activated project rather
+# than from this file, so the script still works from a
+# copy under work/.
+let p = dirname(Base.active_project())
+    include(joinpath(basename(p) == "env" ? dirname(p) : p,
+                     "_common", "julia", "apparatus.jl"))
+end
+
 using CairoMakie, DataFrames, Logjam, Optim, Printf
 # Two device pixels per figure unit, as in lectures 3.2 and 3.3, so the
 # raster figures are sharp at the column's own width.
