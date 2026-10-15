@@ -52,18 +52,50 @@ function commas(x)
 end
 
 ## Sec. 1. OpenStreetMap
-# Code block 1: Raleigh's streets in a bounding box, from OpenStreetMap
+# Code block 1: the two buildings of Ex. 1, and four coarser queries
+bldg = ["Fitts-Woolard Hall", "D. H. Hill Library"]
+qry = ["915 Partners Way, Raleigh, NC 27606",     # the two buildings
+       "2 Broughton Dr, Raleigh, NC 27695",
+       "Raleigh, NC", "27695", "Raliegh, NC", "Raleigh"]
+loc = loc2lonlat(qry; cache_dir = "data")
+# Given a vector of queries, loc2lonlat returns a table with a row for
+# each: the query (INPUT), the LON and LAT found, the tier the answer came
+# from (GC_SOURCE), its uncertainty in miles (GC_UNCERT) and its status
+# (GC_STATUS). The table is printed without LON and LAT, which would make
+# it wider than the page, and the two buildings' are shown below it. Only
+# an answer at the ADDRESS tier is saved, in data/geocode_cache.csv, so
+# the two addresses are read from the copy saved in data/; the other four
+# are answered from Logjam's Census tables, and none of the six needs the
+# Internet.
+prt(select(loc, Not(:LON, :LAT)))       # how each query was answered
+x = Float64.(loc.LON[1:2])     # the two buildings, for Ex. 1, as
+y = Float64.(loc.LAT[1:2])     # numbers (the column holds a missing)
+@show x
+@show y;
+# Code block 2: a box around the two buildings, and the streets in it
 # osm_roads needs LightOSM and NearestNeighbors loaded, even when, as
-# here, it reads the copy of the box's streets already saved in data/
+# here, it reads the copy of the streets already saved in data/
 using LightOSM, NearestNeighbors
-bbox = (-78.70, -78.605, 35.75, 35.82)    # lon min, max, lat min, max
-dfN, dfL = osm_roads(bbox; cache_dir = "data")
-# With cache_dir, osm_roads reads the bounding box's streets from that
-# folder if they are saved there, and downloads and saves it only if not;
-# the copy read here was saved on 2026-10-12.
+bb = mapbbox(x, y; xexpand = 2, yexpand = 0.5)  # (lon, lon), (lat, lat)
+dfN, dfL = osm_roads((bb[1]..., bb[2]...); cache_dir = "data")
+# osm_roads takes the box as one tuple of four numbers, the least and
+# greatest longitude and then latitude, so mapbbox's two pairs are joined
+# with .... It downloads whole cells of a grid 0.05° of longitude and
+# latitude on a side, every cell the box touches, so that nearby boxes
+# share a download; here one cell, about 2.8 by 3.5 miles, holds the box.
+# With cache_dir, it reads the cells from that folder if they are saved
+# there, and downloads and saves them only if not; the copy read here was
+# saved on 2026-10-14.
+dfN, dfL = cropnetwork(dfN, dfL, x, y; xexpand = 2,
+# cropnetwork keeps the nodes inside the box mapbbox gives for the same
+# points and expansions, and the links between them, so the network is the
+# box's and no more.
+                       yexpand = 0.5)
+@show round.(bb[1], digits = 3)
+@show round.(bb[2], digits = 3)
 @show nrow(dfN)
 @show nrow(dfL);
-# Code block 2: a county's box, from the Census block groups in it
+# Code block 3: a county's box, from the Census block groups in it
 co = only(filter(r -> r.ST == :NC && r.NAME == "Wake", uscounty()))
 B = filter(r -> r.STFIP == co.STFIP && r.COFIP == co.COFIP,
            uscenblkgrp())                 # Wake's block groups
@@ -87,7 +119,7 @@ high = (bbW[4] - bbW[3]) * mpd
 @show round.(bbW, digits = 3)
 @show round(Int, wide)                    # mi
 @show round(Int, high);                   # mi
-# Code block 3: the bounding box's links by functional class
+# Code block 4: the box's links by functional class
 cls = ["Interstate", "Other freeway", "Principal arterial",
        "Minor arterial", "Major collector", "Minor collector", "Local"]
 S = combine(groupby(dfL, :FCLASS, sort = true), nrow => :Links,
@@ -96,7 +128,7 @@ S = combine(groupby(dfL, :FCLASS, sort = true), nrow => :Links,
 insertcols!(S, 2, :Class => cls[S.FCLASS])
 S.Miles = round.(S.Miles, digits = 1)
 prt(S)
-# Code block 4: residential streets, one-way links and link length
+# Code block 5: residential streets, one-way links and link length
 using Statistics
 arcs = Set(zip(dfL.SRC, dfL.DST))       # a one-way link has no reverse
 oneway = count(((s, d),) -> (d, s) ∉ arcs, zip(dfL.SRC, dfL.DST))
@@ -114,26 +146,6 @@ medft = round(Int, 5280 * median(dfL.DIST))
 # link has DIR 1, which this line confirms (true); a one-way street is
 # then simply a link with no reverse, which is how oneway counts them
 # above.
-# Code block 5: the two buildings of Ex. 1, and four coarser queries
-bldg = ["Fitts-Woolard Hall", "D. H. Hill Library"]
-qry = ["915 Partners Way, Raleigh, NC 27606",     # the two buildings
-       "2 Broughton Dr, Raleigh, NC 27695",
-       "Raleigh, NC", "27695", "Raliegh, NC", "Raleigh"]
-loc = loc2lonlat(qry; cache_dir = "data")
-# Given a vector of queries, loc2lonlat returns a table with a row for
-# each: the query (INPUT), the LON and LAT found, the tier the answer came
-# from (GC_SOURCE), its uncertainty in miles (GC_UNCERT) and its status
-# (GC_STATUS). The table is printed without LON and LAT, which would make
-# it wider than the page, and the two buildings' are shown below it. Only
-# an answer at the ADDRESS tier is saved, in data/geocode_cache.csv, so
-# the two addresses are read from the copy saved in data/; the other four
-# are answered from Logjam's Census tables, and none of the six needs the
-# Internet.
-prt(select(loc, Not(:LON, :LAT)))       # how each query was answered
-x = Float64.(loc.LON[1:2])     # the two buildings, for Ex. 1, as
-y = Float64.(loc.LAT[1:2])     # numbers (the column holds a missing)
-@show x
-@show y;
 
 # Sec. 1. OpenStreetMap
 ## Example 1: Fitts-Woolard to D. H. Hill Library
@@ -143,15 +155,10 @@ y = Float64.(loc.LAT[1:2])     # numbers (the column holds a missing)
 # streets of Raleigh, and the streets each route follows.
 # Code block 6: the streets around the two buildings, as two graphs
 using Graphs, SimpleWeightedGraphs
-Nc, Lc = cropnetwork(dfN, dfL, x, y; xexpand = 1.5,
-# The network of the bounding box is cropped to the area around the two
-# buildings before they are connected to it, since addconnectors takes
-# about 25 s on the whole bounding box and about half a second on the
-# crop, with the same answer; xexpand = 1.5 widens the buildings' box by
-# 1.5 times its width on each side, and yexpand by 1.5 times its height,
-# the smallest crop that still gives the whole bounding box's answer.
-                     yexpand = 1.5)
-Nc, Lc = addconnectors(Nc, Lc, x, y; add_nf_nf = false)
+Nc, Lc = addconnectors(dfN, dfL, x, y; add_nf_nf = false)
+# addconnectors joins the two buildings to the streets of Code block 2's
+# box: each becomes a node, the buildings nodes 1 and 2, linked to the
+# street nodes around it by connectors, links whose SOURCE is CONNECTOR.
 con = isequal.(Lc.SOURCE, "CONNECTOR")
 tmin = [c ? 60d / 20 : 60d / v                   # minutes, a connector
         for (c, d, v) in zip(con, Lc.DIST, Lc.SPEED)]   # 20 mph
@@ -162,7 +169,7 @@ tmin = [c ? 60d / 20 : 60d / v                   # minutes, a connector
 fw, bw = Lc.DIR .!= -1, Lc.DIR .!= 1
 # As in Lecture 4.1, Code block 45, each link gives an arc in each
 # direction it can be traveled. On OpenStreetMap every street link has DIR
-# 1 (Code block 4), so fw is every link and bw only the connectors, whose
+# 1 (Code block 5), so fw is every link and bw only the connectors, whose
 # DIR is 0 because they run both ways; of two arcs between the same nodes,
 # the quicker is kept (combine = min).
 I, J = [Lc.SRC[fw]; Lc.DST[bw]], [Lc.DST[fw]; Lc.SRC[bw]]
@@ -205,7 +212,7 @@ for (r, p) in zip(eachrow(R), paths)
     println(r.Trip, ", ", lowercase(r.Route), ":")
     prt(streets(p, Lc))
 end
-# Code block 9: the two routes out, on the streets around them
+# Code block 9: the two routes out, on the streets of the box
 using GeoMakie                           # makemap draws with it
 supc  = colorant"#d21f26"                # shortest route
 dcc   = colorant"#1e8a3c"                # fastest route
@@ -217,10 +224,9 @@ street(k) = SimpleWeightedGraph(Lc.SRC[k], Lc.DST[k], Lc.DIST[k];
 lo = street(.!con .& (Lc.FCLASS .>= 6))  # local and minor collector
 hi = street(.!con .& (Lc.FCLASS .<= 5))  # the other classes
 pS, pF = paths[1], paths[2]              # out: shortest, fastest
-zm = unique([pS; pF])                    # zoomed to the two routes
-fig, ax = makemap(Nc.LON[zm], Nc.LAT[zm]; doRoadbkgd = false,
-                  xexpand = 0.5, yexpand = 0.05)
-resize!(fig, 687, 560)
+fig, ax = makemap(bb[1], bb[2]; doRoadbkgd = false,   # the whole box
+                  xexpand = 0, yexpand = 0)
+resize!(fig, 540, 690)
 # Both street layers faint: a muted base under the routes and names
 lines!(ax, x2ln(lo, Nc.LON), x2ln(lo, Nc.LAT); color = (ink, 0.12),
        linewidth = 0.6)
@@ -257,11 +263,10 @@ function namestreet!(ax, N, L, nm, xl, yl; f = 0.5, side = 1, gap = 5)
           offset = gap * side .* (-sin(θ), cos(θ)))
     return nothing
 end
-xl, yl = extrema(Nc.LON[zm]), extrema(Nc.LAT[zm])
-xl = xl .+ (-0.3, 0.3) .* (xl[2] - xl[1])  # the streets beside them too
+xl, yl = bb                              # the streets of the whole box
 for (nm, f, side) in (("Hillsborough Street", 0.35, 1),
-                      ("Western Boulevard", 0.55, 1),
-                      ("Avent Ferry Road", 0.8, -1),
+                      ("Western Boulevard", 0.49, -1),
+                      ("Avent Ferry Road", 0.12, 1),
                       ("Pullen Road", 0.4, -1),
                       ("Varsity Drive", 0.5, -1))
     namestreet!(ax, Nc, Lc, nm, xl, yl; f, side)
@@ -498,9 +503,9 @@ end
 TC₂, X₂ = LAP(D[:,1:2])
 @show TC₂; Int.(X₂)
 
-## Example 3: Uber on Raleigh's streets
-# Twelve drivers and ten passengers wanting a ride are spread across the
-# OpenStreetMap streets of Raleigh of Ex. 1. Assign the drivers to the
+## Example 3: Unter on Raleigh's streets
+# Twelve drivers and ten passengers wanting a ride are at Census block
+# groups within 3 miles of downtown Raleigh. Assign the drivers to the
 # passengers, by the greedy procedure and as @mdl-assignment, so that
 # the total driving time to the pickups is least, and determine, by
 # Little's Law, how many drivers are on the way to a pickup at any time
@@ -508,8 +513,11 @@ TC₂, X₂ = LAP(D[:,1:2])
 # Code block 30: synthetic driver and passenger creation
 using Random
 nd, np = 12, 10                         # drivers, passengers
-bg = filter(r -> bbox[1] <= r.LON <= bbox[2] &&
-                 bbox[3] <= r.LAT <= bbox[4], uscenblkgrp())
+cap = loc2lonlat(["1 E Edenton St, Raleigh, NC 27601"];
+                 cache_dir = "data")
+c0 = (Float64(cap.LON[1]), Float64(cap.LAT[1]))   # the State Capitol
+bg = filter(r -> dgc(c0, (r.LON, r.LAT)) <= 3,    # block groups within
+            uscenblkgrp())                         # 3 mi of it
 sort!(bg, [:TRFIP, :BGFIP])             # a fixed order for the draw
 Random.seed!(754)                       # change it for another draw
 k = randperm(nrow(bg))[1:nd+np]         # distinct block groups
@@ -520,10 +528,12 @@ U = DataFrame(ROLE = [fill("driver", nd); fill("passenger", np)],
               ID = [string.("D", 1:nd); string.("P", 1:np)],
               LON = bg.LON[k], LAT = bg.LAT[k])
 prt(U)
-# Code block 31: driving minutes from each driver to each passenger
+# Code block 31: the 22 points' box, its streets, and driving minutes
 drv = findall(==("driver"), U.ROLE)      # rows of U: 12 drivers
 pas = findall(==("passenger"), U.ROLE)   # and 10 passengers
-NU, LU = cropnetwork(dfN, dfL, U.LON, U.LAT; xexpand = 0.1,
+bbU = mapbbox(U.LON, U.LAT; xexpand = 0.1, yexpand = 0.1)  # their box
+NU, LU = osm_roads((bbU[1]..., bbU[2]...); cache_dir = "data")
+NU, LU = cropnetwork(NU, LU, U.LON, U.LAT; xexpand = 0.1,
                      yexpand = 0.1)
 NU, LU = addconnectors(NU, LU, U.LON, U.LAT; add_nf_nf = false)
 cU = isequal.(LU.SOURCE, "CONNECTOR")
@@ -575,10 +585,9 @@ hi = streetU(.!cU .& (LU.FCLASS .<= 5))
 route(i, j) = tracepath(PU[drv[i]], drv[i], pas[j])  # driver i to j
 rts = [[route(car(Xᵒ, j), j) for j in 1:length(pas)]; # LP, then
        [route(car(X, j), j) for j in d]]              # greedy's
-z = unique(vcat(rts...))                   # zoomed to every route drawn
-fig, ax = makemap(NU.LON[z], NU.LAT[z]; doRoadbkgd = false,
-                  xexpand = 0.03, yexpand = 0.03)
-resize!(fig, 687, 620)
+fig, ax = makemap(bbU[1], bbU[2]; doRoadbkgd = false,  # the whole box
+                  xexpand = 0, yexpand = 0)
+resize!(fig, 687, 640)
 lines!(ax, x2ln(lo, NU.LON), x2ln(lo, NU.LAT); color = (ink, 0.12),
        linewidth = 0.5)
 lines!(ax, x2ln(hi, NU.LON), x2ln(hi, NU.LAT); color = (ink, 0.3),
@@ -591,33 +600,29 @@ for p in rts[np+1:end]                      # greedy's, where they differ
     lines!(ax, NU.LON[p], NU.LAT[p]; color = (orc, 0.9), linewidth = 2.5,
            linestyle = :dash)
 end
-xl, yl = extrema(NU.LON[z]), extrema(NU.LAT[z])
-for (nm, f, side) in (("Hillsborough Street", 0.8, -1),
-                      ("Glenwood Avenue", 0.45, 1),
+xl, yl = bbU                                # the streets of the whole box
+for (nm, f, side) in (("Hillsborough Street", 0.72, -1),
                       ("Wade Avenue", 0.5, 1),
                       ("Western Boulevard", 0.85, -1))
     namestreet!(ax, NU, LU, nm, xl, yl; f, side)   # Code block 9's
 end
 # Two places: NC State, below its two buildings of Ex. 1, clear of the
-# routes, and downtown, at the State Capitol (1 E Edenton St, as
-# loc2lonlat finds it)
-text!(ax, [mean(x), -78.6391], [mean(y), 35.7804];
+# routes, and downtown, at the State Capitol of Code block 30
+text!(ax, [mean(x), c0[1]], [mean(y), c0[2]];
       text = ["NC State", "Downtown"], fontsize = 14, font = :bold,
       color = (ink, 0.6), align = (:center, :center),
-      offset = [(-20, -50), (0, 0)])
+      offset = [(-30, -95), (0, 0)])
 sD = scatter!(ax, U.LON[drv], U.LAT[drv]; marker = :rect, color = bluec,
               markersize = 13, strokecolor = :white, strokewidth = 1)
 sP = scatter!(ax, U.LON[pas], U.LAT[pas]; color = supc, markersize = 13,
               strokecolor = :white, strokewidth = 1)
 # Each ID above right of its point, unless a route leaves that way
-pl = Dict("D1" => ((:right, :bottom), (-6, 4)),
-          "D3" => ((:right, :center), (-9, 0)),
-          "P2" => ((:right, :center), (-9, 0)),
-          "P4" => ((:right, :center), (-9, 0)),
-          "P5" => ((:left, :top), (6, -4)),
-          "D4" => ((:center, :bottom), (0, 9)),
-          "P8" => ((:center, :bottom), (0, 9)),
-          "P9" => ((:center, :bottom), (0, 9)))
+pl = Dict("D1" => ((:right, :center), (-9, 0)),
+          "D3" => ((:right, :top), (-6, -4)),
+          "D10" => ((:right, :bottom), (-6, 4)),
+          "D11" => ((:right, :bottom), (-6, 4)),
+          "P3" => ((:right, :bottom), (-6, 4)),
+          "P9" => ((:right, :top), (-6, -4)))
 ap = [get(pl, id, ((:left, :bottom), (6, 4))) for id in U.ID]
 text!(ax, U.LON, U.LAT; text = U.ID, fontsize = 11, color = ink,
       align = first.(ap), offset = last.(ap))
@@ -673,7 +678,7 @@ cst = [8 6 10 9; 9 12 13 7; 14 9 16 5]  # the tableau's costs per unit
 at = [0.12 0.12 0.15 0.12; 0.12 0.12 0.15 0.12; 0.21 0.15 0.12 0.12]
 sd = [1 1 1 -1; 1 -1 -1 -1; -1 -1 -1 -1]
 
-fig = Figure(size = (440, 366))
+fig = Figure(size = (440, 390))
 ax = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax); hidespines!(ax)
 # Every arc, outline to outline, and its cost
@@ -696,7 +701,10 @@ for (k, (x, y)) in enumerate([XYs; XYd])  # the nodes, over the arcs
     text!(ax, x + dx, y; text = string(amt), color = c, fontsize = 14,
           align = (:center, :center))
 end
-xlims!(ax, -0.8, 3.2); ylims!(ax, -0.4, 2.8)
+# The supply and the demand columns, titled
+text!(ax, [-0.45, 2.85], [2.55, 2.75]; text = ["Supply", "Demand"],
+      color = [supc, demc], fontsize = 13, align = (:center, :bottom))
+xlims!(ax, -0.9, 3.4); ylims!(ax, -0.4, 3.1)
 fig
 
 # Example 4: Transportation with excess supply
@@ -938,12 +946,19 @@ prt(DataFrame(Capacity = caps,
 # Code block 50: drawing a network with its net supplies
 # Nodes at XY; arc k from I[k] to J[k] labeled lab[k] in size ls, at
 # fraction at[k] along it, on side side[k], the arc shifted sideways by
-# off[k] (for parallel arcs); net supply s[i] beside node i, away from
-# its arcs
+# off[k] (for parallel arcs) and drawn two-way if two[k]; net supply
+# s[i] beside node i, away from its arcs or at angle dirs[i], with its
+# role above it if roles (or the name roles[i]), and a zero shown if
+# showzero; notes, k => text, on the other side of arc k from its label;
+# and a legend at (x, y) reading an arc's label: given over default
 function drawnet(XY, I, J, lab, s; off = zeros(length(I)), r = 0.17,
                  w = 380, h = 260, lim = nothing,
                  at = fill(0.5, length(I)),
-                 side = [o >= 0 ? 1 : -1 for o in off], ls = 13)
+                 side = [o >= 0 ? 1 : -1 for o in off], ls = 13,
+                 roles = false, showzero = roles != false,
+                 two = falses(length(I)), rotate = false,
+                 notes = Dict{Int,String}(), legend = nothing,
+                 dirs = nothing)
     fig = Figure(size = (w, h))
     ax = Axis(fig[1, 1]; aspect = DataAspect())
     hidedecorations!(ax); hidespines!(ax)
@@ -956,9 +971,24 @@ function drawnet(XY, I, J, lab, s; off = zeros(length(I)), r = 0.17,
         arrows2d!(ax, [t[1]], [t[2]], [hd[1] - t[1]], [hd[2] - t[2]];
                   color = ink, shaftwidth = 1.3, tipwidth = 8,
                   tiplength = 8)
+        if two[k]                        # two-way: a head at each end
+            tl = p .+ (r + 0.015) .* u .+ off[k] .* nrm
+            arrows2d!(ax, [hd[1]], [hd[2]], [tl[1] - hd[1]],
+                      [tl[2] - hd[2]]; color = ink, shaftwidth = 1.3,
+                      tipwidth = 8, tiplength = 8)
+        end
+        θ = atan(u[2], u[1])             # the arc's angle, kept readable
+        θ < -π / 2 + 0.01 && (θ += π)
+        θ > π / 2 + 0.01 && (θ -= π)
         m = t .+ at[k] .* (hd .- t) .+ 0.01ls * side[k] .* nrm
         text!(ax, m[1], m[2]; text = lab[k], color = ink, fontsize = ls,
-              align = (:center, :center))
+              rotation = rotate ? θ : 0.0, align = (:center, :center))
+        if haskey(notes, k)              # a note on the arc's other side
+            n = t .+ at[k] .* (hd .- t) .- 0.01ls * side[k] .* nrm
+            text!(ax, n[1], n[2]; text = notes[k], color = ink,
+                  fontsize = ls - 1, rotation = θ,
+                  align = (:center, :center))
+        end
     end
     for (i, (x, y)) in enumerate(XY)          # the nodes, over the arcs
         c = s[i] > 0 ? supc : s[i] < 0 ? demc : ink
@@ -966,13 +996,34 @@ function drawnet(XY, I, J, lab, s; off = zeros(length(I)), r = 0.17,
               strokecolor = c, strokewidth = 1.8)
         text!(ax, x, y; text = string(i), color = c, fontsize = 14,
               align = (:center, :center))
-        s[i] == 0 && continue
+        s[i] == 0 && !showzero && continue
         a = sum(collect(XY[j] .- (x, y)) ./ hypot((XY[j] .- (x, y))...)
                 for j in [J[I .== i]; I[J .== i]])  # toward its arcs
-        a = a ./ hypot(a...)
-        text!(ax, x - (r + 0.16) * a[1], y - (r + 0.16) * a[2];
-              text = replace(string(s[i]), "-" => "−"),  # minus sign
-              color = c, fontsize = 13, align = (:center, :center))
+        a = dirs === nothing ? a ./ hypot(a...) :   # or away from dirs[i]
+            (-cosd(dirs[i]), -sind(dirs[i]))
+        txt = replace(string(s[i]), "-" => "−")      # minus sign
+        roles == true && (txt = (s[i] > 0 ? "Supply" : s[i] < 0 ?
+                                 "Demand" : "Transshipment") * "\n" * txt)
+        roles isa AbstractVector && (txt = roles[i] * "\n" * txt)
+        d = r + (roles != false ? 0.27 : 0.16)
+        text!(ax, x - d * a[1], y - d * a[2]; text = txt, color = c,
+              fontsize = 13, align = (:center, :center))
+    end
+    if legend !== nothing                # how an arc's label reads
+        x0, y0 = legend
+        for (x, t) in ((x0, "i"), (x0 + 0.8, "j"))
+            poly!(ax, Circle(Point2f(x, y0), 0.12); color = :white,
+                  strokecolor = ink, strokewidth = 1.2)
+            text!(ax, x, y0; text = t, color = ink, fontsize = 12,
+                  font = :italic, align = (:center, :center))
+        end
+        arrows2d!(ax, [x0 + 0.12], [y0], [0.8 - 0.255], [0.0];
+                  color = ink, shaftwidth = 1.2, tipwidth = 7,
+                  tiplength = 7)
+        text!(ax, x0 + 0.4, y0 + 0.08; text = "c, u, l", color = ink,
+              fontsize = 12, align = (:center, :bottom))
+        text!(ax, x0 + 0.4, y0 - 0.08; text = "c, ∞, 0",
+              color = (ink, 0.6), fontsize = 12, align = (:center, :top))
     end
     lim === nothing || (xlims!(ax, lim[1]...); ylims!(ax, lim[2]...))
     return fig
@@ -980,8 +1031,9 @@ end
 
 XY5 = [(0.0, 1.0), (1.2, 1.8), (1.2, 0.2), (2.4, 1.8), (2.4, 0.2)]
 drawnet(XY5, [1, 1, 2, 2, 3, 4], [2, 3, 4, 5, 5, 5],
-        string.([2, 3, 4, 5, 1, 3]), [6, 2, 0, 0, -8];
-        lim = ((-0.4, 2.8), (-0.2, 2.3)))
+        string.([2, 3, 4, 5, 1, 3]), [6, 2, 0, 0, -8]; roles = true,
+        notes = Dict(1 => "arc cost"), dirs = [180, 90, 270, 90, 270],
+        w = 440, h = 320, lim = ((-0.8, 3.0), (-0.65, 2.55)))
 
 # Sec. 4. Minimum cost network flow
 ## Model: Minimum cost network flow
@@ -1068,8 +1120,8 @@ Matrix([c' 0; A s])
 # its arc where Lecture 4.1 puts the arc's length
 XY6 = [(0.0, 0.0), (1.0, 0.58), (1.0, -0.58), (2.0, 0.58),
        (2.0, -0.58), (3.0, 0.0)]
-fig = drawnet(XY6, i, j, string.(c), s; w = 440, h = 200,
-              lim = ((-0.6, 3.6), (-0.8, 0.8)),
+fig = drawnet(XY6, i, j, string.(c), s; showzero = true, w = 440,
+              h = 230, lim = ((-0.6, 3.6), (-0.95, 0.95)),
               side = [1, -1, -1, 1, 1, 1, -1, 1, -1])
 # The lower bound on arc (2,3), on the side of it clear of its cost
 text!(content(fig[1, 1]), 1.07, 0.24; text = L"l = 1", color = ink,
@@ -1121,7 +1173,16 @@ prt(string.(df))
 df.u = coalesce.(df.u, Inf) # Replace missing values in 'u' with infinity
 df.l = coalesce.(df.l, 0)   # Replace missing values in 'l' with zero
 prt(df)
-# Code block 61: the network without its bounds, and with them
+# Code block 61: the network with its bounds, drawn with Code block 50
+# An arc's label: its cost, then its upper and lower bound where either
+# differs from its default, an upper bound of Inf written as ∞
+arclab(c, u, l) = l > 0 ? "$c, $(isinf(u) ? "∞" : Int(u)), $l" :
+                  isinf(u) ? "$c" : "$c, $(Int(u))"
+drawnet(XY5, df.i, df.j, arclab.(df.c, df.u, df.l), [6, 2, 0, 0, -8];
+        showzero = true, rotate = true, dirs = [180, 90, 270, 90, 270],
+        legend = (3.0, 1.0), w = 520, h = 300,
+        lim = ((-0.6, 4.1), (-0.45, 2.3)))
+# Code block 62: the network without its bounds, and with them
 s = [6, 2, 0, 0, -8]
 A = list2incid(df.i, df.j, length(s))
 TCᵒwoBnds, xᵒwoBnds = mcnf(A, df.c, s)
@@ -1137,7 +1198,18 @@ prt(df)
 # cheaper of the two modes between nodes 1 and 4, at a cost of 6 per
 # unit, can carry at most 20 units; the other, at 18, is uncapacitated.
 # Determine the least-cost flows, with and without the capacity.
-# Code block 62: Lecture 4.1's multigraph, from its arc list, as a flow
+# Code block 63: Ex. 6(d)'s multigraph, drawn with Code block 50
+# The nodes where Lecture 4.1 draws them; each two-way pair of arcs 1-4
+# drawn as one arc with a head at each end
+XYm = [(0.0, 2.0), (0.0, 1.0), (0.0, 0.0), (2.4, 1.6), (2.4, 0.4)]
+drawnet(XYm, [1, 1, 1, 2, 2, 3, 3], [4, 4, 5, 4, 5, 5, 5],
+        ["6, 20", "18", "10", "0", "13", "16", "3"],
+        [30, 10, 20, -40, -20]; off = [0.07, -0.07, 0, 0, 0, 0.07, -0.07],
+        two = [true, true, false, false, false, false, false],
+        at = [0.5, 0.5, 0.2, 0.3, 0.3, 0.5, 0.5],
+        side = [1, -1, -1, 1, -1, 1, -1],
+        w = 400, h = 330, lim = ((-0.7, 3.1), (-0.4, 2.4)))
+# Code block 64: Lecture 4.1's multigraph, from its arc list, as a flow
 i = [1, 4, 1, 4, 1, 2, 2, 3, 3]     # two-way arcs 1-4 listed both ways
 j = [4, 1, 4, 1, 5, 4, 5, 5, 5]
 c = [6, 6, 18, 18, 10, 0, 13, 16, 3]
@@ -1151,38 +1223,52 @@ TCᵒ, xᵒ = mcnf(A, c, s; u = u)
 prt([i j c u xᵒwoBnds xᵒ]; row_title = "Arc",
     cols = ["From", "To", "Cost", "Capacity", "Uncapped", "Capped"])
 
-## Example 7: Three-level network
-# Two plants, which can supply 65 and 80 units, ship to the three supply
-# nodes of Ex. 4, now DCs that only pass flow through, at costs per unit
-# of 4, 6 and 5 from the first plant to the three DCs and 3, 8 and 2
-# from the second; the DCs ship to Ex. 4's demand nodes at its costs.
-# Determine the least-cost flows through the network, and compare the
-# result with the transportation problem the network reduces to.
-# Code block 63: two plants, three DCs and four customers, as a flow
-C12 = [4 6 5; 3 8 2]                     # plant to DC
-C23 = [8 6 10 9; 9 12 13 7; 14 9 16 5]   # DC to customer, Ex. 4's C
-p, m, n = size(C12, 1), size(C12, 2), size(C23, 2)
-i = [repeat(1:p, m); p .+ repeat(1:m, n)]
-j = [p .+ repeat(1:m, inner = p); p + m .+ repeat(1:n, inner = m)]
-c = [vec(C12); vec(C23)]
-s = [65, 80, 0, 0, 0, -45, -20, -30, -30]
-A = list2incid(i, j, p + m + n)
-TCᵒ, xᵒ = mcnf(A, c, s)
-@show TCᵒ
-F12 = reshape(xᵒ[1:p*m], p, m)           # plant to DC
-F23 = reshape(xᵒ[p*m+1:end], m, n)       # DC to customer
-prt(F12; rows = string.(1:p), cols = string.(p+1:p+m),
-    row_title = "Plant")
-prt(F23; rows = string.(p+1:p+m), cols = string.(p+m+1:p+m+n),
-    row_title = "DC")
-# Code block 64: the three-level network, drawn with Code block 50
-XY3 = [(0.0, 1.8), (0.0, 0.6), (1.3, 2.4), (1.3, 1.2), (1.3, 0.0),
-       (2.6, 2.7), (2.6, 1.8), (2.6, 0.9), (2.6, 0.0)]
-# Each cost near its arc's tail, on the side clear of the other arcs
-drawnet(XY3, i, j, string.(c), s; w = 520, h = 410, ls = 10,
-        lim = ((-0.5, 3.1), (-0.4, 3.1)), at = fill(0.16, length(i)),
-        side = [fill(1, 10); -1; -1; 1; fill(-1, 5)])
-# Code block 65: the cheapest two-leg costs, as a transportation problem
-C13 = [minimum(C12[a, k] + C23[k, b] for k in 1:m) for a in 1:p, b in 1:n]
-TC13, X13 = trans(C13, s[1:p], -s[p+m+1:end])
-@show TC13; C13
+## Example 7: Earthquake emergency response
+# Determine the least-cost flows, as @mdl-mcnf, that deliver the 700
+# pallets the Field Hospital needs through the relief network of
+# @tbl-quake-arcs; if the network as it stands cannot deliver them,
+# determine which arc's capacity to raise, and the least total cost with
+# it.
+# Code block 65: the relief network's arcs, with their bounds, as a flow
+arclist_str = """
+i,j,c,u,l
+1,3,4,400,
+1,4,6,300,
+2,4,3,200,
+3,5,10,150,
+4,5,5,600,100
+5,6,2,800,
+"""
+df = CSV.read(IOBuffer(arclist_str), DataFrame)
+df.l = coalesce.(df.l, 0)
+s = [500, 200, 0, 0, 0, -700]
+A = list2incid(df.i, df.j, length(s))
+prt(df)
+# Code block 66: the network as it stands
+try
+    mcnf(A, df.c, s; u = df.u, l = df.l)
+catch e
+    showerror(stdout, e)
+end
+# Code block 67: the relief network, drawn with Code block 50
+XYq = [(0.0, 1.9), (0.0, 0.3), (1.4, 2.2), (1.4, 0.6), (2.8, 1.3),
+       (4.2, 1.3)]
+drawnet(XYq, df.i, df.j, arclab.(df.c, df.u, df.l), s;
+        roles = ["RW", "SP", "LA", "CH", "SA", "FH"], rotate = true,
+        dirs = [180, 180, 90, 270, 270, 0], side = [1, -1, -1, 1, -1, 1],
+        legend = (3.5, 2.4), w = 600, h = 330,
+        lim = ((-0.8, 5.0), (-0.4, 2.8)))
+# Code block 68: the helicopter's capacity, arc (3,5), raised to 200
+df2 = deepcopy(df) # deepcopy used so that `df2` changes don't change `df`
+df2.u[4] = 200
+prt(df2)
+# Code block 69: the network with it
+TC2ᵒ, x2ᵒ = mcnf(A, df2.c, s; u = df2.u, l = df2.l)
+@show TC2ᵒ; x2ᵒ
+# Code block 70: road (1,4)'s capacity raised to 350 instead
+df3 = deepcopy(df)
+df3.u[2] = 350
+prt(df3)
+# Code block 71: the network with it
+TC3ᵒ, x3ᵒ = mcnf(A, df3.c, s; u = df3.u, l = df3.l)
+@show TC3ᵒ; x3ᵒ
