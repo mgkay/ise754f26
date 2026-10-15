@@ -122,7 +122,10 @@
 <style>
   /* The interactive tableau of "Greedy, one pick at a time": Fig. 6's own vocabulary, the
      cost at a cell's corner, the units shipped in bold, a used-up row or column shaded,
-     the step's cell in blue, and the supply or demand it changed struck through. */
+     the step's cell in blue, and the supply or demand it changed struck through. A cell
+     shipped on carries, at its bottom left, the step that shipped on it, so the tableau
+     shows the order of the picks and passes no judgment on them; the hint outlines the
+     least cost in green. */
   .sup { color: #d21f26; }
   .dem { color: #1e8a3c; }
   .gt-wrap { display: flex; flex-direction: column; gap: 0.7rem; }
@@ -145,10 +148,15 @@
   }
   .gt-cell .c { position: absolute; top: 2px; right: 5px; font-size: 0.72em; color: var(--soft); }
   .gt-cell .u { font-weight: 700; font-size: 1.08em; }
+  .gt-cell .k {
+    position: absolute; bottom: 3px; left: 4px; width: 1.35em; height: 1.35em; line-height: 1.25em;
+    border: 1px solid var(--accent); border-radius: 50%; font-size: 0.66em; font-weight: 700;
+    color: var(--accent); background: #fff; text-align: center;
+  }
   .gt-cell.used { background: #ececec; }
   .gt-cell.used .c { color: #9a9a9a; }
   .gt-cell.here { background: #dbe7f3; box-shadow: inset 0 0 0 2px var(--accent); }
-  .gt-cell.hint { box-shadow: inset 0 0 0 3px var(--view); }
+  .gt-cell.hint { box-shadow: inset 0 0 0 3px var(--tip); }
   .gt-cell.wrong { background: #fde2e1; }
   .gt-left { min-width: 3.2rem; font-variant-numeric: tabular-nums; }
   .gt-left s { opacity: 0.6; margin-right: 0.3em; }
@@ -440,12 +448,19 @@
     <div class="view new">
       <h3><span class="tag new">Another view</span> Fig. 6, to work by hand</h3>
       <div class="gt-wrap" id="gt">
-        <p>Click the cell the greedy procedure ships on next. A right pick ships as much as that
-        cell can carry, the smaller of the supply its row has left and the demand its column
-        still needs; a wrong pick says why. Each cell holds its cost per unit at the corner and,
-        once units are shipped on it, the units in bold. <em>A new tableau</em> deals out another
-        problem of the same size, and the linear program&rsquo;s least cost appears once greedy
-        finishes.</p>
+        <p>Click any cell to ship on it, as much as the cell can carry: the smaller of the
+        supply its row has left and the demand its column still needs. A cell whose row has
+        nothing left, or whose column needs nothing more, cannot ship and says why. Each cell
+        holds its cost per unit at the corner and, once units are shipped on it, the units in
+        bold and, in the circle, the step that shipped them. Greedy always takes the least cost
+        still available: <em>Greedy step</em> makes that pick, and <em>Hint</em> outlines the
+        least cost. <em>A new tableau</em> deals out another problem of the same size. Once all
+        the demand is met,
+        the plan&rsquo;s cost is set against greedy&rsquo;s and against the linear
+        program&rsquo;s least cost.</p>
+        <p><b>Try it on Example 4.</b> Greedy&rsquo;s plan costs 1,030. Find the step where
+        taking the second-lowest cost instead of the lowest, and letting greedy finish, gives a
+        plan that costs less.</p>
         <div class="gt-bar" role="group" aria-label="Which tableau">
           <button type="button" id="gt-ex4" aria-pressed="true">Example 4&rsquo;s tableau</button>
           <button type="button" id="gt-new" aria-pressed="false">A new tableau</button>
@@ -453,8 +468,8 @@
         <div class="scroll"><table class="gt" id="gt-table" aria-label="Transportation tableau"></table></div>
         <p class="gt-msg" id="gt-msg" aria-live="polite"></p>
         <div class="gt-bar">
+          <button type="button" id="gt-step">Greedy step</button>
           <button type="button" id="gt-hint">Hint</button>
-          <button type="button" id="gt-step">Do the next step</button>
           <button type="button" id="gt-undo">Undo</button>
           <button type="button" id="gt-reset">Start over</button>
         </div>
@@ -629,12 +644,17 @@
               s: [55, 50, 40], d: [45, 20, 30, 30] };
 
   var $ = function (id) { return document.getElementById(id); };
-  var P, sl, dl, X, hist, tries, hinted, wrongCell, lp;
+  var P, sl, dl, X, hist, hinted, wrongCell, lp, gT;
 
   function fmt(x) { return x.toLocaleString("en-US"); }
   function supName(i) { return "node " + (i + 1); }
   function demName(j) { return "node " + (P.s.length + j + 1); }
+  function cap(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
   function sum(a) { return a.reduce(function (p, q) { return p + q; }, 0); }
+  function cellName(i, j) { return P.C[i][j] + " from " + supName(i) + " to " + demName(j); }
+  function against(t) {
+    return t < gT ? fmt(gT - t) + " less" : t > gT ? fmt(t - gT) + " more" : "the same";
+  }
 
   function randInt(lo, hi) { return lo + Math.floor(Math.random() * (hi - lo + 1)); }
   function newTableau() {               // three supply nodes, four demand nodes
@@ -649,53 +669,60 @@
     return { C: C, s: s, d: d };
   }
 
+  function say(text, cls) {
+    $("gt-msg").className = "gt-msg" + (cls ? " " + cls : "");
+    $("gt-msg").textContent = text;
+  }
+  function clear() {                    // nothing shipped yet
+    sl = P.s.slice(); dl = P.d.slice();
+    X = P.C.map(function (r) { return r.map(function () { return 0; }); });
+    hist = []; hinted = false; wrongCell = null;
+  }
   function load(p) {
-    P = p; sl = p.s.slice(); dl = p.d.slice();
-    X = p.C.map(function (r) { return r.map(function () { return 0; }); });
-    hist = []; tries = 0; hinted = false; wrongCell = null;
-    lp = leastCost(p.C, p.s, p.d);
+    P = p; clear();
+    lp = leastCost(p.C, p.s, p.d); gT = greedyAll(p.C, p.s, p.d).total;
     $("gt-lpwrap").hidden = true;
-    $("gt-msg").textContent = "Which cell does greedy ship on first?";
-    $("gt-msg").className = "gt-msg";
+    say("Click a cell to ship on it. Greedy would take the least cost.", "");
     render();
   }
   function done() { return !sl.some(function (x) { return x > 0; }) || !dl.some(function (x) { return x > 0; }); }
   function total() { return hist.reduce(function (t, h) { return t + h.cost * h.units; }, 0); }
 
-  function ship(i, j, mine) {
+  // Ship on a cell that can ship, and say only what shipped: no judgment of the pick.
+  function ship(i, j) {
     var f = Math.min(sl[i], dl[j]);
-    hist.push({ i: i, j: j, cost: P.C[i][j], units: f, s0: sl[i], d0: dl[j], mine: mine,
-                first: mine && tries === 0 && !hinted });
+    var h = { i: i, j: j, cost: P.C[i][j], units: f, s0: sl[i], d0: dl[j] };
+    hist.push(h);
     X[i][j] += f; sl[i] -= f; dl[j] -= f;
-    tries = 0; hinted = false; wrongCell = null;
-    var msg = "Step " + hist.length + ": " + P.C[i][j] + " from " + supName(i) + " to " +
-      demName(j) + ". It has " + fmt(hist[hist.length - 1].s0) + " and " + demName(j) +
-      " needs " + fmt(hist[hist.length - 1].d0) + ", so " + fmt(f) + " units go.";
-    $("gt-msg").className = "gt-msg";
-    $("gt-msg").textContent = done() ? msg + " All the demand is met." : msg;
+    hinted = false; wrongCell = null;
+    var msg = "Step " + hist.length + ": " + cellName(i, j) + ". " + cap(supName(i)) + " has " +
+      fmt(h.s0) + " left and " + demName(j) + " needs " + fmt(h.d0) + ", so " + fmt(f) + " units go.";
+    say(done() ? msg + " All the demand is met." : msg, "");
     render();
   }
 
+  // Any cell can be clicked; one whose row or column is used up cannot ship, and says why.
   function pick(i, j) {
-    if (done()) return;
-    if (sl[i] <= 0) return wrong(i, j, supName(i) + " has nothing left to ship.");
-    if (dl[j] <= 0) return wrong(i, j, demName(j) + "\u2019s demand is already met.");
-    var low = cheapest(P.C, sl, dl);
-    if (P.C[i][j] > P.C[low[0][0]][low[0][1]]) {
-      return wrong(i, j, "Not yet: a cell of lower cost than " + P.C[i][j] + " is still available.");
+    if (done()) return say("All the demand is met. Undo a step, or start over, to change the plan.", "bad");
+    var noS = sl[i] <= 0, noD = dl[j] <= 0;
+    if (noS || noD) {
+      wrongCell = [i, j];
+      say("This cell cannot ship: " +
+        (noS && noD ? supName(i) + " has nothing left, and " + demName(j) + "\u2019s demand is already met."
+         : noS ? supName(i) + " has nothing left to ship." : demName(j) + "\u2019s demand is already met."), "bad");
+      return render();
     }
-    ship(i, j, true);
-  }
-  function wrong(i, j, why) {
-    tries++; wrongCell = [i, j];
-    $("gt-msg").className = "gt-msg bad";
-    $("gt-msg").textContent = why;
-    render();
+    ship(i, j);
   }
 
+  function stepOf(i, j) {               // the step that shipped on a cell, or 0
+    for (var k = 0; k < hist.length; k++) if (hist[k].i === i && hist[k].j === j) return k + 1;
+    return 0;
+  }
   function cellLabel(i, j) {
+    var k = stepOf(i, j);
     return "Cost " + P.C[i][j] + " from " + supName(i) + " to " + demName(j) +
-      (X[i][j] > 0 ? ", " + X[i][j] + " units shipped" : "");
+      (k ? ", " + hist[k - 1].units + " units shipped at step " + k : "");
   }
   function left(now, before, cls) {
     var td = document.createElement("td");
@@ -728,14 +755,19 @@
       for (j = 0; j < n; j++) {
         var td = document.createElement("td"); td.className = "cellwrap";
         var b = document.createElement("button"); b.type = "button"; b.className = "gt-cell";
+        var k = stepOf(i, j);
         if (sl[i] <= 0 || dl[j] <= 0) b.classList.add("used");
         if (last && last.i === i && last.j === j) b.classList.add("here");
-        if (hint.some(function (h) { return h[0] === i && h[1] === j; })) b.classList.add("hint");
+        if (hint.some(function (q) { return q[0] === i && q[1] === j; })) b.classList.add("hint");
         if (wrongCell && wrongCell[0] === i && wrongCell[1] === j) b.classList.add("wrong");
         var c = document.createElement("span"); c.className = "c"; c.textContent = P.C[i][j];
         var u = document.createElement("span"); u.className = "u";
         u.textContent = X[i][j] > 0 ? fmt(X[i][j]) : "";
         b.appendChild(c); b.appendChild(u);
+        if (k) {
+          var r = document.createElement("span"); r.className = "k"; r.textContent = k;
+          b.appendChild(r);
+        }
         b.setAttribute("aria-label", cellLabel(i, j));
         b.addEventListener("click", (function (a, z) { return function () { pick(a, z); }; })(i, j));
         td.appendChild(b); tr.appendChild(td);
@@ -751,30 +783,28 @@
     tb.appendChild(fr); t.appendChild(tb);
 
     var log = $("gt-log"); log.innerHTML = "";
-    hist.forEach(function (h, k) {
+    hist.forEach(function (h) {
       var li = document.createElement("li");
-      li.textContent = h.cost + " from " + supName(h.i) + " to " + demName(h.j) + ", " +
-        fmt(h.units) + " units" + (h.mine ? "" : " (shown)");
+      li.textContent = cellName(h.i, h.j) + ", " + fmt(h.units) + " units";
       log.appendChild(li);
     });
     $("gt-total").textContent = hist.length
       ? "Total cost so far: " + hist.map(function (h) { return h.cost + " \u00d7 " + fmt(h.units); }).join(" + ") +
         " = " + fmt(total())
       : "Supply " + fmt(sum(P.s)) + " in all, demand " + fmt(sum(P.d)) + ".";
-    var mine = hist.filter(function (h) { return h.mine; }).length,
-        right = hist.filter(function (h) { return h.first; }).length;
     $("gt-end").hidden = !done();
     if (done()) {
-      var g = total(), gap = 100 * (g - lp.total) / lp.total;
-      $("gt-compare").textContent = "Greedy\u2019s total cost is " + fmt(g) +
-        ". The linear program\u2019s least cost is " + fmt(lp.total) +
-        (g === lp.total ? ", so here greedy happens to find the least cost."
-                        : ", so greedy is " + gap.toFixed(1) + "% above it.") +
-        (mine ? " Right on the first try: " + right + " of " + mine + " picks." : "");
+      var tot = total(), gap = (100 * (tot - lp.total) / lp.total).toFixed(1);
+      $("gt-compare").textContent = "This plan costs " + fmt(tot) + ". Greedy\u2019s plan costs " +
+        fmt(gT) + (tot === gT ? ", the same." : ", so this one costs " + against(tot) + ".") +
+        " The linear program\u2019s least cost is " + fmt(lp.total) +
+        (tot === lp.total ? ", and this plan reaches it." : ", and this plan is " + fmt(tot - lp.total) +
+          " (" + gap + "%) above it.");
     }
+    var over = done();
     $("gt-undo").disabled = hist.length === 0;
-    $("gt-step").disabled = done();
-    $("gt-hint").disabled = done();
+    $("gt-step").disabled = over;
+    $("gt-hint").disabled = over;
   }
 
   function lpTable() {
@@ -803,31 +833,29 @@
     tb.appendChild(row(["Shipped"].concat(col, ["", ""]), "tot"));
     tb.appendChild(row(["Demand"].concat(P.d.map(fmt), ["", ""])));
     t.appendChild(tb);
-    var cap = document.createElement("caption");
-    cap.textContent = "The linear program\u2019s shipments, at a total cost of " + fmt(lp.total) +
+    var capt = document.createElement("caption");
+    capt.textContent = "The linear program\u2019s shipments, at a total cost of " + fmt(lp.total) +
       ": each row ships no more than its supply, and each column receives exactly its demand.";
-    t.appendChild(cap);
+    t.appendChild(capt);
   }
 
   $("gt-hint").addEventListener("click", function () {
     if (done()) return;
     hinted = true;
-    $("gt-msg").className = "gt-msg";
-    $("gt-msg").textContent = "The outlined cell" + (cheapest(P.C, sl, dl).length > 1 ? "s have" : " has") +
-      " the least cost still available.";
+    var low = cheapest(P.C, sl, dl);
+    say("The outlined cell" + (low.length > 1 ? "s have" : " has") + " the least cost still available, " +
+      P.C[low[0][0]][low[0][1]] + ".", "");
     render();
   });
   $("gt-step").addEventListener("click", function () {
     if (done()) return;
-    var k = greedyNext(P.C, sl, dl); ship(k[0], k[1], false);
+    var k = greedyNext(P.C, sl, dl); ship(k[0], k[1]);
   });
   $("gt-undo").addEventListener("click", function () {
     var h = hist.pop(); if (!h) return;
     X[h.i][h.j] -= h.units; sl[h.i] += h.units; dl[h.j] += h.units;
-    tries = 0; hinted = false; wrongCell = null;
-    $("gt-lpwrap").hidden = true;
-    $("gt-msg").className = "gt-msg";
-    $("gt-msg").textContent = "Step " + (hist.length + 1) + " undone.";
+    hinted = false; wrongCell = null;
+    say("Step " + (hist.length + 1) + " undone.", "");
     render();
   });
   $("gt-reset").addEventListener("click", function () { load(P); });
