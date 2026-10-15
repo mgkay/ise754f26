@@ -42,6 +42,15 @@ using CairoMakie, DataFrames, Graphs, Logjam, SimpleWeightedGraphs
 # Two device pixels per figure unit, as in lectures 3.2 to 3.4, so the
 # raster figures are sharp at the column's own width.
 CairoMakie.activate!(px_per_unit = 2)
+# Every package a later cell loads, and the colors the figures share, loaded
+# and defined here as well, so a cell added at the end of the script runs
+# after this Setup cell alone
+using CSV, GeoMakie, HiGHS, HTTP, JSON3, JuMP
+supc  = colorant"#d21f26"               # as in Code block 2
+dcc   = colorant"#1e8a3c"
+ink   = colorant"#252525"
+redc  = colorant"#d21f26"               # as in Code block 13
+bluec = colorant"#1f6fb5"               # as in Code block 33
 # Presentation plumbing for the prose: a number with thousands separators,
 # and minutes as hours and minutes
 function commas(x)
