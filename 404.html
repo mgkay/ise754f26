@@ -108,6 +108,19 @@ margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
     border-radius: 50% !important;
     border-width: 1.3px !important;
     padding: 0.14em 0.30em !important; }
+  /* A model formulation is the widest display in a lecture, and below a 1200px
+     window its equation number lands on it. KaTeX centres the body across the
+     column and sets the number at the column's right edge, so the clearance
+     falls half a pixel for every pixel the column loses. Measured 2026-10-19 on
+     4.3 at a 1024px window (508px column): Model 1 at -15px and Model 3 at -18px
+     (EQFIT-01), both clear at 1280. At 0.85 they clear by 26 and 23px, and 4.1's
+     Eq. 5 goes from 22 to 57px; at 0.88 Models 1 and 3 clear by only 18 and 15.
+     The recording window (1920 x 1080 at 150%, a 1280px window) is above the
+     breakpoint and unchanged, and no formulation's TeX is touched. Injected here,
+     not in theme SCSS, for the same purge-safety reason as the KaTeX pin above. */
+  @media (max-width: 1199.98px) {
+    .model-formulation .katex-display .katex { font-size: 0.85em !important; }
+  }
 </style>
 
 
