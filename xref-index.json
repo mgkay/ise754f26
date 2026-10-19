@@ -2491,5 +2491,142 @@
    "label": "Ex. 7",
    "word": "Ex."
   }
+ },
+ "4.3": {
+  "eq-prodinv": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-inv-cost": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-prodinv-setup": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-setup-alloc": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-util": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "fig-network": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-network-flows": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-missing-flows": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-missing-kinds": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-orders-forecast": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-horizon": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-stack": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "tbl-single-product": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "mdl-prodinv": {
+   "label": "Model 1",
+   "word": "Model",
+   "name": "Production-inventory planning"
+  },
+  "mdl-latest": {
+   "label": "Model 2",
+   "word": "Model",
+   "name": "Greedy as-late-as-possible procedure"
+  },
+  "mdl-prodinv-setup": {
+   "label": "Model 3",
+   "word": "Model",
+   "name": "Production-inventory with setups"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-6-d": {
+   "label": "Ex. 6(d)",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-5-a": {
+   "label": "Ex. 5(a)",
+   "word": "Ex."
+  },
+  "example-5-b": {
+   "label": "Ex. 5(b)",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-6-a": {
+   "label": "Ex. 6(a)",
+   "word": "Ex."
+  },
+  "example-6-b": {
+   "label": "Ex. 6(b)",
+   "word": "Ex."
+  },
+  "example-1-k": {
+   "label": "Ex. 1(k)",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  },
+  "example-7-a": {
+   "label": "Ex. 7(a)",
+   "word": "Ex."
+  },
+  "example-7-b": {
+   "label": "Ex. 7(b)",
+   "word": "Ex."
+  }
  }
 }

@@ -3992,7 +3992,7 @@ vertical-align: -.125em;
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>solve for:</code></td>
-<td style="text-align: left;">what is being decided, and over what values</td>
+<td style="text-align: left;">what is being determined, and over what values</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>subject to:</code></td>
@@ -4000,7 +4000,7 @@ vertical-align: -.125em;
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>return:</code></td>
-<td style="text-align: left;">what a model that decides nothing computes</td>
+<td style="text-align: left;">what a model that determines nothing computes</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>assumptions:</code></td>
@@ -4019,7 +4019,7 @@ vertical-align: -.125em;
 <li><strong><code>minimize:</code>/<code>maximize:</code> and <code>return:</code> take exactly one entity.</strong> If a return seems to need three things, it is one composite thing: name it.</li>
 <li><strong><code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are always lettered lists</strong>, <code>(a) (b)   (c)</code>, one item per line, <em>even at a single item</em>.</li>
 <li><strong><code>where:</code> is a definition list keyed by symbol</strong>, not lettered, since every entry is a symbol and its meaning.</li>
-<li><strong>The six are the whole list.</strong> A seventh keyword is an error, however plausible it reads. The temptation comes with a model that has nothing to optimize, which seems to need an opening word of its own; it does not, and the table below says why. What a new keyword would say belongs in <code>solve for:</code> if it names an unknown, or in <code>return:</code> if it names what a model that decides nothing computes.</li>
+<li><strong>The six are the whole list.</strong> A seventh keyword is an error, however plausible it reads. The temptation comes with a model that has nothing to optimize, which seems to need an opening word of its own; it does not, and the table below says why. What a new keyword would say belongs in <code>solve for:</code> if it names an unknown, or in <code>return:</code> if it names what a model that determines nothing computes.</li>
 </ul>
 <p>And the first line tells you what kind of model it is:</p>
 <table class="caption-top table">
@@ -4027,7 +4027,7 @@ vertical-align: -.125em;
 <tr class="header">
 <th>Kind</th>
 <th>Opens with</th>
-<th>Decides?</th>
+<th>Determines?</th>
 <th>Prefers?</th>
 </tr>
 </thead>
@@ -4052,18 +4052,18 @@ vertical-align: -.125em;
 </tr>
 </tbody>
 </table>
-<p><strong>A model that decides has no <code>return:</code>.</strong> Its output is the unknowns, and <code>solve for:</code> already names them, so a <code>return:</code> would only say it again. The optimal value of the objective is not a separate output either: it is the <code>minimize:</code> line evaluated at the solution. <code>return:</code> belongs to the descriptive model, where nothing is decided and it is the only statement of what the model produces. The lectures follow this from Lecture 3.4; the earlier lectures still write a <code>return:</code> in models that decide, and this semester either form is accepted.</p>
+<p><strong>A model that determines something has no <code>return:</code>.</strong> Its output is the unknowns, and <code>solve for:</code> already names them, so a <code>return:</code> would only say it again. The optimal value of the objective is not a separate output either: it is the <code>minimize:</code> line evaluated at the solution. <code>return:</code> belongs to the descriptive model, where nothing is determined and it is the only statement of what the model produces. The lectures follow this from Lecture 3.4; the earlier lectures still write a <code>return:</code> in models that determine something, and this semester either form is accepted.</p>
 <p>Everything below is the detail behind these three tables. A model written this way can be checked mechanically; see <a href="#checking-a-model-mechanically">Sec. 10</a>.</p>
 </section>
 <section id="why-the-slots-are-shaped-this-way" class="level2">
 <h2 class="anchored" data-anchor-id="why-the-slots-are-shaped-this-way">1. Why the slots are shaped this way</h2>
 <p>The uniform silhouette is the point. Every model has the same slots in the same order, so a slot that is thin or missing is visible <strong>as a slot</strong> rather than as an absence nobody notices. That property is what makes this a good prompt as much as a good notation.</p>
 <p>The always-a-list rule exists for the same reason. A single constraint written inline reads as a sentence; written as <code>(a)</code> it reads as a list with one entry, and the reader asks what <code>(b)</code> would have been.</p>
-<p>A descriptive model computes something and decides nothing, so it has no <code>solve for:</code> and no objective. A feasibility model decides something but has no preference among the solutions that work. An optimization model decides something and prefers some solutions to others. Read the first line and you know which you are looking at.</p>
+<p>A descriptive model computes something and determines nothing, so it has no <code>solve for:</code> and no objective. A feasibility model determines something but has no preference among the solutions that work. An optimization model determines something and prefers some solutions to others. Read the first line and you know which you are looking at.</p>
 <section id="omitted-or-present-and-empty" class="level3">
 <h3 class="anchored" data-anchor-id="omitted-or-present-and-empty">Omitted, or present and empty</h3>
 <p>These are two different things, and the difference carries information.</p>
-<p><strong>A slot is omitted when the category does not apply to that kind of model.</strong> A descriptive model has nothing to decide, so <code>solve for:</code> is absent, and its absence is how the reader knows what kind of model it is.</p>
+<p><strong>A slot is omitted when the category does not apply to that kind of model.</strong> A descriptive model has nothing to determine, so <code>solve for:</code> is absent, and its absence is how the reader knows what kind of model it is.</p>
 <p><strong>A slot is written with <code>none</code> when the category applies but is empty.</strong> An optimization model with no constraints gets <code>subject to: none</code>, which is a real finding about the problem rather than an omission: the unconstrained economic-order-quantity model is the standard example, and reading <code>none</code> there tells you something worth knowing.</p>
 <table class="caption-top table">
 <thead>
@@ -4139,9 +4139,9 @@ vertical-align: -.125em;
 <p><strong>The test against a constraint is falsifiability.</strong> A constraint cannot be untrue: it is a condition being imposed. An assumption can, because it is a claim about how things are. So <em>a constraint binds the solution; an assumption binds the model</em> — and if an assumption turns out to be false, the consequence is not a worse answer but <strong>the wrong model</strong>.</p>
 <p>That is also why the assumptions are what a result is checked against. When an answer looks wrong, the first question is usually not “was the arithmetic right?” but “is one of these still true?”</p>
 </section>
-<section id="is-it-what-a-model-that-decides-nothing-computes-return" class="level3">
-<h3 class="anchored" data-anchor-id="is-it-what-a-model-that-decides-nothing-computes-return">5. Is it what a model that decides nothing computes? → <code>return:</code></h3>
-<p>Only a descriptive model has this slot. A model that decides something has already named its output in <code>solve for:</code>.</p>
+<section id="is-it-what-a-model-that-determines-nothing-computes-return" class="level3">
+<h3 class="anchored" data-anchor-id="is-it-what-a-model-that-determines-nothing-computes-return">5. Is it what a model that determines nothing computes? → <code>return:</code></h3>
+<p>Only a descriptive model has this slot. A model that determines something has already named its output in <code>solve for:</code>.</p>
 <p>One entity. Naming it in words is real modeling work, and in a descriptive model it is the most consequential line in the concept, because it is where “what would I actually do with this answer?” gets determined.</p>
 <p><code>return:</code> is not a place for by-products. If a quantity is computed along the way and is worth reporting, it belongs inside the one composite thing being returned, described as part of it.</p>
 </section>
@@ -4158,7 +4158,7 @@ vertical-align: -.125em;
 </section>
 <section id="worked-a-descriptive-model" class="level2">
 <h2 class="anchored" data-anchor-id="worked-a-descriptive-model">4. Worked: a descriptive model</h2>
-<p>Nothing is decided; a quantity is computed.</p>
+<p>Nothing is determined; a quantity is computed.</p>
 <pre><code>return:      the average distance from the depot to a stop
 assumptions:
   (a) stops are uniform over the service region;
@@ -4167,7 +4167,7 @@ assumptions:
 </section>
 <section id="worked-a-feasibility-model" class="level2">
 <h2 class="anchored" data-anchor-id="worked-a-feasibility-model">5. Worked: a feasibility model</h2>
-<p>Something is decided, but no solution is preferred over another that also works.</p>
+<p>Something is determined, but no solution is preferred over another that also works.</p>
 <pre><code>solve for:
   (a) the apartment location, a point along the corridor
 subject to:
@@ -4222,7 +4222,7 @@ where:
 <tr class="odd">
 <td style="text-align: left;"><strong>Concept</strong></td>
 <td style="text-align: left;">Words only, no symbols: the slots above, verbally</td>
-<td style="text-align: left;"><em>what</em> is being decided and why</td>
+<td style="text-align: left;"><em>what</em> is being determined and why</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>Formulation</strong></td>
@@ -4248,7 +4248,7 @@ Model 3 implementation: Poisson arrival simulation</code></pre>
 </section>
 <section id="descending-is-a-fill-in-not-a-rewrite" class="level3">
 <h3 class="anchored" data-anchor-id="descending-is-a-fill-in-not-a-rewrite">Descending is a fill-in, not a rewrite</h3>
-<p>Each rung commits detail the one above left open; it must not change what the one above said. <strong>If the formulation carries a constraint the concept never mentioned, something was decided silently</strong>, and that is worth stopping over rather than smoothing past. The same holds further down: an implementation that quietly assumes a bound the formulation did not state is not an implementation of that model.</p>
+<p>Each rung commits detail the one above left open; it must not change what the one above said. <strong>If the formulation carries a constraint the concept never mentioned, something was determined silently</strong>, and that is worth stopping over rather than smoothing past. The same holds further down: an implementation that quietly assumes a bound the formulation did not state is not an implementation of that model.</p>
 <p>This is the only reason the rungs are worth separating at all. Written as one document they cannot be checked against each other; written as three, the check is a reading.</p>
 </section>
 <section id="when-one-concept-has-more-than-one-formulation" class="level3">
@@ -4325,9 +4325,9 @@ script implementing it, and run it.</code></pre>
 </tr>
 </tbody>
 </table>
-<p>This is the division of labor the whole course rests on, so it is worth being blunt about: turning a stated model into symbols and then into code is translation, and translation is what the assistant is for. Deciding what is being optimized, what is being determined, what must hold and what may be assumed is not translation, and it is not delegated.</p>
+<p>This is the division of labor the whole course rests on, so it is worth being blunt about: turning a stated model into symbols and then into code is translation, and translation is what the assistant is for. Determining what is being optimized, what is being determined, what must hold and what may be assumed is not translation, and it is not delegated.</p>
 <p>The implementation separates into its own file for one reason: it must be executable, and words and symbols are not. Give the script a header comment naming the model file it came from, so the pair does not drift apart.</p>
-<p><strong>Keeping both in one file is what makes the descent checkable.</strong> Descending is supposed to be a fill-in operation rather than a rewrite, and that claim can only be audited if the two sit side by side: a constraint present in the formulation and absent from the concept above it is then visible in a glance, and it means something was decided without being stated. Split across a file and a conversation, the same drift is invisible.</p>
+<p><strong>Keeping both in one file is what makes the descent checkable.</strong> Descending is supposed to be a fill-in operation rather than a rewrite, and that claim can only be audited if the two sit side by side: a constraint present in the formulation and absent from the concept above it is then visible in a glance, and it means something was determined without being stated. Split across a file and a conversation, the same drift is invisible.</p>
 </section>
 </section>
 <section id="checking-a-model-mechanically" class="level2">
@@ -4335,7 +4335,7 @@ script implementing it, and run it.</code></pre>
 <p>Because the form is strict, a program can check whether a model statement follows it. One ships with the course materials:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">julia</span> ../materials/env/check_model.jl model.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Run from the folder holding the model, so the relative path reaches across to <code>materials</code>. It prints a line per finding with its line number, and exits nonzero when any finding is an error, so it can also be used inside a loop.</p>
-<p><strong>What it checks.</strong> That every keyword is one of the six and spelled as such; that the keywords appear in the order above; that <code>minimize:</code>, <code>maximize:</code> and <code>return:</code> carry exactly one entity; that <code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are lettered lists running from <code>(a)</code> without gaps, or read <code>none</code>; that every constraint carries a name; that <code>where:</code> is keyed by symbol rather than lettered; that a model deciding nothing has a <code>return:</code>; and that the slots are mutually coherent, so an objective without <code>solve for:</code> is an error and <code>solve for:</code> without <code>subject to:</code> is queried.</p>
+<p><strong>What it checks.</strong> That every keyword is one of the six and spelled as such; that the keywords appear in the order above; that <code>minimize:</code>, <code>maximize:</code> and <code>return:</code> carry exactly one entity; that <code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are lettered lists running from <code>(a)</code> without gaps, or read <code>none</code>; that every constraint carries a name; that <code>where:</code> is keyed by symbol rather than lettered; that a model determining nothing has a <code>return:</code>; and that the slots are mutually coherent, so an objective without <code>solve for:</code> is an error and <code>solve for:</code> without <code>subject to:</code> is queried.</p>
 <p><strong>What it cannot check, and this is the important half.</strong> It reads the shape, not the modeling. It cannot tell that something written as a constraint is really an assumption, that a domain choice was buried in <code>subject to:</code> instead of <code>solve for:</code>, that a <code>return:</code> is naming a by-product, or that an assumption is false. Every one of those is a judgment, they are what the rest of this page is about, and a clean report says only that the statement is well formed:</p>
 <pre><code>OK  model.md conforms to the model format.
     Note: the format is checked, not the modeling. Whether a
