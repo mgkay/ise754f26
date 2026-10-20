@@ -5858,11 +5858,12 @@ SC = 54000</code></pre>
 <span id="cb54-7"><a href="#cb54-7"></a>d <span class="op">=</span> <span class="fl">532</span>                             <span class="co"># mi, Raleigh to Gainesville</span></span>
 <span id="cb54-8"><a href="#cb54-8"></a>ppiTL, ppiLTL <span class="op">=</span> <span class="fl">131.0</span>, <span class="fl">177.4</span>        <span class="co"># PPIs for Jan 2018</span></span>
 <span id="cb54-9"><a href="#cb54-9"></a>rTL <span class="op">=</span> <span class="fl">2.00</span>ppiTL<span class="op">/</span><span class="fl">102.7</span>               <span class="co"># $/mi</span></span>
-<span id="cb54-10"><a href="#cb54-10"></a><span class="pp">@show</span> cTL <span class="op">=</span> <span class="fu">charge_tl</span>(qmax, s, d; r <span class="op">=</span> rTL, Kwt <span class="op">=</span> Kwt, Kcu <span class="op">=</span> Kcu,</span>
-<span id="cb54-11"><a href="#cb54-11"></a>                      ppi <span class="op">=</span> ppiTL);   <span class="co"># $/truck</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb54-10"><a href="#cb54-10"></a>cTL <span class="op">=</span> <span class="fu">charge_tl</span>(qmax, s, d; r <span class="op">=</span> rTL, Kwt <span class="op">=</span> Kwt, Kcu <span class="op">=</span> Kcu,</span>
+<span id="cb54-11"><a href="#cb54-11"></a>                ppi <span class="op">=</span> ppiTL)        <span class="co"># $/truck</span></span>
+<span id="cb54-12"><a href="#cb54-12"></a><span class="pp">@show</span> cTL;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>qmax = maxpayld(s; Kwt = Kwt, Kcu = Kcu) = 6.111111111111112
-cTL = charge_tl(qmax, s, d; r = rTL, Kwt = Kwt, Kcu = Kcu, ppi = ppiTL) = 1357.1957156767282</code></pre>
+cTL = 1357.1957156767282</code></pre>
 </div>
 </div>
 <p>The truckload’s setup cost is one truck’s charge, $1,357.2, with no cost per ton, and its capacity per setup is the maximum payload, 6.11 tons.</p>

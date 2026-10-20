@@ -621,8 +621,9 @@ f = 20                              # ton/yr
 d = 532                             # mi, Raleigh to Gainesville
 ppiTL, ppiLTL = 131.0, 177.4        # PPIs for Jan 2018
 rTL = 2.00ppiTL/102.7               # $/mi
-@show cTL = charge_tl(qmax, s, d; r = rTL, Kwt = Kwt, Kcu = Kcu,
-                      ppi = ppiTL);   # $/truck
+cTL = charge_tl(qmax, s, d; r = rTL, Kwt = Kwt, Kcu = Kcu,
+                ppi = ppiTL)        # $/truck
+@show cTL;
 
 # Example 6: Truckload as a setup cost
 ## Example 6(a): Weekly plan
