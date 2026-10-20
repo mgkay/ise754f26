@@ -5942,7 +5942,7 @@ Figure 12: Pruning and reindexing. (a) The seven cities joined by arcs costed a
 <span id="cb64-21"><a href="#cb64-21"></a>    <span class="fu">poly!</span>(ax, <span class="fu">Circle</span>(<span class="fu">Point2f</span>(P8[k, <span class="fl">1</span>], P8[k, <span class="fl">2</span>]), rn); color <span class="op">=</span> bluec,</span>
 <span id="cb64-22"><a href="#cb64-22"></a>          strokecolor <span class="op">=</span> <span class="op">:</span>white, strokewidth <span class="op">=</span> <span class="fl">1</span>)</span>
 <span id="cb64-23"><a href="#cb64-23"></a><span class="cf">end</span></span>
-<span id="cb64-24"><a href="#cb64-24"></a>k1 <span class="op">=</span> <span class="fu">findfirst</span>(<span class="fu">&gt;</span>(n1), L8.DST[isc])       <span class="co"># a connector of each kind</span></span>
+<span id="cb64-24"><a href="#cb64-24"></a>k1 <span class="op">=</span> <span class="fu">findfirst</span>(<span class="fu">&gt;</span>(n1), L8.DST[isc])        <span class="co"># a connector of each kind</span></span>
 <span id="cb64-25"><a href="#cb64-25"></a>k2 <span class="op">=</span> <span class="fu">findfirst</span>(<span class="op">&lt;=</span>(n1), L8.DST[isc])</span>
 <span id="cb64-26"><a href="#cb64-26"></a>sc <span class="op">=</span> <span class="fu">MarkerElement</span>(color <span class="op">=</span> bluec, marker <span class="op">=</span> <span class="op">:</span>circle, markersize <span class="op">=</span> <span class="fl">14</span>)</span>
 <span id="cb64-27"><a href="#cb64-27"></a><span class="fu">axislegend</span>(ax, [hs[k1], hs[k2], sc],</span>

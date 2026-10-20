@@ -202,9 +202,9 @@ function streets(p, L)
     k = Dict(zip(zip(L.SRC, L.DST), 1:nrow(L)))   # link of (SRC, DST)
     lk(u, v) = get(k, (u, v), get(k, (v, u), 0))  # either direction
     nm = [L.NAME[lk(u, v)] for (u, v) in zip(p, p[2:end])]
-    t = findall(!ismissing, nm)                 # the steps with a name
+    t = findall(!ismissing, nm)                   # the steps with a name
     a = [i for i in eachindex(t) if i == 1 || nm[t[i]] != nm[t[i-1]]]
-    b = [a[2:end] .- 1; length(t)]              # each run's first, last
+    b = [a[2:end] .- 1; length(t)]                # each run's first, last
     return DataFrame(Seg = eachindex(a), Street = nm[t[a]],
                      Steps = string.(t[a], "-", t[b]))
 end
@@ -577,10 +577,10 @@ prt(DataFrame("Assignment" => ["Greedy", "LP"],
               "WIP" => round.(TH .* ct ./ 60, digits = 2),
               "Busy" => round.(TH .* (ct .+ ride) ./ 60, digits = 2)))
 # Code block 34: the assignment on the streets
-orc = colorant"#e08214"                  # greedy, where it differs
+orc = colorant"#e08214"                     # greedy, where it differs
 streetU(k) = SimpleWeightedGraph(LU.SRC[k], LU.DST[k], LU.DIST[k];
                                  combine = min)
-lo = streetU(.!cU .& (LU.FCLASS .>= 6))  # as in Code block 9
+lo = streetU(.!cU .& (LU.FCLASS .>= 6))     # as in Code block 9
 hi = streetU(.!cU .& (LU.FCLASS .<= 5))
 route(i, j) = tracepath(PU[drv[i]], drv[i], pas[j])  # driver i to j
 rts = [[route(car(Xᵒ, j), j) for j in 1:length(pas)]; # LP, then

@@ -700,7 +700,7 @@ for k in 1:n1                             # the new nodes, filled
     poly!(ax, Circle(Point2f(P8[k, 1], P8[k, 2]), rn); color = bluec,
           strokecolor = :white, strokewidth = 1)
 end
-k1 = findfirst(>(n1), L8.DST[isc])       # a connector of each kind
+k1 = findfirst(>(n1), L8.DST[isc])        # a connector of each kind
 k2 = findfirst(<=(n1), L8.DST[isc])
 sc = MarkerElement(color = bluec, marker = :circle, markersize = 14)
 axislegend(ax, [hs[k1], hs[k2], sc],

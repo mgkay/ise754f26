@@ -55,7 +55,7 @@ logjam_rung(:ufldrop, "UFL, DROP construction"; keywords = false)
 # cost after each pass.
 # Code block 1: five cities on the corridor, and the cost of serving each
 P = reshape([50, 150, 220, 295, 420], :, 1)   # mile markers along I-40
-k = [150, 200, 150, 150, 200]                 # fixed cost at each site
+k = [150, 200, 150, 150, 200]  # fixed cost at each site
 r, f = 1, 1                    # transport rate, annual flow
 w = r * f                      # monetary weight
 C = w * dists(P, P, 1)         # cost to serve each city from each site
@@ -167,7 +167,7 @@ units = ud .* nc ./ sum(nc)          # units/yr by ZIP
 fz = units .* uwt                    # ton/yr by ZIP
 z = uszcta3()
 idx = [findfirst(==(zi), z.ZCTA3) for zi in zip]
-Pz = hcat(z.LON[idx], z.LAT[idx])         # ZIP centroids
+Pz = hcat(z.LON[idx], z.LAT[idx])    # ZIP centroids
 # Code block 14: the cost of serving each ZIP from each candidate site
 rton = 0.25                          # $/ton-mi, given
 g = 1.2                              # road circuity, lecture 2.2

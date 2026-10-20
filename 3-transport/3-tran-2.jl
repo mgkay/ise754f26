@@ -61,12 +61,12 @@ fillc = RGBf(0.78, 0.92, 0.78)
 edgec = RGBf(0.25, 0.55, 0.30)
 ink   = RGBf(0.10, 0.12, 0.14)
 
-# EQUAL SCALE ON BOTH AXES IS WHAT MAKES THE GEOMETRY WORK, and leaving it
-# out is what put white gaps between the arrows and the nodes: a node is a
-# marker sized in PIXELS, so trimming a lane by a radius in DATA units is
-# only right when one data unit is the same number of pixels each way.
-# DataAspect fixes the ratio; the limits below are chosen to match the
-# figure's own so nothing is padded to achieve it.
+# EQUAL SCALE ON BOTH AXES IS WHAT MAKES THE GEOMETRY WORK, and leaving
+# it out is what put white gaps between the arrows and the nodes: a
+# node is a marker sized in PIXELS, so trimming a lane by a radius in
+# DATA units is only right when one data unit is the same number of
+# pixels each way. DataAspect fixes the ratio; the limits below are
+# chosen to match the figure's own so nothing is padded to achieve it.
 XLO, XHI, YLO, YHI = -0.10, 5.55, 0.22, 1.36
 WIDTH = 687
 PXU = WIDTH / (XHI - XLO)          # pixels per data unit, both axes
@@ -249,8 +249,9 @@ udTL = 300                       # cartons
 d = 532                               # mi, Google Maps road distance
 ppiTL = 131.0                         # TL PPI for Jan 2018
 @show rTL = 2.00ppiTL/102.7           # $/mi
-@show cTL = charge_tl(qTL, s, d; r = rTL, Kwt = Kwt,
-                      Kcu = Kcu, ppi = ppiTL)  # $
+cTL = charge_tl(qTL, s, d; r = rTL, Kwt = Kwt,
+                Kcu = Kcu, ppi = ppiTL)       # $
+@show cTL;
 
 # Sec. 4. Less-than-truckload shipments
 # Example 1: Truck shipment from Raleigh to Gainesville

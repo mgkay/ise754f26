@@ -3941,6 +3941,19 @@ font-family: inherit;
     border-radius: 50% !important;
     border-width: 1.3px !important;
     padding: 0.14em 0.30em !important; }
+  /* A model formulation is the widest display in a lecture, and below a 1200px
+     window its equation number lands on it. KaTeX centres the body across the
+     column and sets the number at the column's right edge, so the clearance
+     falls half a pixel for every pixel the column loses. Measured 2026-10-19 on
+     4.3 at a 1024px window (508px column): Model 1 at -15px and Model 3 at -18px
+     (EQFIT-01), both clear at 1280. At 0.85 they clear by 26 and 23px, and 4.1's
+     Eq. 5 goes from 22 to 57px; at 0.88 Models 1 and 3 clear by only 18 and 15.
+     The recording window (1920 x 1080 at 150%, a 1280px window) is above the
+     breakpoint and unchanged, and no formulation's TeX is touched. Injected here,
+     not in theme SCSS, for the same purge-safety reason as the KaTeX pin above. */
+  @media (max-width: 1199.98px) {
+    .model-formulation .katex-display .katex { font-size: 0.85em !important; }
+  }
 </style>
 
   
@@ -4215,11 +4228,17 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">4.3: Prod-Inv: Single Product</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../4-networks/4-net-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3: Prod-Inv: Single Product</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">4.4: Prod-Inv: Multiple Products</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../4-networks/4-net-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4: Prod-Inv: Multiple Products</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4252,13 +4271,13 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">6.1: Work, Econ, One-Time-Safety Stock</span>
+ <span class="menu-text">6.1: Working and One-Time-Safety Stock</span>
   </li>
           <li class="sidebar-item">
  <span class="menu-text">6.2: Periodic Safety Stock</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">6.3: Multi-Echelon Inventory Systems</span>
+ <span class="menu-text">6.3: Production System Design</span>
   </li>
       </ul>
   </li>
@@ -4373,16 +4392,16 @@ Figure 4: Multi-vehicle VRP (savings + 2-opt): nine deliveries served by three 
 <p>A logistics study rarely stops at describing a system. The reason to build a model is usually to <em>change</em> the system: to choose a solution that performs better than the system in place. Four terms name the kinds of model involved:</p>
 <ul>
 <li>a <strong>model</strong> is a representation of the system, detailed enough to predict how it would perform;</li>
-<li>a <strong>descriptive</strong> model computes a measure of performance with no preference about the outcome, and decides nothing (the guesstimation and mean-value models later in this lecture are of this kind, returning an estimate or an average);</li>
+<li>a <strong>descriptive</strong> model computes a measure of performance with no preference about the outcome, and determines nothing (the guesstimation and mean-value models later in this lecture are of this kind, returning an estimate or an average);</li>
 <li>a <strong>feasibility</strong> model determines unknowns that must satisfy stated conditions, with no preference among the answers that work;</li>
 <li>an <strong>optimization</strong> model determines unknowns <em>and</em> adds a preference, an objective, and chooses the answer that performs best. Feasibility and optimization models both <em>prescribe</em>, since each determines something rather than only reporting on it; the distinction that does the daily work is the simpler one, whether a model needs an answer that works or the best one.</li>
 </ul>
-<p>Whatever form a model eventually takes, it is written down with keywords, at most the five below, listed in the order they appear in the boxes that follow. A descriptive model uses only the last two. <code>solve for:</code> is what makes a model decide, and an objective is what makes a deciding model an optimization, so which of the first two lines appear is what tells the three kinds apart:</p>
+<p>Whatever form a model eventually takes, it is written down with keywords, at most the five below, listed in the order they appear in the boxes that follow. A descriptive model uses only the last two. <code>solve for:</code> is what makes a model determine something, and an objective is what makes such a model an optimization, so which of the first two lines appear is what tells the three kinds apart:</p>
 <ul>
 <li><strong>minimize</strong> (or <strong>maximize</strong>): the objective, the preference added to change the system rather than only describe it;</li>
 <li><strong>solve for</strong>: the unknowns the model determines, each with what values it may take;</li>
 <li><strong>subject to</strong>: the constraints, the conditions any acceptable solution must satisfy; a model with none writes <code>none</code> rather than dropping the line, since an unconstrained problem is a finding about it and not an omission;</li>
-<li><strong>return</strong>: the output of the model, as one thing: a measure of performance for a descriptive model, the decision determined for a model that decides;</li>
+<li><strong>return</strong>: the output of the model, as one thing: a measure of performance for a descriptive model, the decision determined for a model that determines something;</li>
 <li><strong>assumptions</strong>: what the model takes as given about the world and its data.</li>
 </ul>
 <p>A constraint and an assumption are easy to confuse and do opposite work: a constraint restricts the <em>solution</em> (which answers the model may return), while an assumption restricts the <em>world and its data</em> (what the model takes as given about the setting).</p>
@@ -4514,7 +4533,7 @@ Model 3: Operational vehicle routing
 </section>
 <section id="levels-of-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="levels-of-modeling">4. Levels of modeling</h2>
-<p>A <em>model</em> is a representation of a real system whose parts and relationships are just detailed enough that it can be used to predict how the system would perform under conditions that have not been tried, and to decide what to do without experimenting on the system itself. <a href="#fig-triangle" class="quarto-xref">Fig. 5</a> shows a variety of different methods of analysis in relationship to the degree to which they focus on the three elements of the model itself, the data used in making decisions, and the computational effort needed to make decisions. While logistics engineering utilizes all of these different methods of analysis, they tend to focus more towards the computational issues due to the complex interactions of the different elements in most logistics systems.</p>
+<p>A <em>model</em> is a representation of a real system whose parts and relationships are just detailed enough that it can be used to predict how the system would perform under conditions that have not been tried, and to determine what to do without experimenting on the system itself. <a href="#fig-triangle" class="quarto-xref">Fig. 5</a> shows a variety of different methods of analysis in relationship to the degree to which they focus on the three elements of the model itself, the data used in making decisions, and the computational effort needed to make decisions. While logistics engineering utilizes all of these different methods of analysis, they tend to focus more towards the computational issues due to the complex interactions of the different elements in most logistics systems.</p>
 <div id="fig-triangle" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-triangle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

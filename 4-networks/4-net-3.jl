@@ -187,135 +187,10 @@ function prodinv(cᵖ, cⁱ, d, u, LBʸ, UBʸ)
     error(termination_status(model))
 end
 
-## Model: Greedy as-late-as-possible procedure
-# Model: greedy as-late-as-possible procedure
-function latestplan(d, u, y⁰, yᵗ⁺¹)
-    m, t = size(u)
-    x, r = zeros(m, t), Float64.(d)       # the last stage's requirement
-    for i in m:-1:1
-        s = Float64(y⁰[i])
-        for j in 1:t                       # initial inventory first
-            use = min(s, r[j])
-            r[j] -= use
-            s -= use
-        end
-        c = yᵗ⁺¹[i] - s                    # final inventory still to make
-        c < 0 && return nothing
-        for j in t:-1:1                    # as late as possible
-            x[i, j] = min(u[i, j], r[j] + c)
-            c = r[j] + c - x[i, j]         # left to an earlier period
-        end
-        c > 0 && return nothing
-        r = x[i, :]                        # what stage i - 1 must supply
-    end
-    y = [y⁰ zeros(m, t)]                   # inventory, by flow balance
-    for j in 1:t, i in 1:m
-        y[i, j+1] = y[i, j] + x[i, j] - (i < m ? x[i+1, j] : d[j])
-    end
-    return (x = x, y = y)
-end
-
-# Example 1: Two stages with unavailable capacity
-## Example 1(b): In Julia
-# Determine the plan and its cost with @mdl-prodinv.
-# Code block 2: Ex. 1's data
-u = [50  0 50;                # capacity of stage i in period j (ton)
-     60  0  0];
-d = [20, 10, 15]              # demand in period j (ton)
-cᵖ = [200, 800]               # production cost in stage i ($/ton)
-h = 0.3/12                    # monthly inventory carrying rate (1/month)
-@show cⁱ = cumsum(cᵖ)*h       # inventory cost for stage i ($/ton)
-y⁰ = [0, 0]                   # initial inventory of stage i (ton)
-yᵗ⁺¹ = [35, 0]                # final inventory of stage i (ton)
-m = length(cᵖ)                # number of production stages = 2
-t = length(d)                 # number of periods of production = 3
-LBʸ = [y⁰ zeros(m, t-1) yᵗ⁺¹] # same LB and UB to fix inventory level
-UBʸ = [y⁰ fill(Inf, m, t-1) yᵗ⁺¹];
-# Code block 3: Ex. 1 solved with prodinv, and as late as possible
-TCᵒ, xᵒ, yᵒ = prodinv(cᵖ, cⁱ, d, u, LBʸ, UBʸ)
-# prodinv returns a named tuple, (TC = …, x = …, y = …), and assigning it
-# to three names unpacks its fields in order, so TCᵒ, xᵒ and yᵒ hold the
-# total cost, the production and the inventory.
-@show TCᵒ
-xˡ, yˡ = latestplan(d, u, y⁰, yᵗ⁺¹)
-# @mdl-latest finds the plan a second way, without a solver, and its cost
-# should match TCᵒ: two routes to one number, a validation, the
-# Triangulate check of Lecture 1.2.
-@show sum(cᵖ .* xˡ) + sum(cⁱ .* yˡ[:, 2:end]);   # its cost
-# Code block 4: the optimal flows of Ex. 1 on its network
-drawpinet(cᵖ, u, cⁱ, d, y⁰, yᵗ⁺¹; X = xᵒ, Y = yᵒ)
-[xᵒ; d']                      # Code block 5: production, then demand
-yᵒ                            # Code block 6: inventory
-
-## Sec. 2. Capacity determined outside the model
-# Code block 7: list2incid and mcnf, as implemented in Lecture 4.2
-using SparseArrays
-list2incid(i, j, n) = sparse([i; j], [1:length(i); 1:length(i)],
-                             [ones(length(i)); -ones(length(j))],
-                             n, length(i))
-
-function mcnf(A, c, s; u = fill(Inf, size(A, 2)), l = zeros(size(A, 2)))
-    V, E = 1:size(A, 1), 1:size(A, 2)
-    model = Model(HiGHS.Optimizer)
-    @variable(model, l[k] ≤ x[k ∈ E] ≤ u[k])                  # (b)
-    @objective(model, Min, sum(c[k] * x[k] for k ∈ E))
-    @constraint(model, supply[i ∈ V; s[i] > 0],
-                sum(A[i, k] * x[k] for k ∈ E) ≤ s[i])               # (a)
-    @constraint(model, balance[i ∈ V; s[i] ≤ 0],
-                sum(A[i, k] * x[k] for k ∈ E) == s[i])              # (a)
-
-    set_silent(model)
-    optimize!(model)
-    if termination_status(model) == JuMP.OPTIMAL
-        return (TC = objective_value(model), x = snapvals(value.(x)))
-    end
-    error(termination_status(model))
-end
-# Code block 8: Ex. 1's time-expanded network as an arc list, solved
-# Node 1 supplies stage 1; node nd(i, j) is stage i in period j; then a
-# node per stage for its initial inventory, and one for its final
-nd(i, j) = 1 + (j - 1)*m + i
-B(i) = 1 + m*t + i
-F(i) = 1 + m*t + m + i
-n = 1 + m*t + 2m
-I, J, c, ub, lb = Int[], Int[], Float64[], Float64[], Float64[]
-arc!(a, b, cc, uu, ll = 0.0) = (push!(I, a); push!(J, b); push!(c, cc);
-                                push!(ub, uu); push!(lb, ll))
-                                # Each call appends one arc to the list:
-                                # start node, end node, cost, upper bound
-                                # and lower bound (0 unless given). Giving
-                                # the initial and final inventory arcs the
-                                # same lower and upper bound fixes their
-                                # flow, as LBʸ and UBʸ do in
-                                # @mdl-prodinv's implementation.
-for j in 1:t, i in 1:m                        # production
-    arc!(i == 1 ? 1 : nd(i - 1, j), nd(i, j), cᵖ[i], u[i, j])
-end
-for i in 1:m
-    arc!(B(i), nd(i, 1), 0.0, y⁰[i], y⁰[i])          # initial inventory
-    for j in 1:t-1
-        arc!(nd(i, j), nd(i, j + 1), cⁱ[i], Inf)      # inventory
-    end
-    arc!(nd(i, t), F(i), cⁱ[i], yᵗ⁺¹[i], yᵗ⁺¹[i])     # final inventory
-end
-s = zeros(n)                                  # net supplies
-s[1] = sum(d) + sum(yᵗ⁺¹)                     # enough for any plan
-for i in 1:m
-    s[B(i)], s[F(i)] = y⁰[i], -yᵗ⁺¹[i]
-end
-for j in 1:t
-    s[nd(m, j)] = -d[j]
-end
-@show length(I)                               # arcs
-@show n                                       # nodes
-TCᵐ, xᵐ = mcnf(list2incid(I, J, n), c, s; u = ub, l = lb)
-@show TCᵐ
-reshape(xᵐ[1:m*t], m, t) == xᵒ                # the plan of Ex. 1(b)
-
-## Example 2: One missing flow
+## Example 1: One missing flow
 # Determine the missing value of flow c in the network of
 # @fig-missing-flows(a).
-# Code block 9: Ex. 2's network as given, and its missing flow found
+# Code block 2: Ex. 1's network as given, and its missing flow found
 # frame! draws the flows N on the network, each marked by what it is in
 # N₀, the network as given: given red, unknown black and named, found blue
 # and named; a node in hl is circled in blue. A flow is named by its array
@@ -389,7 +264,7 @@ for (k, (Nk, hl, title)) in enumerate([(N₀, [], "(a) As given"),
 end
 colgap!(fig.layout, 8)
 fig
-# Code block 10: missing flows found node by node by flow balance
+# Code block 3: missing flows found node by node by flow balance
 # At node (i, j), inventory in plus production equals what goes on, to
 # stage i + 1 or to demand, plus inventory out; a node with one unknown
 # flow determines it, and each step records the node and the flow found
@@ -434,11 +309,11 @@ N, steps = fillflows(X, Y, d)
 @show steps
 N.Y[2, 2]
 
-## Example 3: Unknowns of several kinds
+## Example 2: Unknowns of several kinds
 # Determine the missing values $p$, $q$, $r$ and $s$ in the network of
 # @fig-missing-kinds(a): a production flow, an inventory flow, a final
 # inventory and a demand.
-# Code block 11: Ex. 3's missing data found by fillflows, a frame a step
+# Code block 4: Ex. 2's missing data found by fillflows, a frame a step
 X = [40 0 30; missing 20 22]          # production at stage i in period j
 d = [20, missing, 17]                 # demand in period j
 Y = [10 25 missing missing;           # inventory at stage i into period
@@ -468,6 +343,239 @@ end
 colgap!(fig.layout, 8); rowgap!(fig.layout, 4)
 fig
 
+## Model: Greedy as-late-as-possible procedure
+# Model: greedy as-late-as-possible procedure
+function latestplan(d, u, y⁰, yᵗ⁺¹)
+    m, t = size(u)
+    x, y = zeros(m, t), zeros(m, t + 1)
+    for i in m:-1:1
+        on = i == m ? d : x[i+1, :]          # what stage i passes on
+        y[i, 1], y[i, t+1] = y⁰[i], yᵗ⁺¹[i]  # initial, final inventory
+        for j in t:-1:2                      # as late as possible
+            out = on[j] + y[i, j+1]          # flow out of node (i, j)
+            x[i, j] = min(u[i, j], out)      # what capacity allows
+            y[i, j] = out - x[i, j]          # the rest, from j - 1
+        end
+        x[i, 1] = on[1] + y[i, 2] - y[i, 1]  # initial inventory first
+        j = 1
+        while x[i, j] < 0 && j < t           # more on hand than needed:
+            y[i, j+1] -= x[i, j]             #   carry it forward
+            x[i, j+1] += x[i, j]             #   and make that much less
+            x[i, j] = 0
+            j += 1
+        end
+        (x[i, j] < 0 || x[i, 1] > u[i, 1]) && return nothing
+    end
+    return (x = x, y = y)
+end
+
+# Example 3: Two stages with unavailable capacity
+## Example 3(a): By hand
+# Determine the plan and its cost by hand, from the capacities and flow
+# balance.
+# Code block 5: Model 2 by hand, a frame a node
+# The network with the flows found so far: its data in red, a flow still
+# to be found as its symbol (a production flow with its capacity), a flow
+# found in blue, and the node balanced at the step circled in blue
+function planframe!(ax, X, Y, d, u, hl; r = 0.16, ls = 13)
+    m, t = size(u)
+    hidedecorations!(ax); hidespines!(ax)
+    P(i, j) = ((j - 1) * 2.1, -(i - 1) * 1.7)     # stage i, period j
+    arc(p, q) = arrows2d!(ax, [p[1]], [p[2]], [q[1] - p[1]],
+                          [q[2] - p[2]]; color = ink, shaftwidth = 1.0,
+                          tipwidth = 6, tiplength = 6)
+    tx(p, s, al) = text!(ax, p[1], p[2]; text = s, fontsize = ls,
+                         align = al)
+    xl(i, j) = ismissing(X[i, j]) ?
+        rich(sym("x", "$i,$j"), up(" ≤ $(u[i, j])"; color = datac)) :
+        rich(sym("x", "$i,$j"), up(" = $(num(X[i, j]))"; color = flowc))
+    yl(i, j) = ismissing(Y[i, j]) ? sym("y", "$i,$j") :
+        rich(sym("y", "$i,$j"), up(" = $(num(Y[i, j]))"; color = flowc))
+    for j in 1:t                                  # production and demand
+        x0, y0 = P(1, j)
+        arc((x0, y0 + 0.9), (x0, y0 + r))
+        tx((x0 + 0.08, y0 + 0.5), xl(1, j), (:left, :center))
+        for i in 2:m
+            p, q = P(i - 1, j), P(i, j)
+            arc(p .- (0, r), q .+ (0, r))
+            tx((p[1] + 0.08, (p[2] + q[2]) / 2), xl(i, j),
+               (:left, :center))
+        end
+        xm, ym = P(m, j)
+        arc((xm, ym - r), (xm, ym - 0.7))
+        tx((xm, ym - 0.8), up("$(d[j])"; color = datac), (:center, :top))
+    end
+    for i in 1:m                                  # inventory
+        p = P(i, 1) .- (0.75, 0)
+        arc(p, P(i, 1) .- (r, 0))
+        tx(p .- (0.08, 0), up("$(num(Y[i, 1]))"; color = datac),
+           (:right, :center))
+        # each label below its arc, clear of the production label above
+        for j in 1:t-1
+            p, q = P(i, j) .+ (r, 0), P(i, j + 1) .- (r, 0)
+            arc(p, q)
+            tx(((p[1] + q[1]) / 2, p[2] - 0.1), yl(i, j + 1),
+               (:center, :top))
+        end
+        q = P(i, t) .+ (0.75, 0)
+        arc(P(i, t) .+ (r, 0), q)
+        tx(q .+ (0.08, 0), up("$(num(Y[i, t+1]))"; color = datac),
+           (:left, :center))
+    end
+    for i in 1:m, j in 1:t                        # nodes, over the arcs
+        h = (i, j) == hl
+        poly!(ax, Circle(Point2f(P(i, j)...), r); color = :white,
+              strokecolor = h ? flowc : ink, strokewidth = h ? 2.6 : 1.4)
+    end
+    xlims!(ax, -1.45, (t - 1) * 2.1 + 1.4)
+    ylims!(ax, -(m - 1) * 1.7 - 1.2, 1.0)
+    return ax
+end
+# The frames: the network as given, then one per node in the order the
+# procedure balances them, the last stage first and, within it, the last
+# period first; each fills in its node's production and inventory in
+function latestframes(d, u, y⁰, yᵗ⁺¹)
+    m, t = size(u)
+    pl = latestplan(d, u, y⁰, yᵗ⁺¹)
+    X = Matrix{Union{Missing, Float64}}(missing, m, t)
+    Y = Matrix{Union{Missing, Float64}}(missing, m, t + 1)
+    Y[:, 1], Y[:, t+1] = y⁰, yᵗ⁺¹
+    nodes = [(i, j) for i in reverse(1:m) for j in reverse(1:t)]
+    fig = Figure(size = (680, 230 * (length(nodes) ÷ 2 + 1)))
+    for k in 0:length(nodes)
+        if k == 0
+            hl, title = (0, 0), "(a) As given"
+        else
+            i, j = nodes[k]
+            X[i, j] = pl.x[i, j]
+            j > 1 && (Y[i, j] = pl.y[i, j])
+            hl, title = (i, j), "($('a' + k)) Stage $i, month $j"
+        end
+        ax = Axis(fig[k ÷ 2 + 1, k % 2 + 1]; aspect = DataAspect(),
+                  title = title, titlesize = 13, titlefont = :regular)
+        planframe!(ax, X, Y, d, u, hl)
+    end
+    colgap!(fig.layout, 8); rowgap!(fig.layout, 4)
+    return fig
+end
+
+latestframes([20, 10, 15], [50 0 50; 60 0 0], [0, 0], [35, 0])
+
+## Example 3(b): In Julia
+# Determine the plan and its cost with @mdl-prodinv.
+# Code block 6: Ex. 3's data
+u = [50  0 50;                # capacity of stage i in period j (ton)
+     60  0  0];
+d = [20, 10, 15]              # demand in period j (ton)
+cᵖ = [200, 800]               # production cost in stage i ($/ton)
+h = 0.3/12                    # monthly inventory carrying rate (1/month)
+@show cⁱ = cumsum(cᵖ)*h       # inventory cost for stage i ($/ton)
+y⁰ = [0, 0]                   # initial inventory of stage i (ton)
+yᵗ⁺¹ = [35, 0]                # final inventory of stage i (ton)
+m = length(cᵖ)                # number of production stages = 2
+t = length(d)                 # number of periods of production = 3
+LBʸ = [y⁰ zeros(m, t-1) yᵗ⁺¹] # same LB and UB to fix inventory level
+UBʸ = [y⁰ fill(Inf, m, t-1) yᵗ⁺¹];
+# Code block 7: Ex. 3 solved with prodinv, and as late as possible
+TCᵒ, xᵒ, yᵒ = prodinv(cᵖ, cⁱ, d, u, LBʸ, UBʸ)
+# prodinv returns a named tuple, (TC = …, x = …, y = …), and assigning it
+# to three names unpacks its fields in order, so TCᵒ, xᵒ and yᵒ hold the
+# total cost, the production and the inventory.
+@show TCᵒ
+xˡ, yˡ = latestplan(d, u, y⁰, yᵗ⁺¹)
+# @mdl-latest finds the plan a second way, without a solver, and its cost
+# should match TCᵒ: two routes to one number, a validation, the
+# Triangulate check of Lecture 1.2.
+@show sum(cᵖ .* xˡ) + sum(cⁱ .* yˡ[:, 2:end]);   # its cost
+# Code block 8: the optimal flows of Ex. 3 on its network
+drawpinet(cᵖ, u, cⁱ, d, y⁰, yᵗ⁺¹; X = xᵒ, Y = yᵒ)
+[xᵒ; d']                      # Code block 9: production, then demand
+yᵒ                            # Code block 10: inventory
+
+## Example 3(c): By hand, with capacity that binds
+# Ex. 3's product, with its costs and demand, has 10 tons of inventory
+# at stage 1 to start, none wanted at either stage at the end, and in
+# place of those of @fig-network the capacities, in tons, $$ u =
+# \begin{bmatrix} 40 & 20 & 0 \\ 30 & 15 & 10 \end{bmatrix}. $$
+# Determine the plan and its cost by hand.
+# Code block 11: Ex. 3(c) by hand, a frame a node
+latestframes([20, 10, 15], [40 20 0; 30 15 10], [10, 0], [0, 0])
+# Code block 12: Ex. 3(c) solved as late as possible, and with prodinv
+uc = [40 20  0;                    # capacity of stage i in period j (ton)
+      30 15 10]
+y⁰c, yᵗ⁺¹c = [10, 0], [0, 0]       # initial and final inventory (ton)
+xˡc, yˡc = latestplan(d, uc, y⁰c, yᵗ⁺¹c)
+@show sum(cᵖ .* xˡc) + sum(cⁱ .* yˡc[:, 2:end]);   # its cost
+LBʸc = [y⁰c zeros(m, t-1) yᵗ⁺¹c]
+UBʸc = [y⁰c fill(Inf, m, t-1) yᵗ⁺¹c]
+TCc, xᵒc, yᵒc = prodinv(cᵖ, cⁱ, d, uc, LBʸc, UBʸc)
+@show TCc;
+
+## Sec. 2. Capacity determined outside the model
+# Code block 13: list2incid and mcnf, as implemented in Lecture 4.2
+using SparseArrays
+list2incid(i, j, n) = sparse([i; j], [1:length(i); 1:length(i)],
+                             [ones(length(i)); -ones(length(j))],
+                             n, length(i))
+
+function mcnf(A, c, s; u = fill(Inf, size(A, 2)), l = zeros(size(A, 2)))
+    V, E = 1:size(A, 1), 1:size(A, 2)
+    model = Model(HiGHS.Optimizer)
+    @variable(model, l[k] ≤ x[k ∈ E] ≤ u[k])                  # (b)
+    @objective(model, Min, sum(c[k] * x[k] for k ∈ E))
+    @constraint(model, supply[i ∈ V; s[i] > 0],
+                sum(A[i, k] * x[k] for k ∈ E) ≤ s[i])               # (a)
+    @constraint(model, balance[i ∈ V; s[i] ≤ 0],
+                sum(A[i, k] * x[k] for k ∈ E) == s[i])              # (a)
+
+    set_silent(model)
+    optimize!(model)
+    if termination_status(model) == JuMP.OPTIMAL
+        return (TC = objective_value(model), x = snapvals(value.(x)))
+    end
+    error(termination_status(model))
+end
+# Code block 14: Ex. 3's time-expanded network as an arc list, solved
+# Node 1 supplies stage 1; node nd(i, j) is stage i in period j; then a
+# node per stage for its initial inventory, and one for its final
+nd(i, j) = 1 + (j - 1)*m + i
+B(i) = 1 + m*t + i
+F(i) = 1 + m*t + m + i
+n = 1 + m*t + 2m
+I, J, c, ub, lb = Int[], Int[], Float64[], Float64[], Float64[]
+arc!(a, b, cc, uu, ll = 0.0) = (push!(I, a); push!(J, b); push!(c, cc);
+                                push!(ub, uu); push!(lb, ll))
+                                # Each call appends one arc to the list:
+                                # start node, end node, cost, upper bound
+                                # and lower bound (0 unless given). Giving
+                                # the initial and final inventory arcs the
+                                # same lower and upper bound fixes their
+                                # flow, as LBʸ and UBʸ do in
+                                # @mdl-prodinv's implementation.
+for j in 1:t, i in 1:m                        # production
+    arc!(i == 1 ? 1 : nd(i - 1, j), nd(i, j), cᵖ[i], u[i, j])
+end
+for i in 1:m
+    arc!(B(i), nd(i, 1), 0.0, y⁰[i], y⁰[i])          # initial inventory
+    for j in 1:t-1
+        arc!(nd(i, j), nd(i, j + 1), cⁱ[i], Inf)      # inventory
+    end
+    arc!(nd(i, t), F(i), cⁱ[i], yᵗ⁺¹[i], yᵗ⁺¹[i])     # final inventory
+end
+s = zeros(n)                                  # net supplies
+s[1] = sum(d) + sum(yᵗ⁺¹)                     # enough for any plan
+for i in 1:m
+    s[B(i)], s[F(i)] = y⁰[i], -yᵗ⁺¹[i]
+end
+for j in 1:t
+    s[nd(m, j)] = -d[j]
+end
+@show length(I)                               # arcs
+@show n                                       # nodes
+TCᵐ, xᵐ = mcnf(list2incid(I, J, n), c, s; u = ub, l = lb)
+@show TCᵐ
+reshape(xᵐ[1:m*t], m, t) == xᵒ                # the plan of Ex. 3(b)
+
 ## Example 4: Scheduled maintenance
 # A single product is produced in a two-stage production process. Stage
 # one has a capacity to produce 40 tons of the product per month, and
@@ -484,7 +592,7 @@ fig
 # ton-month, determine the production plan that minimizes total costs
 # over the planning horizon and what the total production costs will be,
 # and what the total inventory costs will be.
-# Code block 12: Ex. 4's data
+# Code block 15: Ex. 4's data
 u = [40 40 40 40 0 40;          # capacity of each stage (ton)
      80 80  0 80 0 80]
 d = [25, 15, 10, 50, 25, 15]    # demand in each period (ton)
@@ -498,7 +606,7 @@ t = length(d)                   # number of periods of production
 # same LB and UB to fix initial and final inventory levels
 LBʸ = [y⁰ zeros(m, t-1) yᵗ⁺¹]
 UBʸ = [y⁰ fill(30, m, t-1) yᵗ⁺¹];  # max inventory storage level
-# Code block 13: Ex. 4 solved with prodinv, and as late as possible
+# Code block 16: Ex. 4 solved with prodinv, and as late as possible
 TCᵒ, xᵒ, yᵒ = prodinv(cᵖ, cⁱ, d, u, LBʸ, UBʸ)
 @show TCᵒ
 xˡ, yˡ = latestplan(d, u, y⁰, yᵗ⁺¹)
@@ -507,12 +615,12 @@ TCˡ = sum(cᵖ .* xˡ) + sum(cⁱ .* yˡ[:, 2:end])   # its cost
 @show maximum(yˡ[:, 2:t])          # the most it holds at a stage
 UBⁿ = [y⁰ fill(Inf, m, t-1) yᵗ⁺¹]  # no storage limit
 @show prodinv(cᵖ, cⁱ, d, u, LBʸ, UBⁿ).TC;
-[xᵒ; d']                      # Code block 14: production, then demand
-yᵒ                            # Code block 15: inventory
-TCᵖ, TCⁱ = sum(cᵖ.*xᵒ), sum(cⁱ.*yᵒ)   # Code block 16: component costs
-TCᵖ + TCⁱ, TCᵒ                # Code block 17: their sum, and the total
-TCⁱ = sum(cⁱ.*yᵒ[:,2:end])    # Code block 18: inventory from period 2
-TCᵖ + TCⁱ, TCᵒ                # Code block 19: the sum, and the total
+[xᵒ; d']                      # Code block 17: production, then demand
+yᵒ                            # Code block 18: inventory
+TCᵖ, TCⁱ = sum(cᵖ.*xᵒ), sum(cⁱ.*yᵒ)   # Code block 19: component costs
+TCᵖ + TCⁱ, TCᵒ                # Code block 20: their sum, and the total
+TCⁱ = sum(cⁱ.*yᵒ[:,2:end])    # Code block 21: inventory from period 2
+TCᵖ + TCⁱ, TCᵒ                # Code block 22: the sum, and the total
 
 # Sec. 3. Capacity determined inside the model
 ## Model: Production-inventory with setups
@@ -549,7 +657,7 @@ end
 # Example 5: Setup costs in manufacturing
 ## Example 5(a): Optimal plan
 # Determine the plan and its cost with @mdl-prodinv-setup.
-# Code block 20: Ex. 5's data
+# Code block 23: Ex. 5's data
 u = [40, 80]                    # capacity of each stage (ton)
 d = [25, 15, 10, 50, 25, 15]    # demand in each period (ton)
 # variable production cost for each stage ($/ton)
@@ -565,16 +673,16 @@ t = length(d)                   # number of periods of production
 # same LB and UB to fix initial and final inventory levels
 LBʸ = [y⁰ zeros(m, t-1) yᵗ⁺¹]
 UBʸ = [y⁰ fill(30, m, t-1) yᵗ⁺¹];  # max inventory storage level
-# Code block 21: Ex. 5 solved with prodinv_setup
+# Code block 24: Ex. 5 solved with prodinv_setup
 z̄ = ones(Int, m, t)                 # one setup a month at most
 TCᵒ, xᵒ, yᵒ, zᵒ = prodinv_setup(cᵖ, cˢ, cⁱ, d, u, z̄, LBʸ, UBʸ)
 @show TCᵒ;
-[xᵒ; d']                      # Code block 22: production, then demand
-yᵒ                            # Code block 23: inventory
-zᵒ                            # Code block 24: setups
-# Code block 25: the cost components, inventory from period 2
+[xᵒ; d']                      # Code block 25: production, then demand
+yᵒ                            # Code block 26: inventory
+zᵒ                            # Code block 27: setups
+# Code block 28: the cost components, inventory from period 2
 TCᵖ, TCⁱ, TCˢ = sum(cᵖ.*xᵒ), sum(cⁱ.*yᵒ[:,2:end]), sum(cˢ.*zᵒ)
-TCᵖ + TCⁱ + TCˢ, TCᵒ          # Code block 26: their sum, and the total
+TCᵖ + TCⁱ + TCˢ, TCᵒ          # Code block 29: their sum, and the total
 
 ## Example 5(b): Cost of a given plan by hand
 # Using some different data as noted below (otherwise, use the data
@@ -586,7 +694,7 @@ TCᵖ + TCⁱ + TCˢ, TCᵒ          # Code block 26: their sum, and the total
 # Currently, five tons of material is in storage at stage one and none
 # at stage two; at the end of the planning period, seven tons of
 # material should be in storage at stage one and four at stage two.
-# Code block 27: Ex. 5(b)'s plan, costed
+# Code block 30: Ex. 5(b)'s plan, costed
 X = [20 4 40; 25 0 37]              # production at stage i in month j
 db = [22, 3, 33]                    # demand in month j
 Y = zeros(2, 4)                     # inventory, by flow balance
@@ -612,7 +720,7 @@ VPC, IC, SC = sum(cᵖ.*X), sum(cⁱb.*Y[:, 2:end]), sum(cˢ.*Z)
 # year as @mdl-prodinv-setup, with a demand of 20/52 tons a week at
 # Gainesville and no inventory at either end of the year: (a) determine
 # the plan; and (b) determine it again at a value of \$85,000 a ton.
-# Code block 28: Lecture 3.3's Ex. 1, and one truck's charge
+# Code block 31: Lecture 3.3's Ex. 1, and one truck's charge
 uwt, ucu = 40, 9                    # lb and ft^3 per carton
 s = uwt/ucu                         # density (lb/ft^3)
 Kwt, Kcu = 25, 2750                 # trailer limits (ton, ft^3)
@@ -628,7 +736,7 @@ cTL = charge_tl(qmax, s, d; r = rTL, Kwt = Kwt, Kcu = Kcu,
 # Example 6: Truckload as a setup cost
 ## Example 6(a): Weekly plan
 # Determine the weekly plan for the year.
-# Code block 29: the year planned week by week, at product value v
+# Code block 32: the year planned week by week, at product value v
 using Statistics
 function weekly(v)
     weeks, h = 52, 0.3              # weeks in the year; carrying rate
@@ -639,7 +747,7 @@ function weekly(v)
     z̄ = [ones(Int, 1, weeks);       # most setups in a week: the plant,
          fill(10, 1, weeks)]        #   and trucks, more than ever needed
     cⁱ = h/weeks .* [v, v + cTL/qmax]   # inventory cost ($/ton-week)
-    LBʸ = zeros(2, weeks + 1)           # no inventory at either end
+    LBʸ = zeros(2, weeks + 1)       # no inventory at either end
     UBʸ = [zeros(2) fill(Inf, 2, weeks - 1) zeros(2)]
     return prodinv_setup(cᵖ, cˢ, cⁱ, dw, u, z̄, LBʸ, UBʸ)
 end
@@ -648,7 +756,7 @@ tl25 = findall(>(0), r25.z[2, :])              # weeks a truck is sent
 @show length(tl25)
 @show mean(r25.x[2, tl25])                     # tons per truck
 mean(diff(tl25))                               # weeks between trucks
-# Code block 30: Lecture 3.3's minTLC on the same shipment
+# Code block 33: Lecture 3.3's minTLC on the same shipment
 tr = (r = rTL, Kwt = Kwt, Kcu = Kcu, ppi = ppiTL)
 res25 = minTLC((f = f, s = s, a = 1/2, v = 25000, h = 0.3, d = d), tr,
                ppiLTL)
@@ -659,7 +767,7 @@ res25.isLTL
 ## Example 6(b): More valuable product
 # Determine the plan again at a value of \$85,000 a ton, as in {{< xref
 # 3.3 example-1-k >}}.
-# Code block 31: the plan and minTLC at a value of $85,000 a ton
+# Code block 34: the plan and minTLC at a value of $85,000 a ton
 r85 = weekly(85000)
 tl85 = findall(>(0), r85.z[2, :])
 @show length(tl85)
@@ -671,7 +779,7 @@ res85 = minTLC((f = f, s = s, a = 1/2, v = 85000, h = 0.3, d = d), tr,
 52res85.qᵒ/f
 
 ## Sec. 4. Forecasting demand
-# Code block 32: orders on hand consuming the forecast
+# Code block 35: orders on hand consuming the forecast
 let
     F = [0.85, 1.10, 0.80, 0.95, 1.00, 0.70, 0.95, 1.20, 1.05, 0.80]
     n, fence = length(F), 2            # periods ahead, demand time fence
@@ -725,7 +833,7 @@ let
 end
 
 ## Sec. 5. Planning horizon
-# Code block 33: rolling plans ahead of an outage, with a lead time
+# Code block 36: rolling plans ahead of an outage, with a lead time
 let
     T, δ = 12, 2                       # periods, lead time
     cap, o = 0.7, 9:10                 # capacity, periods of the outage
@@ -842,7 +950,7 @@ let
     rowsize!(fig.layout, 1, Relative(0.5))
     fig
 end
-# Code block 34: the logistics software stack
+# Code block 37: the logistics software stack
 let
     boxc, edgec = colorant"#dff2da", colorant"#3a8a4f"
     # name, what it is, centre (x, y); every box 6.65 wide and 2.5 high
@@ -900,7 +1008,7 @@ end
 # Example 7: Horizon of the month-1 plan
 ## Example 7(b): In Julia
 # Determine the plan over all six months.
-# Code block 35: the six-month plan
+# Code block 38: the six-month plan
 u6 = [50  0 50  0  0 50;          # capacity of stage i in period j (ton)
       60  0  0 60 60 60]
 d6 = [20, 10, 15, 20, 15, 25]       # demand in period j (ton)
@@ -912,7 +1020,7 @@ TC6, x6, y6 = prodinv(cᵖ, cⁱ, d6, u6, LBʸ, UBʸ)
 @show TC6
 prt(y6; rows = ["1", "2"], cols = string.(1:7),
     row_title = "Stage")              # inventory into each month
-# Code block 36: the plan made in month 1, over horizons of 1 to 6 months
+# Code block 39: the plan made in month 1, over horizons of 1 to 6 months
 x₁ = zeros(2, 6)                    # month-1 production, horizon H
 for H in 1:6
     LBʸ = zeros(2, H + 1)           # no inventory at the start or end

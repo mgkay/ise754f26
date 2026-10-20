@@ -144,7 +144,7 @@ ship.ton  # Code block 23: read the weight column
 # Code block 24: plotting a curve
 using CairoMakie                     # load the plotting backend
 f(x) = x - x^3                       # the curve to draw
-xrng = -2:0.01:2          # x-values, fine steps
+xrng = -2:0.01:2                     # x-values, fine steps
 lines(xrng, f;
 # lines draws f over the range xrng; the axis = (...) keyword sets the
 # title and axis labels inside the same call, so the separate Figure and

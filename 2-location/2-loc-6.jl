@@ -387,7 +387,7 @@ prt(DataFrame(
 pos = (A = 0.0, Z1 = 30.0, Z2 = 90.0, Z3 = 160.0, B = 200.0, Z4 = 420.0)
 zone, plant = [:Z1, :Z2, :Z3, :Z4], [:A, :B]
 
-output = [300.0, 200.0]                    # ton/yr produced at A and B
+output = [300.0, 200.0]                 # ton/yr produced at A and B
 prodcost = [460_000.0, 340_000.0]       # $/yr production + procurement
 distcost = [162_000.0, 80_000.0]        # $/yr outbound distribution
 popn = [120_000.0, 80_000.0, 100_000.0, 60_000.0]    # people

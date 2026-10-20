@@ -3906,6 +3906,19 @@ font-family: inherit;
     border-radius: 50% !important;
     border-width: 1.3px !important;
     padding: 0.14em 0.30em !important; }
+  /* A model formulation is the widest display in a lecture, and below a 1200px
+     window its equation number lands on it. KaTeX centres the body across the
+     column and sets the number at the column's right edge, so the clearance
+     falls half a pixel for every pixel the column loses. Measured 2026-10-19 on
+     4.3 at a 1024px window (508px column): Model 1 at -15px and Model 3 at -18px
+     (EQFIT-01), both clear at 1280. At 0.85 they clear by 26 and 23px, and 4.1's
+     Eq. 5 goes from 22 to 57px; at 0.88 Models 1 and 3 clear by only 18 and 15.
+     The recording window (1920 x 1080 at 150%, a 1280px window) is above the
+     breakpoint and unchanged, and no formulation's TeX is touched. Injected here,
+     not in theme SCSS, for the same purge-safety reason as the KaTeX pin above. */
+  @media (max-width: 1199.98px) {
+    .model-formulation .katex-display .katex { font-size: 0.85em !important; }
+  }
 </style>
 
   
@@ -4180,11 +4193,17 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">4.3: Prod-Inv: Single Product</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../4-networks/4-net-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3: Prod-Inv: Single Product</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">4.4: Prod-Inv: Multiple Products</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../4-networks/4-net-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4: Prod-Inv: Multiple Products</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4217,13 +4236,13 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">6.1: Work, Econ, One-Time-Safety Stock</span>
+ <span class="menu-text">6.1: Working and One-Time-Safety Stock</span>
   </li>
           <li class="sidebar-item">
  <span class="menu-text">6.2: Periodic Safety Stock</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">6.3: Multi-Echelon Inventory Systems</span>
+ <span class="menu-text">6.3: Production System Design</span>
   </li>
       </ul>
   </li>
@@ -4311,7 +4330,7 @@ window.Quarto = {
 <li><strong>Shipper</strong>: person or company that owns the shipment (customer of carrier)</li>
 </ul>
 <p>This is the largest piece of terminology in freight transport, and it runs opposite to ordinary usage. Most people would call the transport company the shipper, since it is the party that ships things. In freight transport the sense is flipped: the party that operates the railcars, trucks and ships is the <strong>carrier</strong>, and the <strong>shipper</strong> is the party that contracts it. Ordering something on Amazon Prime makes the customer the shipper. A second oddity follows from the first, and it is one that students whose first language is not English have raised more than once: if the load goes by rail or by truck, why is the word <em>shipping</em>? Shipping in this field means any mode. It is not literally about ships.</p>
-<p>The distinction is not merely a vocabulary lesson, because it decides which cost information the rest of Transport draws on. Almost all the costing information available is from the carrier’s point of view: what its equipment costs to operate, what it pays its drivers. The cost analysis in this course is taken from the <strong>shipper’s</strong> side instead, on the assumption that the reader is much more likely to work at a company hiring a carrier than at the carrier.</p>
+<p>The distinction is not merely a vocabulary lesson, because it determines which cost information the rest of Transport draws on. Almost all the costing information available is from the carrier’s point of view: what its equipment costs to operate, what it pays its drivers. The cost analysis in this course is taken from the <strong>shipper’s</strong> side instead, on the assumption that the reader is much more likely to work at a company hiring a carrier than at the carrier.</p>
 <p>Carrier and shipper are the first of a good many terms that read oddly, and the reason they read that way is that freight transport is hundreds and in places thousands of years old. Its vocabulary goes back as far as Old English: solid, ordinary words that carry a particular meaning in this field and nowhere else, which is the opposite of how a new field sounds. Learning the terminology is part of learning the subject, and Sec. 8 collects the rest of it.</p>
 <p>What is the most significant concept in freight transport? What a shipment is charged for transport is determined by its density. Freight capacity is a combination of the weight and the cube of a load, and in practice, most loads cube out before they weigh out. Weight is what a load physically weighs; cube is the volume it occupies. To <em>cube out</em> is to reach the maximum cubic volume before reaching the maximum weight capacity. The two limits arise differently. Weight capacity is set by federal law, which caps payload at 25 tons. Cube capacity is physical, but it is bounded by law as well, since a trailer may be only so wide and so tall before the load has to be flagged as oversize.</p>
 </section>
@@ -4359,7 +4378,7 @@ Table 1: Transport modes and their cost per ton-mile.<a href="#fn2" class="foot
 </figure>
 </div>
 <p>Water here usually means ocean transport: a container from China to the west coast of the United States. Just over two cents moves one ton one mile that way, averaged over the whole world, and since the figure varies with the origin and destination the absolute numbers are useful but not very useful. The right column is the one to keep in mind. Taking water as 1, rail is about twice as costly, and its advantage over water is that it can go where water cannot. A standard 53-foot interstate trailer costs about nine times water and about four times rail.</p>
-<p>Everything else being equal, the ordering in the table implies a mode preference: push as much onto water as the geography allows; where there is no river and no ocean, the next best is rail; where there is no rail line, road; and last, air. What decides the matter where there is a genuine choice is how valuable the goods are and how fast they are needed. On the ratios alone, everything that could go by rail should. What kept the traffic on trucks was dependability, or rather rail’s lack of it: a railcar loaded in Raleigh went into a black box, and until it surfaced in Los Angeles nobody knew where it was, the railroad included. Sec. 6 returns to what closed that gap.</p>
+<p>Everything else being equal, the ordering in the table implies a mode preference: push as much onto water as the geography allows; where there is no river and no ocean, the next best is rail; where there is no rail line, road; and last, air. What determines the outcome where there is a genuine choice is how valuable the goods are and how fast they are needed. On the ratios alone, everything that could go by rail should. What kept the traffic on trucks was dependability, or rather rail’s lack of it: a railcar loaded in Raleigh went into a black box, and until it surfaced in Los Angeles nobody knew where it was, the railroad included. Sec. 6 returns to what closed that gap.</p>
 <p>The same ordering once drove a speculative boom. For about fifty years, canals were the Silicon Valley of their day and every government was building them, precisely because the economics of water transport are as cheap as <a href="#tbl-modes" class="quarto-xref">Table 1</a> says. The first canals were cut in the good locations and did well; by the 1840s and 1850s they were being cut in locations that were not good. Railroads arrived at the same moment, and although rail is <em>less</em> efficient than a canal by the measure in the table, it is far cheaper to build, so a great many canal companies went bankrupt. Air, at 65 times water, is the other end of the same trade-off, and what sits on the far side of it is the value of the goods. A highly valued product is expensive simply to keep: it has to be financed, so every week it spends anywhere costs something in capital alone, and that cost can justify flying it. A cheap product sitting for weeks costs almost nothing, so nothing justifies the freight.</p>
 <p>The trade-off is not always resolved the way the ratios suggest. Two weeks of national Walmart demand for a textile item, from one Southeast Asian supplier, plausibly fits on a single cargo plane, and plausibly flies, even though the items retail for $4.99 or $9.99: they are small enough that the freight is a minor share of what they sell for. Where the goods are much lower in value, getting the freight right is what matters.</p>
 <!-- PORTED, NOT DRAWN. images/dirt-to-dirt.png is slide 3's own vector art
@@ -4650,7 +4669,7 @@ Figure 2: Logistics cost as a percent of GDP, by country.<a href="#fn14" class=
 </figure>
 </div>
 <p>In <a href="#fig-country" class="quarto-xref">Fig. 2</a>, all three of the most developed economies, Europe, the United States, and Japan, have the lowest logistics cost as a percentage of GDP. What is interesting is that the United States achieves that low percentage in a different manner than Europe and Japan. The U.S. has the lowest transport cost on a per-ton-mile basis,<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> but being a continental-sized country with low population density, requires about three times as many ton-miles on a per capita basis.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
-<p>Geography is the principal reason U.S. per-ton-mile transport costs are low. It has many natural harbors on both coasts, long-distance navigable inland waterways, and many 500-plus-mile hauls, which make rail feasible. The 500-mile threshold is economic rather than physical, since rail is always possible. Below it the hassle decides: a truck makes a direct delivery in about a day, where rail means a day to the yard, another waiting to be loaded, a day or two moving, and a day at the far end. One day against three or four is not worth the saving. Past 500 miles the trucking cost has grown enough that it is.</p>
+<p>Geography is the principal reason U.S. per-ton-mile transport costs are low. It has many natural harbors on both coasts, long-distance navigable inland waterways, and many 500-plus-mile hauls, which make rail feasible. The 500-mile threshold is economic rather than physical, since rail is always possible. Below it the hassle determines the choice: a truck makes a direct delivery in about a day, where rail means a day to the yard, another waiting to be loaded, a day or two moving, and a day at the far end. One day against three or four is not worth the saving. Past 500 miles the trucking cost has grown enough that it is.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Is driving on the right arbitrary?">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -4720,8 +4739,8 @@ Figure 4: A freight team of ten animals drawing three wagons, with the driver m
 </figcaption>
 </figure>
 </div>
-<p>The same handedness decides the American arrangement, and how it played out is the interesting part. Until the railroads, the mule train was the main long-haul mode wherever there was no navigable river, and <a href="#fig-mule" class="quarto-xref">Fig. 4</a> shows the arrangement: six mules in three rows of two, and no seat. A seat would be wasted cargo space, so the driver rides one of the mules in the back row.</p>
-<p>Which of the two he rides is decided by his hands. Sitting on the <em>left</em> mule of the rear pair, a right-handed driver can reach all six with the whip, and for a right-handed driver that is the efficient seat.</p>
+<p>The same handedness determines the American arrangement, and how it played out is the interesting part. Until the railroads, the mule train was the main long-haul mode wherever there was no navigable river, and <a href="#fig-mule" class="quarto-xref">Fig. 4</a> shows the arrangement: six mules in three rows of two, and no seat. A seat would be wasted cargo space, so the driver rides one of the mules in the back row.</p>
+<p>Which of the two he rides is determined by his hands. Sitting on the <em>left</em> mule of the rear pair, a right-handed driver can reach all six with the whip, and for a right-handed driver that is the efficient seat.</p>
 <p>Guns ended the sword argument. Firearms had been in use for centuries before Europeans colonized North America, so by the time the question arose here the sword was a non-issue and the cost of moving freight was the only live consideration. Americans drove on the right. England, already on the left and locked in, did not switch, because changing the side of the road is an enormous undertaking.</p>
 <p>Continental Europe was on the left too, until Napoleon. Taking power in France around 1800 and interested in what was new, he saw what the Americans were doing and ordered France to the right; having conquered most of the continent, he ordered the rest of it to the right as well. The map of who drives where is therefore largely a map of whom he did not conquer. England he tried and failed; Sweden he never reached; Japan is an island and was never conquered. All three stayed on the left.</p>
 <!-- PORTED, NOT DRAWN. images/stockholm-1967.png is slide 8's own image
@@ -5023,7 +5042,7 @@ Figure 16: The rail boxcar, with interior dimensions in parenthesis.
 </figcaption>
 </figure>
 </div>
-<p>Doublestacking cuts the cost of moving a container by roughly half, and <a href="#fig-doublestack" class="quarto-xref">Fig. 17</a> shows why it is not simply a matter of deciding to do it. The complication was the bridges and the tunnels. Much of the American rail network’s grade crossing was built in the 1920s, 1930s and 1940s, when the container did not exist and no one had any reason to imagine a car standing eighteen feet tall; a rail car then was not much taller than its load.</p>
+<p>Doublestacking cuts the cost of moving a container by roughly half, and <a href="#fig-doublestack" class="quarto-xref">Fig. 17</a> shows why it is not simply a matter of making the decision to do it. The complication was the bridges and the tunnels. Much of the American rail network’s grade crossing was built in the 1920s, 1930s and 1940s, when the container did not exist and no one had any reason to imagine a car standing eighteen feet tall; a rail car then was not much taller than its load.</p>
 <!-- PORTED, NOT DRAWN. Slide 19's two images, carried unchanged:
      ppt/media/image25.png, the dimensioned comparison, and image26.png, a
      doublestack train. No Julia: a diagram from an outside source and a
@@ -5184,8 +5203,8 @@ Figure 23: Transloading: receiving on one side, sorting, shipping on the other.
 </div>
 <p>The reason the box changes size at the port is a mismatch between two standards. The 40-ft container suits the ship, and it suited the American trailer too while the legal maximum was 40 ft. From about the 1990s that maximum rose to 53 ft, and a 40-ft box on a 53-ft truck now gives up thirteen feet of length and everything it could have held.</p>
 <p>Hence a third kind of box. A <strong>domestic container</strong> never goes to sea; it moves on land only, and it is built to the size of the tractor-trailer. The large buildings beside a port are transloading facilities, and all they do is take the contents of the 40-ft boxes, sort them, and load them into 53-ft ones for the outbound leg. <a href="#fig-transloading" class="quarto-xref">Fig. 23</a> is that building in one picture. The first saving is arithmetic: four trucks become three.</p>
-<p>The second saving is less obvious and worth more. Sorting at the port is also a chance to decide, later, where the goods go. A box leaving Shanghai is about thirteen days from the American port and a couple of days more from the distribution center, so a firm that fixes the destination at the port is forecasting two days ahead where one that fixed it in China was forecasting three weeks ahead. A forecast made closer to the event is a better forecast, and transloading is what buys the delay.</p>
-<p>An example makes the point concrete. Each outbound truck is going to a different distribution center, and the split is decided after the sort. A cold spell in the Northeast has raised demand for gloves there while Texas is still warm, so most of the gloves go north and fewer go to Texas. The alternative is committing to that split in China a month earlier, against a forecast nobody could make well. So transloading buys two things at the cost of one extra handling: cheaper line-haul, and the right to decide late.</p>
+<p>The second saving is less obvious and worth more. Sorting at the port is also a chance to determine, later, where the goods go. A box leaving Shanghai is about thirteen days from the American port and a couple of days more from the distribution center, so a firm that fixes the destination at the port is forecasting two days ahead where one that fixed it in China was forecasting three weeks ahead. A forecast made closer to the event is a better forecast, and transloading is what buys the delay.</p>
+<p>An example makes the point concrete. Each outbound truck is going to a different distribution center, and the split is determined after the sort. A cold spell in the Northeast has raised demand for gloves there while Texas is still warm, so most of the gloves go north and fewer go to Texas. The alternative is committing to that split in China a month earlier, against a forecast nobody could make well. So transloading buys two things at the cost of one extra handling: cheaper line-haul, and the right to determine the split late.</p>
 <!-- PORTED, NOT DRAWN. ONE of slide 27's three images: ppt/media/image39.png,
      the annotated aerial, carried unchanged. No Julia: an aerial photograph.
 

@@ -3943,6 +3943,19 @@ font-family: inherit;
     border-radius: 50% !important;
     border-width: 1.3px !important;
     padding: 0.14em 0.30em !important; }
+  /* A model formulation is the widest display in a lecture, and below a 1200px
+     window its equation number lands on it. KaTeX centres the body across the
+     column and sets the number at the column's right edge, so the clearance
+     falls half a pixel for every pixel the column loses. Measured 2026-10-19 on
+     4.3 at a 1024px window (508px column): Model 1 at -15px and Model 3 at -18px
+     (EQFIT-01), both clear at 1280. At 0.85 they clear by 26 and 23px, and 4.1's
+     Eq. 5 goes from 22 to 57px; at 0.88 Models 1 and 3 clear by only 18 and 15.
+     The recording window (1920 x 1080 at 150%, a 1280px window) is above the
+     breakpoint and unchanged, and no formulation's TeX is touched. Injected here,
+     not in theme SCSS, for the same purge-safety reason as the KaTeX pin above. */
+  @media (max-width: 1199.98px) {
+    .model-formulation .katex-display .katex { font-size: 0.85em !important; }
+  }
 </style>
 <script>/**
  * Minified by jsDelivr using Terser v5.37.0.
@@ -3957,10 +3970,7 @@ font-family: inherit;
 var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseElement,dataMain,src,interactiveScript,currentlyAddingScript,mainScript,subPath,version="2.3.6",commentRegExp=/\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/gm,cjsRequireRegExp=/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,jsSuffixRegExp=/\.js$/,currDirRegExp=/^\.\//,op=Object.prototype,ostring=op.toString,hasOwn=op.hasOwnProperty,isBrowser=!("undefined"==typeof window||"undefined"==typeof navigator||!window.document),isWebWorker=!isBrowser&&"undefined"!=typeof importScripts,readyRegExp=isBrowser&&"PLAYSTATION 3"===navigator.platform?/^complete$/:/^(complete|loaded)$/,defContextName="_",isOpera="undefined"!=typeof opera&&"[object Opera]"===opera.toString(),contexts={},cfg={},globalDefQueue=[],useInteractive=!1;function commentReplace(e,t){return t||""}function isFunction(e){return"[object Function]"===ostring.call(e)}function isArray(e){return"[object Array]"===ostring.call(e)}function each(e,t){var i;if(e)for(i=0;i<e.length&&(!e[i]||!t(e[i],i,e));i+=1);}function eachReverse(e,t){var i;if(e)for(i=e.length-1;i>-1&&(!e[i]||!t(e[i],i,e));i-=1);}function hasProp(e,t){return hasOwn.call(e,t)}function getOwn(e,t){return hasProp(e,t)&&e[t]}function eachProp(e,t){var i;for(i in e)if(hasProp(e,i)&&t(e[i],i))break}function mixin(e,t,i,r){return t&&eachProp(t,(function(t,n){!i&&hasProp(e,n)||(!r||"object"!=typeof t||!t||isArray(t)||isFunction(t)||t instanceof RegExp?e[n]=t:(e[n]||(e[n]={}),mixin(e[n],t,i,r)))})),e}function bind(e,t){return function(){return t.apply(e,arguments)}}function scripts(){return document.getElementsByTagName("script")}function defaultOnError(e){throw e}function getGlobal(e){if(!e)return e;var t=global;return each(e.split("."),(function(e){t=t[e]})),t}function makeError(e,t,i,r){var n=new Error(t+"\nhttps://requirejs.org/docs/errors.html#"+e);return n.requireType=e,n.requireModules=r,i&&(n.originalError=i),n}if(void 0===define){if(void 0!==requirejs){if(isFunction(requirejs))return;cfg=requirejs,requirejs=void 0}void 0===require||isFunction(require)||(cfg=require,require=void 0),req=requirejs=function(e,t,i,r){var n,o,a=defContextName;return isArray(e)||"string"==typeof e||(o=e,isArray(t)?(e=t,t=i,i=r):e=[]),o&&o.context&&(a=o.context),(n=getOwn(contexts,a))||(n=contexts[a]=req.s.newContext(a)),o&&n.configure(o),n.require(e,t,i)},req.config=function(e){return req(e)},req.nextTick=void 0!==setTimeout?function(e){setTimeout(e,4)}:function(e){e()},require||(require=req),req.version=version,req.jsExtRegExp=/^\/|:|\?|\.js$/,req.isBrowser=isBrowser,s=req.s={contexts:contexts,newContext:newContext},req({}),each(["toUrl","undef","defined","specified"],(function(e){req[e]=function(){var t=contexts[defContextName];return t.require[e].apply(t,arguments)}})),isBrowser&&(head=s.head=document.getElementsByTagName("head")[0],baseElement=document.getElementsByTagName("base")[0],baseElement&&(head=s.head=baseElement.parentNode)),req.onError=defaultOnError,req.createNode=function(e,t,i){var r=e.xhtml?document.createElementNS("http://www.w3.org/1999/xhtml","html:script"):document.createElement("script");return r.type=e.scriptType||"text/javascript",r.charset="utf-8",r.async=!0,r},req.load=function(e,t,i){var r,n=e&&e.config||{};if(isBrowser)return(r=req.createNode(n,t,i)).setAttribute("data-requirecontext",e.contextName),r.setAttribute("data-requiremodule",t),!r.attachEvent||r.attachEvent.toString&&r.attachEvent.toString().indexOf("[native code")<0||isOpera?(r.addEventListener("load",e.onScriptLoad,!1),r.addEventListener("error",e.onScriptError,!1)):(useInteractive=!0,r.attachEvent("onreadystatechange",e.onScriptLoad)),r.src=i,n.onNodeCreated&&n.onNodeCreated(r,n,t,i),currentlyAddingScript=r,baseElement?head.insertBefore(r,baseElement):head.appendChild(r),currentlyAddingScript=null,r;if(isWebWorker)try{setTimeout((function(){}),0),importScripts(i),e.completeLoad(t)}catch(r){e.onError(makeError("importscripts","importScripts failed for "+t+" at "+i,r,[t]))}},isBrowser&&!cfg.skipDataMain&&eachReverse(scripts(),(function(e){if(head||(head=e.parentNode),dataMain=e.getAttribute("data-main"))return mainScript=dataMain,cfg.baseUrl||-1!==mainScript.indexOf("!")||(src=mainScript.split("/"),mainScript=src.pop(),subPath=src.length?src.join("/")+"/":"./",cfg.baseUrl=subPath),mainScript=mainScript.replace(jsSuffixRegExp,""),req.jsExtRegExp.test(mainScript)&&(mainScript=dataMain),cfg.deps=cfg.deps?cfg.deps.concat(mainScript):[mainScript],!0})),define=function(e,t,i){var r,n;"string"!=typeof e&&(i=t,t=e,e=null),isArray(t)||(i=t,t=null),!t&&isFunction(i)&&(t=[],i.length&&(i.toString().replace(commentRegExp,commentReplace).replace(cjsRequireRegExp,(function(e,i){t.push(i)})),t=(1===i.length?["require"]:["require","exports","module"]).concat(t))),useInteractive&&(r=currentlyAddingScript||getInteractiveScript())&&(e||(e=r.getAttribute("data-requiremodule")),n=contexts[r.getAttribute("data-requirecontext")]),n?(n.defQueue.push([e,t,i]),n.defQueueMap[e]=!0):globalDefQueue.push([e,t,i])},define.amd={jQuery:!0},req.exec=function(text){return eval(text)},req(cfg)}function newContext(e){var t,i,r,n,o,a={waitSeconds:7,baseUrl:"./",paths:{},bundles:{},pkgs:{},shim:{},config:{}},s={},u={},c={},d=[],p={},f={},l={},h=1,m=1;function g(e,t,i){var r,n,o,s,u,c,d,p,f,l,h=t&&t.split("/"),m=a.map,g=m&&m["*"];if(e&&(c=(e=e.split("/")).length-1,a.nodeIdCompat&&jsSuffixRegExp.test(e[c])&&(e[c]=e[c].replace(jsSuffixRegExp,"")),"."===e[0].charAt(0)&&h&&(e=h.slice(0,h.length-1).concat(e)),function(e){var t,i;for(t=0;t<e.length;t++)if("."===(i=e[t]))e.splice(t,1),t-=1;else if(".."===i){if(0===t||1===t&&".."===e[2]||".."===e[t-1])continue;t>0&&(e.splice(t-1,2),t-=2)}}(e),e=e.join("/")),i&&m&&(h||g)){e:for(o=(n=e.split("/")).length;o>0;o-=1){if(u=n.slice(0,o).join("/"),h)for(s=h.length;s>0;s-=1)if((r=getOwn(m,h.slice(0,s).join("/")))&&(r=getOwn(r,u))){d=r,p=o;break e}!f&&g&&getOwn(g,u)&&(f=getOwn(g,u),l=o)}!d&&f&&(d=f,p=l),d&&(n.splice(0,p,d),e=n.join("/"))}return getOwn(a.pkgs,e)||e}function v(e){isBrowser&&each(scripts(),(function(t){if(t.getAttribute("data-requiremodule")===e&&t.getAttribute("data-requirecontext")===r.contextName)return t.parentNode.removeChild(t),!0}))}function x(e){var t=getOwn(a.paths,e);if(t&&isArray(t)&&t.length>1)return t.shift(),r.require.undef(e),r.makeRequire(null,{skipMap:!0})([e]),!0}function b(e){var t,i=e?e.indexOf("!"):-1;return i>-1&&(t=e.substring(0,i),e=e.substring(i+1,e.length)),[t,e]}function q(e,t,i,n){var o,a,s,u,c=null,d=t?t.name:null,f=e,l=!0,v="";return e||(l=!1,e="_@r"+(h+=1)),c=(u=b(e))[0],e=u[1],c&&(c=g(c,d,n),a=getOwn(p,c)),e&&(c?v=i?e:a&&a.normalize?a.normalize(e,(function(e){return g(e,d,n)})):-1===e.indexOf("!")?g(e,d,n):e:(c=(u=b(v=g(e,d,n)))[0],v=u[1],i=!0,o=r.nameToUrl(v))),{prefix:c,name:v,parentMap:t,unnormalized:!!(s=!c||a||i?"":"_unnormalized"+(m+=1)),url:o,originalName:f,isDefine:l,id:(c?c+"!"+v:v)+s}}function E(e){var t=e.id,i=getOwn(s,t);return i||(i=s[t]=new r.Module(e)),i}function w(e,t,i){var r=e.id,n=getOwn(s,r);!hasProp(p,r)||n&&!n.defineEmitComplete?(n=E(e)).error&&"error"===t?i(n.error):n.on(t,i):"defined"===t&&i(p[r])}function y(e,t){var i=e.requireModules,r=!1;t?t(e):(each(i,(function(t){var i=getOwn(s,t);i&&(i.error=e,i.events.error&&(r=!0,i.emit("error",e)))})),r||req.onError(e))}function S(){globalDefQueue.length&&(each(globalDefQueue,(function(e){var t=e[0];"string"==typeof t&&(r.defQueueMap[t]=!0),d.push(e)})),globalDefQueue=[])}function k(e){delete s[e],delete u[e]}function M(e,t,i){var r=e.map.id;e.error?e.emit("error",e.error):(t[r]=!0,each(e.depMaps,(function(r,n){var o=r.id,a=getOwn(s,o);!a||e.depMatched[n]||i[o]||(getOwn(t,o)?(e.defineDep(n,p[o]),e.check()):M(a,t,i))})),i[r]=!0)}function O(){var e,i,n=1e3*a.waitSeconds,s=n&&r.startTime+n<(new Date).getTime(),c=[],d=[],p=!1,f=!0;if(!t){if(t=!0,eachProp(u,(function(e){var t=e.map,r=t.id;if(e.enabled&&(t.isDefine||d.push(e),!e.error))if(!e.inited&&s)x(r)?(i=!0,p=!0):(c.push(r),v(r));else if(!e.inited&&e.fetched&&t.isDefine&&(p=!0,!t.prefix))return f=!1})),s&&c.length)return(e=makeError("timeout","Load timeout for modules: "+c,null,c)).contextName=r.contextName,y(e);f&&each(d,(function(e){M(e,{},{})})),s&&!i||!p||!isBrowser&&!isWebWorker||o||(o=setTimeout((function(){o=0,O()}),50)),t=!1}}function j(e){hasProp(p,e[0])||E(q(e[0],null,!0)).init(e[1],e[2])}function P(e,t,i,r){e.detachEvent&&!isOpera?r&&e.detachEvent(r,t):e.removeEventListener(i,t,!1)}function R(e){var t=e.currentTarget||e.srcElement;return P(t,r.onScriptLoad,"load","onreadystatechange"),P(t,r.onScriptError,"error"),{node:t,id:t&&t.getAttribute("data-requiremodule")}}function T(){var e;for(S();d.length;){if(null===(e=d.shift())[0])return y(makeError("mismatch","Mismatched anonymous define() module: "+e[e.length-1]));j(e)}r.defQueueMap={}}return n={require:function(e){return e.require?e.require:e.require=r.makeRequire(e.map)},exports:function(e){if(e.usingExports=!0,e.map.isDefine)return e.exports?p[e.map.id]=e.exports:e.exports=p[e.map.id]={}},module:function(e){return e.module?e.module:e.module={id:e.map.id,uri:e.map.url,config:function(){return getOwn(a.config,e.map.id)||{}},exports:e.exports||(e.exports={})}}},(i=function(e){this.events=getOwn(c,e.id)||{},this.map=e,this.shim=getOwn(a.shim,e.id),this.depExports=[],this.depMaps=[],this.depMatched=[],this.pluginMaps={},this.depCount=0}).prototype={init:function(e,t,i,r){r=r||{},this.inited||(this.factory=t,i?this.on("error",i):this.events.error&&(i=bind(this,(function(e){this.emit("error",e)}))),this.depMaps=e&&e.slice(0),this.errback=i,this.inited=!0,this.ignore=r.ignore,r.enabled||this.enabled?this.enable():this.check())},defineDep:function(e,t){this.depMatched[e]||(this.depMatched[e]=!0,this.depCount-=1,this.depExports[e]=t)},fetch:function(){if(!this.fetched){this.fetched=!0,r.startTime=(new Date).getTime();var e=this.map;if(!this.shim)return e.prefix?this.callPlugin():this.load();r.makeRequire(this.map,{enableBuildCallback:!0})(this.shim.deps||[],bind(this,(function(){return e.prefix?this.callPlugin():this.load()})))}},load:function(){var e=this.map.url;f[e]||(f[e]=!0,r.load(this.map.id,e))},check:function(){if(this.enabled&&!this.enabling){var e,t,i=this.map.id,n=this.depExports,o=this.exports,a=this.factory;if(this.inited){if(this.error)this.emit("error",this.error);else if(!this.defining){if(this.defining=!0,this.depCount<1&&!this.defined){if(isFunction(a)){if(this.events.error&&this.map.isDefine||req.onError!==defaultOnError)try{o=r.execCb(i,a,n,o)}catch(t){e=t}else o=r.execCb(i,a,n,o);if(this.map.isDefine&&void 0===o&&((t=this.module)?o=t.exports:this.usingExports&&(o=this.exports)),e)return e.requireMap=this.map,e.requireModules=this.map.isDefine?[this.map.id]:null,e.requireType=this.map.isDefine?"define":"require",y(this.error=e)}else o=a;if(this.exports=o,this.map.isDefine&&!this.ignore&&(p[i]=o,req.onResourceLoad)){var s=[];each(this.depMaps,(function(e){s.push(e.normalizedMap||e)})),req.onResourceLoad(r,this.map,s)}k(i),this.defined=!0}this.defining=!1,this.defined&&!this.defineEmitted&&(this.defineEmitted=!0,this.emit("defined",this.exports),this.defineEmitComplete=!0)}}else hasProp(r.defQueueMap,i)||this.fetch()}},callPlugin:function(){var e=this.map,t=e.id,i=q(e.prefix);this.depMaps.push(i),w(i,"defined",bind(this,(function(i){var n,o,u,c=getOwn(l,this.map.id),d=this.map.name,p=this.map.parentMap?this.map.parentMap.name:null,f=r.makeRequire(e.parentMap,{enableBuildCallback:!0});return this.map.unnormalized?(i.normalize&&(d=i.normalize(d,(function(e){return g(e,p,!0)}))||""),w(o=q(e.prefix+"!"+d,this.map.parentMap,!0),"defined",bind(this,(function(e){this.map.normalizedMap=o,this.init([],(function(){return e}),null,{enabled:!0,ignore:!0})}))),void((u=getOwn(s,o.id))&&(this.depMaps.push(o),this.events.error&&u.on("error",bind(this,(function(e){this.emit("error",e)}))),u.enable()))):c?(this.map.url=r.nameToUrl(c),void this.load()):((n=bind(this,(function(e){this.init([],(function(){return e}),null,{enabled:!0})}))).error=bind(this,(function(e){this.inited=!0,this.error=e,e.requireModules=[t],eachProp(s,(function(e){0===e.map.id.indexOf(t+"_unnormalized")&&k(e.map.id)})),y(e)})),n.fromText=bind(this,(function(i,o){var s=e.name,u=q(s),c=useInteractive;o&&(i=o),c&&(useInteractive=!1),E(u),hasProp(a.config,t)&&(a.config[s]=a.config[t]);try{req.exec(i)}catch(e){return y(makeError("fromtexteval","fromText eval for "+t+" failed: "+e,e,[t]))}c&&(useInteractive=!0),this.depMaps.push(u),r.completeLoad(s),f([s],n)})),void i.load(e.name,f,n,a))}))),r.enable(i,this),this.pluginMaps[i.id]=i},enable:function(){u[this.map.id]=this,this.enabled=!0,this.enabling=!0,each(this.depMaps,bind(this,(function(e,t){var i,o,a;if("string"==typeof e){if(e=q(e,this.map.isDefine?this.map:this.map.parentMap,!1,!this.skipMap),this.depMaps[t]=e,a=getOwn(n,e.id))return void(this.depExports[t]=a(this));this.depCount+=1,w(e,"defined",bind(this,(function(e){this.undefed||(this.defineDep(t,e),this.check())}))),this.errback?w(e,"error",bind(this,this.errback)):this.events.error&&w(e,"error",bind(this,(function(e){this.emit("error",e)})))}i=e.id,o=s[i],hasProp(n,i)||!o||o.enabled||r.enable(e,this)}))),eachProp(this.pluginMaps,bind(this,(function(e){var t=getOwn(s,e.id);t&&!t.enabled&&r.enable(e,this)}))),this.enabling=!1,this.check()},on:function(e,t){var i=this.events[e];i||(i=this.events[e]=[]),i.push(t)},emit:function(e,t){each(this.events[e],(function(e){e(t)})),"error"===e&&delete this.events[e]}},r={config:a,contextName:e,registry:s,defined:p,urlFetched:f,defQueue:d,defQueueMap:{},Module:i,makeModuleMap:q,nextTick:req.nextTick,onError:y,configure:function(e){if(e.baseUrl&&"/"!==e.baseUrl.charAt(e.baseUrl.length-1)&&(e.baseUrl+="/"),"string"==typeof e.urlArgs){var t=e.urlArgs;e.urlArgs=function(e,i){return(-1===i.indexOf("?")?"?":"&")+t}}var i=a.shim,n={paths:!0,bundles:!0,config:!0,map:!0};eachProp(e,(function(e,t){n[t]?(a[t]||(a[t]={}),mixin(a[t],e,!0,!0)):a[t]=e})),e.bundles&&eachProp(e.bundles,(function(e,t){each(e,(function(e){e!==t&&(l[e]=t)}))})),e.shim&&(eachProp(e.shim,(function(e,t){isArray(e)&&(e={deps:e}),!e.exports&&!e.init||e.exportsFn||(e.exportsFn=r.makeShimExports(e)),i[t]=e})),a.shim=i),e.packages&&each(e.packages,(function(e){var t;t=(e="string"==typeof e?{name:e}:e).name,e.location&&(a.paths[t]=e.location),a.pkgs[t]=e.name+"/"+(e.main||"main").replace(currDirRegExp,"").replace(jsSuffixRegExp,"")})),eachProp(s,(function(e,t){e.inited||e.map.unnormalized||(e.map=q(t,null,!0))})),(e.deps||e.callback)&&r.require(e.deps||[],e.callback)},makeShimExports:function(e){return function(){var t;return e.init&&(t=e.init.apply(global,arguments)),t||e.exports&&getGlobal(e.exports)}},makeRequire:function(t,i){function o(a,u,c){var d,f;return i.enableBuildCallback&&u&&isFunction(u)&&(u.__requireJsBuild=!0),"string"==typeof a?isFunction(u)?y(makeError("requireargs","Invalid require call"),c):t&&hasProp(n,a)?n[a](s[t.id]):req.get?req.get(r,a,t,o):(d=q(a,t,!1,!0).id,hasProp(p,d)?p[d]:y(makeError("notloaded",'Module name "'+d+'" has not been loaded yet for context: '+e+(t?"":". Use require([])")))):(T(),r.nextTick((function(){T(),(f=E(q(null,t))).skipMap=i.skipMap,f.init(a,u,c,{enabled:!0}),O()})),o)}return i=i||{},mixin(o,{isBrowser:isBrowser,toUrl:function(e){var i,n=e.lastIndexOf("."),o=e.split("/")[0];return-1!==n&&(!("."===o||".."===o)||n>1)&&(i=e.substring(n,e.length),e=e.substring(0,n)),r.nameToUrl(g(e,t&&t.id,!0),i,!0)},defined:function(e){return hasProp(p,q(e,t,!1,!0).id)},specified:function(e){return e=q(e,t,!1,!0).id,hasProp(p,e)||hasProp(s,e)}}),t||(o.undef=function(e){S();var i=q(e,t,!0),n=getOwn(s,e);n.undefed=!0,v(e),delete p[e],delete f[i.url],delete c[e],eachReverse(d,(function(t,i){t[0]===e&&d.splice(i,1)})),delete r.defQueueMap[e],n&&(n.events.defined&&(c[e]=n.events),k(e))}),o},enable:function(e){getOwn(s,e.id)&&E(e).enable()},completeLoad:function(e){var t,i,n,o=getOwn(a.shim,e)||{},u=o.exports;for(S();d.length;){if(null===(i=d.shift())[0]){if(i[0]=e,t)break;t=!0}else i[0]===e&&(t=!0);j(i)}if(r.defQueueMap={},n=getOwn(s,e),!t&&!hasProp(p,e)&&n&&!n.inited){if(!(!a.enforceDefine||u&&getGlobal(u)))return x(e)?void 0:y(makeError("nodefine","No define call for "+e,null,[e]));j([e,o.deps||[],o.exportsFn])}O()},nameToUrl:function(e,t,i){var n,o,s,u,c,d,p=getOwn(a.pkgs,e);if(p&&(e=p),d=getOwn(l,e))return r.nameToUrl(d,t,i);if(req.jsExtRegExp.test(e))u=e+(t||"");else{for(n=a.paths,s=(o=e.split("/")).length;s>0;s-=1)if(c=getOwn(n,o.slice(0,s).join("/"))){isArray(c)&&(c=c[0]),o.splice(0,s,c);break}u=o.join("/"),u=("/"===(u+=t||(/^data\:|^blob\:|\?/.test(u)||i?"":".js")).charAt(0)||u.match(/^[\w\+\.\-]+:/)?"":a.baseUrl)+u}return a.urlArgs&&!/^blob\:/.test(u)?u+a.urlArgs(e,u):u},load:function(e,t){req.load(r,e,t)},execCb:function(e,t,i,r){return t.apply(r,i)},onScriptLoad:function(e){if("load"===e.type||readyRegExp.test((e.currentTarget||e.srcElement).readyState)){interactiveScript=null;var t=R(e);r.completeLoad(t.id)}},onScriptError:function(e){var t=R(e);if(!x(t.id)){var i=[];return eachProp(s,(function(e,r){0!==r.indexOf("_@r")&&each(e.depMaps,(function(e){if(e.id===t.id)return i.push(r),!0}))})),y(makeError("scripterror",'Script error for "'+t.id+(i.length?'", needed by: '+i.join(", "):'"'),e,[t.id]))}}},r.require=r.makeRequire(),r}function getInteractiveScript(){return interactiveScript&&"interactive"===interactiveScript.readyState||eachReverse(scripts(),(function(e){if("interactive"===e.readyState)return interactiveScript=e})),interactiveScript}})(this,"undefined"==typeof setTimeout?void 0:setTimeout);
 //# sourceMappingURL=/sm/c085107b3a83774f186e128717d411844a7b1fac09e57eb242821d615fcecdde.map</script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
   
   <script>
@@ -4234,11 +4244,17 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">4.3: Prod-Inv: Single Product</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../4-networks/4-net-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.3: Prod-Inv: Single Product</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">4.4: Prod-Inv: Multiple Products</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../4-networks/4-net-4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.4: Prod-Inv: Multiple Products</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -4271,13 +4287,13 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">6.1: Work, Econ, One-Time-Safety Stock</span>
+ <span class="menu-text">6.1: Working and One-Time-Safety Stock</span>
   </li>
           <li class="sidebar-item">
  <span class="menu-text">6.2: Periodic Safety Stock</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">6.3: Multi-Echelon Inventory Systems</span>
+ <span class="menu-text">6.3: Production System Design</span>
   </li>
       </ul>
   </li>
@@ -4413,7 +4429,7 @@ New Logjam functions used
 <summary>
 Companion script
 </summary>
-<p><a href="3-tran-2.jl"><code>3-tran-2.jl</code></a>, runnable Julia extracted from the lecture’s code blocks. (<a href="data/ppi-trucking.csv"><code>ppi-trucking.csv</code></a>, the Producer Price Index snapshot Sec. 2.8 reads.)</p>
+<p><a href="3-tran-2.jl"><code>3-tran-2.jl</code></a>, runnable Julia extracted from the lecture’s code blocks. (<a href="data/ppi-trucking.csv"><code>ppi-trucking.csv</code></a>, the Producer Price Index snapshot Sec. 2.2 reads.)</p>
 </details>
 </div>
 <section id="trucking-services-and-operations" class="level2 page-columns page-full">
@@ -4600,11 +4616,13 @@ Figure 4: An LTL terminal from the air, and the T-shape that is best at 150 to 
 <section id="one-time-and-periodic-shipments" class="level3">
 <h3 class="anchored" data-anchor-id="one-time-and-periodic-shipments">1.4 One-time and periodic shipments</h3>
 <p>One-time shipments are an operational decision, and they are what this lecture is about: the shipment size <span class="math inline">q</span> is known. A shipper already knows when and how much to ship, and what is left is to determine if TL and/or LTL is to be used. The charge is the carrier’s to state, so a shipper must contact a carrier or have an agreement to know the charge, but it can, and should, be estimated first: that estimate is what the rest of this lecture builds.</p>
-<p>Periodic shipments are a tactical decision: here the demand rate <span class="math inline">f</span> is known and the size <span class="math inline">q</span> must be determined. What has to be worked out is how often and how much to ship, and an analytical transport charge formula is what allows an “optimal” size, and with it the shipment frequency, to be estimated. The U.S. Bureau of Labor Statistic’s Producer Price Index (PPI) for TL and LTL is used to estimate those transport charges, and Sec. 2.8 is where it enters here. Periodic shipments are Lecture 3.3’s subject.</p>
+<p>Periodic shipments are a tactical decision: here the demand rate <span class="math inline">f</span> is known and the size <span class="math inline">q</span> must be determined. What has to be worked out is how often and how much to ship, and an analytical transport charge formula is what allows an “optimal” size, and with it the shipment frequency, to be estimated. The U.S. Bureau of Labor Statistic’s Producer Price Index (PPI) for TL and LTL is used to estimate those transport charges, and Sec. 2.2 is where it enters here. Periodic shipments are Lecture 3.3’s subject.</p>
 </section>
 </section>
 <section id="design-constants" class="level2">
 <h2 class="anchored" data-anchor-id="design-constants">2. Design constants</h2>
+<section id="seven-constants" class="level3">
+<h3 class="anchored" data-anchor-id="seven-constants">2.1 Seven constants</h3>
 <p>This section is a reference rather than an argument. Seven standing values recur through the rest of the course, and they are collected here, in the order they are introduced, so that any of them can be found again quickly from the sidebar. Each is stated on its own line; what sits under it is the reasoning, the derivation, and where the constant is treated at length.</p>
 <p>They are the numbers to reach for when a problem supplies no data of its own, and each is good enough that a more careful estimate is rarely worth the effort, because the demand data a logistics problem starts from is far more uncertain than the constant is.</p>
 <div class="constant-list">
@@ -4771,12 +4789,12 @@ Figure 5: A $1 treat pail, and its label. It is made in the USA for one reason:
 <span id="cb1-7"><a href="#cb1-7"></a>edgec <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.25</span>, <span class="fl">0.55</span>, <span class="fl">0.30</span>)</span>
 <span id="cb1-8"><a href="#cb1-8"></a>ink   <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.10</span>, <span class="fl">0.12</span>, <span class="fl">0.14</span>)</span>
 <span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># EQUAL SCALE ON BOTH AXES IS WHAT MAKES THE GEOMETRY WORK, and leaving it</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co"># out is what put white gaps between the arrows and the nodes: a node is a</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co"># marker sized in PIXELS, so trimming a lane by a radius in DATA units is</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># only right when one data unit is the same number of pixels each way.</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># DataAspect fixes the ratio; the limits below are chosen to match the</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co"># figure&#39;s own so nothing is padded to achieve it.</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># EQUAL SCALE ON BOTH AXES IS WHAT MAKES THE GEOMETRY WORK, and leaving</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co"># it out is what put white gaps between the arrows and the nodes: a</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co"># node is a marker sized in PIXELS, so trimming a lane by a radius in</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># DATA units is only right when one data unit is the same number of</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># pixels each way. DataAspect fixes the ratio; the limits below are</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co"># chosen to match the figure&#39;s own so nothing is padded to achieve it.</span></span>
 <span id="cb1-16"><a href="#cb1-16"></a>XLO, XHI, YLO, YHI <span class="op">=</span> <span class="op">-</span><span class="fl">0.10</span>, <span class="fl">5.55</span>, <span class="fl">0.22</span>, <span class="fl">1.36</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a>WIDTH <span class="op">=</span> <span class="fl">687</span></span>
 <span id="cb1-18"><a href="#cb1-18"></a>PXU <span class="op">=</span> WIDTH <span class="op">/</span> (XHI <span class="op">-</span> XLO)          <span class="co"># pixels per data unit, both axes</span></span>
@@ -5214,7 +5232,7 @@ Table 4: The bottom-up estimate of TL cost per mile in 2004.
 <p>A lease is the cleanest way to see what <span class="math inline">K</span> is: a lease payment <strong>is</strong> the capital recovery cost, because the vehicle goes back at the end. A loan payment is not, because the borrower still owns the vehicle when the loan is done.</p>
 <p><strong>Note:</strong> the average cost is not the present worth spread over the life. It is tempting to write <span style="white-space: nowrap"><span class="math inline">AC = \left(IV^{\text{eff}} + PV \text{ of } OC\right) / (Nq)</span>,</span> taking the present worth of everything and dividing by the total output. That is <strong>not</strong> <a href="#eq-avgcost" class="quarto-xref">Eq. 6</a> and it does not give the same answer: dividing a present worth by <span class="math inline">N</span> spreads it evenly in nominal terms and so ignores the discounting that produced it. The capital recovery factor in <a href="#eq-caprecovery" class="quarto-xref">Eq. 5</a> is what converts a present worth into a per-period amount correctly.</p>
 <p>Every row of <a href="#tbl-tl-cost-2004" class="quarto-xref">Table 4</a> follows from those three and a handful of published inputs, and the code that produced it folds under the table itself. Each input that was looked up rather than derived carries its source in the table.</p>
-<p>Two of those inputs are worth pausing on, because they are where the estimate could most easily have gone wrong. The deflator is the same producer price index Sec. 2.8 is about, used in reverse: the vehicle cost and the wage are current figures brought <strong>back</strong> to 2004 so that every row sits in the same year’s dollars. And the driver wage is divided by <span class="math inline">1 - 0.30</span> rather than multiplied by 1.30, because benefits are stated as a share of total compensation rather than as a markup on the wage.</p>
+<p>Two of those inputs are worth pausing on, because they are where the estimate could most easily have gone wrong. The deflator is the same producer price index Sec. 2.2 is about, used in reverse: the vehicle cost and the wage are current figures brought <strong>back</strong> to 2004 so that every row sits in the same year’s dollars. And the driver wage is divided by <span class="math inline">1 - 0.30</span> rather than multiplied by 1.30, because benefits are stated as a share of total compensation rather than as a markup on the wage.</p>
 <p>The same three formulas size anything bought once and used over time. Run on a $32,000 car over five years at 12,000 miles a year, they give about 74 cents a mile, which is close to the Internal Revenue Service’s own standard mileage rate and a long way above what most drivers believe a mile costs them.</p>
 </div>
 </div>
@@ -5240,8 +5258,9 @@ r_{TL} = \frac{PPI_{TL}}{PPI_{TL}^{2004}} \times r_{2004}
 <p>Sec. 3.2 is where this is applied.</p>
 </div>
 </div>
+</section>
 <section id="producer-price-index" class="level3">
-<h3 class="anchored" data-anchor-id="producer-price-index">2.8 Producer Price Index</h3>
+<h3 class="anchored" data-anchor-id="producer-price-index">2.2 Producer Price Index</h3>
 <p>The two series that carry <a href="#dc-r">design constant 7</a> forward are published monthly by the Bureau of Labor Statistics.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
 <p><strong>Where the data is and how to get it.</strong> Each series has a page of its own, and the series identifier is what addresses it: <code>PCU484121484121</code> for truckload and <code>PCU484122484122</code> for less-than-truckload. Going to <code>data.bls.gov/timeseries/PCU484121484121</code> returns the whole monthly history, which is the fastest way to look at one value.</p>
 <p><a href="#tbl-ppi-tl" class="quarto-xref">Table 5</a> and <a href="#tbl-ppi-ltl" class="quarto-xref">Table 6</a> are those two series from the base month, December 2003, to the present, laid out the way BLS lays them out so that the page and this lecture are recognizably the same table. Both are <strong>built from the committed data at render</strong> rather than copied from the website as an image, so they carry whatever the last refresh of <code>data/ppi-trucking.csv</code> returned. The years 2007 to 2015 are left out to hold each table to one screen, and the rightmost column is BLS’s own annual average rather than a mean taken here. Two markings carry over from BLS: the <strong>(P)</strong> on a value that is still provisional and will be revised, and the base date, which is December 2003 = 100.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> Three entries are set in bold, and each is a number the arithmetic below stands on: the base month itself, where the index is 100 by construction; the 2004 annual average, 102.7 for TL and 104.2 for LTL, the two divisors that carry a 2004 estimate forward; and the January 2018 reading this lecture is anchored at, chosen so that its arithmetic does not change from one year to the next.</p>
@@ -5865,7 +5884,7 @@ Table 6: <code>PCU484122484122</code> – PPI industry data for General freight
 </div>
 <section id="maximum-payload" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="maximum-payload">3.1 Maximum payload</h3>
-<p>A trailer is constrained by weight and by cubic volume at the same time, and which one binds is decided by the density of the load alone. The maximum payload is the maximum size of each truckload:</p>
+<p>A trailer is constrained by weight and by cubic volume at the same time, and which one binds is determined by the density of the load alone. The maximum payload is the maximum size of each truckload:</p>
 <p><span id="eq-maxpayld"><span class="math display">
 q_{\max} = \min\left\{ q_{\max}^{wt},\, q_{\max}^{cu} \right\}
          = \min\left\{ K_{wt},\, \frac{s K_{cu}}{2000} \right\}
@@ -5985,14 +6004,12 @@ nTL = ceil(Int, qTL / qmax) = 1</code></pre>
 <span id="cb9-2"><a href="#cb9-2"></a>d <span class="op">=</span> <span class="fl">532</span>                               <span class="co"># mi, Google Maps road distance</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>ppiTL <span class="op">=</span> <span class="fl">131.0</span>                         <span class="co"># TL PPI for Jan 2018</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="pp">@show</span> rTL <span class="op">=</span> <span class="fl">2.00</span>ppiTL<span class="op">/</span><span class="fl">102.7</span>           <span class="co"># $/mi</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="pp">@show</span> cTL <span class="op">=</span> <span class="fu">charge_tl</span>(qTL, s, d; r <span class="op">=</span> rTL, Kwt <span class="op">=</span> Kwt,</span>
-<span id="cb9-6"><a href="#cb9-6"></a>                      Kcu <span class="op">=</span> Kcu, ppi <span class="op">=</span> ppiTL)  <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-5"><a href="#cb9-5"></a>cTL <span class="op">=</span> <span class="fu">charge_tl</span>(qTL, s, d; r <span class="op">=</span> rTL, Kwt <span class="op">=</span> Kwt,</span>
+<span id="cb9-6"><a href="#cb9-6"></a>                Kcu <span class="op">=</span> Kcu, ppi <span class="op">=</span> ppiTL)       <span class="co"># $</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="pp">@show</span> cTL;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>rTL = (2.0ppiTL) / 102.7 = 2.5511197663096397
-cTL = charge_tl(qTL, s, d; r = rTL, Kwt = Kwt, Kcu = Kcu, ppi = ppiTL) = 1357.1957156767282</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>1357.1957156767282</code></pre>
+cTL = 1357.1957156767282</code></pre>
 </div>
 </div>
 <div class="result-box">
@@ -6052,7 +6069,7 @@ s_\text{agg} = \frac{q_\text{agg}}{\sum_{i=1}^{m} q_i / s_i}
 </dl>
 </div>
 <p>The model reflects average industry rates and allows rate estimates to be adjusted to current economic conditions by using the current Producer Price Index for LTL service. Note that, in actuality, an LTL shipment between any origin and destination is likely to travel a longer distance than the road distance <span class="math inline">d</span> because it will travel through one or more transshipment terminals along its journey. However, the road distance between O-D pairs is the only readily available measure of distance, and, since the particular network of transshipment terminals is specific to each LTL carrier, it is the only reasonable measure. The model is independent of the particular characteristics of any O-D pair and, since the only parameter that distinguishes O-D pairs is road distance, the resulting rate estimate is symmetric with respect to O-D order, with such differences being treated as noise.</p>
-<p>The range the estimate is valid over is part of the estimate. <a href="#eq-rltl" class="quarto-xref">Eq. 12</a> holds for <span class="math inline">37 \le d \le 3{,}354</span> mi, <span class="math inline">0.075 \le q \le 5</span> ton, and <span class="math inline">2000\,q/s \le 650</span> ft<sup>3</sup>. These conditions represent the range of input data that produced the estimate, and they also ensure that the denominator stays positive. Outside them the formula does not fail, it returns a <strong>negative rate</strong>: pushing <span class="math inline">q</span> and <span class="math inline">d</span> low enough drives <span class="math inline">q^{1/7} d^{15/29} - 7/2</span> below zero, and the result is a confident, wrong, negative charge. <span class="math inline">K_{wt}</span> and <span style="white-space: nowrap"><span class="math inline">K_{cu}</span>,</span> meanwhile, do not appear anywhere in <a href="#eq-rltl" class="quarto-xref">Eq. 12</a>, and that is not an oversight. The trailer’s capacities are a <strong>truckload</strong> constraint: they decide how much fits on a truck the shipper is paying for whole. An LTL shipment rides with other freight, so the carrier’s trailer capacity is the carrier’s problem and never enters the rate.</p>
+<p>The range the estimate is valid over is part of the estimate. <a href="#eq-rltl" class="quarto-xref">Eq. 12</a> holds for <span class="math inline">37 \le d \le 3{,}354</span> mi, <span class="math inline">0.075 \le q \le 5</span> ton, and <span class="math inline">2000\,q/s \le 650</span> ft<sup>3</sup>. These conditions represent the range of input data that produced the estimate, and they also ensure that the denominator stays positive. Outside them the formula does not fail, it returns a <strong>negative rate</strong>: pushing <span class="math inline">q</span> and <span class="math inline">d</span> low enough drives <span class="math inline">q^{1/7} d^{15/29} - 7/2</span> below zero, and the result is a confident, wrong, negative charge. <span class="math inline">K_{wt}</span> and <span style="white-space: nowrap"><span class="math inline">K_{cu}</span>,</span> meanwhile, do not appear anywhere in <a href="#eq-rltl" class="quarto-xref">Eq. 12</a>, and that is not an oversight. The trailer’s capacities are a <strong>truckload</strong> constraint: they determine how much fits on a truck the shipper is paying for whole. An LTL shipment rides with other freight, so the carrier’s trailer capacity is the carrier’s problem and never enters the rate.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="How the formula was fitted">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -6170,13 +6187,13 @@ Figure 7: Relative error against density, weight and distance, for the initial 
 <p>Using the January 2018 PPI LTL rate estimate, determine the transport charge to ship 15 cartons LTL.</p>
 </div>
 <div id="20" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Code block 5: the LTL rate estimate and charge</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>udLTL <span class="op">=</span> <span class="fl">15</span>                                <span class="co"># cartons</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="pp">@show</span> qLTL <span class="op">=</span> <span class="fu">udLTL*</span>(uwt<span class="op">/</span><span class="fl">2000</span>)             <span class="co"># ton</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>ppiLTL <span class="op">=</span> <span class="fl">177.4</span>                            <span class="co"># LTL PPI for Jan 2018</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="pp">@show</span> rLTL <span class="op">=</span> <span class="fu">rate_ltl</span>(qLTL, s, d; ppi <span class="op">=</span> ppiLTL)    <span class="co"># $/ton-mi</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="pp">@show</span> cLTL <span class="op">=</span> <span class="fu">charge_ltl</span>(qLTL, s, d; ppi <span class="op">=</span> ppiLTL)  <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Code block 5: the LTL rate estimate and charge</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>udLTL <span class="op">=</span> <span class="fl">15</span>                                <span class="co"># cartons</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="pp">@show</span> qLTL <span class="op">=</span> <span class="fu">udLTL*</span>(uwt<span class="op">/</span><span class="fl">2000</span>)             <span class="co"># ton</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>ppiLTL <span class="op">=</span> <span class="fl">177.4</span>                            <span class="co"># LTL PPI for Jan 2018</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="pp">@show</span> rLTL <span class="op">=</span> <span class="fu">rate_ltl</span>(qLTL, s, d; ppi <span class="op">=</span> ppiLTL)    <span class="co"># $/ton-mi</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="pp">@show</span> cLTL <span class="op">=</span> <span class="fu">charge_ltl</span>(qLTL, s, d; ppi <span class="op">=</span> ppiLTL)  <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>qLTL = udLTL * (uwt / 2000) = 0.3
 rLTL = rate_ltl(qLTL, s, d; ppi = ppiLTL) = 3.7770239841173217
@@ -6195,7 +6212,7 @@ cLTL = charge_ltl(qLTL, s, d; ppi = ppiLTL) = 602.8130278651246</code></pre>
 </section>
 <section id="comparing-tl-and-ltl" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-tl-and-ltl">4.2 Comparing TL and LTL</h3>
-<p>At 0.3 ton, LTL is much the cheaper service. At 6 tons, TL is. Somewhere between them the two charges are equal, and that crossing is what decides which service a given shipment should use.</p>
+<p>At 0.3 ton, LTL is much the cheaper service. At 6 tons, TL is. Somewhere between them the two charges are equal, and that crossing is what determines which service a given shipment should use.</p>
 <div id="example-1-e" class="part-heading">
 <p>Example 1(e): The shipment size at which the charges are equal</p>
 </div>
@@ -6207,20 +6224,20 @@ cLTL = charge_ltl(qLTL, s, d; ppi = ppiLTL) = 602.8130278651246</code></pre>
 q_I = \arg\min_q \left| c_{TL}(q) - c_{LTL}(q) \right|
 \tag{13}</span></span></p>
 <div id="22" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Code block 6: the TL/LTL break-even shipment size</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">cTLh</span>(q)  <span class="op">=</span> <span class="fu">charge_tl</span>(q, s, d; r <span class="op">=</span> rTL, Kwt <span class="op">=</span> Kwt,</span>
-<span id="cb15-3"><a href="#cb15-3"></a>                     Kcu <span class="op">=</span> Kcu, ppi <span class="op">=</span> ppiTL)</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="fu">cLTLh</span>(q) <span class="op">=</span> <span class="fu">charge_ltl</span>(q, s, d; ppi <span class="op">=</span> ppiLTL)</span>
-<span id="cb15-5"><a href="#cb15-5"></a></span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="co"># The search stops at the rate estimate&#39;s own upper bound rather</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="co"># than at qmax. Sec. 4.1 gives it as 2000q/s &lt;= 650 ft^3, which for</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="co"># this load is 1.44 ton, and `rate_ltl` returns Inf above it rather</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co"># than extrapolating -- so a search over the whole trailer would be</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co"># optimising a constant.</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a>qLTLmax <span class="op">=</span> <span class="fl">650</span>s<span class="op">/</span><span class="fl">2000</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a><span class="fu">gap</span>(q) <span class="op">=</span> <span class="fu">abs</span>(<span class="fu">cTLh</span>(q) <span class="op">-</span> <span class="fu">cLTLh</span>(q))     <span class="co"># zero where the two are equal</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a><span class="pp">@show</span> qI <span class="op">=</span> <span class="fu">optimize</span>(gap, <span class="fl">0.075</span>, qLTLmax).minimizer</span>
-<span id="cb15-14"><a href="#cb15-14"></a><span class="pp">@show</span> <span class="fu">cTLh</span>(qI), <span class="fu">cLTLh</span>(qI)  <span class="co"># equal at the crossing</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Code block 6: the TL/LTL break-even shipment size</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">cTLh</span>(q)  <span class="op">=</span> <span class="fu">charge_tl</span>(q, s, d; r <span class="op">=</span> rTL, Kwt <span class="op">=</span> Kwt,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>                     Kcu <span class="op">=</span> Kcu, ppi <span class="op">=</span> ppiTL)</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="fu">cLTLh</span>(q) <span class="op">=</span> <span class="fu">charge_ltl</span>(q, s, d; ppi <span class="op">=</span> ppiLTL)</span>
+<span id="cb14-5"><a href="#cb14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co"># The search stops at the rate estimate&#39;s own upper bound rather</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co"># than at qmax. Sec. 4.1 gives it as 2000q/s &lt;= 650 ft^3, which for</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co"># this load is 1.44 ton, and `rate_ltl` returns Inf above it rather</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co"># than extrapolating -- so a search over the whole trailer would be</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co"># optimising a constant.</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a>qLTLmax <span class="op">=</span> <span class="fl">650</span>s<span class="op">/</span><span class="fl">2000</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="fu">gap</span>(q) <span class="op">=</span> <span class="fu">abs</span>(<span class="fu">cTLh</span>(q) <span class="op">-</span> <span class="fu">cLTLh</span>(q))     <span class="co"># zero where the two are equal</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="pp">@show</span> qI <span class="op">=</span> <span class="fu">optimize</span>(gap, <span class="fl">0.075</span>, qLTLmax).minimizer</span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="pp">@show</span> <span class="fu">cTLh</span>(qI), <span class="fu">cLTLh</span>(qI)  <span class="co"># equal at the crossing</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>qI = (optimize(gap, 0.075, qLTLmax)).minimizer = 0.7959529639553807
 (cTLh(qI), cLTLh(qI)) = (1357.1957156767282, 1357.1957214745564)</code></pre>
@@ -6246,46 +6263,46 @@ q_I = \arg\min_q \left| c_{TL}(q) - c_{LTL}(q) \right|
 <div id="cell-fig-tl-vs-ltl" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code that draws this figure</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># `charge_tl` and `charge_ltl` ALREADY floor at their minimum</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="co"># charges, which are Sec. 4.3&#39;s subject, so the independent charge</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="co"># is the smaller of the two rather than the smaller of two maxima.</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="fu">c0h</span>(q) <span class="op">=</span> <span class="fu">min</span>(<span class="fu">cTLh</span>(q), <span class="fu">cLTLh</span>(q))</span>
-<span id="cb18-5"><a href="#cb18-5"></a></span>
-<span id="cb18-6"><a href="#cb18-6"></a><span class="co"># From ONE POUND rather than from zero, which is what the example</span></span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="co"># asks for. At exactly zero `ceil(0/qmax)` is zero trucks, so the</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="co"># TL charge is zero and the curve would drop to the axis; a pound</span></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># in, the left end is the LTL minimum charge.</span></span>
-<span id="cb18-10"><a href="#cb18-10"></a>qs <span class="op">=</span> <span class="fu">range</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">2000</span>, <span class="fl">2</span>qI; length <span class="op">=</span> <span class="fl">1200</span>)</span>
-<span id="cb18-11"><a href="#cb18-11"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">687</span>, <span class="fl">400</span>))</span>
-<span id="cb18-12"><a href="#cb18-12"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>];</span>
-<span id="cb18-13"><a href="#cb18-13"></a>          xlabel <span class="op">=</span> <span class="st">&quot;Shipment size (ton)&quot;</span>,</span>
-<span id="cb18-14"><a href="#cb18-14"></a>          ylabel <span class="op">=</span> <span class="st">&quot;Transport charge (\$)&quot;</span>,</span>
-<span id="cb18-15"><a href="#cb18-15"></a>          title <span class="op">=</span> <span class="st">&quot;Indifference point between TL and LTL&quot;</span>,</span>
-<span id="cb18-16"><a href="#cb18-16"></a>          titlesize <span class="op">=</span> <span class="fl">17</span>, xlabelsize <span class="op">=</span> <span class="fl">16</span>, ylabelsize <span class="op">=</span> <span class="fl">16</span>,</span>
-<span id="cb18-17"><a href="#cb18-17"></a>          xticklabelsize <span class="op">=</span> <span class="fl">14</span>, yticklabelsize <span class="op">=</span> <span class="fl">14</span>)</span>
-<span id="cb18-18"><a href="#cb18-18"></a><span class="fu">lines!</span>(ax, qs, <span class="fu">c0h</span>.(qs);</span>
-<span id="cb18-19"><a href="#cb18-19"></a>       color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.13</span>, <span class="fl">0.35</span>, <span class="fl">0.60</span>), linewidth <span class="op">=</span> <span class="fl">2.2</span>)</span>
-<span id="cb18-20"><a href="#cb18-20"></a><span class="co"># An OPEN circle, as the MATLAB draws it: `plot(qI, c0h(qI), &#39;ro&#39;)`.</span></span>
-<span id="cb18-21"><a href="#cb18-21"></a><span class="co"># A filled marker of the same colour as the curve is what made the</span></span>
-<span id="cb18-22"><a href="#cb18-22"></a><span class="co"># point hard to see.</span></span>
-<span id="cb18-23"><a href="#cb18-23"></a><span class="fu">scatter!</span>(ax, [qI], [<span class="fu">cTLh</span>(qI)]; color <span class="op">=</span> <span class="op">:</span>white,</span>
-<span id="cb18-24"><a href="#cb18-24"></a>         markersize <span class="op">=</span> <span class="fl">13</span>, strokewidth <span class="op">=</span> <span class="fl">2.2</span>,</span>
-<span id="cb18-25"><a href="#cb18-25"></a>         strokecolor <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
-<span id="cb18-26"><a href="#cb18-26"></a><span class="fu">text!</span>(ax, qI, <span class="fu">cTLh</span>(qI); text <span class="op">=</span> <span class="st">&quot;  qI = </span><span class="sc">$</span>(<span class="fu">round</span>(qI, digits<span class="op">=</span><span class="fl">4</span>))<span class="st"> ton&quot;</span>,</span>
-<span id="cb18-27"><a href="#cb18-27"></a>      align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>top), fontsize <span class="op">=</span> <span class="fl">14</span>,</span>
-<span id="cb18-28"><a href="#cb18-28"></a>      color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
-<span id="cb18-29"><a href="#cb18-29"></a><span class="co"># Both axes start AT zero, so the origin sits in the corner.</span></span>
-<span id="cb18-30"><a href="#cb18-30"></a><span class="co"># Makie pads by default, which lifts the zero off it and makes</span></span>
-<span id="cb18-31"><a href="#cb18-31"></a><span class="co"># the two axes look as though they do not meet.</span></span>
-<span id="cb18-32"><a href="#cb18-32"></a><span class="fu">xlims!</span>(ax, <span class="fl">0</span>, <span class="fl">2</span>qI)</span>
-<span id="cb18-33"><a href="#cb18-33"></a><span class="co"># The top is a round number so the tick set lands INSIDE the</span></span>
-<span id="cb18-34"><a href="#cb18-34"></a><span class="co"># limits and the zero is drawn: with a ragged top Makie drops</span></span>
-<span id="cb18-35"><a href="#cb18-35"></a><span class="co"># the end ticks, and the one it dropped was the y-axis zero.</span></span>
-<span id="cb18-36"><a href="#cb18-36"></a><span class="fu">ylims!</span>(ax, <span class="fl">0</span>, <span class="fl">1500</span>)</span>
-<span id="cb18-37"><a href="#cb18-37"></a><span class="co"># The zero sits on the corner, as it does on the slide.</span></span>
-<span id="cb18-38"><a href="#cb18-38"></a>ax.xticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">0.5</span><span class="op">:</span><span class="fl">1.5</span></span>
-<span id="cb18-39"><a href="#cb18-39"></a>ax.yticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span></span>
-<span id="cb18-40"><a href="#cb18-40"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># `charge_tl` and `charge_ltl` ALREADY floor at their minimum</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co"># charges, which are Sec. 4.3&#39;s subject, so the independent charge</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co"># is the smaller of the two rather than the smaller of two maxima.</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">c0h</span>(q) <span class="op">=</span> <span class="fu">min</span>(<span class="fu">cTLh</span>(q), <span class="fu">cLTLh</span>(q))</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co"># From ONE POUND rather than from zero, which is what the example</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="co"># asks for. At exactly zero `ceil(0/qmax)` is zero trucks, so the</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co"># TL charge is zero and the curve would drop to the axis; a pound</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co"># in, the left end is the LTL minimum charge.</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a>qs <span class="op">=</span> <span class="fu">range</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">2000</span>, <span class="fl">2</span>qI; length <span class="op">=</span> <span class="fl">1200</span>)</span>
+<span id="cb17-11"><a href="#cb17-11"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">687</span>, <span class="fl">400</span>))</span>
+<span id="cb17-12"><a href="#cb17-12"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>];</span>
+<span id="cb17-13"><a href="#cb17-13"></a>          xlabel <span class="op">=</span> <span class="st">&quot;Shipment size (ton)&quot;</span>,</span>
+<span id="cb17-14"><a href="#cb17-14"></a>          ylabel <span class="op">=</span> <span class="st">&quot;Transport charge (\$)&quot;</span>,</span>
+<span id="cb17-15"><a href="#cb17-15"></a>          title <span class="op">=</span> <span class="st">&quot;Indifference point between TL and LTL&quot;</span>,</span>
+<span id="cb17-16"><a href="#cb17-16"></a>          titlesize <span class="op">=</span> <span class="fl">17</span>, xlabelsize <span class="op">=</span> <span class="fl">16</span>, ylabelsize <span class="op">=</span> <span class="fl">16</span>,</span>
+<span id="cb17-17"><a href="#cb17-17"></a>          xticklabelsize <span class="op">=</span> <span class="fl">14</span>, yticklabelsize <span class="op">=</span> <span class="fl">14</span>)</span>
+<span id="cb17-18"><a href="#cb17-18"></a><span class="fu">lines!</span>(ax, qs, <span class="fu">c0h</span>.(qs);</span>
+<span id="cb17-19"><a href="#cb17-19"></a>       color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.13</span>, <span class="fl">0.35</span>, <span class="fl">0.60</span>), linewidth <span class="op">=</span> <span class="fl">2.2</span>)</span>
+<span id="cb17-20"><a href="#cb17-20"></a><span class="co"># An OPEN circle, as the MATLAB draws it: `plot(qI, c0h(qI), &#39;ro&#39;)`.</span></span>
+<span id="cb17-21"><a href="#cb17-21"></a><span class="co"># A filled marker of the same colour as the curve is what made the</span></span>
+<span id="cb17-22"><a href="#cb17-22"></a><span class="co"># point hard to see.</span></span>
+<span id="cb17-23"><a href="#cb17-23"></a><span class="fu">scatter!</span>(ax, [qI], [<span class="fu">cTLh</span>(qI)]; color <span class="op">=</span> <span class="op">:</span>white,</span>
+<span id="cb17-24"><a href="#cb17-24"></a>         markersize <span class="op">=</span> <span class="fl">13</span>, strokewidth <span class="op">=</span> <span class="fl">2.2</span>,</span>
+<span id="cb17-25"><a href="#cb17-25"></a>         strokecolor <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
+<span id="cb17-26"><a href="#cb17-26"></a><span class="fu">text!</span>(ax, qI, <span class="fu">cTLh</span>(qI); text <span class="op">=</span> <span class="st">&quot;  qI = </span><span class="sc">$</span>(<span class="fu">round</span>(qI, digits<span class="op">=</span><span class="fl">4</span>))<span class="st"> ton&quot;</span>,</span>
+<span id="cb17-27"><a href="#cb17-27"></a>      align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>top), fontsize <span class="op">=</span> <span class="fl">14</span>,</span>
+<span id="cb17-28"><a href="#cb17-28"></a>      color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
+<span id="cb17-29"><a href="#cb17-29"></a><span class="co"># Both axes start AT zero, so the origin sits in the corner.</span></span>
+<span id="cb17-30"><a href="#cb17-30"></a><span class="co"># Makie pads by default, which lifts the zero off it and makes</span></span>
+<span id="cb17-31"><a href="#cb17-31"></a><span class="co"># the two axes look as though they do not meet.</span></span>
+<span id="cb17-32"><a href="#cb17-32"></a><span class="fu">xlims!</span>(ax, <span class="fl">0</span>, <span class="fl">2</span>qI)</span>
+<span id="cb17-33"><a href="#cb17-33"></a><span class="co"># The top is a round number so the tick set lands INSIDE the</span></span>
+<span id="cb17-34"><a href="#cb17-34"></a><span class="co"># limits and the zero is drawn: with a ragged top Makie drops</span></span>
+<span id="cb17-35"><a href="#cb17-35"></a><span class="co"># the end ticks, and the one it dropped was the y-axis zero.</span></span>
+<span id="cb17-36"><a href="#cb17-36"></a><span class="fu">ylims!</span>(ax, <span class="fl">0</span>, <span class="fl">1500</span>)</span>
+<span id="cb17-37"><a href="#cb17-37"></a><span class="co"># The zero sits on the corner, as it does on the slide.</span></span>
+<span id="cb17-38"><a href="#cb17-38"></a>ax.xticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">0.5</span><span class="op">:</span><span class="fl">1.5</span></span>
+<span id="cb17-39"><a href="#cb17-39"></a>ax.yticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span></span>
+<span id="cb17-40"><a href="#cb17-40"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="fig-tl-vs-ltl" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -6324,52 +6341,52 @@ Figure 8: The independent charge over the range where the two services cross. L
 <div id="cell-fig-rate-by-class" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code that draws this figure</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Class and average density, read off the class-density table.</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>classes <span class="op">=</span> [(<span class="st">&quot;Class 300&quot;</span>, <span class="fl">2.49</span>), (<span class="st">&quot;Class 100&quot;</span>, <span class="fl">9.72</span>),</span>
-<span id="cb19-3"><a href="#cb19-3"></a>           (<span class="st">&quot;Class 85&quot;</span>, <span class="fl">12.72</span>), (<span class="st">&quot;Class 60&quot;</span>, <span class="fl">32.16</span>)]</span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># The estimate&#39;s upper bound is the SMALLER of its weight bound</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="co"># and its cube bound, and for a light class the cube one binds</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="co"># first: Class 300 stops at 0.81 ton, not at 5.</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="fu">qtop</span>(sk) <span class="op">=</span> <span class="fu">min</span>(<span class="fl">5.0</span>, <span class="fl">650</span>sk<span class="op">/</span><span class="fl">2000</span>)</span>
-<span id="cb19-8"><a href="#cb19-8"></a></span>
-<span id="cb19-9"><a href="#cb19-9"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">687</span>, <span class="fl">520</span>))</span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="cf">for</span> (k, (nm, sk)) <span class="kw">in</span> <span class="fu">enumerate</span>(classes)</span>
-<span id="cb19-11"><a href="#cb19-11"></a>    row, col <span class="op">=</span> <span class="fu">fldmod1</span>(k, <span class="fl">2</span>)</span>
-<span id="cb19-12"><a href="#cb19-12"></a>    ax <span class="op">=</span> <span class="fu">Axis</span>(fig[row, col];</span>
-<span id="cb19-13"><a href="#cb19-13"></a>              xlabel <span class="op">=</span> <span class="st">&quot;Shipment size (ton)&quot;</span>,</span>
-<span id="cb19-14"><a href="#cb19-14"></a>              ylabel <span class="op">=</span> <span class="st">&quot;Rate (\$/ton-mi)&quot;</span>,</span>
-<span id="cb19-15"><a href="#cb19-15"></a>              title <span class="op">=</span> <span class="st">&quot;</span><span class="sc">$</span>nm<span class="st">  (</span><span class="sc">$</span>sk<span class="st"> lb/ft³)&quot;</span>,</span>
-<span id="cb19-16"><a href="#cb19-16"></a>              titlesize <span class="op">=</span> <span class="fl">15</span>, xlabelsize <span class="op">=</span> <span class="fl">14</span>, ylabelsize <span class="op">=</span> <span class="fl">14</span>,</span>
-<span id="cb19-17"><a href="#cb19-17"></a>              xticklabelsize <span class="op">=</span> <span class="fl">13</span>, yticklabelsize <span class="op">=</span> <span class="fl">13</span>)</span>
-<span id="cb19-18"><a href="#cb19-18"></a>    qmk <span class="op">=</span> <span class="fu">min</span>(Kwt, sk<span class="op">*</span>Kcu<span class="op">/</span><span class="fl">2000</span>)          <span class="co"># this class&#39;s maximum payload</span></span>
-<span id="cb19-19"><a href="#cb19-19"></a>    <span class="fu">rateTL</span>(q)  <span class="op">=</span> <span class="fu">ceil</span>(q<span class="op">/</span>qmk) <span class="op">*</span> rTL <span class="op">/</span> q   <span class="co"># $/ton-mi, from the charge</span></span>
-<span id="cb19-20"><a href="#cb19-20"></a>    <span class="fu">rateL</span>(q)   <span class="op">=</span> <span class="fu">rate_ltl</span>(q, sk, d; ppi <span class="op">=</span> ppiLTL)</span>
-<span id="cb19-21"><a href="#cb19-21"></a></span>
-<span id="cb19-22"><a href="#cb19-22"></a>    qs <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.1</span>, Kwt; length <span class="op">=</span> <span class="fl">3000</span>)</span>
-<span id="cb19-23"><a href="#cb19-23"></a>    <span class="fu">lines!</span>(ax, qs, <span class="fu">rateTL</span>.(qs); color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.13</span>, <span class="fl">0.45</span>, <span class="fl">0.25</span>),</span>
-<span id="cb19-24"><a href="#cb19-24"></a>           linewidth <span class="op">=</span> <span class="fl">2.0</span>, label <span class="op">=</span> <span class="st">&quot;TL&quot;</span>)</span>
-<span id="cb19-25"><a href="#cb19-25"></a>    ql <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.1</span>, <span class="fu">qtop</span>(sk); length <span class="op">=</span> <span class="fl">1200</span>)</span>
-<span id="cb19-26"><a href="#cb19-26"></a>    <span class="fu">lines!</span>(ax, ql, <span class="fu">rateL</span>.(ql); color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>),</span>
-<span id="cb19-27"><a href="#cb19-27"></a>           linewidth <span class="op">=</span> <span class="fl">2.0</span>, linestyle <span class="op">=</span> <span class="op">:</span>dashdot, label <span class="op">=</span> <span class="st">&quot;LTL&quot;</span>)</span>
-<span id="cb19-28"><a href="#cb19-28"></a></span>
-<span id="cb19-29"><a href="#cb19-29"></a>    <span class="co"># The equal-rate size, found as qI was: a bounded 1-D search.</span></span>
-<span id="cb19-30"><a href="#cb19-30"></a>    qe <span class="op">=</span> <span class="fu">optimize</span>(q <span class="op">-&gt;</span> <span class="fu">abs</span>(<span class="fu">rateTL</span>(q) <span class="op">-</span> <span class="fu">rateL</span>(q)),</span>
-<span id="cb19-31"><a href="#cb19-31"></a>                  <span class="fl">0.1</span>, <span class="fu">qtop</span>(sk)).minimizer</span>
-<span id="cb19-32"><a href="#cb19-32"></a>    <span class="fu">scatter!</span>(ax, [qe], [<span class="fu">rateL</span>(qe)]; color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.20</span>, <span class="fl">0.30</span>, <span class="fl">0.75</span>),</span>
-<span id="cb19-33"><a href="#cb19-33"></a>             markersize <span class="op">=</span> <span class="fl">11</span>)</span>
-<span id="cb19-34"><a href="#cb19-34"></a>    <span class="fu">text!</span>(ax, qe, <span class="fu">rateL</span>(qe); text <span class="op">=</span> <span class="st">&quot;  </span><span class="sc">$</span>(<span class="fu">round</span>(qe, digits <span class="op">=</span> <span class="fl">1</span>))<span class="st"> ton&quot;</span>,</span>
-<span id="cb19-35"><a href="#cb19-35"></a>          align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>bottom), fontsize <span class="op">=</span> <span class="fl">13</span>,</span>
-<span id="cb19-36"><a href="#cb19-36"></a>          color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.20</span>, <span class="fl">0.30</span>, <span class="fl">0.75</span>))</span>
-<span id="cb19-37"><a href="#cb19-37"></a>    <span class="fu">xlims!</span>(ax, <span class="fl">0</span>, Kwt)</span>
-<span id="cb19-38"><a href="#cb19-38"></a>    <span class="co"># EACH PANEL GETS ITS OWN y LIMIT. The chapter fixes one scale</span></span>
-<span id="cb19-39"><a href="#cb19-39"></a>    <span class="co"># across all four because its rates are on the 2004 index; on</span></span>
-<span id="cb19-40"><a href="#cb19-40"></a>    <span class="co"># this lecture&#39;s January-2018 index the LTL rate for Class 300</span></span>
-<span id="cb19-41"><a href="#cb19-41"></a>    <span class="co"># runs clean off a shared scale and takes its crossing with it,</span></span>
-<span id="cb19-42"><a href="#cb19-42"></a>    <span class="co"># which is a panel that shows nothing.</span></span>
-<span id="cb19-43"><a href="#cb19-43"></a>    <span class="fu">ylims!</span>(ax, <span class="fl">0</span>, <span class="fl">2.2</span> <span class="op">*</span> <span class="fu">rateL</span>(qe))</span>
-<span id="cb19-44"><a href="#cb19-44"></a>    k <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;&amp;</span> <span class="fu">axislegend</span>(ax; position <span class="op">=</span> <span class="op">:</span>rt, labelsize <span class="op">=</span> <span class="fl">13</span>)</span>
-<span id="cb19-45"><a href="#cb19-45"></a><span class="cf">end</span></span>
-<span id="cb19-46"><a href="#cb19-46"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Class and average density, read off the class-density table.</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>classes <span class="op">=</span> [(<span class="st">&quot;Class 300&quot;</span>, <span class="fl">2.49</span>), (<span class="st">&quot;Class 100&quot;</span>, <span class="fl">9.72</span>),</span>
+<span id="cb18-3"><a href="#cb18-3"></a>           (<span class="st">&quot;Class 85&quot;</span>, <span class="fl">12.72</span>), (<span class="st">&quot;Class 60&quot;</span>, <span class="fl">32.16</span>)]</span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># The estimate&#39;s upper bound is the SMALLER of its weight bound</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co"># and its cube bound, and for a light class the cube one binds</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co"># first: Class 300 stops at 0.81 ton, not at 5.</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="fu">qtop</span>(sk) <span class="op">=</span> <span class="fu">min</span>(<span class="fl">5.0</span>, <span class="fl">650</span>sk<span class="op">/</span><span class="fl">2000</span>)</span>
+<span id="cb18-8"><a href="#cb18-8"></a></span>
+<span id="cb18-9"><a href="#cb18-9"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">687</span>, <span class="fl">520</span>))</span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="cf">for</span> (k, (nm, sk)) <span class="kw">in</span> <span class="fu">enumerate</span>(classes)</span>
+<span id="cb18-11"><a href="#cb18-11"></a>    row, col <span class="op">=</span> <span class="fu">fldmod1</span>(k, <span class="fl">2</span>)</span>
+<span id="cb18-12"><a href="#cb18-12"></a>    ax <span class="op">=</span> <span class="fu">Axis</span>(fig[row, col];</span>
+<span id="cb18-13"><a href="#cb18-13"></a>              xlabel <span class="op">=</span> <span class="st">&quot;Shipment size (ton)&quot;</span>,</span>
+<span id="cb18-14"><a href="#cb18-14"></a>              ylabel <span class="op">=</span> <span class="st">&quot;Rate (\$/ton-mi)&quot;</span>,</span>
+<span id="cb18-15"><a href="#cb18-15"></a>              title <span class="op">=</span> <span class="st">&quot;</span><span class="sc">$</span>nm<span class="st">  (</span><span class="sc">$</span>sk<span class="st"> lb/ft³)&quot;</span>,</span>
+<span id="cb18-16"><a href="#cb18-16"></a>              titlesize <span class="op">=</span> <span class="fl">15</span>, xlabelsize <span class="op">=</span> <span class="fl">14</span>, ylabelsize <span class="op">=</span> <span class="fl">14</span>,</span>
+<span id="cb18-17"><a href="#cb18-17"></a>              xticklabelsize <span class="op">=</span> <span class="fl">13</span>, yticklabelsize <span class="op">=</span> <span class="fl">13</span>)</span>
+<span id="cb18-18"><a href="#cb18-18"></a>    qmk <span class="op">=</span> <span class="fu">min</span>(Kwt, sk<span class="op">*</span>Kcu<span class="op">/</span><span class="fl">2000</span>)          <span class="co"># this class&#39;s maximum payload</span></span>
+<span id="cb18-19"><a href="#cb18-19"></a>    <span class="fu">rateTL</span>(q)  <span class="op">=</span> <span class="fu">ceil</span>(q<span class="op">/</span>qmk) <span class="op">*</span> rTL <span class="op">/</span> q   <span class="co"># $/ton-mi, from the charge</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a>    <span class="fu">rateL</span>(q)   <span class="op">=</span> <span class="fu">rate_ltl</span>(q, sk, d; ppi <span class="op">=</span> ppiLTL)</span>
+<span id="cb18-21"><a href="#cb18-21"></a></span>
+<span id="cb18-22"><a href="#cb18-22"></a>    qs <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.1</span>, Kwt; length <span class="op">=</span> <span class="fl">3000</span>)</span>
+<span id="cb18-23"><a href="#cb18-23"></a>    <span class="fu">lines!</span>(ax, qs, <span class="fu">rateTL</span>.(qs); color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.13</span>, <span class="fl">0.45</span>, <span class="fl">0.25</span>),</span>
+<span id="cb18-24"><a href="#cb18-24"></a>           linewidth <span class="op">=</span> <span class="fl">2.0</span>, label <span class="op">=</span> <span class="st">&quot;TL&quot;</span>)</span>
+<span id="cb18-25"><a href="#cb18-25"></a>    ql <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.1</span>, <span class="fu">qtop</span>(sk); length <span class="op">=</span> <span class="fl">1200</span>)</span>
+<span id="cb18-26"><a href="#cb18-26"></a>    <span class="fu">lines!</span>(ax, ql, <span class="fu">rateL</span>.(ql); color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>),</span>
+<span id="cb18-27"><a href="#cb18-27"></a>           linewidth <span class="op">=</span> <span class="fl">2.0</span>, linestyle <span class="op">=</span> <span class="op">:</span>dashdot, label <span class="op">=</span> <span class="st">&quot;LTL&quot;</span>)</span>
+<span id="cb18-28"><a href="#cb18-28"></a></span>
+<span id="cb18-29"><a href="#cb18-29"></a>    <span class="co"># The equal-rate size, found as qI was: a bounded 1-D search.</span></span>
+<span id="cb18-30"><a href="#cb18-30"></a>    qe <span class="op">=</span> <span class="fu">optimize</span>(q <span class="op">-&gt;</span> <span class="fu">abs</span>(<span class="fu">rateTL</span>(q) <span class="op">-</span> <span class="fu">rateL</span>(q)),</span>
+<span id="cb18-31"><a href="#cb18-31"></a>                  <span class="fl">0.1</span>, <span class="fu">qtop</span>(sk)).minimizer</span>
+<span id="cb18-32"><a href="#cb18-32"></a>    <span class="fu">scatter!</span>(ax, [qe], [<span class="fu">rateL</span>(qe)]; color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.20</span>, <span class="fl">0.30</span>, <span class="fl">0.75</span>),</span>
+<span id="cb18-33"><a href="#cb18-33"></a>             markersize <span class="op">=</span> <span class="fl">11</span>)</span>
+<span id="cb18-34"><a href="#cb18-34"></a>    <span class="fu">text!</span>(ax, qe, <span class="fu">rateL</span>(qe); text <span class="op">=</span> <span class="st">&quot;  </span><span class="sc">$</span>(<span class="fu">round</span>(qe, digits <span class="op">=</span> <span class="fl">1</span>))<span class="st"> ton&quot;</span>,</span>
+<span id="cb18-35"><a href="#cb18-35"></a>          align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>bottom), fontsize <span class="op">=</span> <span class="fl">13</span>,</span>
+<span id="cb18-36"><a href="#cb18-36"></a>          color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.20</span>, <span class="fl">0.30</span>, <span class="fl">0.75</span>))</span>
+<span id="cb18-37"><a href="#cb18-37"></a>    <span class="fu">xlims!</span>(ax, <span class="fl">0</span>, Kwt)</span>
+<span id="cb18-38"><a href="#cb18-38"></a>    <span class="co"># EACH PANEL GETS ITS OWN y LIMIT. The chapter fixes one scale</span></span>
+<span id="cb18-39"><a href="#cb18-39"></a>    <span class="co"># across all four because its rates are on the 2004 index; on</span></span>
+<span id="cb18-40"><a href="#cb18-40"></a>    <span class="co"># this lecture&#39;s January-2018 index the LTL rate for Class 300</span></span>
+<span id="cb18-41"><a href="#cb18-41"></a>    <span class="co"># runs clean off a shared scale and takes its crossing with it,</span></span>
+<span id="cb18-42"><a href="#cb18-42"></a>    <span class="co"># which is a panel that shows nothing.</span></span>
+<span id="cb18-43"><a href="#cb18-43"></a>    <span class="fu">ylims!</span>(ax, <span class="fl">0</span>, <span class="fl">2.2</span> <span class="op">*</span> <span class="fu">rateL</span>(qe))</span>
+<span id="cb18-44"><a href="#cb18-44"></a>    k <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;&amp;</span> <span class="fu">axislegend</span>(ax; position <span class="op">=</span> <span class="op">:</span>rt, labelsize <span class="op">=</span> <span class="fl">13</span>)</span>
+<span id="cb18-45"><a href="#cb18-45"></a><span class="cf">end</span></span>
+<span id="cb18-46"><a href="#cb18-46"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="fig-rate-by-class" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -6441,14 +6458,14 @@ x^* = \arg\min_x \left\{ f(x) : LB \le x \le UB \right\}, \qquad TC^* = f(x^*)
 <p><strong>Golden section.</strong> Placing the two interior points at the golden ratio rather than at the thirds improves the reduction a little, from about 0.33 of the interval to 0.38. The better part is elsewhere. Interval search recomputes the objective at both interior points on every pass; golden section is arranged so that one of the two points, and its function value, carries over to the next iteration. It therefore costs <strong>one</strong> new evaluation per pass instead of two, which halves the number of evaluations. For an analytical function that is nothing, milliseconds of processor time. But the thing being evaluated might be a simulation that takes several minutes even on a fast computer, and halving the count is then what makes this the basis of industrial optimization rather than a curiosity.</p>
 <p><strong>Parabolic interpolation.</strong> Pick three points, a <em>triplet</em>, and fit the parabola through them. Three points give three equations in the three coefficients, so the fit is one linear solve rather than a search. A parabola’s minimum is then known analytically once those coefficients are in hand, so instead of shrinking an interval the method steps straight to it.</p>
 <p><strong>Brent’s method.</strong> Parabolic interpolation is not surefire, and how it fails is worth seeing. If the three points do not enclose the minimum, which is easy enough when the bounds were guessed rather than plotted, the fitted parabola has its own minimum nowhere near the function’s: a bad parabolic update. Brent’s method (1973) is the intelligent way of using parabolic interpolation when it can be trusted, and the test is whether the calculated minimum falls between the first and third points of the triplet. While it does, the method keeps interpolating; the moment it falls outside, the method switches to golden section, and switches back once interpolation is improving again. That is the go-to technique in <code>Optim</code>, in SciPy, in MATLAB and in essentially any scientific programming language, and it has been since 1973.</p>
-<p><strong>Finding a root or an intersection.</strong> A minimizer can find where a function is zero, and therefore where two functions cross, by minimizing a non-negative function that vanishes there. Minimizing <span class="math inline">|f(x)|</span> or <span class="math inline">f(x)^2</span> drives <span class="math inline">f</span> to zero, which is exactly what <a href="#eq-qi" class="quarto-xref">Eq. 13</a> does with the difference of the two charge functions. The bracket matters: a function with several roots has several minima, and the bounds decide which one is found.</p>
+<p><strong>Finding a root or an intersection.</strong> A minimizer can find where a function is zero, and therefore where two functions cross, by minimizing a non-negative function that vanishes there. Minimizing <span class="math inline">|f(x)|</span> or <span class="math inline">f(x)^2</span> drives <span class="math inline">f</span> to zero, which is exactly what <a href="#eq-qi" class="quarto-xref">Eq. 13</a> does with the difference of the two charge functions. The bracket matters: a function with several roots has several minima, and the bounds determine which one is found.</p>
 <div id="28" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Code block 7: the three roots of f(x) = x - x^3, found by bracketing</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">f</span>(x) <span class="op">=</span> x <span class="op">-</span> x<span class="op">^</span><span class="fl">3</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a><span class="fu">g</span>(x) <span class="op">=</span> <span class="fu">f</span>(x)<span class="op">^</span><span class="fl">2</span>                            <span class="co"># non-negative, zero at each root</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="pp">@show</span> <span class="fu">optimize</span>(g, <span class="op">-</span><span class="fl">2.0</span>, <span class="op">-</span><span class="fl">0.5</span>).minimizer  <span class="co"># near -1</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="pp">@show</span> <span class="fu">optimize</span>(g, <span class="op">-</span><span class="fl">0.5</span>,  <span class="fl">0.5</span>).minimizer  <span class="co"># near  0</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="pp">@show</span> <span class="fu">optimize</span>(g,  <span class="fl">0.5</span>,  <span class="fl">2.0</span>).minimizer  <span class="co"># near +1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Code block 7: the three roots of f(x) = x - x^3, found by bracketing</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">f</span>(x) <span class="op">=</span> x <span class="op">-</span> x<span class="op">^</span><span class="fl">3</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="fu">g</span>(x) <span class="op">=</span> <span class="fu">f</span>(x)<span class="op">^</span><span class="fl">2</span>                            <span class="co"># non-negative, zero at each root</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="pp">@show</span> <span class="fu">optimize</span>(g, <span class="op">-</span><span class="fl">2.0</span>, <span class="op">-</span><span class="fl">0.5</span>).minimizer  <span class="co"># near -1</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="pp">@show</span> <span class="fu">optimize</span>(g, <span class="op">-</span><span class="fl">0.5</span>,  <span class="fl">0.5</span>).minimizer  <span class="co"># near  0</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="pp">@show</span> <span class="fu">optimize</span>(g,  <span class="fl">0.5</span>,  <span class="fl">2.0</span>).minimizer  <span class="co"># near +1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(optimize(g, -2.0, -0.5)).minimizer = -0.9999999992556936
 (optimize(g, -0.5, 0.5)).minimizer = -1.3877787807814457e-17
@@ -6484,9 +6501,9 @@ MC_{LTL} = \left(\frac{PPI_{LTL}}{104.2}\right)
 <p>Determine the TL and LTL minimum charges, and account for why neither depends on the size of the shipment while only the LTL charge depends on its distance.</p>
 </div>
 <div id="30" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Code block 8: the two minimum charges</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="pp">@show</span> MC_TL  <span class="op">=</span> <span class="fu">mincharge_tl</span>(; ppi <span class="op">=</span> ppiTL)      <span class="co"># $</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a><span class="pp">@show</span> MC_LTL <span class="op">=</span> <span class="fu">mincharge_ltl</span>(d; ppi <span class="op">=</span> ppiLTL)   <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Code block 8: the two minimum charges</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="pp">@show</span> MC_TL  <span class="op">=</span> <span class="fu">mincharge_tl</span>(; ppi <span class="op">=</span> ppiTL)      <span class="co"># $</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="pp">@show</span> MC_LTL <span class="op">=</span> <span class="fu">mincharge_ltl</span>(d; ppi <span class="op">=</span> ppiLTL)   <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>MC_TL = mincharge_tl(; ppi = ppiTL) = 57.40019474196689
 MC_LTL = mincharge_ltl(d; ppi = ppiLTL) = 87.5107523114767</code></pre>
@@ -6524,70 +6541,70 @@ c_0(q) = \min\Bigl\{ \max\bigl\{ c_{TL}(q),\, MC_{TL} \bigr\},\;
 <div id="cell-fig-independent-charge" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code that draws this figure</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># The two charges already carry their minimum charges, so the</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a><span class="co"># independent charge is the smaller of them.</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a><span class="fu">c0</span>(q) <span class="op">=</span> <span class="fu">min</span>(<span class="fu">cTLh</span>(q), <span class="fu">cLTLh</span>(q))</span>
-<span id="cb26-4"><a href="#cb26-4"></a></span>
-<span id="cb26-5"><a href="#cb26-5"></a><span class="co"># From ONE POUND, which is what the statement asks for and what</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a><span class="co"># makes the flat left end the LTL minimum charge the result box</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a><span class="co"># prints. At exactly zero the TL charge is zero trucks.</span></span>
-<span id="cb26-8"><a href="#cb26-8"></a>qs <span class="op">=</span> <span class="fu">range</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">2000</span>, <span class="fl">1.2</span>qmax; length <span class="op">=</span> <span class="fl">2400</span>)</span>
-<span id="cb26-9"><a href="#cb26-9"></a></span>
-<span id="cb26-10"><a href="#cb26-10"></a><span class="co"># A SPLIT HORIZONTAL AXIS, because on a linear one the whole LTL</span></span>
-<span id="cb26-11"><a href="#cb26-11"></a><span class="co"># branch is the first 11% of the width and reads as a straight</span></span>
-<span id="cb26-12"><a href="#cb26-12"></a><span class="co"># line. `u` gives the first ton half the axis and the remaining</span></span>
-<span id="cb26-13"><a href="#cb26-13"></a><span class="co"># 6.3 tons the other half, so the break-even lands at 40% of the</span></span>
-<span id="cb26-14"><a href="#cb26-14"></a><span class="co"># width with its curvature intact.</span></span>
-<span id="cb26-15"><a href="#cb26-15"></a><span class="co">#</span></span>
-<span id="cb26-16"><a href="#cb26-16"></a><span class="co"># LINEAR INSIDE EACH PIECE, which is the point. c_LTL grows about</span></span>
-<span id="cb26-17"><a href="#cb26-17"></a><span class="co"># as q^0.85 and is concave; against sqrt(q) that becomes u^1.7 and</span></span>
-<span id="cb26-18"><a href="#cb26-18"></a><span class="co"># reads as CONVEX. Every smooth transform that expands the low end</span></span>
-<span id="cb26-19"><a href="#cb26-19"></a><span class="co"># is itself concave, so every one of them bends the curve the</span></span>
-<span id="cb26-20"><a href="#cb26-20"></a><span class="co"># wrong way. A split scale preserves the shape it separates.</span></span>
-<span id="cb26-21"><a href="#cb26-21"></a><span class="kw">const</span> QSPLIT <span class="op">=</span> <span class="fl">1.0</span>                      <span class="co"># ton, where the axis breaks</span></span>
-<span id="cb26-22"><a href="#cb26-22"></a><span class="fu">u</span>(q) <span class="op">=</span> q <span class="op">&lt;=</span> QSPLIT ? <span class="fl">0.5</span>q<span class="op">/</span>QSPLIT <span class="op">:</span></span>
-<span id="cb26-23"><a href="#cb26-23"></a>       <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.5</span>(q <span class="op">-</span> QSPLIT)<span class="op">/</span>(<span class="fl">1.2</span>qmax <span class="op">-</span> QSPLIT)</span>
-<span id="cb26-24"><a href="#cb26-24"></a></span>
-<span id="cb26-25"><a href="#cb26-25"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">687</span>, <span class="fl">430</span>))</span>
-<span id="cb26-26"><a href="#cb26-26"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>];</span>
-<span id="cb26-27"><a href="#cb26-27"></a>          xlabel <span class="op">=</span> <span class="st">&quot;Shipment size (ton)&quot;</span>,</span>
-<span id="cb26-28"><a href="#cb26-28"></a>          ylabel <span class="op">=</span> <span class="st">&quot;Transport charge (\$)&quot;</span>,</span>
-<span id="cb26-29"><a href="#cb26-29"></a>          title <span class="op">=</span> <span class="st">&quot;Independent charge: Class 200, 27606 to 32606&quot;</span>,</span>
-<span id="cb26-30"><a href="#cb26-30"></a>          titlesize <span class="op">=</span> <span class="fl">17</span>, xlabelsize <span class="op">=</span> <span class="fl">16</span>, ylabelsize <span class="op">=</span> <span class="fl">16</span>,</span>
-<span id="cb26-31"><a href="#cb26-31"></a>          xticklabelsize <span class="op">=</span> <span class="fl">14</span>, yticklabelsize <span class="op">=</span> <span class="fl">14</span>)</span>
-<span id="cb26-32"><a href="#cb26-32"></a><span class="co"># The seam, drawn faintly so the change of scale is visible</span></span>
-<span id="cb26-33"><a href="#cb26-33"></a><span class="co"># rather than something the reader has to infer from the ticks.</span></span>
-<span id="cb26-34"><a href="#cb26-34"></a><span class="fu">vlines!</span>(ax, [<span class="fl">0.5</span>]; color <span class="op">=</span> (<span class="op">:</span>black, <span class="fl">0.28</span>), linewidth <span class="op">=</span> <span class="fl">1</span>,</span>
-<span id="cb26-35"><a href="#cb26-35"></a>        linestyle <span class="op">=</span> <span class="op">:</span>dash)</span>
-<span id="cb26-36"><a href="#cb26-36"></a><span class="fu">lines!</span>(ax, <span class="fu">u</span>.(qs), <span class="fu">c0</span>.(qs);</span>
-<span id="cb26-37"><a href="#cb26-37"></a>       color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.13</span>, <span class="fl">0.35</span>, <span class="fl">0.60</span>), linewidth <span class="op">=</span> <span class="fl">2.2</span>)</span>
-<span id="cb26-38"><a href="#cb26-38"></a><span class="co"># Open circles, the MATLAB&#39;s own markers: red at the break-even,</span></span>
-<span id="cb26-39"><a href="#cb26-39"></a><span class="co"># cyan at one truckload.</span></span>
-<span id="cb26-40"><a href="#cb26-40"></a><span class="fu">scatter!</span>(ax, [<span class="fu">u</span>(qI)], [<span class="fu">c0</span>(qI)]; color <span class="op">=</span> <span class="op">:</span>white, markersize <span class="op">=</span> <span class="fl">13</span>,</span>
-<span id="cb26-41"><a href="#cb26-41"></a>         strokewidth <span class="op">=</span> <span class="fl">2.2</span>, strokecolor <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
-<span id="cb26-42"><a href="#cb26-42"></a><span class="fu">text!</span>(ax, <span class="fu">u</span>(qI), <span class="fu">c0</span>(qI); text <span class="op">=</span> <span class="st">&quot;  qI = </span><span class="sc">$</span>(<span class="fu">round</span>(qI, digits<span class="op">=</span><span class="fl">3</span>))<span class="st"> ton&quot;</span>,</span>
-<span id="cb26-43"><a href="#cb26-43"></a>      align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>bottom), fontsize <span class="op">=</span> <span class="fl">14</span>,</span>
-<span id="cb26-44"><a href="#cb26-44"></a>      color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
-<span id="cb26-45"><a href="#cb26-45"></a><span class="fu">scatter!</span>(ax, [<span class="fu">u</span>(qmax)], [<span class="fu">c0</span>(qmax)]; color <span class="op">=</span> <span class="op">:</span>white, markersize <span class="op">=</span> <span class="fl">13</span>,</span>
-<span id="cb26-46"><a href="#cb26-46"></a>         strokewidth <span class="op">=</span> <span class="fl">2.2</span>, strokecolor <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.10</span>, <span class="fl">0.55</span>, <span class="fl">0.65</span>))</span>
-<span id="cb26-47"><a href="#cb26-47"></a><span class="fu">text!</span>(ax, <span class="fu">u</span>(qmax), <span class="fu">c0</span>(qmax);</span>
-<span id="cb26-48"><a href="#cb26-48"></a>      text <span class="op">=</span> <span class="st">&quot;qmax = </span><span class="sc">$</span>(<span class="fu">round</span>(qmax, digits<span class="op">=</span><span class="fl">3</span>))<span class="st"> ton  &quot;</span>,</span>
-<span id="cb26-49"><a href="#cb26-49"></a>      align <span class="op">=</span> (<span class="op">:</span>right, <span class="op">:</span>bottom), fontsize <span class="op">=</span> <span class="fl">14</span>,</span>
-<span id="cb26-50"><a href="#cb26-50"></a>      color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.10</span>, <span class="fl">0.55</span>, <span class="fl">0.65</span>))</span>
-<span id="cb26-51"><a href="#cb26-51"></a><span class="co"># Both axes start AT zero, so the origin sits in the corner. Makie pads by</span></span>
-<span id="cb26-52"><a href="#cb26-52"></a><span class="co"># default, which lifts the zero off it (instructor, 2026-09-22).</span></span>
-<span id="cb26-53"><a href="#cb26-53"></a><span class="fu">xlims!</span>(ax, <span class="fl">0</span>, <span class="fl">1</span>)</span>
-<span id="cb26-54"><a href="#cb26-54"></a><span class="fu">ylims!</span>(ax, <span class="fl">0</span>, <span class="fl">1.08</span> <span class="op">*</span> <span class="fu">c0</span>(<span class="fl">1.2</span>qmax))</span>
-<span id="cb26-55"><a href="#cb26-55"></a><span class="co"># A tick AT zero, so the zero is ON the corner rather than the</span></span>
-<span id="cb26-56"><a href="#cb26-56"></a><span class="co"># first tick inboard of it: Makie picks its own round numbers</span></span>
-<span id="cb26-57"><a href="#cb26-57"></a><span class="co"># and skips the endpoint.</span></span>
-<span id="cb26-58"><a href="#cb26-58"></a><span class="co"># The ticks carry the REAL shipment sizes, placed where the</span></span>
-<span id="cb26-59"><a href="#cb26-59"></a><span class="co"># split scale puts them, so the axis reads in tons throughout.</span></span>
-<span id="cb26-60"><a href="#cb26-60"></a>xt <span class="op">=</span> [<span class="fl">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>]</span>
-<span id="cb26-61"><a href="#cb26-61"></a><span class="fu">lbl</span>(x) <span class="op">=</span> <span class="fu">isinteger</span>(x) ? <span class="fu">string</span>(<span class="fu">Int</span>(x)) <span class="op">:</span> <span class="fu">string</span>(x)</span>
-<span id="cb26-62"><a href="#cb26-62"></a>ax.xticks <span class="op">=</span> (<span class="fu">u</span>.(xt), <span class="fu">lbl</span>.(xt))</span>
-<span id="cb26-63"><a href="#cb26-63"></a>ax.yticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1000</span><span class="op">:</span><span class="fl">3000</span></span>
-<span id="cb26-64"><a href="#cb26-64"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># The two charges already carry their minimum charges, so the</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="co"># independent charge is the smaller of them.</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="fu">c0</span>(q) <span class="op">=</span> <span class="fu">min</span>(<span class="fu">cTLh</span>(q), <span class="fu">cLTLh</span>(q))</span>
+<span id="cb25-4"><a href="#cb25-4"></a></span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="co"># From ONE POUND, which is what the statement asks for and what</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="co"># makes the flat left end the LTL minimum charge the result box</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="co"># prints. At exactly zero the TL charge is zero trucks.</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>qs <span class="op">=</span> <span class="fu">range</span>(<span class="fl">1</span><span class="op">/</span><span class="fl">2000</span>, <span class="fl">1.2</span>qmax; length <span class="op">=</span> <span class="fl">2400</span>)</span>
+<span id="cb25-9"><a href="#cb25-9"></a></span>
+<span id="cb25-10"><a href="#cb25-10"></a><span class="co"># A SPLIT HORIZONTAL AXIS, because on a linear one the whole LTL</span></span>
+<span id="cb25-11"><a href="#cb25-11"></a><span class="co"># branch is the first 11% of the width and reads as a straight</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a><span class="co"># line. `u` gives the first ton half the axis and the remaining</span></span>
+<span id="cb25-13"><a href="#cb25-13"></a><span class="co"># 6.3 tons the other half, so the break-even lands at 40% of the</span></span>
+<span id="cb25-14"><a href="#cb25-14"></a><span class="co"># width with its curvature intact.</span></span>
+<span id="cb25-15"><a href="#cb25-15"></a><span class="co">#</span></span>
+<span id="cb25-16"><a href="#cb25-16"></a><span class="co"># LINEAR INSIDE EACH PIECE, which is the point. c_LTL grows about</span></span>
+<span id="cb25-17"><a href="#cb25-17"></a><span class="co"># as q^0.85 and is concave; against sqrt(q) that becomes u^1.7 and</span></span>
+<span id="cb25-18"><a href="#cb25-18"></a><span class="co"># reads as CONVEX. Every smooth transform that expands the low end</span></span>
+<span id="cb25-19"><a href="#cb25-19"></a><span class="co"># is itself concave, so every one of them bends the curve the</span></span>
+<span id="cb25-20"><a href="#cb25-20"></a><span class="co"># wrong way. A split scale preserves the shape it separates.</span></span>
+<span id="cb25-21"><a href="#cb25-21"></a><span class="kw">const</span> QSPLIT <span class="op">=</span> <span class="fl">1.0</span>                      <span class="co"># ton, where the axis breaks</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a><span class="fu">u</span>(q) <span class="op">=</span> q <span class="op">&lt;=</span> QSPLIT ? <span class="fl">0.5</span>q<span class="op">/</span>QSPLIT <span class="op">:</span></span>
+<span id="cb25-23"><a href="#cb25-23"></a>       <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.5</span>(q <span class="op">-</span> QSPLIT)<span class="op">/</span>(<span class="fl">1.2</span>qmax <span class="op">-</span> QSPLIT)</span>
+<span id="cb25-24"><a href="#cb25-24"></a></span>
+<span id="cb25-25"><a href="#cb25-25"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">687</span>, <span class="fl">430</span>))</span>
+<span id="cb25-26"><a href="#cb25-26"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>];</span>
+<span id="cb25-27"><a href="#cb25-27"></a>          xlabel <span class="op">=</span> <span class="st">&quot;Shipment size (ton)&quot;</span>,</span>
+<span id="cb25-28"><a href="#cb25-28"></a>          ylabel <span class="op">=</span> <span class="st">&quot;Transport charge (\$)&quot;</span>,</span>
+<span id="cb25-29"><a href="#cb25-29"></a>          title <span class="op">=</span> <span class="st">&quot;Independent charge: Class 200, 27606 to 32606&quot;</span>,</span>
+<span id="cb25-30"><a href="#cb25-30"></a>          titlesize <span class="op">=</span> <span class="fl">17</span>, xlabelsize <span class="op">=</span> <span class="fl">16</span>, ylabelsize <span class="op">=</span> <span class="fl">16</span>,</span>
+<span id="cb25-31"><a href="#cb25-31"></a>          xticklabelsize <span class="op">=</span> <span class="fl">14</span>, yticklabelsize <span class="op">=</span> <span class="fl">14</span>)</span>
+<span id="cb25-32"><a href="#cb25-32"></a><span class="co"># The seam, drawn faintly so the change of scale is visible</span></span>
+<span id="cb25-33"><a href="#cb25-33"></a><span class="co"># rather than something the reader has to infer from the ticks.</span></span>
+<span id="cb25-34"><a href="#cb25-34"></a><span class="fu">vlines!</span>(ax, [<span class="fl">0.5</span>]; color <span class="op">=</span> (<span class="op">:</span>black, <span class="fl">0.28</span>), linewidth <span class="op">=</span> <span class="fl">1</span>,</span>
+<span id="cb25-35"><a href="#cb25-35"></a>        linestyle <span class="op">=</span> <span class="op">:</span>dash)</span>
+<span id="cb25-36"><a href="#cb25-36"></a><span class="fu">lines!</span>(ax, <span class="fu">u</span>.(qs), <span class="fu">c0</span>.(qs);</span>
+<span id="cb25-37"><a href="#cb25-37"></a>       color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.13</span>, <span class="fl">0.35</span>, <span class="fl">0.60</span>), linewidth <span class="op">=</span> <span class="fl">2.2</span>)</span>
+<span id="cb25-38"><a href="#cb25-38"></a><span class="co"># Open circles, the MATLAB&#39;s own markers: red at the break-even,</span></span>
+<span id="cb25-39"><a href="#cb25-39"></a><span class="co"># cyan at one truckload.</span></span>
+<span id="cb25-40"><a href="#cb25-40"></a><span class="fu">scatter!</span>(ax, [<span class="fu">u</span>(qI)], [<span class="fu">c0</span>(qI)]; color <span class="op">=</span> <span class="op">:</span>white, markersize <span class="op">=</span> <span class="fl">13</span>,</span>
+<span id="cb25-41"><a href="#cb25-41"></a>         strokewidth <span class="op">=</span> <span class="fl">2.2</span>, strokecolor <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
+<span id="cb25-42"><a href="#cb25-42"></a><span class="fu">text!</span>(ax, <span class="fu">u</span>(qI), <span class="fu">c0</span>(qI); text <span class="op">=</span> <span class="st">&quot;  qI = </span><span class="sc">$</span>(<span class="fu">round</span>(qI, digits<span class="op">=</span><span class="fl">3</span>))<span class="st"> ton&quot;</span>,</span>
+<span id="cb25-43"><a href="#cb25-43"></a>      align <span class="op">=</span> (<span class="op">:</span>left, <span class="op">:</span>bottom), fontsize <span class="op">=</span> <span class="fl">14</span>,</span>
+<span id="cb25-44"><a href="#cb25-44"></a>      color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.78</span>, <span class="fl">0.16</span>, <span class="fl">0.18</span>))</span>
+<span id="cb25-45"><a href="#cb25-45"></a><span class="fu">scatter!</span>(ax, [<span class="fu">u</span>(qmax)], [<span class="fu">c0</span>(qmax)]; color <span class="op">=</span> <span class="op">:</span>white, markersize <span class="op">=</span> <span class="fl">13</span>,</span>
+<span id="cb25-46"><a href="#cb25-46"></a>         strokewidth <span class="op">=</span> <span class="fl">2.2</span>, strokecolor <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.10</span>, <span class="fl">0.55</span>, <span class="fl">0.65</span>))</span>
+<span id="cb25-47"><a href="#cb25-47"></a><span class="fu">text!</span>(ax, <span class="fu">u</span>(qmax), <span class="fu">c0</span>(qmax);</span>
+<span id="cb25-48"><a href="#cb25-48"></a>      text <span class="op">=</span> <span class="st">&quot;qmax = </span><span class="sc">$</span>(<span class="fu">round</span>(qmax, digits<span class="op">=</span><span class="fl">3</span>))<span class="st"> ton  &quot;</span>,</span>
+<span id="cb25-49"><a href="#cb25-49"></a>      align <span class="op">=</span> (<span class="op">:</span>right, <span class="op">:</span>bottom), fontsize <span class="op">=</span> <span class="fl">14</span>,</span>
+<span id="cb25-50"><a href="#cb25-50"></a>      color <span class="op">=</span> <span class="fu">RGBf</span>(<span class="fl">0.10</span>, <span class="fl">0.55</span>, <span class="fl">0.65</span>))</span>
+<span id="cb25-51"><a href="#cb25-51"></a><span class="co"># Both axes start AT zero, so the origin sits in the corner. Makie pads by</span></span>
+<span id="cb25-52"><a href="#cb25-52"></a><span class="co"># default, which lifts the zero off it (instructor, 2026-09-22).</span></span>
+<span id="cb25-53"><a href="#cb25-53"></a><span class="fu">xlims!</span>(ax, <span class="fl">0</span>, <span class="fl">1</span>)</span>
+<span id="cb25-54"><a href="#cb25-54"></a><span class="fu">ylims!</span>(ax, <span class="fl">0</span>, <span class="fl">1.08</span> <span class="op">*</span> <span class="fu">c0</span>(<span class="fl">1.2</span>qmax))</span>
+<span id="cb25-55"><a href="#cb25-55"></a><span class="co"># A tick AT zero, so the zero is ON the corner rather than the</span></span>
+<span id="cb25-56"><a href="#cb25-56"></a><span class="co"># first tick inboard of it: Makie picks its own round numbers</span></span>
+<span id="cb25-57"><a href="#cb25-57"></a><span class="co"># and skips the endpoint.</span></span>
+<span id="cb25-58"><a href="#cb25-58"></a><span class="co"># The ticks carry the REAL shipment sizes, placed where the</span></span>
+<span id="cb25-59"><a href="#cb25-59"></a><span class="co"># split scale puts them, so the axis reads in tons throughout.</span></span>
+<span id="cb25-60"><a href="#cb25-60"></a>xt <span class="op">=</span> [<span class="fl">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>]</span>
+<span id="cb25-61"><a href="#cb25-61"></a><span class="fu">lbl</span>(x) <span class="op">=</span> <span class="fu">isinteger</span>(x) ? <span class="fu">string</span>(<span class="fu">Int</span>(x)) <span class="op">:</span> <span class="fu">string</span>(x)</span>
+<span id="cb25-62"><a href="#cb25-62"></a>ax.xticks <span class="op">=</span> (<span class="fu">u</span>.(xt), <span class="fu">lbl</span>.(xt))</span>
+<span id="cb25-63"><a href="#cb25-63"></a>ax.yticks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1000</span><span class="op">:</span><span class="fl">3000</span></span>
+<span id="cb25-64"><a href="#cb25-64"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="fig-independent-charge" class="cell-output cell-output-display quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-fig figure">
@@ -6820,7 +6837,7 @@ Table 8: Class–density relationship. Italics indicate the value at capacity.
      specialists." The contrast earns its place because 3.1 makes this point
      QUALITATIVELY, having no trailer numbers yet, and this section is where
      the numbers finally exist. -->
-<p>Density decides which of a vehicle’s two capacities runs out first, and the threshold is not the same in every mode. Lecture 3.1 makes the point without figures because the trailer numbers had not been introduced; they have now.</p>
+<p>Density determines which of a vehicle’s two capacities runs out first, and the threshold is not the same in every mode. Lecture 3.1 makes the point without figures because the trailer numbers had not been introduced; they have now.</p>
 <div id="tbl-mode-density" class="fit quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mode-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -6874,9 +6891,9 @@ Table 9: The density above which weight binds before cube, by mode.<a href="#fn
 <p>Determine the most likely freight class for this LTL shipment.</p>
 </div>
 <div id="34" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Code block 9: freight class from load density</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a><span class="pp">@show</span> s  <span class="co"># lb/ft^3, from code block 2</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a><span class="co"># Class 200 spans 4 &lt;= s &lt; 5 in the class-density table</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Code block 9: freight class from load density</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="pp">@show</span> s  <span class="co"># lb/ft^3, from code block 2</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co"># Class 200 spans 4 &lt;= s &lt; 5 in the class-density table</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>s = 4.444444444444445</code></pre>
 </div>
@@ -7195,16 +7212,16 @@ c_\text{tariff} = (1 - \text{disc}) \max\Bigl\{ MC,\;
 <p>Using the same LTL shipment, determine the transport cost found using the undiscounted CzarLite tariff, and the weight break between the rate breaks at 0.25 and 0.5 tons.</p>
 </div>
 <div id="36" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Code block 10: reading a charge out of the tariff</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a>OD200 <span class="op">=</span> [<span class="fl">138.78</span>, <span class="fl">127.69</span>, <span class="fl">99.92</span>, <span class="fl">81.89</span>, <span class="fl">64.47</span>, <span class="fl">47.19</span>, <span class="fl">23.40</span>, <span class="fl">23.40</span>, <span class="fl">23.40</span>]</span>
-<span id="cb30-3"><a href="#cb30-3"></a>qB    <span class="op">=</span> [<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="cn">Inf</span>]  <span class="co"># ton</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a>MC    <span class="op">=</span> <span class="fl">95.23</span>                                    <span class="co"># $</span></span>
-<span id="cb30-5"><a href="#cb30-5"></a>disc  <span class="op">=</span> <span class="fl">0</span></span>
-<span id="cb30-6"><a href="#cb30-6"></a></span>
-<span id="cb30-7"><a href="#cb30-7"></a><span class="pp">@show</span> i    <span class="op">=</span> <span class="fu">findfirst</span>(<span class="fu">&gt;</span>(qLTL), qB)              <span class="co"># rate break</span></span>
-<span id="cb30-8"><a href="#cb30-8"></a><span class="pp">@show</span> ci   <span class="op">=</span> OD200[i]<span class="op">*</span><span class="fl">20</span><span class="op">*</span>qLTL                    <span class="co"># $, this break</span></span>
-<span id="cb30-9"><a href="#cb30-9"></a><span class="pp">@show</span> cip1 <span class="op">=</span> OD200[i<span class="op">+</span><span class="fl">1</span>]<span class="op">*</span><span class="fl">20</span><span class="op">*</span>qB[i]                 <span class="co"># $, next break</span></span>
-<span id="cb30-10"><a href="#cb30-10"></a><span class="pp">@show</span> c_tar <span class="op">=</span> (<span class="fl">1</span> <span class="op">-</span> disc)<span class="fu">*max</span>(MC, <span class="fu">min</span>(ci, cip1))  <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Code block 10: reading a charge out of the tariff</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a>OD200 <span class="op">=</span> [<span class="fl">138.78</span>, <span class="fl">127.69</span>, <span class="fl">99.92</span>, <span class="fl">81.89</span>, <span class="fl">64.47</span>, <span class="fl">47.19</span>, <span class="fl">23.40</span>, <span class="fl">23.40</span>, <span class="fl">23.40</span>]</span>
+<span id="cb29-3"><a href="#cb29-3"></a>qB    <span class="op">=</span> [<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="cn">Inf</span>]  <span class="co"># ton</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a>MC    <span class="op">=</span> <span class="fl">95.23</span>                                    <span class="co"># $</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a>disc  <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a></span>
+<span id="cb29-7"><a href="#cb29-7"></a><span class="pp">@show</span> i    <span class="op">=</span> <span class="fu">findfirst</span>(<span class="fu">&gt;</span>(qLTL), qB)              <span class="co"># rate break</span></span>
+<span id="cb29-8"><a href="#cb29-8"></a><span class="pp">@show</span> ci   <span class="op">=</span> OD200[i]<span class="op">*</span><span class="fl">20</span><span class="op">*</span>qLTL                    <span class="co"># $, this break</span></span>
+<span id="cb29-9"><a href="#cb29-9"></a><span class="pp">@show</span> cip1 <span class="op">=</span> OD200[i<span class="op">+</span><span class="fl">1</span>]<span class="op">*</span><span class="fl">20</span><span class="op">*</span>qB[i]                 <span class="co"># $, next break</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a><span class="pp">@show</span> c_tar <span class="op">=</span> (<span class="fl">1</span> <span class="op">-</span> disc)<span class="fu">*max</span>(MC, <span class="fu">min</span>(ci, cip1))  <span class="co"># $</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>i = findfirst((&gt;)(qLTL), qB) = 2
 ci = OD200[i] * 20 * qLTL = 766.14
@@ -7220,8 +7237,8 @@ c_tar = (1 - disc) * max(MC, min(ci, cip1)) = 766.14</code></pre>
 q_i^W = \frac{OD(\text{class}, i+1)}{OD(\text{class}, i)}\, q_i^B
 \tag{18}</span></span></p>
 <div id="38" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Code block 11: the weight break</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="pp">@show</span> qW <span class="op">=</span> OD200[i<span class="op">+</span><span class="fl">1</span>]<span class="op">/</span>OD200[i] <span class="op">*</span> qB[i]  <span class="co"># ton</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Code block 11: the weight break</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="pp">@show</span> qW <span class="op">=</span> OD200[i<span class="op">+</span><span class="fl">1</span>]<span class="op">/</span>OD200[i] <span class="op">*</span> qB[i]  <span class="co"># ton</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>qW = (OD200[i + 1] / OD200[i]) * qB[i] = 0.3912600830135485</code></pre>
 </div>
@@ -7348,12 +7365,12 @@ Figure 12: The carton and the pallet, and the dimensions a quote form names.
 </figure>
 </div>
 <div id="40" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Code block 12: the dimensions a spot quote asks for</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="pp">@show</span> wt <span class="op">=</span> <span class="fl">2000</span>qLTL                 <span class="co"># lb, shipment weight</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="pp">@show</span> cuin <span class="op">=</span> ucu<span class="op">*</span><span class="fl">12</span><span class="op">^</span><span class="fl">3</span>               <span class="co"># in^3 per carton -- 24 x 24 x 27</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a>lcart, wcart, hcart <span class="op">=</span> <span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">27</span>    <span class="co"># in, from cuin</span></span>
-<span id="cb36-5"><a href="#cb36-5"></a><span class="pp">@show</span> npall <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int</span>, udLTL <span class="op">/</span> ((<span class="fl">48</span><span class="op">÷</span>lcart)<span class="fu">*</span>(<span class="fl">48</span><span class="op">÷</span>wcart)<span class="op">*</span><span class="fl">2</span>))  <span class="co"># 48x48 pallet</span></span>
-<span id="cb36-6"><a href="#cb36-6"></a><span class="pp">@show</span> hgt <span class="op">=</span> <span class="fl">2</span><span class="op">*</span>hcart <span class="op">+</span> <span class="fl">5</span>             <span class="co"># in, 5 in. for the empty pallet</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Code block 12: the dimensions a spot quote asks for</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="pp">@show</span> wt <span class="op">=</span> <span class="fl">2000</span>qLTL                 <span class="co"># lb, shipment weight</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="pp">@show</span> cuin <span class="op">=</span> ucu<span class="op">*</span><span class="fl">12</span><span class="op">^</span><span class="fl">3</span>               <span class="co"># in^3 per carton -- 24 x 24 x 27</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a>lcart, wcart, hcart <span class="op">=</span> <span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">27</span>    <span class="co"># in, from cuin</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="pp">@show</span> npall <span class="op">=</span> <span class="fu">ceil</span>(<span class="dt">Int</span>, udLTL <span class="op">/</span> ((<span class="fl">48</span><span class="op">÷</span>lcart)<span class="fu">*</span>(<span class="fl">48</span><span class="op">÷</span>wcart)<span class="op">*</span><span class="fl">2</span>))  <span class="co"># 48x48 pallet</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="pp">@show</span> hgt <span class="op">=</span> <span class="fl">2</span><span class="op">*</span>hcart <span class="op">+</span> <span class="fl">5</span>             <span class="co"># in, 5 in. for the empty pallet</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>wt = 2000qLTL = 600.0
 cuin = ucu * 12 ^ 3 = 15552
@@ -7379,14 +7396,14 @@ hgt = 2hcart + 5 = 59</code></pre>
 </div>
 <p>This lane is the complement of Example 1’s in the one respect that matters. Its density is 31.5 lb/ft<sup>3</sup> against 4.44, so the load <strong>weighs out</strong> where Example 1’s cubes out, and it falls in Class 60 rather than Class 200.</p>
 <div id="42" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># Code block 13: a higher-density load on a longer lane</span></span>
-<span id="cb39-2"><a href="#cb39-2"></a>uwt2, ucu2, ud2 <span class="op">=</span> <span class="fl">126</span>, <span class="fl">4</span>, <span class="fl">14</span>         <span class="co"># lb, ft^3, cartons</span></span>
-<span id="cb39-3"><a href="#cb39-3"></a><span class="pp">@show</span> s2 <span class="op">=</span> uwt2<span class="op">/</span>ucu2                 <span class="co"># lb/ft^3 -- Class 60</span></span>
-<span id="cb39-4"><a href="#cb39-4"></a><span class="pp">@show</span> q2 <span class="op">=</span> ud2<span class="op">*</span>uwt2<span class="op">/</span><span class="fl">2000</span>             <span class="co"># ton</span></span>
-<span id="cb39-5"><a href="#cb39-5"></a>d2, ppi2 <span class="op">=</span> <span class="fl">691</span>, <span class="fl">184.6</span>                <span class="co"># mi, LTL PPI</span></span>
-<span id="cb39-6"><a href="#cb39-6"></a>MC2 <span class="op">=</span> <span class="fl">95.71</span>                          <span class="co"># $, Ral-Det lane minimum</span></span>
-<span id="cb39-7"><a href="#cb39-7"></a></span>
-<span id="cb39-8"><a href="#cb39-8"></a><span class="pp">@show</span> qmax2 <span class="op">=</span> <span class="fu">maxpayld</span>(s2; Kwt <span class="op">=</span> Kwt, Kcu <span class="op">=</span> Kcu)  <span class="co"># ton, weighs out</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Code block 13: a higher-density load on a longer lane</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a>uwt2, ucu2, ud2 <span class="op">=</span> <span class="fl">126</span>, <span class="fl">4</span>, <span class="fl">14</span>         <span class="co"># lb, ft^3, cartons</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="pp">@show</span> s2 <span class="op">=</span> uwt2<span class="op">/</span>ucu2                 <span class="co"># lb/ft^3 -- Class 60</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="pp">@show</span> q2 <span class="op">=</span> ud2<span class="op">*</span>uwt2<span class="op">/</span><span class="fl">2000</span>             <span class="co"># ton</span></span>
+<span id="cb38-5"><a href="#cb38-5"></a>d2, ppi2 <span class="op">=</span> <span class="fl">691</span>, <span class="fl">184.6</span>                <span class="co"># mi, LTL PPI</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a>MC2 <span class="op">=</span> <span class="fl">95.71</span>                          <span class="co"># $, Ral-Det lane minimum</span></span>
+<span id="cb38-7"><a href="#cb38-7"></a></span>
+<span id="cb38-8"><a href="#cb38-8"></a><span class="pp">@show</span> qmax2 <span class="op">=</span> <span class="fu">maxpayld</span>(s2; Kwt <span class="op">=</span> Kwt, Kcu <span class="op">=</span> Kcu)  <span class="co"># ton, weighs out</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>s2 = uwt2 / ucu2 = 31.5
 q2 = (ud2 * uwt2) / 2000 = 0.882
@@ -7397,12 +7414,12 @@ qmax2 = maxpayld(s2; Kwt = Kwt, Kcu = Kcu) = 25.0</code></pre>
 </div>
 </div>
 <div id="44" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># Code block 14: the tariff charge against the estimate</span></span>
-<span id="cb42-2"><a href="#cb42-2"></a>ODi, ODip1 <span class="op">=</span> <span class="fl">37.11</span>, <span class="fl">30.04</span>  <span class="co"># Ral-Det Class 60 row</span></span>
-<span id="cb42-3"><a href="#cb42-3"></a><span class="pp">@show</span> i2 <span class="op">=</span> <span class="fu">findfirst</span>(<span class="fu">&gt;</span>(q2), qB)</span>
-<span id="cb42-4"><a href="#cb42-4"></a><span class="pp">@show</span> c_tar2 <span class="op">=</span> <span class="fu">max</span>(MC2, <span class="fu">min</span>(ODi<span class="op">*</span><span class="fl">20</span><span class="op">*</span>q2, ODip1<span class="op">*</span><span class="fl">20</span><span class="op">*</span>qB[i2]))</span>
-<span id="cb42-5"><a href="#cb42-5"></a><span class="pp">@show</span> c_est2 <span class="op">=</span> <span class="fu">charge_ltl</span>(q2, s2, d2; ppi <span class="op">=</span> ppi2)</span>
-<span id="cb42-6"><a href="#cb42-6"></a><span class="pp">@show</span> difference <span class="op">=</span> <span class="fu">abs</span>(c_tar2 <span class="op">-</span> c_est2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Code block 14: the tariff charge against the estimate</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>ODi, ODip1 <span class="op">=</span> <span class="fl">37.11</span>, <span class="fl">30.04</span>  <span class="co"># Ral-Det Class 60 row</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="pp">@show</span> i2 <span class="op">=</span> <span class="fu">findfirst</span>(<span class="fu">&gt;</span>(q2), qB)</span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="pp">@show</span> c_tar2 <span class="op">=</span> <span class="fu">max</span>(MC2, <span class="fu">min</span>(ODi<span class="op">*</span><span class="fl">20</span><span class="op">*</span>q2, ODip1<span class="op">*</span><span class="fl">20</span><span class="op">*</span>qB[i2]))</span>
+<span id="cb41-5"><a href="#cb41-5"></a><span class="pp">@show</span> c_est2 <span class="op">=</span> <span class="fu">charge_ltl</span>(q2, s2, d2; ppi <span class="op">=</span> ppi2)</span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="pp">@show</span> difference <span class="op">=</span> <span class="fu">abs</span>(c_tar2 <span class="op">-</span> c_est2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>i2 = findfirst((&gt;)(q2), qB) = 3
 c_tar2 = max(MC2, min(ODi * 20 * q2, ODip1 * 20 * qB[i2])) = 600.8

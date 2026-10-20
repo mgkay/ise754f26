@@ -2517,32 +2517,48 @@
    "label": "Fig. 1",
    "word": "Fig."
   },
-  "fig-network-flows": {
+  "fig-missing-flows": {
    "label": "Fig. 2",
    "word": "Fig."
   },
-  "fig-missing-flows": {
+  "fig-missing-kinds": {
    "label": "Fig. 3",
    "word": "Fig."
   },
-  "fig-missing-kinds": {
+  "fig-latest-steps": {
    "label": "Fig. 4",
    "word": "Fig."
   },
-  "fig-orders-forecast": {
+  "fig-network-flows": {
    "label": "Fig. 5",
    "word": "Fig."
   },
-  "fig-horizon": {
+  "fig-latest-binds": {
    "label": "Fig. 6",
    "word": "Fig."
   },
-  "fig-stack": {
+  "fig-orders-forecast": {
    "label": "Fig. 7",
    "word": "Fig."
   },
-  "tbl-single-product": {
+  "fig-horizon": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-stack": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "tbl-latest-steps": {
    "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-latest-binds": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-single-product": {
+   "label": "Table 3",
    "word": "Table"
   },
   "mdl-prodinv": {
@@ -2564,20 +2580,24 @@
    "label": "Ex. 1",
    "word": "Ex."
   },
-  "example-1-a": {
-   "label": "Ex. 1(a)",
-   "word": "Ex."
-  },
-  "example-1-b": {
-   "label": "Ex. 1(b)",
-   "word": "Ex."
-  },
   "example-2": {
    "label": "Ex. 2",
    "word": "Ex."
   },
   "example-3": {
    "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
    "word": "Ex."
   },
   "example-4": {
@@ -2658,8 +2678,12 @@
    "label": "Table 1",
    "word": "Table"
   },
-  "tbl-switch": {
+  "tbl-multi-product": {
    "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-switch": {
+   "label": "Table 3",
    "word": "Table"
   },
   "mdl-prodinv-coupled": {
