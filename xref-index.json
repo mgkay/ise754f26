@@ -2741,5 +2741,44 @@
    "label": "Ex. 4(b)",
    "word": "Ex."
   }
+ },
+ "5.1": {
+  "eq-tsp-count": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-asym-count": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-sym-count": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "fig-routing-alternatives": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-ltl-network": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-six-node-tour": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-crossing-arcs": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "tbl-tour-sequence": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "mdl-tsp": {
+   "label": "Model 1",
+   "word": "Model",
+   "name": "Traveling salesman problem"
+  }
  }
 }

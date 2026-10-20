@@ -449,7 +449,7 @@ function latestframes(d, u, y⁰, yᵗ⁺¹)
             i, j = nodes[k]
             X[i, j] = pl.x[i, j]
             j > 1 && (Y[i, j] = pl.y[i, j])
-            hl, title = (i, j), "($('a' + k)) Stage $i, month $j"
+            hl, title = (i, j), "($('a' + k)) Step $k: stage $i, month $j"
         end
         ax = Axis(fig[k ÷ 2 + 1, k % 2 + 1]; aspect = DataAspect(),
                   title = title, titlesize = 13, titlefont = :regular)
