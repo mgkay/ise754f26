@@ -2755,6 +2755,34 @@
    "label": "Eq. 3",
    "word": "Eq."
   },
+  "eq-tsp": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-twoopt-moves": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-ex2-costs": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-two-customer": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-angle": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-da": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-tsp-est": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
   "fig-routing-alternatives": {
    "label": "Fig. 1",
    "word": "Fig."
@@ -2771,14 +2799,102 @@
    "label": "Fig. 4",
    "word": "Fig."
   },
+  "fig-subtour-rounds": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-construction": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-sfc": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-twoopt-move": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-twoopt-steps": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-two-customer": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-density": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-nc-random": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-nc-tour": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
   "tbl-tour-sequence": {
    "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-twoopt-trace": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-estimate": {
+   "label": "Table 3",
    "word": "Table"
   },
   "mdl-tsp": {
    "label": "Model 1",
    "word": "Model",
    "name": "Traveling salesman problem"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  },
+  "example-2-c": {
+   "label": "Ex. 2(c)",
+   "word": "Ex."
+  },
+  "example-2-d": {
+   "label": "Ex. 2(d)",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
+   "word": "Ex."
+  },
+  "example-3-d": {
+   "label": "Ex. 3(d)",
+   "word": "Ex."
   }
  }
 }
