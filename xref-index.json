@@ -2682,8 +2682,28 @@
    "label": "Table 2",
    "word": "Table"
   },
-  "tbl-switch": {
+  "tbl-ex1-demand": {
    "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-ex2-demand": {
+   "label": "Table 4",
+   "word": "Table"
+  },
+  "tbl-switch": {
+   "label": "Table 5",
+   "word": "Table"
+  },
+  "tbl-switch-cases": {
+   "label": "Table 6",
+   "word": "Table"
+  },
+  "tbl-ex4-demand": {
+   "label": "Table 7",
+   "word": "Table"
+  },
+  "tbl-ex5-demand": {
+   "label": "Table 8",
    "word": "Table"
   },
   "mdl-prodinv-coupled": {
@@ -2739,6 +2759,18 @@
   },
   "example-4-b": {
    "label": "Ex. 4(b)",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-5-a": {
+   "label": "Ex. 5(a)",
+   "word": "Ex."
+  },
+  "example-5-c": {
+   "label": "Ex. 5(c)",
    "word": "Ex."
   }
  },
