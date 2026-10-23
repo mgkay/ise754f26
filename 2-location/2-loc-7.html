@@ -4431,8 +4431,8 @@ Companion script
 (a) first quantity, any nonnegative amount;<br>
 (b) second quantity, any nonnegative amount.</p>
 <p><strong>subject to:</strong><br>
-(a) shared supply: the two quantities draw 2 and 3 a unit on a supply of 11;<br>
-(b) own supply: first quantity alone draws 2 a unit on a supply of 7.</p>
+(a) Shared supply: the two quantities draw 2 and 3 a unit on a supply of 11;<br>
+(b) Own supply: first quantity alone draws 2 a unit on a supply of 7.</p>
 <p><strong>return:</strong> pair of quantities giving the greatest total value</p>
 <p><strong>assumptions:</strong><br>
 (a) value contributed and supply consumed are proportional to the quantity chosen;<br>
@@ -4447,7 +4447,8 @@ Model 1: Linear program
 <p><span id="eq-lp"><span class="math display">
 \begin{array}{rlrclll}
 \textbf{LP} : &amp; \text{Maximize} &amp; 6x_1 + 8x_2 &amp;  &amp;  &amp; &amp; \\[2pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Shared supply}}\quad\mathopen{} 2x_1 + 3x_2 &amp; \leq &amp; 11 &amp; &amp; (a) \\[2pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Shared supply}}\quad\mathopen{} 2x_1 + 3x_2 &amp; \leq &amp; 11 &amp; &amp; (a) \\[2pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Own supply}}\quad\mathopen{} 2x_1 &amp; \leq &amp; 7 &amp; &amp; (b) \\[2pt]
 &amp;  &amp; x_1,\, x_2 &amp; \geq &amp; 0 &amp; &amp;
 \end{array}
@@ -5065,7 +5066,7 @@ Solving report
   Primal bound      30
   Dual bound        30
   Gap               0% (tolerance: 0.01%)
-  P-D integral      0.000178405653426
+  P-D integral      0.000219051130525
   Solution status   feasible
                     30 (objective)
                     0 (bound viol.)
@@ -5257,8 +5258,8 @@ Figure 4: The resolution rungs of <a href="2-loc-4.html#mdl-ufl" class="xref" d
 <p><strong>solve for:</strong><br>
 (a) sites at which to locate new facilities, a subset of the <span class="math inline">n</span> candidate sites.</p>
 <p><strong>subject to:</strong><br>
-(a) coverage: every existing facility is fully served;<br>
-(b) linking: nothing is served from a site unless a facility is established there.</p>
+(a) Coverage: every existing facility is fully served;<br>
+(b) Linking: nothing is served from a site unless a facility is established there.</p>
 <p><strong>return:</strong> sites chosen and the resulting total cost</p>
 <p><strong>assumptions:</strong><br>
 (a) new facilities may be located only at the given candidate sites;<br>
@@ -5275,7 +5276,8 @@ Model 2: Uncapacitated facility location
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{i \in N} k_i y_i +
          \sum_{i \in N}\sum_{j \in M} c_{ij} x_{ij} &amp;  &amp;  &amp;  &amp; \\[16pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Coverage}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in N}}\, x_{ij} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in M &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Coverage}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in N}}\, x_{ij} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in M &amp; (a) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Linking}}\quad\mathopen{} y_i &amp; \geq &amp; x_{ij}, &amp; \hphantom{k}\mathllap{i} \in N,\ j \in M &amp; (b) \\[16pt]
 &amp;  &amp; 0 \leq x_{ij} &amp; \leq &amp; 1, &amp; \hphantom{k}\mathllap{i} \in N,\ j \in M &amp; \\[16pt]
 &amp;  &amp; y_i &amp; \in &amp; \{0,1\}, &amp; \hphantom{k}\mathllap{i} \in N &amp;
@@ -5445,8 +5447,8 @@ Model 2: Uncapacitated facility location
 (a) sites at which to locate new facilities, a subset of the <span class="math inline">n</span> candidate sites;<br>
 (b) share of each existing facility’s demand served from each open site.</p>
 <p><strong>subject to:</strong><br>
-(a) coverage: every existing facility’s demand is fully served;<br>
-(b) capacity: no new facility is asked for more than it can produce.</p>
+(a) Coverage: every existing facility’s demand is fully served;<br>
+(b) Capacity: no new facility is asked for more than it can produce.</p>
 <p><strong>return:</strong> sites chosen, the allocation, and the resulting total cost</p>
 <p><strong>assumptions:</strong><br>
 (a) new facilities may be located only at the given candidate sites;<br>
@@ -5462,7 +5464,8 @@ Model 3: Capacitated facility location
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{i \in N} k_i y_i +
          \sum_{i \in N}\sum_{j \in M} c_{ij} x_{ij} &amp;  &amp;  &amp;  &amp; \\[16pt]
-&amp; \text{subject to} &amp; \smash{\displaystyle \sum_{i \in N}}\, x_{ij} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in M &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \smash{\displaystyle \sum_{i \in N}}\, x_{ij} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in M &amp; (a) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Capacity}}\quad\mathopen{} K_i\,y_i &amp; \geq &amp; \smash{\displaystyle \sum_{j \in M}}\, f_j x_{ij}, &amp; \hphantom{k}\mathllap{i} \in N &amp; (b) \\[16pt]
 &amp;  &amp; 0 \leq x_{ij} &amp; \leq &amp; 1, &amp; \hphantom{k}\mathllap{i} \in N,\ j \in M &amp; \\[16pt]
 &amp;  &amp; y_i &amp; \in &amp; \{0,1\}, &amp; \hphantom{k}\mathllap{i} \in N &amp;
@@ -5631,7 +5634,7 @@ Model 3: Capacitated facility location
 <p><strong>solve for:</strong><br>
 (a) subsets to include in the cover.</p>
 <p><strong>subject to:</strong><br>
-(a) coverage: every object belongs to at least one chosen subset.</p>
+(a) Coverage: every object belongs to at least one chosen subset.</p>
 <p><strong>return:</strong> subsets chosen and the resulting cost</p>
 <p><strong>assumptions:</strong><br>
 (a) subsets are given;<br>
@@ -5684,7 +5687,8 @@ I^{\star} = \arg\min_{I}\Bigl\{ \sum_{i \in I} c_i \;:\;
 <p><span id="eq-setcover"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{i \in N} c_i x_i &amp;  &amp;  &amp; &amp; \\[16pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Coverage}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in N}}\, a_{ji} x_i &amp; \geq &amp; 1, &amp; j \in M &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Coverage}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in N}}\, a_{ji} x_i &amp; \geq &amp; 1, &amp; j \in M &amp; (a) \\[16pt]
 &amp;  &amp; x_i &amp; \in &amp; \{0,1\}, &amp; i \in N &amp;
 \end{array}
 \tag{9}</span></span></p>
@@ -5747,7 +5751,7 @@ Figure 5: Six objects, and the five subsets available to cover them. Where two 
 <p><strong>solve for:</strong><br>
 (a) subsets to include in the packing.</p>
 <p><strong>subject to:</strong><br>
-(a) disjointness: no object belongs to more than one chosen subset.</p>
+(a) Disjointness: no object belongs to more than one chosen subset.</p>
 <p><strong>return:</strong> subsets chosen, and the objects left uncovered</p>
 <p><strong>assumptions:</strong><br>
 (a) subsets are given;<br>
@@ -5762,7 +5766,8 @@ Model 5: Set packing
 <p><span id="eq-setpack"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Maximize} &amp; \displaystyle \sum_{i \in N} x_i &amp;  &amp;  &amp; &amp; \\[16pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Disjointness}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in N}}\, a_{ji} x_i &amp; \leq &amp; 1, &amp; j \in M &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Disjointness}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in N}}\, a_{ji} x_i &amp; \leq &amp; 1, &amp; j \in M &amp; (a) \\[16pt]
 &amp;  &amp; x_i &amp; \in &amp; \{0,1\}, &amp; i \in N &amp;
 \end{array}
 \tag{10}</span></span></p>
@@ -6031,8 +6036,8 @@ OPTIMAL
 (a) bins to open;<br>
 (b) assignment of each object to an open bin.</p>
 <p><strong>subject to:</strong><br>
-(a) capacity: the objects in a bin do not exceed its capacity;<br>
-(b) assignment: every object is placed in exactly one bin.</p>
+(a) Capacity: the objects in a bin do not exceed its capacity;<br>
+(b) Assignment: every object is placed in exactly one bin.</p>
 <p><strong>return:</strong> number of bins used and the contents of each</p>
 <p><strong>assumptions:</strong><br>
 (a) every bin has the same capacity;<br>
@@ -6078,7 +6083,8 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <p><span id="eq-binpack"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{i \in M} y_i &amp;  &amp;  &amp; &amp; \\[16pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Capacity}}\quad\mathopen{} V\,y_i &amp; \geq &amp; \smash{\displaystyle \sum_{j \in M}}\, v_j x_{ij}, &amp; \hphantom{k}\mathllap{i} \in M &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Capacity}}\quad\mathopen{} V\,y_i &amp; \geq &amp; \smash{\displaystyle \sum_{j \in M}}\, v_j x_{ij}, &amp; \hphantom{k}\mathllap{i} \in M &amp; (a) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Assignment}}\quad\mathopen{} \smash{\displaystyle \sum_{i \in M}}\, x_{ij} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in M &amp; (b) \\[16pt]
 &amp;  &amp; x_{ij},\, y_i &amp; \in &amp; \{0,1\}, &amp; \hphantom{k}\mathllap{i} \in M,\ j \in M &amp;
 \end{array}
@@ -6153,9 +6159,9 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <pre><code>   objects  binaries  bins  seconds
 ───────────────────────────────────
 1       20       420     6     0.00
-2       50     2,550    15     0.20
-3      100    10,100    31     1.21
-4      200    40,200    61     9.62</code></pre>
+2       50     2,550    15     0.25
+3      100    10,100    31     1.31
+4      200    40,200    61    11.08</code></pre>
 </div>
 </div>
 <p>Ten times the objects is a hundred times the variables and rather more than a hundred times the work. Sixty seconds covers two hundred objects several times over and three hundred comfortably, and stops somewhere past that rather than running all afternoon on an instance nobody meant to pose. A limit that is never reached costs nothing, which is the argument for always setting one.</p>
@@ -6175,10 +6181,10 @@ B^{\star} = \arg\min_{B}\Bigl\{ \lvert B \rvert \;:\;
 <div class="cell-output cell-output-stdout">
 <pre><code>    gap  bins  seconds
 ──────────────────────
-  exact    61     9.13
-     1%    61     9.12
-     2%    62     5.82
-     5%    62     5.80</code></pre>
+  exact    61    10.13
+     1%    61     9.63
+     2%    62     6.15
+     5%    62     6.18</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Reading a solve that stopped early">
@@ -6302,9 +6308,9 @@ Figure 9: Twenty objects into bins of capacity ten. Every bin comes out exactly
 (a) colors to use;<br>
 (b) color given to each vertex.</p>
 <p><strong>subject to:</strong><br>
-(a) coloring: every vertex is given exactly one color;<br>
-(b) conflict: two vertices joined by an edge are not given the same color;<br>
-(c) linking: a vertex is given a color only if that color is used.</p>
+(a) Coloring: every vertex is given exactly one color;<br>
+(b) Conflict: two vertices joined by an edge are not given the same color;<br>
+(c) Linking: a vertex is given a color only if that color is used.</p>
 <p><strong>return:</strong> colors used, and the vertices of each</p>
 <p><strong>assumptions:</strong><br>
 (a) graph is given;<br>
@@ -6369,7 +6375,8 @@ Figure 10: The conflict graph of the qualifying exam. Each vertex is one of the
 <p><span id="eq-coloring"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{k \in K} y_k &amp;  &amp;  &amp;  &amp; \\[16pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Coloring}}\quad\mathopen{} \smash{\displaystyle \sum_{k \in K}}\, x_{ik} &amp; = &amp; 1, &amp; \hphantom{(i,j)}\mathllap{i} \in V &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Coloring}}\quad\mathopen{} \smash{\displaystyle \sum_{k \in K}}\, x_{ik} &amp; = &amp; 1, &amp; \hphantom{(i,j)}\mathllap{i} \in V &amp; (a) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Conflict}}\quad\mathopen{} x_{ik} + x_{jk} &amp; \leq &amp; 1, &amp; (i,j) \in E,\ k \in K &amp; (b) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Linking}}\quad\mathopen{} x_{ik} &amp; \leq &amp; y_k, &amp; \hphantom{(i,j)}\mathllap{i} \in V,\ k \in K &amp; (c) \\[16pt]
 &amp;  &amp; y_k &amp; \in &amp; \{0,1\}, &amp; \hphantom{(i,j)}\mathllap{k} \in K &amp; \\[16pt]
@@ -6524,10 +6531,10 @@ Figure 11: The same conflict graph with a minimum coloring on it. No edge joins
 <p><strong>solve for:</strong><br>
 (a) position each job occupies in the sequence.</p>
 <p><strong>subject to:</strong><br>
-(a) assignment: every job occupies exactly one position;<br>
-(b) occupancy: every position holds exactly one job;<br>
-(c) accumulation: a position completes when the one before it completes plus the processing time of the job in it;<br>
-(d) tardiness: a job’s tardiness is its completion past its due date, and is never negative.</p>
+(a) Assignment: every job occupies exactly one position;<br>
+(b) Occupancy: every position holds exactly one job;<br>
+(c) Accumulation: a position completes when the one before it completes plus the processing time of the job in it;<br>
+(d) Tardiness: a job’s tardiness is its completion past its due date, and is never negative.</p>
 <p><strong>return:</strong> sequence and its total tardiness</p>
 <p><strong>assumptions:</strong><br>
 (a) one machine, running one job at a time;<br>
@@ -6543,7 +6550,8 @@ Model 8: Single-machine total tardiness
 <p><span id="eq-tardiness"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{j \in J} T_j &amp;  &amp;  &amp;  &amp; \\[16pt]
-&amp; \text{subject to} &amp; \textcolor{#d21f26}{\small\text{Assignment}}\quad\mathopen{} \smash{\displaystyle \sum_{k \in K}}\, y_{jk} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in J &amp; (a) \\[16pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \textcolor{#d21f26}{\small\text{Assignment}}\quad\mathopen{} \smash{\displaystyle \sum_{k \in K}}\, y_{jk} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{j} \in J &amp; (a) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Occupancy}}\quad\mathopen{} \smash{\displaystyle \sum_{j \in J}}\, y_{jk} &amp; = &amp; 1, &amp; \hphantom{k}\mathllap{k} \in K &amp; (b) \\[16pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Accumulation}}\quad\mathopen{} t_1 &amp; = &amp; \smash{\displaystyle \sum_{j \in J}}\, p_j\, y_{j1} &amp;  &amp; (c) \\[16pt]
 &amp;  &amp; t_k &amp; = &amp; t_{k-1} + \smash{\displaystyle \sum_{j \in J}}\, p_j\, y_{jk}, &amp; \hphantom{k}\mathllap{k} \in K \setminus \{1\} &amp; (d) \\[16pt]
@@ -7422,6 +7430,28 @@ if (new URLSearchParams(location.search).has('present')) {
     });
   });
 })();
+</script>
+
+<!-- Math in a footnote pop-up (instructor, 2026-10-23, on 4.4's endnote 4: "math in the
+     endnote that's not displaying correctly"). Quarto builds each footnote's hover pop-up
+     from the endnote when the page loads, before KaTeX has typeset the page, so a formula
+     in a footnote showed as raw TeX in the pop-up while the endnote itself was right.
+     This typesets the pop-up when it opens, with Quarto's own typesetMath. -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    document.querySelectorAll('a[role="doc-noteref"]').forEach(function (a) {
+      if (!a._tippy) return;
+      var prev = a._tippy.props.onShow;
+      a._tippy.setProps({ onShow: function (inst) {
+        if (prev) prev(inst);
+        if (window.Quarto && window.Quarto.typesetMath) {
+          window.Quarto.typesetMath(inst.popper);
+        }
+      } });
+    });
+  }, 0);
+});
 </script>
 <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {

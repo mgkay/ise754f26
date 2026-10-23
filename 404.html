@@ -822,6 +822,28 @@ if (new URLSearchParams(location.search).has('present')) {
 })();
 </script>
 
+<!-- Math in a footnote pop-up (instructor, 2026-10-23, on 4.4's endnote 4: "math in the
+     endnote that's not displaying correctly"). Quarto builds each footnote's hover pop-up
+     from the endnote when the page loads, before KaTeX has typeset the page, so a formula
+     in a footnote showed as raw TeX in the pop-up while the endnote itself was right.
+     This typesets the pop-up when it opens, with Quarto's own typesetMath. -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    document.querySelectorAll('a[role="doc-noteref"]').forEach(function (a) {
+      if (!a._tippy) return;
+      var prev = a._tippy.props.onShow;
+      a._tippy.setProps({ onShow: function (inst) {
+        if (prev) prev(inst);
+        if (window.Quarto && window.Quarto.typesetMath) {
+          window.Quarto.typesetMath(inst.popper);
+        }
+      } });
+    });
+  }, 0);
+});
+</script>
+
 
 
 

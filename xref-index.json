@@ -2757,6 +2757,10 @@
    "label": "Ex. 5(b)",
    "word": "Ex."
   },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
   "example-2": {
    "label": "Ex. 2",
    "word": "Ex."
@@ -2775,6 +2779,14 @@
   },
   "example-4-b": {
    "label": "Ex. 4(b)",
+   "word": "Ex."
+  },
+  "example-4-c": {
+   "label": "Ex. 4(c)",
+   "word": "Ex."
+  },
+  "example-4-d": {
+   "label": "Ex. 4(d)",
    "word": "Ex."
   },
   "example-5": {

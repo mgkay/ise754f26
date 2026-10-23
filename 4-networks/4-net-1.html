@@ -6513,8 +6513,8 @@ Table 4: OSRM’s routes from High Point to Goldsboro, fastest first, as the re
 <p><strong>solve for:</strong><br>
 (a) intersections to select as terminals.</p>
 <p><strong>subject to:</strong><br>
-(a) coverage: every intersection is within half a day’s drive of a terminal;<br>
-<span class="model-add">(b) linehaul: every terminal is within a day’s drive of another terminal.</span></p>
+(a) Coverage: every intersection is within half a day’s drive of a terminal;<br>
+<span class="model-add">(b) Linehaul: every terminal is within a day’s drive of another terminal.</span></p>
 <p><strong>assumptions:</strong><br>
 (a) travel time between two intersections is the time of the shortest path between them;<br>
 (b) any intersection can be a terminal.</p>
@@ -6529,7 +6529,8 @@ Model 2: Transshipment terminals
 <p><span id="eq-terminals"><span class="math display">
 \begin{array}{rlrclll}
 &amp; \text{Minimize} &amp; \displaystyle \sum_{i \in N} x_i &amp;  &amp;  &amp; &amp; \\[16pt]
-&amp; \text{subject to} &amp; \smash{\displaystyle \sum_{\substack{i \in N \,: \\ t_{ij} \le t_{\max}/2}}}\, x_i &amp; \geq &amp; 1, &amp; j \in N &amp; (a) \\[24pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; \smash{\displaystyle \sum_{\substack{i \in N \,: \\ t_{ij} \le t_{\max}/2}}}\, x_i &amp; \geq &amp; 1, &amp; j \in N &amp; (a) \\[24pt]
 &amp;  &amp; \textcolor{#d21f26}{\small\text{Linehaul}}\quad\mathopen{} x_i &amp; \leq &amp; \smash{\displaystyle \sum_{\substack{k \in N \setminus \{i\} \,: \\ t_{ik} \le t_{\max}}}}\, x_k, &amp; i \in N &amp; (b) \\[24pt]
 &amp;  &amp; x_i &amp; \in &amp; \{0,1\}, &amp; i \in N &amp;
 \end{array}
@@ -7427,6 +7428,28 @@ if (new URLSearchParams(location.search).has('present')) {
     });
   });
 })();
+</script>
+
+<!-- Math in a footnote pop-up (instructor, 2026-10-23, on 4.4's endnote 4: "math in the
+     endnote that's not displaying correctly"). Quarto builds each footnote's hover pop-up
+     from the endnote when the page loads, before KaTeX has typeset the page, so a formula
+     in a footnote showed as raw TeX in the pop-up while the endnote itself was right.
+     This typesets the pop-up when it opens, with Quarto's own typesetMath. -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    document.querySelectorAll('a[role="doc-noteref"]').forEach(function (a) {
+      if (!a._tippy) return;
+      var prev = a._tippy.props.onShow;
+      a._tippy.setProps({ onShow: function (inst) {
+        if (prev) prev(inst);
+        if (window.Quarto && window.Quarto.typesetMath) {
+          window.Quarto.typesetMath(inst.popper);
+        }
+      } });
+    });
+  }, 0);
+});
 </script>
 
 
