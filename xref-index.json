@@ -2666,12 +2666,20 @@
    "label": "Fig. 1",
    "word": "Fig."
   },
-  "fig-blocks-excl": {
+  "fig-ex1-setup": {
    "label": "Fig. 2",
    "word": "Fig."
   },
-  "fig-blocks-switch": {
+  "fig-blocks-excl": {
    "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-setups": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-blocks-switch": {
+   "label": "Fig. 5",
    "word": "Fig."
   },
   "tbl-four-classes": {
@@ -2704,6 +2712,14 @@
   },
   "tbl-ex5-demand": {
    "label": "Table 8",
+   "word": "Table"
+  },
+  "tbl-ex5-stages": {
+   "label": "Table 9",
+   "word": "Table"
+  },
+  "tbl-ex5-products": {
+   "label": "Table 10",
    "word": "Table"
   },
   "mdl-prodinv-coupled": {
