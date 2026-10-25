@@ -345,6 +345,145 @@ prt([zᵒ[2:3, :]; d'];
     rows = ["Trucks", "Trailers", "Demand 1", "Demand 2"],
     cols = string.(1:t), row_title = "Week")
 
+## Example 1(b): Cost of a given plan by hand
+# Using some different data (as noted below, otherwise use the data
+# given in Ex. 1) and only a three-week planning horizon, determine the
+# total production, inventory, and transport cost over the horizon. The
+# forecasted demand for both materials is 20, 10, 45 and 12, 25, 5 tons,
+# respectively. It costs \$600 and \$400 to extract each ton of material
+# at the facility, and the annual inventory carrying rate is 0.5.
+# Currently, 20 tons of the second material is in inventory at the final
+# destination. A different amount of material can be in inventory at the
+# end of the planning period. For each material, each period, 30, 30, 30
+# and 16, 17, 17 tons, respectively, are produced; 30, 10, 50 and 0, 20,
+# 30 tons are transported to the staging station; and 22, 8, 60 and 0,
+# 17, 33 tons are transported to the final destination.
+# Ex. 1(b)'s plan on each material's network: each item's network, stage
+# i a row and period j a column, the plan's flows, the demand and the
+# inventory at the start in red, and in blue the inventory each node
+# carries out, what came in less what went on; given the capacity cap of
+# each shared vehicle, the items' tons on it in each period and the loads
+# that carry them, below the networks
+flowc = colorant"#1f5fa8"                        # a value determined
+blue(s) = up(s; color = flowc)
+function plannets(X, d, y⁰; nodes, arcs = nothing, item = "Material",
+                  period = "Week", cap = nothing, vehicles = nothing,
+                  dx = 2.3, dy = 1.0, r = 0.15, ls = 14, w = 640)
+    m, t, g = size(X)
+    Y = zeros(m, t + 1, g)                       # inventory into period j
+    Y[:, 1, :] = y⁰
+    for k in 1:g, j in 1:t, i in 1:m             # flow balance
+        on = i < m ? X[i+1, j, k] : d[j, k]
+        Y[i, j+1, k] = Y[i, j, k] + X[i, j, k] - on
+    end
+    ℓs, ℓd, ℓi = 0.55, 0.45, 0.75                # supply, demand, end arcs
+    H = 2dy + ℓs + ℓd + 1.65                     # a network's height
+    xl = -ℓi - 0.55                              # the names, right-aligned
+    yc = -g * H + ℓs + 0.1                       # the loads, if any
+    x0, x1 = xl - 1.2, (t - 1) * dx + ℓi + 1.25
+    y0 = cap === nothing ? -(g - 1) * H - 2dy - ℓd - r - 0.85 : yc - 2.25
+    y1 = ℓs + 0.55
+    fig = Figure(size = (w, round(Int, w * (y1 - y0) / (x1 - x0))),
+                 figure_padding = 4)
+    ax = Axis(fig[1, 1]; aspect = DataAspect())
+    hidedecorations!(ax); hidespines!(ax)
+    P(k, i, j) = ((j - 1) * dx, -(k - 1) * H - (i - 1) * dy)
+    arc(p, q) = arrows2d!(ax, [p[1]], [p[2]], [q[1] - p[1]],
+                          [q[2] - p[2]]; color = ink, shaftwidth = 1.1,
+                          tipwidth = 6.5, tiplength = 6.5)
+    tx(p, s, al; fs = ls) = text!(ax, p[1], p[2]; text = s, color = ink,
+                                  fontsize = fs, align = al)
+    function head(y)                             # each period, above
+        for j in 1:t
+            tx(((j - 1) * dx, y), "$period $j", (:center, :bottom);
+               fs = ls - 1)
+        end
+    end
+    under(y, s) = tx(((t - 1) * dx / 2, y), s, (:center, :top))  # caption
+    v(n) = string(round(Int, n))
+    for k in 1:g
+        xk, yk = P(k, 1, 1)
+        head(yk + ℓs + 0.22)
+        under(yk - 2dy - r - ℓd - 0.42, "($('a' + k - 1)) $item $k")
+        for i in 1:m
+            tx((xl, P(k, i, 1)[2]), nodes[i], (:right, :center))
+        end
+        if arcs !== nothing                      # what each arc carries
+            for (s, y) in zip(arcs, (yk + ℓs / 2 + r / 2, yk - dy / 2,
+                                     yk - 1.5dy, yk - 2dy - ℓd / 2 - r / 2))
+                tx((xl, y), s, (:right, :center); fs = ls - 2)
+            end
+        end
+        for j in 1:t                             # the plan's flows
+            x, y = P(k, 1, j)
+            arc((x, y + ℓs + r), (x, y + r))
+            tx((x + 0.08, y + ℓs / 2 + r / 2), red(v(X[1, j, k])),
+               (:left, :center))
+            for i in 2:m
+                p, q = P(k, i - 1, j), P(k, i, j)
+                arc(p .- (0, r), q .+ (0, r))
+                tx((p[1] + 0.08, (p[2] + q[2]) / 2), red(v(X[i, j, k])),
+                   (:left, :center))
+            end
+            x, y = P(k, m, j)                    # demand
+            arc((x, y - r), (x, y - r - ℓd))
+            tx((x, y - r - ℓd - 0.05), red(v(d[j, k])), (:center, :top))
+        end
+        for i in 1:m                             # inventory
+            x, y = P(k, i, 1)
+            arc((x - ℓi, y), (x - r, y))
+            tx((x - ℓi - 0.08, y), red(v(Y[i, 1, k])), (:right, :center))
+            for j in 1:t-1
+                p, q = P(k, i, j) .+ (r, 0), P(k, i, j + 1) .- (r, 0)
+                arc(p, q)
+                tx(((p[1] + q[1]) / 2, y - 0.07), blue(v(Y[i, j+1, k])),
+                   (:center, :top))
+            end
+            x, y = P(k, i, t)
+            arc((x + r, y), (x + ℓi, y))
+            tx((x + ℓi + 0.08, y), blue(v(Y[i, t+1, k])), (:left, :center))
+        end
+        for i in 1:m, j in 1:t                   # nodes, over the arcs
+            poly!(ax, Circle(Point2f(P(k, i, j)...), r); color = :white,
+                  strokecolor = ink, strokewidth = 1.4)
+        end
+    end
+    if cap !== nothing                           # stage n + 1's vehicles
+        head(yc + 0.22)
+        under(yc - 1.85, "($('a' + g)) Loads")
+        for (n, s) in enumerate(vehicles)
+            y = yc - 0.2 - (n - 1) * 0.95
+            tx((xl, y - 0.2), titlecase(s), (:right, :center))
+            z = 0
+            for j in 1:t
+                x = (j - 1) * dx
+                tons = sum(X[n+1, j, :])
+                zj = ceil(Int, tons / cap[n])
+                z += zj
+                add = [k == 1 ? red(v(X[n+1, j, k])) :
+                       rich(up(" + "), red(v(X[n+1, j, k]))) for k in 1:g]
+                tx((x, y), rich(add..., up(" = "), blue(v(tons))),
+                   (:center, :center))
+                ld = rich(up("⌈"), blue(v(tons)), up("/"), red(v(cap[n])),
+                          up("⌉ = "), blue("$zj"))
+                tx((x, y - 0.4), ld, (:center, :center))
+            end
+            tx(((t - 1) * dx + ℓi + 0.08, y - 0.2), rich(blue("$z"), " $s"),
+               (:left, :center))
+        end
+    end
+    xlims!(ax, x0, x1); ylims!(ax, y0, y1)
+    return fig
+end
+plannets(cat([30 30 30; 30 10 50; 22 8 60],     # x[i,j,k]: stage i,
+             [16 17 17; 0 20 30; 0 17 33];      #   week j, material k
+             dims = 3),
+         [20 12; 10 25; 45 5],                  # demand d[j,k] (ton)
+         [0 0; 0 0; 0 20];                      # inventory at the start
+         nodes = ["Site", "Station", "Destination"],
+         arcs = ["extract", "truck", "trailer", "demand"],
+         cap = u[2:3], vehicles = ["trucks", "trailers"])
+
 ## Example 1(c): Costs of the plan with code
 # Compute part (b)'s three costs from the plan with code, and check them
 # against the answers published with the problem.
@@ -454,17 +593,21 @@ UBʸ = [reshape(y⁰, m, 1, g) fill(Inf, m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)]
 # Code block 8: Ex. 2 solved with prodinv_excl
 TCᵒ, xᵒ, yᵒ, zᵒ = prodinv_excl(cᵖ, cⁱ, d, u, LBʸ, UBʸ)
 @show TCᵒ;
-# Code block 9: Product 1 production level/Demand
-prt([xᵒ[:,:,1]; d[:,1]']; rows = [string.("Stage ", 1:m); "Demand"],
-    cols = string.(1:t), row_title = "Week")
-yᵒ[:,:,1]              # Code block 10: Product 1 inventory level
-zᵒ[:,:,1]              # Code block 11: Product 1 set up
-# Code block 12: Product 2 production level/Demand
-prt([xᵒ[:,:,2]; d[:,2]']; rows = [string.("Stage ", 1:m); "Demand"],
-    cols = string.(1:t), row_title = "Week")
-yᵒ[:,:,2]              # Code block 13: Product 2 inventory level
-zᵒ[:,:,2]              # Code block 14: Product 2 set up
-# Code block 15: the constraint matrix by blocks, a block per product
+# Code block 9: the plan for each product
+stages = string.("Stage ", 1:m)                 # the rows of each table
+for k in 1:g
+    println()                                   # a blank line above each
+    prt([xᵒ[:,:,k]; d[:,k]']; rows = [stages; "Demand"],
+        cols = string.(1:t), row_title = "Week",
+        title = "Product $k: production level and demand")
+    println()
+    prt(yᵒ[:,:,k]; rows = stages, cols = string.(1:t+1),
+        row_title = "Week", title = "Product $k: inventory level")
+    println()
+    prt(zᵒ[:,:,k]; rows = stages, cols = string.(1:t),
+        row_title = "Week", title = "Product $k: set up")
+end
+# Code block 10: the constraint matrix by blocks, a block per product
 # Product k's block spans x in [(k-1)W, kW] and y in [-kH, -(k-1)H];
 # its columns are x, y, (v,) z at xc, yc, vc, zc, its rows top down
 ink, boxc = colorant"#252525", colorant"#8c8c8c"
@@ -540,14 +683,14 @@ end
 fig = Figure(size = (680, 252), figure_padding = 4)
 blocks!(Axis(fig[1, 1]; aspect = DataAspect()))
 fig
-size(cᵖ), size(xᵒ)   # Code block 16: cᵖ to reshape to (3, 1, 2) for xᵒ
-# Code block 17: the production and inventory costs
+size(cᵖ), size(xᵒ)   # Code block 11: cᵖ to reshape to (3, 1, 2) for xᵒ
+# Code block 12: the production and inventory costs
 # Reshaped cᵖ broadcast for multiplication with xᵒ
 TCᵖ = sum((reshape(cᵖ,m,1,g).*xᵒ)[:])
 TCⁱ = sum((reshape(cⁱ,m,1,g).*yᵒ[:,2:end,:])[:])  # First period excluded
 TCᵖ, TCⁱ
-TCᵖ + TCⁱ, TCᵒ   # Code block 18: their sum, and the total
-# Code block 19: Ex. 2 without linking, each product on its own
+TCᵖ + TCⁱ, TCᵒ   # Code block 13: their sum, and the total
+# Code block 14: Ex. 2 without linking, each product on its own
 TCⁿ = prodinv_coupled(cᵖ, zeros(m), cⁱ, d, u, fill(Inf, m),
                       zeros(Int, m, t), LBʸ, UBʸ).TC
 TCⁿ, TCᵒ
@@ -595,7 +738,7 @@ function prodinv_switch(cᵖ, cʷ, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 end
 
 ## Sec. 4. Switchover costs
-# Code block 20: the truth table of row (g)
+# Code block 15: the truth table of row (g)
 # columns: vⱼ, zⱼ, zⱼ₋₁, the row's left side, and whether it is ≤ 0
 T = [0 0 0; 0 0 1; 0 1 0; 0 1 1; 1 0 0; 1 0 1; 1 1 0; 1 1 1]
 TT(f) = hcat(T, [f(row...) for row in eachrow(T)],
@@ -615,7 +758,7 @@ TT((vⱼ, zⱼ, zⱼ₋₁) -> -vⱼ + zⱼ - zⱼ₋₁)
 # The plant is currently set up to produce each stage of the first
 # product. Determine the amount of each product that should be produced
 # to minimize total costs over the planning horizon.
-# Code block 21: Ex. 3's data, the bounds and the initial setup
+# Code block 16: Ex. 3's data, the bounds and the initial setup
 # demand in each period, each product (ton)
 d = [6 40 33 24 29 24 16 13 14 17 18 43 25
     17 14 17  4  7 10 12 18 13 23  8 17  3]'
@@ -641,27 +784,31 @@ z⁰ = [1 0; 1 0; 1 0]
 # convert y⁰ and yᵗ⁺¹ from 2D (m x g) to 3D (m x t x g)
 LBʸ = [reshape(y⁰, m, 1, g) zeros(m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)]
 UBʸ = [reshape(y⁰, m, 1, g) fill(Inf, m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)];
-# Code block 22: Ex. 3 solved with prodinv_switch
+# Code block 17: Ex. 3 solved with prodinv_switch
 TCᵒ, xᵒ, yᵒ, zᵒ, vᵒ = prodinv_switch(cᵖ, cʷ, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 @show TCᵒ;
-# Code block 23: product 1, production and demand
-prt([xᵒ[:,:,1]; d[:,1]']; rows = [string.("Stage ", 1:m); "Demand"],
-    cols = string.(1:t), row_title = "Week")
-yᵒ[:,:,1]              # Code block 24: product 1 inventory level
-zᵒ[:,:,1]              # Code block 25: product 1 set up
-vᵒ[:,:,1]              # Code block 26: product 1 switchovers
-# Code block 27: product 2, production and demand
-prt([xᵒ[:,:,2]; d[:,2]']; rows = [string.("Stage ", 1:m); "Demand"],
-    cols = string.(1:t), row_title = "Week")
-yᵒ[:,:,2]              # Code block 28: product 2 inventory level
-zᵒ[:,:,2]              # Code block 29: product 2 set up
-vᵒ[:,:,2]              # Code block 30: product 2 switchovers
-# Code block 31: switchovers at each stage
+# Code block 18: the plan for each product
+for k in 1:g
+    println()                                   # a blank line above each
+    prt([xᵒ[:,:,k]; d[:,k]']; rows = [stages; "Demand"],
+        cols = string.(1:t), row_title = "Week",
+        title = "Product $k: production level and demand")
+    println()
+    prt(yᵒ[:,:,k]; rows = stages, cols = string.(1:t+1),
+        row_title = "Week", title = "Product $k: inventory level")
+    println()
+    prt(zᵒ[:,:,k]; rows = stages, cols = string.(1:t),
+        row_title = "Week", title = "Product $k: set up")
+    println()
+    prt(vᵒ[:,:,k]; rows = stages, cols = string.(1:t),
+        row_title = "Week", title = "Product $k: switchovers")
+end
+# Code block 19: switchovers at each stage
 vec(sum(vᵒ, dims = (2, 3)))
 # Summing over dimensions 2 and 3, the periods and the products, leaves
 # one count for each stage; vec turns the $3 \times 1 \times 1$ array that
 # remains into a vector.
-# Code block 32: what each stage is set up for, Ex. 2 and Ex. 3
+# Code block 20: what each stage is set up for, Ex. 2 and Ex. 3
 pc = [colorant"#cfe3f5", colorant"#f8dcc2"]    # product 1, product 2
 function setups!(ax, x, z, title)
     hidedecorations!(ax); hidespines!(ax)
@@ -699,11 +846,11 @@ Legend(fig[3, 1], [PolyElement(color = c) for c in pc],
        orientation = :horizontal, framevisible = false, labelsize = 12)
 rowgap!(fig.layout, 2)
 fig
-# Code block 33: Ex. 3's constraint matrix by blocks
+# Code block 21: Ex. 3's constraint matrix by blocks
 fig = Figure(size = (680, 330), figure_padding = 4)
 blocks!(Axis(fig[1, 1]; aspect = DataAspect()); switch = true)
 fig
-# Code block 34: the three costs, their sum, and the total
+# Code block 22: the three costs, their sum, and the total
 # Reshaped cᵖ broadcast for multiplication with xᵒ
 @show TCᵖ = sum((reshape(cᵖ,m,1,g).*xᵒ)[:])
 # First period excluded
@@ -711,13 +858,13 @@ fig
 @show TCʷ = sum((reshape(cʷ,m,1,g).*vᵒ)[:])
 @show TCᵖ + TCⁱ + TCʷ
 @show TCᵒ;
-# Code block 35: switchover costs at zero, against Ex. 2
+# Code block 23: switchover costs at zero, against Ex. 2
 TC0 = prodinv_switch(cᵖ, zeros(m, g), cⁱ, d, u, z⁰, LBʸ, UBʸ).TC
 TC2 = prodinv_excl(cᵖ, cⁱ, d, u, LBʸ, UBʸ).TC
 # Ex. 3's TCᵒ replaced Ex. 2's, so Ex. 2 is solved again for the
 # comparison; .TC takes the one field of the named tuple that is wanted.
 TC0, TC2
-# Code block 36: the statement's $60 at stage 3 for product 2
+# Code block 24: the statement's $60 at stage 3 for product 2
 cʷ60 = [400 600; 90 110; 50 60]
 r60 = prodinv_switch(cᵖ, cʷ60, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 @show r60.TC
@@ -725,10 +872,71 @@ r60 = prodinv_switch(cᵖ, cʷ60, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 @show r60.x == xᵒ;
 
 # Example 4: Switchovers in a given plan
+## Example 4(a): Switchovers by hand
+# Determine the switchovers at each stage, and their cost, from the
+# setup indicators.
+# Ex. 4's setups and the switchovers they make: each stage's setup in each
+# month, the start first, the product's number in it, on white with no
+# fill (LREG-04); row (g) at least cost makes a switchover where a stage
+# is set up for a product it was not set up for the month before, outlined
+# in blue with its cost, each stage's total at the right
+function switchfig(z, z⁰, cʷ; w = 640, ls = 14)
+    m, t, g = size(z)
+    Z = cat(reshape(z⁰, m, 1, g), z; dims = 2)  # column 1 is the start
+    V = max.(Z[:, 2:end, :] - Z[:, 1:end-1, :], 0)   # row (g)
+    fig = Figure(size = (w, round(Int, w * (m + 1.1) / (t + 4.6))),
+                 figure_padding = 4)
+    ax = Axis(fig[1, 1]; aspect = DataAspect())
+    hidedecorations!(ax); hidespines!(ax)
+    tx(x, y, s; fs = ls, al = (:center, :center)) =
+        text!(ax, x, y; text = s, fontsize = fs, align = al, color = ink)
+    for i in 1:m, c in 0:t                       # stage i, month c
+        y = -i
+        k = findfirst(==(1), Z[i, c+1, :])       # product set up for
+        sw = c > 0 && k !== nothing && V[i, c, k] == 1
+        poly!(ax, Rect(c + 0.06, y + 0.06, 0.88, 0.88); color = :white,
+              strokecolor = sw ? flowc : ink, strokewidth = sw ? 2.5 : 0.8)
+        k === nothing && continue
+        tx(c + 0.5, y + (sw ? 0.64 : 0.5), "$k")
+        sw && text!(ax, c + 0.5, y + 0.3;
+                    text = rich("\$", commas(cʷ[i, k]); color = flowc),
+                    fontsize = ls - 2, align = (:center, :center))
+    end
+    for i in 1:m
+        tx(-0.15, -i + 0.5, "Stage $i"; al = (:right, :center))
+        cost = sum(V[i, j, k] * cʷ[i, k] for j in 1:t, k in 1:g)
+        text!(ax, t + 1.2, -i + 0.5; text = rich("\$", commas(cost);
+              color = flowc), fontsize = ls, align = (:left, :center))
+    end
+    tx(0.5, 0.15, "Start"; fs = ls - 1, al = (:center, :bottom))
+    for c in 1:t
+        tx(c + 0.5, 0.15, "$c"; fs = ls - 1, al = (:center, :bottom))
+    end
+    tx((t + 2) / 2, 0.6, "Month"; fs = ls - 1, al = (:center, :bottom))
+    tx(t + 1.2, 0.15, "Cost"; fs = ls - 1, al = (:left, :bottom))
+    xlims!(ax, -1.6, t + 3.0); ylims!(ax, -m - 0.05, 1.0)
+    return fig
+end
+switchfig(cat([1 0 0 1 1 1; 1 1 0 1 1 0; 1 1 0 1 1 0],     # z[i,j,1]
+              [0 1 1 0 0 0; 0 0 1 0 0 1; 0 0 1 0 0 1];     # z[i,j,2]
+              dims = 3),
+          [1 0; 1 0; 1 0],                                 # z⁰ at the start
+          [2800 3200; 800 600; 400 300])                   # cʷ ($)
+
+## Example 4(b): Cost of the plan by hand
+# Determine the plan's production, inventory and switchover costs, and
+# its total cost, by hand.
+plannets(cat([45 0 0 20 40 0; 20 25 0 20 40 0; 20 25 0 20 40 0],
+             [0 20 35 0 0 0; 0 0 40 0 0 15; 0 0 40 0 0 15]; dims = 3),
+         [20 10; 10 15; 15 25; 20 10; 15 5; 25 15],   # demand d[j,k]
+         [0 0; 0 0; 0 25];                            # at the start
+         nodes = string.("Stage ", 1:3), item = "Product",
+         period = "Month", dx = 1.35)
+
 ## Example 4(c): Plan solved with the model
 # Determine the plan that minimizes the total cost, and that cost, with
 # the implementation of @mdl-prodinv-switch.
-# Code block 37: Ex. 4's data
+# Code block 25: Ex. 4's data
 # capacity of each stage for each product (ton)
 u = [50 35; 60 45; 70 55]
 d = [20 10 15 20 15 25
@@ -745,7 +953,7 @@ yᵗ⁺¹ = zeros(m, g)                    # final inventory (ton)
 z⁰ = [1 0; 1 0; 1 0]
 LBʸ = [reshape(y⁰, m, 1, g) zeros(m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)]
 UBʸ = [reshape(y⁰, m, 1, g) fill(Inf, m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)];
-# Code block 38: Ex. 4 solved with prodinv_switch
+# Code block 26: Ex. 4 solved with prodinv_switch
 r4 = prodinv_switch(cᵖ, cʷ, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 @show r4.TC
 @show sum(r4.v);
@@ -753,7 +961,7 @@ r4 = prodinv_switch(cᵖ, cʷ, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 ## Example 4(d): Plan given against the model's
 # Compare the plan given and its cost, found by hand in parts (a) and
 # (b), with the model's plan and cost from part (c).
-# Code block 39: the plan given against the model's
+# Code block 27: the plan given against the model's
 X = cat([45 0 0 20 40 0; 20 25 0 20 40 0; 20 25 0 20 40 0],
         [0 20 35 0 0 0; 0 0 40 0 0 15; 0 0 40 0 0 15]; dims = 3)
 @assert round(r4.TC, digits = 2) == 270112.50
@@ -767,7 +975,7 @@ r4.x == X
 ## Example 5(a): The plan
 # Determine the plan that minimizes total cost over the 26 weeks, and
 # check it.
-# Code block 40: Ex. 5's data, the bounds and the initial setup
+# Code block 28: Ex. 5's data, the bounds and the initial setup
 # demand in each period, each product (ton): weeks 1-13, then 14-26
 d = hcat([26, 20, 20, 23, 41, 10, 27, 14, 26, 27, 14, 23, 14,
           13, 27, 31, 32, 51, 22, 13, 16, 17, 28, 36, 27, 30],
@@ -795,17 +1003,17 @@ z⁰ = [1 0; 1 0; 1 0]
 # convert y⁰ and yᵗ⁺¹ from 2D (m x g) to 3D (m x t x g)
 LBʸ = [reshape(y⁰, m, 1, g) zeros(m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)]
 UBʸ = [reshape(y⁰, m, 1, g) fill(Inf, m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)];
-# Code block 41: Ex. 5 solved with prodinv_switch, and timed
+# Code block 29: Ex. 5 solved with prodinv_switch, and timed
 secs = @elapsed r5 = prodinv_switch(cᵖ, cʷ, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 @show r5.TC
 @show round(Int, secs);
-# Code block 42: the production, inventory and switchover costs
+# Code block 30: the production, inventory and switchover costs
 # Reshaped cᵖ broadcast for multiplication with r5.x
 @show TCᵖ = sum((reshape(cᵖ,m,1,g).*r5.x)[:])
 # First period excluded
 @show TCⁱ = sum((reshape(cⁱ,m,1,g).*r5.y[:,2:end,:])[:])
 @show TCʷ = sum((reshape(cʷ,m,1,g).*r5.v)[:]);
-# Code block 43: their sum, and the published total
+# Code block 31: their sum, and the published total
 @assert round(r5.TC, digits = 2) == 149745.64
 # @assert stops the script with an error unless the expression after it is
 # true. A run that gets past this line has confirmed that the solver's
@@ -817,7 +1025,7 @@ secs = @elapsed r5 = prodinv_switch(cᵖ, cʷ, cⁱ, d, u, z⁰, LBʸ, UBʸ)
 ## Example 5(b): A report for each stage
 # Report the plan to the person running each stage: what the stage makes
 # of each product in each week.
-# Code block 44: a report for the person running each stage
+# Code block 32: a report for the person running each stage
 using DataFrames
 report(df) = HTML("<div class=\"report\">" * sprint(io -> show(io,
 # sprint runs the function it is given on a string buffer and returns what
@@ -843,7 +1051,7 @@ end
 ## Example 5(c): A report for each product
 # Report the plan to each product's product manager: its demand, what is
 # finished each week and the finished inventory on hand.
-# Code block 45: a report for each product's product manager
+# Code block 33: a report for each product's product manager
 for k in 1:g
     display(report(DataFrame("Week" => 1:t, "Demand" => d[:, k],
         "Finished" => round.(Int, r5.x[m, :, k]),

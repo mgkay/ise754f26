@@ -2674,16 +2674,28 @@
    "label": "Fig. 2",
    "word": "Fig."
   },
-  "fig-blocks-excl": {
+  "fig-ex1b-plan": {
    "label": "Fig. 3",
    "word": "Fig."
   },
-  "fig-setups": {
+  "fig-blocks-excl": {
    "label": "Fig. 4",
    "word": "Fig."
   },
-  "fig-blocks-switch": {
+  "fig-setups": {
    "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-blocks-switch": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-ex4-switch": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-ex4-plan": {
+   "label": "Fig. 8",
    "word": "Fig."
   },
   "tbl-four-classes": {
@@ -2714,16 +2726,20 @@
    "label": "Table 7",
    "word": "Table"
   },
-  "tbl-ex5-demand": {
+  "tbl-switch-4": {
    "label": "Table 8",
    "word": "Table"
   },
-  "tbl-ex5-stages": {
+  "tbl-ex5-demand": {
    "label": "Table 9",
    "word": "Table"
   },
-  "tbl-ex5-products": {
+  "tbl-ex5-stages": {
    "label": "Table 10",
+   "word": "Table"
+  },
+  "tbl-ex5-products": {
+   "label": "Table 11",
    "word": "Table"
   },
   "mdl-prodinv-coupled-lp": {
