@@ -2650,16 +2650,20 @@
   }
  },
  "4.4": {
-  "eq-prodinv-coupled": {
+  "eq-prodinv-coupled-lp": {
    "label": "Eq. 1",
    "word": "Eq."
   },
-  "eq-prodinv-excl": {
+  "eq-prodinv": {
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-prodinv-switch": {
+  "eq-prodinv-excl": {
    "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-prodinv-switch": {
+   "label": "Eq. 4",
    "word": "Eq."
   },
   "fig-sharing": {
@@ -2722,18 +2726,23 @@
    "label": "Table 10",
    "word": "Table"
   },
-  "mdl-prodinv-coupled": {
+  "mdl-prodinv-coupled-lp": {
    "label": "Model 1",
    "word": "Model",
    "name": "Coupled products"
   },
-  "mdl-prodinv-excl": {
+  "mdl-prodinv-coupled": {
    "label": "Model 2",
+   "word": "Model",
+   "name": "Coupled products with setups"
+  },
+  "mdl-prodinv-excl": {
+   "label": "Model 3",
    "word": "Model",
    "name": "Exclusive shared resources"
   },
   "mdl-prodinv-switch": {
-   "label": "Model 3",
+   "label": "Model 4",
    "word": "Model",
    "name": "Switchover costs"
   },

@@ -128,7 +128,7 @@ function twonets!(ax; panel = :coupling, r = 0.16, dx = 1.5, dy = 1.25,
         ye = -0.35
         lbl((xr + 1.7, ye + 0.36), "Couples each network";
             al = (:center, :bottom), fs = ls - 1)
-        lbl((xr, ye), L"x_{2,2,1} + x_{2,2,2} \;\le\; u_2\, z_{2,2}";
+        lbl((xr, ye), L"x_{2,2,1} + x_{2,2,2} \;\le\; u_{2,2}";
             fs = ls + 2)
         lbl((xr + 0.95, ye - 0.8), "Continuous\nvariables";
             al = (:center, :top), fs = ls - 1)
@@ -172,8 +172,8 @@ rowgap!(fig.layout, 4)
 fig
 
 # Sec. 2. Coupling constraints
-## Model: Coupled products
-# Model: coupled products
+## Model: Coupled products with setups
+# Model: coupled products with setups
 using JuMP, HiGHS, Logjam
 function prodinv_coupled(cᵖ, cˢ, cⁱ, d, UBˣ, u, z̄, LBʸ, UBʸ)
     m, g = size(cᵖ)
