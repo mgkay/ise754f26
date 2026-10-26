@@ -6811,10 +6811,10 @@ y⁰ = [0 0; 0 0; 0 sum(d[[1 2], 2])] = [0 0; 0 0; 0 11]</code></pre>
 <span id="cb50-4"><a href="#cb50-4"></a><span class="pp">@show</span> <span class="fu">round</span>(<span class="dt">Int</span>, secs);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>r5.TC = 149745.64188911687
-round(Int, secs) = 60</code></pre>
+round(Int, secs) = 57</code></pre>
 </div>
 </div>
-<p>Here the solve takes about a minute, 60 seconds on this page’s render. Code block 30 finds the plan’s production, inventory and switchover costs as Code block 22 does for Ex. 3, and Code block 31 adds them and checks the total against the problem’s published solution:</p>
+<p>Here the solve takes about a minute, 57 seconds on this page’s render. Code block 30 finds the plan’s production, inventory and switchover costs as Code block 22 does for Ex. 3, and Code block 31 adds them and checks the total against the problem’s published solution:</p>
 <div id="80" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Code block 30: the production, inventory and switchover costs</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a><span class="co"># Reshaped cᵖ broadcast for multiplication with r5.x</span></span>
@@ -6914,7 +6914,7 @@ Table 9: What each stage makes of each product in each week (ton).
 <div class="quarto-layout-row">
 <div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ex5-stages" style="flex-basis: 33.3%;justify-content: center;">
 <div class="report"><div class="data-frame" style="overflow-x: scroll;">
-<div id="tbl-ex5-stages-1" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" style="margin-bottom: 6px;" data-quarto-postprocess="true">
+<div id="tbl-ex5-stages-1" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true" style="margin-bottom: 6px;">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ex5-stages-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Stage 1
@@ -7068,7 +7068,7 @@ Table 9: What each stage makes of each product in each week (ton).
 </div>
 <div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ex5-stages" style="flex-basis: 33.3%;justify-content: center;">
 <div class="report"><div class="data-frame" style="overflow-x: scroll;">
-<div id="tbl-ex5-stages-2" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" style="margin-bottom: 6px;" data-quarto-postprocess="true">
+<div id="tbl-ex5-stages-2" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true" style="margin-bottom: 6px;">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ex5-stages-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Stage 2
@@ -7222,7 +7222,7 @@ Table 9: What each stage makes of each product in each week (ton).
 </div>
 <div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ex5-stages" style="flex-basis: 33.3%;justify-content: center;">
 <div class="report"><div class="data-frame" style="overflow-x: scroll;">
-<div id="tbl-ex5-stages-3" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" style="margin-bottom: 6px;" data-quarto-postprocess="true">
+<div id="tbl-ex5-stages-3" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true" style="margin-bottom: 6px;">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ex5-stages-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) Stage 3
@@ -7408,7 +7408,7 @@ Table 10: Each product’s demand, the tons finished at stage 3 and the finishe
 <div class="quarto-layout-row">
 <div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ex5-products" style="flex-basis: 50.0%;justify-content: center;">
 <div class="report"><div class="data-frame" style="overflow-x: scroll;">
-<div id="tbl-ex5-products-1" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" style="margin-bottom: 6px;" data-quarto-postprocess="true">
+<div id="tbl-ex5-products-1" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true" style="margin-bottom: 6px;">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ex5-products-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Product 1
@@ -7589,7 +7589,7 @@ Table 10: Each product’s demand, the tons finished at stage 3 and the finishe
 </div>
 <div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ex5-products" style="flex-basis: 50.0%;justify-content: center;">
 <div class="report"><div class="data-frame" style="overflow-x: scroll;">
-<div id="tbl-ex5-products-2" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" style="margin-bottom: 6px;" data-quarto-postprocess="true">
+<div id="tbl-ex5-products-2" class="data-frame do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true" style="margin-bottom: 6px;">
 <figure class="quarto-float quarto-subfloat-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ex5-products-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Product 2
