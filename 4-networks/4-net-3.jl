@@ -489,7 +489,9 @@ xˡ, yˡ = latestplan(d, u, y⁰, yᵗ⁺¹)
 @show sum(cᵖ .* xˡ) + sum(cⁱ .* yˡ[:, 2:end]);   # its cost
 # Code block 8: the optimal flows of Ex. 3 on its network
 drawpinet(cᵖ, u, cⁱ, d, y⁰, yᵗ⁺¹; X = xᵒ, Y = yᵒ)
-[xᵒ; d']                      # Code block 9: production, then demand
+# Code block 9: production, then demand
+prt([xᵒ; d']; rows = [string.("Stage ", 1:m); "Demand"],
+    cols = string.(1:t), row_title = "Period")
 yᵒ                            # Code block 10: inventory
 
 ## Example 3(c): By hand, with capacity that binds
@@ -615,7 +617,9 @@ TCˡ = sum(cᵖ .* xˡ) + sum(cⁱ .* yˡ[:, 2:end])   # its cost
 @show maximum(yˡ[:, 2:t])          # the most it holds at a stage
 UBⁿ = [y⁰ fill(Inf, m, t-1) yᵗ⁺¹]  # no storage limit
 @show prodinv(cᵖ, cⁱ, d, u, LBʸ, UBⁿ).TC;
-[xᵒ; d']                      # Code block 17: production, then demand
+# Code block 17: production, then demand
+prt([xᵒ; d']; rows = [string.("Stage ", 1:m); "Demand"],
+    cols = string.(1:t), row_title = "Period")
 yᵒ                            # Code block 18: inventory
 TCᵖ, TCⁱ = sum(cᵖ.*xᵒ), sum(cⁱ.*yᵒ)   # Code block 19: component costs
 TCᵖ + TCⁱ, TCᵒ                # Code block 20: their sum, and the total
@@ -677,7 +681,9 @@ UBʸ = [y⁰ fill(30, m, t-1) yᵗ⁺¹];  # max inventory storage level
 z̄ = ones(Int, m, t)                 # one setup a month at most
 TCᵒ, xᵒ, yᵒ, zᵒ = prodinv_setup(cᵖ, cˢ, cⁱ, d, u, z̄, LBʸ, UBʸ)
 @show TCᵒ;
-[xᵒ; d']                      # Code block 25: production, then demand
+# Code block 25: production, then demand
+prt([xᵒ; d']; rows = [string.("Stage ", 1:m); "Demand"],
+    cols = string.(1:t), row_title = "Period")
 yᵒ                            # Code block 26: inventory
 zᵒ                            # Code block 27: setups
 # Code block 28: the cost components, inventory from period 2
@@ -745,7 +751,7 @@ function weekly(v)
     cˢ = [0.0, cTL]                 # setup costs ($/setup)
     u = [f, qmax]                   # capacity per setup (ton)
     z̄ = [ones(Int, 1, weeks);       # most setups in a week: the plant,
-         fill(10, 1, weeks)]        #   and trucks, more than ever needed
+         fill(ceil(Int, f/qmax), 1, weeks)]  # and trucks for all f tons
     cⁱ = h/weeks .* [v, v + cTL/qmax]   # inventory cost ($/ton-week)
     LBʸ = zeros(2, weeks + 1)       # no inventory at either end
     UBʸ = [zeros(2) fill(Inf, 2, weeks - 1) zeros(2)]

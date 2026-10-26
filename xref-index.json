@@ -2509,8 +2509,12 @@
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-util": {
+  "eq-most-setups": {
    "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-util": {
+   "label": "Eq. 6",
    "word": "Eq."
   },
   "fig-network": {
@@ -2726,20 +2730,16 @@
    "label": "Table 7",
    "word": "Table"
   },
-  "tbl-switch-4": {
+  "tbl-ex5-demand": {
    "label": "Table 8",
    "word": "Table"
   },
-  "tbl-ex5-demand": {
+  "tbl-ex5-stages": {
    "label": "Table 9",
    "word": "Table"
   },
-  "tbl-ex5-stages": {
-   "label": "Table 10",
-   "word": "Table"
-  },
   "tbl-ex5-products": {
-   "label": "Table 11",
+   "label": "Table 10",
    "word": "Table"
   },
   "mdl-prodinv-coupled-lp": {

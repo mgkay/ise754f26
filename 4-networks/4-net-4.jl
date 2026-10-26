@@ -308,7 +308,7 @@ fig
 # Example 1: Extraction and staging
 ## Example 1(a): Ten-week plan
 # Determine the ten-week plan and its cost with @mdl-prodinv-coupled,
-# after a lower bound on the cost by hand.
+# after a lower bound on the cost and the most setups in a week by hand.
 # Code block 3: Ex. 1's data
 d = [13 15 21 14 12 11 45 25 48 14      # demand in week j for material k
      11  9 17 15 18 11  6  7 15 20]'    #   (ton)
@@ -325,13 +325,13 @@ yᵗ⁺¹ = [0 0; 0 0; 0 5]                  # final inventory (ton)
 uʸ = [20 20; Inf Inf; Inf Inf]          # storage capacity (ton)
 LBʸ = [reshape(y⁰, m, 1, g) zeros(m, t-1, g) reshape(yᵗ⁺¹, m, 1, g)]
 UBʸ = hcat(reshape(y⁰, m, 1, g), repeat(reshape(uʸ, m, 1, g), 1, t-1),
-           reshape(yᵗ⁺¹, m, 1, g))
-# most setups: none to extract, up to 20 trucks or trailers a week
-z̄ = [zeros(Int, 1, t); fill(20, 2, t)];
-# Code block 4: a lower bound on the cost, by flow balance
-ship = sum(d) + sum(y⁰) - sum(yᵗ⁺¹)    # tons to ship
-@show loads = ceil.(Int, ship ./ u[2:3])      # trucks, trailers
-LB = sum(cᵖ[1, :] .* vec(sum(d, dims = 1))) + sum(cˢ[2:3] .* loads)
+           reshape(yᵗ⁺¹, m, 1, g));
+# Code block 4: a lower bound on the cost, and the most setups
+ship = sum(d) - sum(y⁰) + sum(yᵗ⁺¹)            # tons to ship
+@show min_loads = ceil.(Int, ship ./ u[2:3])   # fewest trucks, trailers
+max_loads = min_loads                          # the most in any one week
+z̄ = [zeros(Int, 1, t); repeat(max_loads, 1, t)] # none to extract
+LB = sum(cᵖ[1, :] .* vec(sum(d, dims = 1))) + sum(cˢ[2:3] .* min_loads)
 # Code block 5: Ex. 1 solved with prodinv_coupled
 TCᵒ, xᵒ, yᵒ, zᵒ = prodinv_coupled(cᵖ, cˢ, cⁱ, d, UBˣ, u, z̄, LBʸ, UBʸ)
 @show TCᵒ
@@ -888,8 +888,8 @@ function switchfig(z, z⁰, cʷ; w = 640, ls = 14)
                  figure_padding = 4)
     ax = Axis(fig[1, 1]; aspect = DataAspect())
     hidedecorations!(ax); hidespines!(ax)
-    tx(x, y, s; fs = ls, al = (:center, :center)) =
-        text!(ax, x, y; text = s, fontsize = fs, align = al, color = ink)
+    tx(x, y, s; fs = ls, al = (:center, :center), c = ink) =
+        text!(ax, x, y; text = s, fontsize = fs, align = al, color = c)
     for i in 1:m, c in 0:t                       # stage i, month c
         y = -i
         k = findfirst(==(1), Z[i, c+1, :])       # product set up for
@@ -897,7 +897,7 @@ function switchfig(z, z⁰, cʷ; w = 640, ls = 14)
         poly!(ax, Rect(c + 0.06, y + 0.06, 0.88, 0.88); color = :white,
               strokecolor = sw ? flowc : ink, strokewidth = sw ? 2.5 : 0.8)
         k === nothing && continue
-        tx(c + 0.5, y + (sw ? 0.64 : 0.5), "$k")
+        tx(c + 0.5, y + (sw ? 0.64 : 0.5), "$k"; c = datac)   # given
         sw && text!(ax, c + 0.5, y + 0.3;
                     text = rich("\$", commas(cʷ[i, k]); color = flowc),
                     fontsize = ls - 2, align = (:center, :center))
