@@ -351,13 +351,15 @@ prt([zᵒ[2:3, :]; d'];
 # total production, inventory, and transport cost over the horizon. The
 # forecasted demand for both materials is 20, 10, 45 and 12, 25, 5 tons,
 # respectively. It costs \$600 and \$400 to extract each ton of material
-# at the facility, and the annual inventory carrying rate is 0.5.
-# Currently, 20 tons of the second material is in inventory at the final
-# destination. A different amount of material can be in inventory at the
-# end of the planning period. For each material, each period, 30, 30, 30
-# and 16, 17, 17 tons, respectively, are produced; 30, 10, 50 and 0, 20,
-# 30 tons are transported to the staging station; and 22, 8, 60 and 0,
-# 17, 33 tons are transported to the final destination.
+# at the facility, and the annual inventory carrying rate is 0.5. The
+# facility can extract up to 30 and 20 tons per week of each material,
+# respectively. Currently, 20 tons of the second material is in
+# inventory at the final destination. A different amount of material can
+# be in inventory at the end of the planning period. For each material,
+# each period, 30, 30, 30 and 16, 17, 17 tons, respectively, are
+# produced; 30, 10, 50 and 0, 20, 30 tons are transported to the staging
+# station; and 22, 8, 60 and 0, 17, 33 tons are transported to the final
+# destination.
 # Ex. 1(b)'s plan on each material's network: each item's network, stage
 # i a row and period j a column, the plan's flows, the demand and the
 # inventory at the start in red, and in blue the inventory each node
