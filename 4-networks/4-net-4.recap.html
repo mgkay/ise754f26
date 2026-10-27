@@ -25,6 +25,7 @@
   }
   html.present { font-size: 125%; }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }   /* the site copy has no Artifact skeleton to say so */
   body {
     background: var(--bg); color: var(--ink); font-family: var(--serif);
     font-size: 1.0625rem; line-height: 1.6; margin: 0;
@@ -118,11 +119,12 @@
   }
 </style>
 <style>
-  /* The interactive panel. It counts Example 4's switchovers from a grid of setups, by the
-     lecture's rule; 4-net-4.recap.jl runs the functions between core:begin and core:end under
-     Node against that rule, against row (g), and against Model 4's own plans for Examples 3
-     and 4. Fig. 5's colors for the two products; a switchover, which has to be determined, in
-     blue, as in Fig. 7. */
+  /* The interactive panel. Example 4's setup indicators, z for each product, pressed on and
+     off, and the switchover indicators v they give, by the lecture's rule; 4-net-4.recap.jl
+     runs the functions between core:begin and core:end under Node against that rule, against
+     row (g)'s least indicators, and against Model 4's own plans for Examples 3 and 4. Fig. 5's
+     colors for the two products; a switchover, which has to be determined, in blue, as in
+     Fig. 7. */
   .note { font-family: var(--sans); font-size: 0.88em; color: var(--muted); }
   .ctl { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-family: var(--sans); }
   .ctl button {
@@ -131,7 +133,7 @@
     padding: 0.3em 0.8em; cursor: pointer;
   }
   .ctl button[aria-pressed="true"] { background: var(--accent); color: #fff; }
-  .ctl .sep { flex: 0 0 0.6rem; }
+  .ctl button:disabled { color: var(--gray); border-color: var(--line); cursor: default; }
   .steptext {
     font-family: var(--sans); background: var(--tint); border-radius: 0.25rem;
     padding: 0.6em 0.9em; color: var(--strong); min-height: 3.2em;
@@ -143,29 +145,40 @@
   .tile .n { display: block; font-size: 1.5em; font-weight: 700; color: var(--strong); font-variant-numeric: tabular-nums; }
   .tile .l { display: block; font-size: 0.85em; color: var(--muted); }
   .tile.found .n { color: #1565c0; }
-  table.setgrid { width: auto; min-width: 100%; font-family: var(--sans); border-collapse: separate; border-spacing: 4px; }
-  table.setgrid th, table.setgrid td { padding: 0; text-align: center; vertical-align: middle; background: none !important; }
-  table.setgrid th { font-size: 0.85em; color: var(--muted); font-weight: 600; padding: 0 0.2em; }
-  table.setgrid th.stage { text-align: right; padding-right: 0.5em; color: var(--strong); white-space: nowrap; }
-  table.setgrid td.total { text-align: right; padding-left: 0.6em; font-weight: 700; color: #1565c0; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  table.setgrid td.total.plain { color: var(--soft); }
-  .cell {
-    width: 100%; min-width: 3.1rem; height: 3.3rem; font: inherit; border: 1px solid var(--line);
-    border-radius: 0.25rem; cursor: pointer; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 0.05rem; color: var(--strong); padding: 0;
+  .zv { display: flex; flex-wrap: wrap; gap: 0.8rem 2rem; justify-content: center; }
+  .zv + .zv { border-top: 1px dashed var(--line); padding-top: 0.8rem; }
+  .mat { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; min-width: 0; max-width: 100%; }
+  .mat .ml { font-family: var(--sans); font-size: 0.95em; color: var(--strong); }
+  .mat .scroll { max-width: 100%; }
+  table.mx { width: auto; border: none; border-collapse: separate; border-spacing: 3px; font-family: var(--sans); }
+  table.mx thead tr:last-child { border: none; }
+  table.mx th, table.mx td { padding: 0; text-align: center; vertical-align: middle; background: none !important; }
+  table.mx th { font-size: 0.75em; color: var(--muted); font-weight: 600; padding: 0 0.15em; }
+  table.mx th.st { text-align: right; padding-right: 0.35em; }
+  table.mx td.lb, table.mx td.rb { width: 0.4rem; border: 2px solid var(--strong); }
+  table.mx td.lb { border-right: none; }
+  table.mx td.rb { border-left: none; }
+  .zc {
+    width: 2.45rem; height: 2.45rem; font: inherit; border: 1px solid var(--line);
+    border-radius: 0.25rem; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 0.05rem; color: var(--strong); padding: 0; background: #fff;
   }
-  .cell .k { font-size: 1.15em; font-weight: 700; line-height: 1; }
-  .cell .c { font-size: 0.72em; line-height: 1.1; min-height: 1.1em; font-variant-numeric: tabular-nums; }
-  .cell.p1 { background: #cfe3f5; }
-  .cell.p2 { background: #f8dcc2; }
-  .cell.p0 { background: #fff; color: var(--gray); }
-  .cell.p0 .k { font-size: 0.78em; font-weight: 600; }
-  .cell.sw { outline: 3px solid #1565c0; outline-offset: -3px; }
-  .cell.sw .c { color: #1565c0; font-weight: 700; }
-  .cell.every .c { color: var(--soft); }
-  .cell.before { border-style: dashed; }
-  .cell.changed { box-shadow: inset 0 0 0 2px #c62828; }
-  .cell.sw.changed { box-shadow: inset 0 0 0 5px #c62828; }
+  button.zc { cursor: pointer; }
+  .zc .k { font-size: 1.1em; font-weight: 700; line-height: 1; }
+  .zc .c { font-size: 0.62em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .zc.off { color: var(--gray); }
+  .zc.p1 { background: #cfe3f5; }
+  .zc.p2 { background: #f8dcc2; }
+  .zc.start { border-style: dashed; }
+  .zc.blank { border-color: transparent; }
+  .zc.sw { outline: 3px solid #1565c0; outline-offset: -3px; }
+  .zc.sw .c { color: #1565c0; font-weight: 700; }
+  .zc.changed { box-shadow: inset 0 0 0 2px #c62828; }
+  @media (max-width: 30rem) {
+    .zc { width: 2.1rem; height: 2.1rem; }
+    .zc .c { font-size: 0.55em; }
+    table.mx { border-spacing: 2px; }
+  }
   table.cases { width: auto; }
   table.cases td, table.cases th { text-align: center; }
   table.cases tr.mark td { background: var(--hl-warn); }
@@ -181,7 +194,8 @@
   table.grand tr.pick[aria-selected="true"] td.q { background: var(--hl) !important; box-shadow: inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent); }
   table.grand td.grp { font-weight: 600; color: var(--strong); background: #fff !important; }
   table.grand td.solved { white-space: normal; }
-  .fm-head { display: flex; flex-direction: column; gap: 0.25rem; }
+  .fm-head { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.9rem;
+             padding-top: 0.7rem; border-top: 1px solid var(--line); }
   .fm-head .t { font-family: var(--sans); font-weight: 700; color: var(--strong); font-size: 1.05em; }
   .fm-head .rel { font-family: var(--sans); font-size: 0.85em; color: var(--muted); }
   .fm-head .s { font-style: italic; font-size: 0.95em; }
@@ -325,33 +339,51 @@
     </div>
 
     <div class="view new">
-      <h3><span class="tag new">Another view</span> Set the stages up, and watch what is charged</h3>
-      <p>Each cell is the product a stage is set up for in a month, starting from Example 4's
-      plan. Press a cell to change it, to product 1, product 2 or neither; the
-      <b>Start</b> column is each stage's setup before month 1, as in Fig. 7. A switchover is outlined in
-      blue, with its cost, wherever a stage is set up for a product it was not set up for the
-      month before. The second button charges the same setups in every month a stage is set up
-      for a product instead, which is how a switchover is <em>not</em> charged.</p>
-      <div class="ctl" role="group" aria-label="How the cost is charged">
-        <button type="button" id="sw-once" aria-pressed="true">Once, at each switch (Model 4)</button>
-        <button type="button" id="sw-every" aria-pressed="false">Every month set up for it</button>
-        <span class="sep"></span>
-        <button type="button" id="sw-given">Example 4's plan</button>
-        <button type="button" id="sw-model">The model's plan</button>
+      <h3><span class="tag new">Another view</span> Switch the setups on and off, and read the switchovers</h3>
+      <p>The setup indicators start as Example 4&rsquo;s: \(z_{ij1}\) for the first product and
+      \(z_{ij2}\) for the second, a row for each stage and a column for each month, with each
+      stage&rsquo;s setup before month 1 in the <b>start</b> column. Press an indicator to switch
+      that setup on or off. A stage is set up for one product at a time, so switching a stage on
+      for one product in a month switches it off for the other. Below them are the switchover
+      indicators the setups give, \(v_{ijk} = 1\) where \(z_{ijk} = 1\) and
+      \(z_{i(j-1)k} = 0\), each with its cost.</p>
+      <div class="zv">
+        <div class="mat"><div class="ml">setups, product 1: \(z_{ij1}\)</div>
+          <div class="scroll"><table class="mx">
+            <thead><tr><th class="st">stage</th><th>start</th><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th></th></tr></thead>
+            <tbody id="z1"></tbody>
+          </table></div></div>
+        <div class="mat"><div class="ml">setups, product 2: \(z_{ij2}\)</div>
+          <div class="scroll"><table class="mx">
+            <thead><tr><th class="st">stage</th><th>start</th><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th></th></tr></thead>
+            <tbody id="z2"></tbody>
+          </table></div></div>
       </div>
-      <div class="scroll"><table class="setgrid">
-        <thead><tr><th></th><th>Start</th><th>Month 1</th><th>Month 2</th><th>Month 3</th><th>Month 4</th><th>Month 5</th><th>Month 6</th><th class="total-h">Charged</th></tr></thead>
-        <tbody id="sw-body"></tbody>
-      </table></div>
+      <div class="zv">
+        <div class="mat"><div class="ml">switchovers, product 1: \(v_{ij1}\)</div>
+          <div class="scroll"><table class="mx">
+            <thead><tr><th class="st">stage</th><th></th><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th></th></tr></thead>
+            <tbody id="v1"></tbody>
+          </table></div></div>
+        <div class="mat"><div class="ml">switchovers, product 2: \(v_{ij2}\)</div>
+          <div class="scroll"><table class="mx">
+            <thead><tr><th class="st">stage</th><th></th><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th></th></tr></thead>
+            <tbody id="v2"></tbody>
+          </table></div></div>
+      </div>
+      <div class="ctl">
+        <button type="button" id="sw-reset" disabled>Back to Example 4&rsquo;s setups</button>
+      </div>
       <div class="tiles">
-        <div class="tile found"><span class="n" id="sw-n"></span><span class="l" id="sw-nl">switchovers</span></div>
-        <div class="tile found"><span class="n" id="sw-cost"></span><span class="l" id="sw-cl">switchover cost</span></div>
-        <div class="tile"><span class="n">8 &middot; $9,000</span><span class="l">Example 4's plan, as the lecture counts it</span></div>
+        <div class="tile found"><span class="n" id="sw-n"></span><span class="l">switchovers</span></div>
+        <div class="tile found"><span class="n" id="sw-cost"></span><span class="l">switchover cost</span></div>
+        <div class="tile"><span class="n">8 &middot; $9,000</span><span class="l">Example 4&rsquo;s setups, as the lecture counts them</span></div>
       </div>
       <div class="steptext" id="sw-text" aria-live="polite"></div>
-      <p class="note">Product 1 is blue and product 2 orange, as in the lecture's Fig. 5; a cell
-      changed from Example 4's plan has a red edge. The grid counts switchovers only: whether a set
-      of setups can meet the demand is the question Model&nbsp;4 answers in Example 4(c).</p>
+      <p class="note">Product 1 is blue and product 2 orange, as in the lecture&rsquo;s Fig. 5, and a
+      switchover is outlined in blue, as in Fig. 7; a setup changed from Example 4&rsquo;s has a red
+      edge. The indicators count switchovers only: whether a set of setups can meet the demand is
+      the question Model&nbsp;4 answers in Example 4(c).</p>
     </div>
 
     <div class="view lecture">
@@ -484,41 +516,6 @@
 <!-- models:begin -->
 <!-- Written by 4-net-4.recap.jl from the lectures' own formulations; do not edit. -->
 <div class="fm">
-  <div class="fm-head" data-fm="43-1" hidden>
-    <span class="t">Lecture 4.3, Model 1: Production-inventory planning</span>
-    <span class="rel">Special case of Model 3: Minimum cost network flow in Lecture 4.2</span>
-    <p class="s">&ldquo;Constraints (a) and (b) in the model are the flow-balance equations for each node, while the remaining constraints represent lower- and upper-bounds on the decision variables \(x\) and \(y\).&rdquo;</p>
-  </div>
-  <div class="fm-head" data-fm="43-2" hidden>
-    <span class="t">Lecture 4.3, Model 2: Greedy as-late-as-possible procedure</span>
-    <p class="s">&ldquo;The procedure is exact only under its assumptions. A storage limit, an upper bound on the amount of inventory that can be carried from one period to the next, can break it: in Ex. 4 the latest plan would hold more at a stage than it can store, and only the linear program finds the plan that does not.&rdquo;</p>
-    <p class="note">Model 2 is a procedure, not a math program. Shown here is Model 1, whose plan it finds when its assumptions hold; its assumption (c), &ldquo;no storage limit binds&rdquo;, sets the storage row aside.</p>
-  </div>
-  <div class="fm-head" data-fm="43-3" hidden>
-    <span class="t">Lecture 4.3, Model 3: Production-inventory with setups</span>
-    <span class="rel">Generalization of Model 1: Production-inventory planning</span>
-    <p class="s">&ldquo;Model 3 generalizes Model 1 with the number of setups at each stage in each period. A machine is set up at most once in a period, so for a machine the number is the indicator; for trucks it is a count.&rdquo;</p>
-  </div>
-  <div class="fm-head" data-fm="44-1" hidden>
-    <span class="t">Lecture 4.4, Model 1: Coupled products</span>
-    <span class="rel">Generalization of Model 1: Production-inventory planning in Lecture 4.3</span>
-    <p class="s">&ldquo;Model 1 generalizes Model 1 in Lecture 4.3: each flow carries a product index, and the products at a stage share its capacity in each period, which is given, as Lecture 4.3’s capacities are.&rdquo;</p>
-  </div>
-  <div class="fm-head" data-fm="44-2" hidden>
-    <span class="t">Lecture 4.4, Model 2: Coupled products with setups</span>
-    <span class="rel">Generalization of Model 1: Coupled products</span>
-    <p class="s">&ldquo;Model 2 generalizes Model 1 as Model 3 in Lecture 4.3 generalizes Model 1 in Lecture 4.3: the shared capacity, given in Model 1, is the capacity per setup times the number of setups, determined in the model, each setup at a cost.&rdquo;</p>
-  </div>
-  <div class="fm-head" data-fm="44-3" hidden>
-    <span class="t">Lecture 4.4, Model 3: Exclusive shared resources</span>
-    <span class="rel">Generalization of Model 1: Production-inventory planning in Lecture 4.3</span>
-    <p class="s">&ldquo;Model 3 generalizes Model 1 in Lecture 4.3: each product has its own network, its capacity at a stage gated by whether the stage is set up for it, and the linking rows join the networks.&rdquo;</p>
-  </div>
-  <div class="fm-head" data-fm="44-4" hidden>
-    <span class="t">Lecture 4.4, Model 4: Switchover costs</span>
-    <span class="rel">Generalization of Model 3: Exclusive shared resources</span>
-    <p class="s">&ldquo;Model 4 generalizes Model 3 by adding a switchover indicator for each stage, period and product, its cost to the objective, and the rows (g) that set it.&rdquo;</p>
-  </div>
   <div class="eq" data-fm="43-1 43-2" hidden>\[\text{Minimize} \quad \sum_{i=1}^{m} \sum_{j=1}^{t} c_i^p\, x_{ij} + \sum_{i=1}^{m} \sum_{j=2}^{t+1} c_i^i\, y_{ij}\]</div>
   <div class="eq" data-fm="43-3" hidden>\[\text{Minimize} \quad \sum_{i=1}^{m} \sum_{j=1}^{t} \bigl( c_i^p\, x_{ij} + \colorbox{#fff3cd}{$c_i^s\, z_{ij}$} \bigr) + \sum_{i=1}^{m} \sum_{j=2}^{t+1} c_i^i\, y_{ij}\]</div>
   <div class="eq" data-fm="44-1 44-3" hidden>\[\text{Minimize} \quad \sum_{i=1}^{m} \sum_{j=1}^{t} \sum_{k=1}^{g} c_{ik}^p\, x_{ijk} + \sum_{i=1}^{m} \sum_{j=2}^{t+1} \sum_{k=1}^{g} c_{ik}^i\, y_{ijk}\]</div>
@@ -616,6 +613,41 @@
     <li>\(c_{ik}^w\) = switchover cost of product \(k\) at stage \(i\) ($/switchover)</li>
     <li>\(z_{ik}^0\) = \(\begin{cases} 1, & \text{if stage } i \text{ is set up for product } k \text{ before period 1} \\ 0, & \text{otherwise} \end{cases}\).</li>
   </ul></div>
+  <div class="fm-head" data-fm="43-1" hidden>
+    <span class="t">Lecture 4.3, Model 1: Production-inventory planning</span>
+    <span class="rel">Special case of Model 3: Minimum cost network flow in Lecture 4.2</span>
+    <p class="s">&ldquo;Constraints (a) and (b) in the model are the flow-balance equations for each node, while the remaining constraints represent lower- and upper-bounds on the decision variables \(x\) and \(y\).&rdquo;</p>
+  </div>
+  <div class="fm-head" data-fm="43-2" hidden>
+    <span class="t">Lecture 4.3, Model 2: Greedy as-late-as-possible procedure</span>
+    <p class="s">&ldquo;The procedure is exact only under its assumptions. A storage limit, an upper bound on the amount of inventory that can be carried from one period to the next, can break it: in Ex. 4 the latest plan would hold more at a stage than it can store, and only the linear program finds the plan that does not.&rdquo;</p>
+    <p class="note">Model 2 is a procedure, not a math program. Shown here is Model 1, whose plan it finds when its assumptions hold; its assumption (c), &ldquo;no storage limit binds&rdquo;, sets the storage row aside.</p>
+  </div>
+  <div class="fm-head" data-fm="43-3" hidden>
+    <span class="t">Lecture 4.3, Model 3: Production-inventory with setups</span>
+    <span class="rel">Generalization of Model 1: Production-inventory planning</span>
+    <p class="s">&ldquo;Model 3 generalizes Model 1 with the number of setups at each stage in each period. A machine is set up at most once in a period, so for a machine the number is the indicator; for trucks it is a count.&rdquo;</p>
+  </div>
+  <div class="fm-head" data-fm="44-1" hidden>
+    <span class="t">Lecture 4.4, Model 1: Coupled products</span>
+    <span class="rel">Generalization of Model 1: Production-inventory planning in Lecture 4.3</span>
+    <p class="s">&ldquo;Model 1 generalizes Model 1 in Lecture 4.3: each flow carries a product index, and the products at a stage share its capacity in each period, which is given, as Lecture 4.3’s capacities are.&rdquo;</p>
+  </div>
+  <div class="fm-head" data-fm="44-2" hidden>
+    <span class="t">Lecture 4.4, Model 2: Coupled products with setups</span>
+    <span class="rel">Generalization of Model 1: Coupled products</span>
+    <p class="s">&ldquo;Model 2 generalizes Model 1 as Model 3 in Lecture 4.3 generalizes Model 1 in Lecture 4.3: the shared capacity, given in Model 1, is the capacity per setup times the number of setups, determined in the model, each setup at a cost.&rdquo;</p>
+  </div>
+  <div class="fm-head" data-fm="44-3" hidden>
+    <span class="t">Lecture 4.4, Model 3: Exclusive shared resources</span>
+    <span class="rel">Generalization of Model 1: Production-inventory planning in Lecture 4.3</span>
+    <p class="s">&ldquo;Model 3 generalizes Model 1 in Lecture 4.3: each product has its own network, its capacity at a stage gated by whether the stage is set up for it, and the linking rows join the networks.&rdquo;</p>
+  </div>
+  <div class="fm-head" data-fm="44-4" hidden>
+    <span class="t">Lecture 4.4, Model 4: Switchover costs</span>
+    <span class="rel">Generalization of Model 3: Exclusive shared resources</span>
+    <p class="s">&ldquo;Model 4 generalizes Model 3 by adding a switchover indicator for each stage, period and product, its cost to the objective, and the rows (g) that set it.&rdquo;</p>
+  </div>
 </div>
 <!-- models:end -->
       <p class="note">Lecture 4.3's models make one product, so its rows carry two indices,
@@ -633,39 +665,45 @@
   </footer>
 
 </div>
-<script type="application/json" id="recap-data">{"ex4":{"S":[[1,2,2,1,1,1],[1,1,2,1,1,2],[1,1,2,1,1,2]],"Smodel":[[1,2,2,1,1,0],[1,1,2,1,1,2],[1,1,2,1,1,2]],"cw":[[2800,3200],[800,600],[400,300]],"s0":[1,1,1]}}</script>
+<script type="application/json" id="recap-data">{"ex4":{"Z":[[[1,0,0,1,1,1],[1,1,0,1,1,0],[1,1,0,1,1,0]],[[0,1,1,0,0,0],[0,0,1,0,0,1],[0,0,1,0,0,1]]],"cw":[[2800,3200],[800,600],[400,300]],"z0":[[1,1,1],[0,0,0]]}}</script>
 <script>
 // core:begin
-// Example 4(a)'s rule: a stage is switched over to a product in a month in which it is set up
-// for the product and was not the month before, the month before month 1 its initial setup.
-// S[i][j] is the product stage i is set up for in month j (1 or 2, 0 for neither), s0[i] its
-// setup before month 1, and cw[i][k - 1] the cost of a switchover to product k at stage i.
-function switchovers(s0, S, cw) {
-  var stages = [], n = 0, cost = 0;
-  for (var i = 0; i < S.length; i++) {
-    var cells = [], total = 0;
-    for (var j = 0; j < S[i].length; j++) {
-      var before = j === 0 ? s0[i] : S[i][j - 1], k = S[i][j];
-      var v = k > 0 && k !== before ? k : 0, c = v ? cw[i][v - 1] : 0;
-      cells.push({v: v, c: c});
-      total += c;
-      if (v) n++;
+// Example 4(a)'s rule, the paid switch of row (g): a stage is switched over to a product in a
+// month in which it is set up for the product and was not the month before, the month before
+// month 1 its initial setup. Z[k][i][j] is the setup indicator of product k + 1 at stage i + 1
+// in month j + 1, z0[k][i] its initial setup, and cw[i][k] the cost of a switchover to product
+// k + 1 at stage i + 1.
+function switchovers(z0, Z, cw) {
+  var V = [], per = [], n = 0, cost = 0, i, j, k;
+  for (k = 0; k < Z.length; k++) {
+    V.push([]);
+    for (i = 0; i < Z[k].length; i++) {
+      V[k].push([]);
+      for (j = 0; j < Z[k][i].length; j++) {
+        var before = j === 0 ? z0[k][i] : Z[k][i][j - 1];
+        V[k][i].push(Z[k][i][j] === 1 && before === 0 ? 1 : 0);
+      }
     }
-    stages.push({cells: cells, cost: total});
-    cost += total;
   }
-  return {stages: stages, n: n, cost: cost};
-}
-// The reading the lecture rules out: a charge in every month a stage is set up for a product.
-function everyMonth(S, cw) {
-  var per = [], n = 0, cost = 0;
-  for (var i = 0; i < S.length; i++) {
+  for (i = 0; i < cw.length; i++) {
     var s = 0;
-    for (var j = 0; j < S[i].length; j++) if (S[i][j] > 0) { n++; s += cw[i][S[i][j] - 1]; }
+    for (k = 0; k < V.length; k++)
+      for (j = 0; j < V[k][i].length; j++) if (V[k][i][j]) { n++; s += cw[i][k]; }
     per.push(s);
     cost += s;
   }
-  return {per: per, n: n, cost: cost};
+  return {V: V, per: per, n: n, cost: cost};
+}
+// A stage is set up for one product at a time: switching stage i + 1 on for product k + 1 in
+// month j + 1 switches it off for any other product that month. Returns the products switched
+// off by the press.
+function press(Z, k, i, j) {
+  var off = [];
+  Z[k][i][j] = 1 - Z[k][i][j];
+  if (Z[k][i][j] === 1)
+    for (var q = 0; q < Z.length; q++)
+      if (q !== k && Z[q][i][j] === 1) { Z[q][i][j] = 0; off.push(q); }
+  return off;
 }
 // core:end
 
@@ -673,81 +711,88 @@ function everyMonth(S, cw) {
   var D = JSON.parse(document.getElementById("recap-data").textContent).ex4;
   function $(id) { return document.getElementById(id); }
   function money(v) { return "$" + Number(v).toLocaleString("en-US"); }
-  function copy(a) { return a.map(function (r) { return r.slice(); }); }
-  var st = {s0: D.s0.slice(), S: copy(D.S), mode: "once"};
-  var NAME = ["neither", "product 1", "product 2"];
+  function copy(Z) { return Z.map(function (a) { return a.map(function (r) { return r.slice(); }); }); }
+  var Z = copy(D.Z), said = "";
 
-  function list(a) { return a.join("; "); }
-  function render() {
-    var sw = switchovers(st.s0, st.S, D.cw), ev = everyMonth(st.S, D.cw);
-    var once = st.mode === "once", body = $("sw-body");
+  function same() { return JSON.stringify(Z) === JSON.stringify(D.Z); }
+  function cell(tag, cls, k, c) {
+    var e = document.createElement(tag);
+    e.className = "zc " + cls;
+    e.innerHTML = '<span class="k">' + k + "</span>" + (c === undefined ? "" : '<span class="c">' + c + "</span>");
+    return e;
+  }
+  function bracket(tr, side, rows) {
+    var td = document.createElement("td");
+    td.className = side; td.rowSpan = rows; td.setAttribute("aria-hidden", "true");
+    tr.appendChild(td);
+  }
+  function draw(id, k, sw) {
+    var body = $(id), rows = Z[k].length;
     body.innerHTML = "";
-    for (var i = 0; i < st.S.length; i++) {
-      var tr = document.createElement("tr");
-      var th = document.createElement("th");
-      th.className = "stage"; th.textContent = "Stage " + (i + 1); tr.appendChild(th);
-      for (var j = -1; j < st.S[i].length; j++) {
-        var td = document.createElement("td"), b = document.createElement("button");
-        var k = j < 0 ? st.s0[i] : st.S[i][j], given = j < 0 ? D.s0[i] : D.S[i][j];
-        var cls = "cell p" + k + (j < 0 ? " before" : "") + (k !== given ? " changed" : "");
-        var label = "", cost = "";
-        if (j >= 0 && once && sw.stages[i].cells[j].v) { cls += " sw"; cost = money(sw.stages[i].cells[j].c); }
-        if (j >= 0 && !once && k > 0) { cls += " every"; cost = money(D.cw[i][k - 1]); }
-        b.type = "button"; b.className = cls;
-        b.dataset.i = i; b.dataset.j = j;
-        b.setAttribute("aria-label", "Stage " + (i + 1) + (j < 0 ? ", before month 1" : ", month " + (j + 1)) +
-                       ": set up for " + NAME[k] + (cost ? ", charged " + cost : "") + ". Press to change.");
-        b.innerHTML = '<span class="k">' + (k ? k : "none") + '</span><span class="c">' + cost + "</span>";
-        td.appendChild(b); tr.appendChild(td);
+    for (var i = 0; i < rows; i++) {
+      var tr = document.createElement("tr"), th = document.createElement("th"), td;
+      th.className = "st"; th.textContent = i + 1; tr.appendChild(th);
+      td = document.createElement("td");
+      td.appendChild(sw ? cell("div", "blank", "") :
+        cell("div", "start" + (D.z0[k][i] ? " p" + (k + 1) : " off"), D.z0[k][i]));
+      if (!sw) td.firstChild.setAttribute("aria-label", "Stage " + (i + 1) + ", before month 1: " + D.z0[k][i]);
+      tr.appendChild(td);
+      if (i === 0) bracket(tr, "lb", rows);
+      for (var j = 0; j < Z[k][i].length; j++) {
+        td = document.createElement("td");
+        if (sw) {
+          var v = sw.V[k][i][j];
+          var e = cell("div", v ? "sw" : "off", v, v ? money(D.cw[i][k]) : undefined);
+          e.setAttribute("aria-label", "v, stage " + (i + 1) + ", month " + (j + 1) + ": " + v +
+                         (v ? ", " + money(D.cw[i][k]) : ""));
+          td.appendChild(e);
+        } else {
+          var z = Z[k][i][j], b = cell("button", (z ? "p" + (k + 1) : "off") +
+                                       (z !== D.Z[k][i][j] ? " changed" : ""), z);
+          b.type = "button"; b.dataset.k = k; b.dataset.i = i; b.dataset.j = j;
+          b.setAttribute("aria-label", "Stage " + (i + 1) + ", month " + (j + 1) + ", product " +
+                         (k + 1) + ": " + (z ? "set up" : "not set up") + ". Press to switch " +
+                         (z ? "off." : "on."));
+          td.appendChild(b);
+        }
+        tr.appendChild(td);
       }
-      var tot = document.createElement("td");
-      tot.className = "total" + (once ? "" : " plain");
-      tot.textContent = money(once ? sw.stages[i].cost : ev.per[i]);
-      tr.appendChild(tot);
+      if (i === 0) bracket(tr, "rb", rows);
       body.appendChild(tr);
     }
-    $("sw-n").textContent = once ? sw.n : ev.n;
-    $("sw-nl").textContent = once ? "switchovers" : "months set up, each charged";
-    $("sw-cost").textContent = money(once ? sw.cost : ev.cost);
-    $("sw-cl").textContent = once ? "switchover cost" : "charged every month (not Model 4)";
-    var out = [];
-    if (once) {
-      for (var a = 0; a < sw.stages.length; a++) {
-        var parts = [];
-        sw.stages[a].cells.forEach(function (c, m) {
-          if (c.v) parts.push("to product " + c.v + " in month " + (m + 1) + ", " + money(c.c));
-        });
-        out.push("<p>Stage " + (a + 1) + ": " + (parts.length ? list(parts) : "no switchover") + ".</p>");
-      }
-      out.push('<p><span class="fnd-t">' + sw.n + " switchover" + (sw.n === 1 ? "" : "s") + " for " +
-               money(sw.cost) + "</span>, each charged once, in the month the stage changes product.</p>");
-    } else {
-      out.push("<p>Charged in every month a stage is set up for a product, the same setups would pay " +
-               ev.n + " charges, " + money(ev.cost) + ", against " + sw.n + " switchovers and " +
-               money(sw.cost) + " charged once at each switch. A charge in every period is how a setup " +
-               "cost works in Lecture 4.3, not a switchover cost.</p>");
+  }
+  function render() {
+    var sw = switchovers(D.z0, Z, D.cw);
+    draw("z1", 0); draw("z2", 1); draw("v1", 0, sw); draw("v2", 1, sw);
+    $("sw-n").textContent = sw.n;
+    $("sw-cost").textContent = money(sw.cost);
+    $("sw-reset").disabled = same();
+    var out = said ? ["<p>" + said + "</p>"] : [];
+    for (var i = 0; i < D.cw.length; i++) {
+      var parts = [];
+      for (var j = 0; j < Z[0][i].length; j++)
+        for (var k = 0; k < Z.length; k++)
+          if (sw.V[k][i][j]) parts.push("to product " + (k + 1) + " in month " + (j + 1) + ", " + money(D.cw[i][k]));
+      out.push("<p>Stage " + (i + 1) + ": " + (parts.length ? parts.join("; ") + "; " + money(sw.per[i]) + " in all" : "no switchover") + ".</p>");
     }
+    out.push('<p><span class="fnd-t">' + sw.n + " switchover" + (sw.n === 1 ? "" : "s") + " for " +
+             money(sw.cost) + "</span>, each charged once, in the month the stage changes product.</p>");
     $("sw-text").innerHTML = out.join("");
   }
-  $("sw-body").addEventListener("click", function (e) {
-    var b = e.target.closest("button.cell");
+  function pressed(e) {
+    var b = e.target.closest("button.zc");
     if (!b) return;
-    var i = +b.dataset.i, j = +b.dataset.j;
-    if (j < 0) st.s0[i] = (st.s0[i] + 1) % 3; else st.S[i][j] = (st.S[i][j] + 1) % 3;
+    var k = +b.dataset.k, i = +b.dataset.i, j = +b.dataset.j;
+    var off = press(Z, k, i, j);
+    said = off.length ? "Stage " + (i + 1) + " is set up for product " + (k + 1) + " in month " + (j + 1) +
+           ", so its setup for product " + (off[0] + 1) + " that month is switched off: a stage is set up for one product at a time." : "";
     render();
-    var again = $("sw-body").querySelector('button[data-i="' + i + '"][data-j="' + j + '"]');
+    var again = $(k ? "z2" : "z1").querySelector('button[data-i="' + i + '"][data-j="' + j + '"]');
     if (again) again.focus();
-  });
-  function mode(m) {
-    st.mode = m;
-    $("sw-once").setAttribute("aria-pressed", m === "once" ? "true" : "false");
-    $("sw-every").setAttribute("aria-pressed", m === "every" ? "true" : "false");
-    render();
   }
-  $("sw-once").addEventListener("click", function () { mode("once"); });
-  $("sw-every").addEventListener("click", function () { mode("every"); });
-  $("sw-given").addEventListener("click", function () { st.s0 = D.s0.slice(); st.S = copy(D.S); render(); });
-  $("sw-model").addEventListener("click", function () { st.s0 = D.s0.slice(); st.S = copy(D.Smodel); render(); });
+  $("z1").addEventListener("click", pressed);
+  $("z2").addEventListener("click", pressed);
+  $("sw-reset").addEventListener("click", function () { Z = copy(D.Z); said = ""; render(); });
   render();
 })();
 
