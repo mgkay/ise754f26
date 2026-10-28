@@ -2840,28 +2840,44 @@
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-tsp": {
+  "eq-tsp-perm": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-twoopt-moves": {
+  "eq-tsp": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-ex2-costs": {
+  "eq-twoopt-moves": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-two-customer": {
+  "eq-ex2-costs": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-angle": {
+  "eq-pairwise-saving": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-tsp-est": {
+  "eq-da2dcenter": {
    "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-two-saving": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-angle": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-tsp-phi": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-tsp-est": {
+   "label": "Eq. 13",
    "word": "Eq."
   },
   "fig-routing-alternatives": {
@@ -2900,20 +2916,28 @@
    "label": "Fig. 9",
    "word": "Fig."
   },
-  "fig-two-customer": {
+  "fig-pairwise-saving": {
    "label": "Fig. 10",
    "word": "Fig."
   },
-  "fig-density": {
+  "fig-two-customer": {
    "label": "Fig. 11",
    "word": "Fig."
   },
-  "fig-nc-random": {
+  "fig-density": {
    "label": "Fig. 12",
    "word": "Fig."
   },
-  "fig-nc-tour": {
+  "fig-nc-random": {
    "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "fig-nc-tour": {
+   "label": "Fig. 14",
+   "word": "Fig."
+  },
+  "fig-nc-road-tour": {
+   "label": "Fig. 15",
    "word": "Fig."
   },
   "tbl-tour-sequence": {
