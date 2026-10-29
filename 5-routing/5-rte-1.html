@@ -6206,25 +6206,25 @@ TCᵒ = 9</code></pre>
 <p>Determine the optimal tour, by looking at all 120 tours and by solving the formulation of <a href="#mdl-tsp" class="quarto-xref">Model 1</a>, and how far the tours of Ex. 2(a) and 2(c) are from it.</p>
 </div>
 <p>With only six nodes, brute force is reasonable: Code block 18 lists every tour that starts and ends at node 1, as the permutations of nodes 2 to 6, costs each one, which is the mathematical formulation of <a href="#eq-tsp-perm" class="quarto-xref">Eq. 4</a> worked in full, and solves <a href="#mdl-tsp" class="quarto-xref">Model 1</a> with the implementation of Sec. 2:</p>
+<!-- COMBINATORICS' permutations, his request of 2026-10-28 (capture entry 4):
+     "Normally, to generate permutations by brute force, I would use the
+     permutations generator from the combinatoric package", with a using line "so
+     that everybody knows what package is coming from." It is in the frozen
+     environment and 2.7's Code block 34 introduced it, so the hand-written perms,
+     built on the plan's wrong premise that it was not, is gone. ISE 361's
+     6-Comb_Opt-1 brute force is the shape: for α in permutations(1:n). -->
 <div id="60" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Code block 18: all 120 tours by brute force, and the formulation</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="kw">function</span> <span class="fu">perms</span>(v)                      <span class="co"># every ordering of the vector v</span></span>
-<span id="cb38-3"><a href="#cb38-3"></a>    <span class="fu">length</span>(v) <span class="op">≤</span> <span class="fl">1</span> <span class="op">&amp;&amp;</span> <span class="cf">return</span> [v]</span>
-<span id="cb38-4"><a href="#cb38-4"></a>    out <span class="op">=</span> <span class="fu">Vector</span><span class="dt">{Vector{Int}}</span>()</span>
-<span id="cb38-5"><a href="#cb38-5"></a>    <span class="cf">for</span> k <span class="op">∈</span> <span class="fu">eachindex</span>(v), p <span class="op">∈</span> <span class="fu">perms</span>(<span class="fu">deleteat!</span>(<span class="fu">copy</span>(v), k))</span>
-<span id="cb38-6"><a href="#cb38-6"></a>        <span class="fu">push!</span>(out, [v[k]; p])          <span class="co"># v[k] first, then the rest</span></span>
-<span id="cb38-7"><a href="#cb38-7"></a>    <span class="cf">end</span></span>
-<span id="cb38-8"><a href="#cb38-8"></a>    <span class="cf">return</span> out</span>
-<span id="cb38-9"><a href="#cb38-9"></a><span class="kw">end</span></span>
-<span id="cb38-10"><a href="#cb38-10"></a>tours <span class="op">=</span> [[<span class="fl">1</span>; p; <span class="fl">1</span>] for p <span class="op">∈</span> <span class="fu">perms</span>(<span class="fu">collect</span>(<span class="fl">2</span><span class="op">:</span><span class="fl">6</span>))]</span>
-<span id="cb38-11"><a href="#cb38-11"></a>TCs <span class="op">=</span> <span class="fu">rTCh</span>.(tours)</span>
-<span id="cb38-12"><a href="#cb38-12"></a>ex2 <span class="op">=</span> <span class="fu">TSP</span>(D)</span>
-<span id="cb38-13"><a href="#cb38-13"></a><span class="pp">@show</span> <span class="fu">length</span>(tours)                    <span class="co"># the tours looked at</span></span>
-<span id="cb38-14"><a href="#cb38-14"></a><span class="pp">@show</span> <span class="fu">minimum</span>(TCs)                     <span class="co"># the cheapest of them</span></span>
-<span id="cb38-15"><a href="#cb38-15"></a><span class="pp">@show</span> <span class="fu">count</span>(<span class="op">==</span>(<span class="fu">minimum</span>(TCs)), TCs)     <span class="co"># how many are that cheap</span></span>
-<span id="cb38-16"><a href="#cb38-16"></a><span class="pp">@show</span> ex2.TC                           <span class="co"># the formulation&#39;s optimum</span></span>
-<span id="cb38-17"><a href="#cb38-17"></a><span class="pp">@show</span> ex2.tour</span>
-<span id="cb38-18"><a href="#cb38-18"></a><span class="pp">@show</span> <span class="fu">length</span>(ex2.rounds);              <span class="co"># its rounds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="im">using</span> <span class="bu">Combinatorics</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a>tours <span class="op">=</span> [[<span class="fl">1</span>; p; <span class="fl">1</span>] for p <span class="op">∈</span> <span class="fu">permutations</span>(<span class="fl">2</span><span class="op">:</span><span class="fl">6</span>)]</span>
+<span id="cb38-4"><a href="#cb38-4"></a>TCs <span class="op">=</span> <span class="fu">rTCh</span>.(tours)</span>
+<span id="cb38-5"><a href="#cb38-5"></a>ex2 <span class="op">=</span> <span class="fu">TSP</span>(D)</span>
+<span id="cb38-6"><a href="#cb38-6"></a><span class="pp">@show</span> <span class="fu">length</span>(tours)                    <span class="co"># the tours looked at</span></span>
+<span id="cb38-7"><a href="#cb38-7"></a><span class="pp">@show</span> <span class="fu">minimum</span>(TCs)                     <span class="co"># the cheapest of them</span></span>
+<span id="cb38-8"><a href="#cb38-8"></a><span class="pp">@show</span> <span class="fu">count</span>(<span class="op">==</span>(<span class="fu">minimum</span>(TCs)), TCs)     <span class="co"># how many are that cheap</span></span>
+<span id="cb38-9"><a href="#cb38-9"></a><span class="pp">@show</span> ex2.TC                           <span class="co"># the formulation&#39;s optimum</span></span>
+<span id="cb38-10"><a href="#cb38-10"></a><span class="pp">@show</span> ex2.tour</span>
+<span id="cb38-11"><a href="#cb38-11"></a><span class="pp">@show</span> <span class="fu">length</span>(ex2.rounds);              <span class="co"># its rounds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>length(tours) = 120
 minimum(TCs) = 9

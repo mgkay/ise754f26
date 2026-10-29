@@ -654,15 +654,8 @@ rᵒ, TCᵒ = multistart(n, rTCh; nruns)
 # the formulation of @mdl-tsp, and how far the tours of Ex. 2(a) and
 # 2(c) are from it.
 # Code block 18: all 120 tours by brute force, and the formulation
-function perms(v)                      # every ordering of the vector v
-    length(v) ≤ 1 && return [v]
-    out = Vector{Vector{Int}}()
-    for k ∈ eachindex(v), p ∈ perms(deleteat!(copy(v), k))
-        push!(out, [v[k]; p])          # v[k] first, then the rest
-    end
-    return out
-end
-tours = [[1; p; 1] for p ∈ perms(collect(2:6))]
+using Combinatorics
+tours = [[1; p; 1] for p ∈ permutations(2:6)]
 TCs = rTCh.(tours)
 ex2 = TSP(D)
 @show length(tours)                    # the tours looked at
