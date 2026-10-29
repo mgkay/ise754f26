@@ -730,7 +730,7 @@ fig = Figure(size = (330, 330))
 ax = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax); hidespines!(ax)
 θ = range(0, 2π, length = 361)
-lines!(ax, cos.(θ), sin.(θ); color = bluec, linewidth = 1.6)  # r = 1
+lines!(ax, cos.(θ), sin.(θ); color = bluec, linewidth = 1.6)  # radius 1
 lines!(ax, (2/3) .* cos.(θ), (2/3) .* sin.(θ); color = dcc,
        linewidth = 1.3, linestyle = :dash)     # the expected distance
 d = 2 / 3
@@ -752,7 +752,7 @@ text!(ax, d / 2 - 0.035, d / 2 - 0.035;       # inside the triangle,
       fontsize = 14, rotation = -π / 4, align = (:center, :top))
 text!(ax, 0.82cosd(-45) + 0.025cosd(45),
       0.82sind(-45) + 0.025sind(45);
-      text = L"r = 1", color = bluec, fontsize = 13, rotation = -π / 4,
+      text = L"1", color = bluec, fontsize = 13, rotation = -π / 4,
       align = (:center, :bottom))              # between the two circles
 text!(ax, 0.0, 1.0 - 0.06; text = L"a = \pi", color = ink, fontsize = 15,
       align = (:center, :top))
