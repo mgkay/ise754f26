@@ -132,7 +132,7 @@
   .ans { font-family: var(--sans); color: var(--strong); }
 
   /* The interactive panels. Their arithmetic is in the functions between core:begin and
-     core:end, which 5-rte-1.recap.jl runs under Node against the lecture's Code block 11 and
+     core:end, which 5-rte-1.recap.jl runs under Node against the lecture's Code block 12 and
      Table 2, Logjam's twoopt, brute force, and the table of 120 tours of his F22 study guide.
      The lecture's colors: ink for arcs, blue for nodes and for what has to be determined, red
      for the start, green for the arc letters of Fig. 8. */
@@ -253,7 +253,7 @@
   <section id="twoopt">
     <div class="sec-head"><h2>2-opt by hand</h2>
       <span class="where"><span class="origin instructor">Added by the instructor</span>
-      Lecture 5.1, Sec. 3, Ex. 2(a) and 2(b)</span></div>
+      Lecture 5.1, Sec. 3, Ex. 3(a) and 3(b)</span></div>
     <div class="view lecture">
       <h3><span class="tag">Lecture</span> The example</h3>
       <blockquote><p>&ldquo;Determine a tour of the six nodes of Fig. 3 by 2-opt improvement of the tour 1-2-3-4-5-6-1, under the arc costs \(D\) of Eq. 7, by hand, in Julia, and by multi-start from random starting tours, and determine how far the tours it finds are from the optimum.&rdquo;</p></blockquote>
@@ -276,20 +276,20 @@
     <div class="view new" id="costs">
       <h3><span class="tag new">Another view</span> The costs the panels below use</h3>
       <div class="ctl">
-        <button type="button" id="c-ex2" aria-pressed="true">Ex. 2&rsquo;s \(D\)</button>
+        <button type="button" id="c-ex2" aria-pressed="true">Ex. 3&rsquo;s \(D\)</button>
         <button type="button" id="c-new" aria-pressed="false">New costs</button>
         <label><input type="checkbox" id="c-sym" style="width:auto"> symmetric</label>
       </div>
       <div class="scroll"><table class="dmat" id="c-D"><caption id="c-cap"></caption></table></div>
       <p class="note">New costs are whole numbers from 1 to 10, drawn at random, for a fresh
-      problem that follows the same logic as Ex. 2.</p>
+      problem that follows the same logic as Ex. 3.</p>
     </div>
 
     <div class="view lecture">
       <h3><span class="tag">Lecture</span> A change: two arcs out, the segment between them reversed</h3>
       <blockquote><p>&ldquo;In Fig. 8, the letters a to f are the arcs of the tour 1-2-3-4-5-6-1, and the first change gets rid of arcs a and c and adds instead an arc from 1 to 3 and another from 2 to 4, replacing two arcs with two other arcs so that the tour is still feasible: it now goes from 1 to 3, back to 2 and over to 4.&rdquo;</p>
       <p>&ldquo;A change is made by taking the segment between the two arcs removed and flipping it. Removing a and c flips 2-3 into 3-2; removing a and d gives the route 1-4-3-2-5, the segment 2-3-4 flipped; removing a and e flips everything from 2 to 5. These are the 2-opt changes, and they continue with b and d, b and e, and on through d and f. With \(n = 6\) there are nine of them in all, \(n(n - 3)/2\) (Eq. 6).&rdquo;</p>
-      <p>&ldquo;The tour up to \(r_i\), then the segment from \(r_{i+1}\) to \(r_j\) reversed, then the rest: the arcs out of \(r_i\) and out of \(r_j\) are removed, and arcs from \(r_i\) to \(r_j\) and from \(r_{i+1}\) to \(r_{j+1}\) are added.&rdquo;</p></blockquote>
+      <p>&ldquo;The tour up to \(\pi_i\), then the segment from \(\pi_{i+1}\) to \(\pi_j\) reversed, then the rest: the arcs out of \(\pi_i\) and out of \(\pi_j\) are removed, and arcs from \(\pi_i\) to \(\pi_j\) and from \(\pi_{i+1}\) to \(\pi_{j+1}\) are added.&rdquo;</p></blockquote>
     </div>
 
     <div class="view new" id="f8">
@@ -321,14 +321,14 @@
     </div>
 
     <div class="view lecture">
-      <h3><span class="tag">Lecture</span> Code block 11: the same nine changes, in order</h3>
+      <h3><span class="tag">Lecture</span> Code block 12: the same nine changes, in order</h3>
       <div class="codepair">
-<pre class="code"><span class="ln">1</span># Code block 11: the nine 2-opt changes of the tour 1-2-3-4-5-6-1
-<span class="ln">2</span>r = [1:6; 1]
-<span class="ln">3</span>println(r)
-<span class="ln">4</span>for i = 1:length(r)-2
-<span class="ln">5</span>    for j = i+2:min(length(r)-1, length(r)+i-3)
-<span class="ln">6</span>        println(vcat(r[1:i], reverse(r[i+1:j]), r[j+1:end]))
+<pre class="code"><span class="ln">1</span># Code block 12: the nine 2-opt changes of the tour 1-2-3-4-5-6-1
+<span class="ln">2</span>π = [1:6; 1]
+<span class="ln">3</span>println(π)
+<span class="ln">4</span>for i = 1:length(π)-2
+<span class="ln">5</span>    for j = i+2:min(length(π)-1, length(π)+i-3)
+<span class="ln">6</span>        println(vcat(π[1:i], reverse(π[i+1:j]), π[j+1:end]))
 <span class="ln">7</span>    end
 <span class="ln">8</span>end</pre>
 <pre class="code out">[1, 2, 3, 4, 5, 6, 1]
@@ -351,7 +351,7 @@
     <div class="view lecture">
       <h3><span class="tag">Lecture</span> When a change is kept</h3>
       <blockquote><p>&ldquo;It is a first improvement procedure: others look at all the possibilities and take the best, but this one makes any improvement as soon as it sees it, and the new sequence becomes the base point. Whenever there is an improvement, the clock is put back and the scan starts again at the first change; it is not a continuation.&rdquo;</p>
-      <p>&ldquo;Table 2: The sequences 2-opt considers in Ex. 2(a), in order, with their costs. In each, the segment its change reverses is shaded blue, and Change counts the changes looked at since the last tour kept, in the order of the rows of the table in Fig. 8; each kept sequence is the tour the scan starts again from. A scan stops at its first change that lowers the cost, so only the last, from the local optimum, looks at all 9 changes of Eq. 6, verifying that none is lower: 2-opt does its most work at the end.&rdquo;</p></blockquote>
+      <p>&ldquo;Table 2: The sequences 2-opt considers in Ex. 3(a), in order, with their costs. In each, the segment its change reverses is shaded blue, and Change counts the changes looked at since the last tour kept, in the order of the rows of the table in Fig. 8; each kept sequence is the tour the scan starts again from. A scan stops at its first change that lowers the cost, so only the last, from the local optimum, looks at all 9 changes of Eq. 6, verifying that none is lower: 2-opt does its most work at the end.&rdquo;</p></blockquote>
     </div>
 
     <div class="view new" id="lk">
@@ -362,7 +362,7 @@
       Table 2. To work it here:</p>
       <ol class="howto">
         <li>The <b>yellow</b> row is the tour the scan is on, drawn with its arcs lettered a to f.
-        Its 9 changes are taken in the order of Code block 11: arcs a and c out first, then a
+        Its 9 changes are taken in the order of Code block 12: arcs a and c out first, then a
         and d, a and e, b and d, and so on to d and f.</li>
         <li>Work out the sequence the next change gives, find it among the rows listed, and
         <b>click it</b>. A row that is not it is struck through; try again.</li>
@@ -411,7 +411,7 @@
       <div class="view lecture">
         <blockquote><p>&ldquo;In the run, 39 is not better than 38, but 32 is, so 1-4-3-2-5-6-1 becomes the new target and the scan starts over from it; flipping its first segment gives 1-3-4-2-5-6-1 at 31, the next target. From 31, the first change gets back to the tour of row 3, which has been seen before; if a tour were expensive to evaluate, as with one that needed a simulation, a dictionary keyed by the tour would keep it from being evaluated again. The next change gives 31 again, which is no improvement, and the one after it, 1-5-2-4-3-6-1, lowers the cost to 21, the new target. From 21, the first change gives 21 again, which is not taken, since an improvement has to be strict, and three changes later 1-5-4-2-3-6-1 reaches 12.&rdquo;</p>
         <p>&ldquo;2-opt from 1-2-3-4-5-6-1, of cost 38, reaches the local optimum 1-5-4-2-3-6-1, of cost 12.&rdquo;</p>
-        <p>&ldquo;The tour found by hand and the one the implementation finds agree, a Triangulate check of Lecture 1.2: solving Ex. 2(a) by hand, as Table 2 does, and running Logjam&rsquo;s code reach the same tour by two different routes, a person and a program.&rdquo;</p>
+        <p>&ldquo;The tour found by hand and the one the implementation finds agree, a Triangulate check of Lecture 1.2: solving Ex. 3(a) by hand, as Table 2 does, and running Logjam&rsquo;s code reach the same tour by two different routes, a person and a program.&rdquo;</p>
         <p>&ldquo;It is important to get the mechanics right: once it has been done by hand and verified with the procedure, it is known really well, and the steps should be the same as the code&rsquo;s.&rdquo;</p></blockquote>
       </div>
     </details>
@@ -421,7 +421,7 @@
   <section id="multistart">
     <div class="sec-head"><h2>Multi-start: a random tour, then 2-opt, again and again</h2>
       <span class="where"><span class="origin instructor">Added by the instructor</span>
-      Lecture 5.1, Secs. 1 and 3, Ex. 2(c) and 2(d)</span></div>
+      Lecture 5.1, Secs. 1 and 3, Ex. 3(c) and 3(d)</span></div>
     <p class="prompt"><b>The review asks</b>Why is any random permutation of the stops a
     feasible tour for the TSP?</p>
     <div class="view lecture">
@@ -429,17 +429,17 @@
       <blockquote><p>&ldquo;The TSP is the basic routing problem, and in vehicle routing problems it is basically just a subroutine. What makes it simple and easy to solve is that it is unconstrained: any permutation is a feasible route. All that is done is to take a permutation of the integers 1 through 6 and make it into a tour, assuming a return to wherever it starts, by repeating its first node, the depot 1, at the end.&rdquo;</p>
       <p>&ldquo;From this starting tour, 12 is the best 2-opt can do: it is a local minimum, the bottom of one valley in a mountain range, as for the UFL in Lecture 2.4. A different starting permutation could lead, by 2-opt changes, somewhere better, which is why a multi-start picks several different permutations, runs 2-opt from each and keeps the best, a very simplistic but very effective way.&rdquo;</p></blockquote>
 <pre class="code"><span class="ln">1</span>algorithm multistart;
-<span class="ln">2</span>{ input:  n nodes, cost c(r) of a tour r, number of starts N   }
-<span class="ln">3</span>{ output: best tour rᵒ found, and its cost TCᵒ                  }
+<span class="ln">2</span>{ input:  n nodes, cost c(π) of a tour π, number of starts N   }
+<span class="ln">3</span>{ output: best tour πᵒ found, and its cost TCᵒ                  }
 <span class="ln">4</span>begin
 <span class="ln">5</span>    TCᵒ := ∞;
 <span class="ln">6</span>    for k := 1 to N do
 <span class="ln">7</span>    begin
-<span class="ln">8</span>        r := a random tour of the n nodes;   { easy construction }
-<span class="ln">9</span>        r′, TC′ := twoopt with r;            { improvement       }
-<span class="ln">10</span>        if TC′ &lt; TCᵒ then rᵒ := r′, TCᵒ := TC′;
+<span class="ln">8</span>        π := a random tour of the n nodes;   { easy construction }
+<span class="ln">9</span>        π′, TC′ := twoopt with π;            { improvement       }
+<span class="ln">10</span>        if TC′ &lt; TCᵒ then πᵒ := π′, TCᵒ := TC′;
 <span class="ln">11</span>    end;
-<span class="ln">12</span>    return rᵒ, TCᵒ;
+<span class="ln">12</span>    return πᵒ, TCᵒ;
 <span class="ln">13</span>end;</pre>
       <blockquote><p>&ldquo;Line 8 is the construction and line 9 the improvement; line 10 keeps the best tour over all of the starts, where 2-opt keeps the first improvement it sees.&rdquo;</p></blockquote>
     </div>
@@ -448,7 +448,7 @@
       <h3><span class="tag new">Another view</span> Multi-start on the same costs</h3>
       <p>Each start is a random row of the table of 120 tours, a random tour with node 1
       first, improved by 2-opt to its local optimum; the best so far is kept, and each start
-      that improves on it is printed the way Code block 17 prints it. Any start can be sent up
+      that improves on it is printed the way Code block 18 prints it. Any start can be sent up
       to the table panel and worked by hand.</p>
       <div class="ctl">
         <label>Starts <input class="num" id="ms-n" type="number" min="1" max="500" value="10"></label>
@@ -463,7 +463,7 @@
     </div>
 
     <div class="view lecture">
-      <h3><span class="tag">Lecture</span> Ex. 2(c) and 2(d)</h3>
+      <h3><span class="tag">Lecture</span> Ex. 3(c) and 3(d)</h3>
       <blockquote><p>&ldquo;The best of 100 random starts is 2-1-5-4-3-6-2, of cost 9.&rdquo;</p>
       <p>&ldquo;The optimal tour is 1-5-4-3-6-2-1, of cost 9.&rdquo;</p></blockquote>
     </div>
@@ -487,10 +487,10 @@
     </div>
 
     <details>
-      <summary>How the lecture checks Ex. 2: Triangulate, Landmark, Assumptions</summary>
+      <summary>How the lecture checks Ex. 3: Triangulate, Landmark, Assumptions</summary>
       <div>
         <div class="view lecture">
-          <blockquote><p>&ldquo;The optimum is a Landmark check of Lecture 1.2 on the 2-opt tours: the best of the 100 starts of Ex. 2(c) is optimal, and the local optimum of Ex. 2(a) is 33% above it. The count of 120 is an Assumptions check as well: Eq. 3 halves the count only when costs are symmetric, and under \(D\) the tour 1-2-3-4-5-6-1 costs 38 while its reverse, 1-6-5-4-3-2-1, costs 13, so all 120 have to be looked at. So is the crossing argument of Sec. 1, which needs Euclidean costs and which Ex. 2(a)&rsquo;s trace therefore sets aside.&rdquo;</p></blockquote>
+          <blockquote><p>&ldquo;The optimum is a Landmark check of Lecture 1.2 on the 2-opt tours: the best of the 100 starts of Ex. 3(c) is optimal, and the local optimum of Ex. 3(a) is 33% above it. The count of 120 is an Assumptions check as well: Eq. 3 halves the count only when costs are symmetric, and under \(D\) the tour 1-2-3-4-5-6-1 costs 38 while its reverse, 1-6-5-4-3-2-1, costs 13, so all 120 have to be looked at. So is the crossing argument of Sec. 1, which needs Euclidean costs and which Ex. 3(a)&rsquo;s trace therefore sets aside.&rdquo;</p></blockquote>
           <p class="note">Eqs. 2 and 3 count the tours of \(n\) nodes: \((n - 1)!\) when the
           arc costs are asymmetric, and \((n - 1)!/2\) when they are symmetric, which for
           \(n = 6\) is 120 and 60.</p>
@@ -518,7 +518,7 @@
   <section id="estimate">
     <div class="sec-head"><h2>Estimating a tour&rsquo;s length</h2>
       <span class="where"><span class="origin instructor">Added by the instructor</span>
-      Lecture 5.1, Sec. 4, Ex. 3</span></div>
+      Lecture 5.1, Sec. 4, Ex. 4</span></div>
     <div class="view lecture">
       <h3><span class="tag">Lecture</span> Eq. 13, and the tour of North Carolina</h3>
       <div class="eq">\[
@@ -544,13 +544,14 @@
     <div class="sec-head"><h2>Six questions</h2>
       <span class="where"><span class="origin instructor">Added by the instructor</span>
       Lecture 5.1, Secs. 1, 3 and 4</span></div>
-    <p class="note">The review&rsquo;s six, as written. Each answer opens with the lecture&rsquo;s
+    <p class="note">The review&rsquo;s six, as written, renumbered and with the tour
+    written \(\pi\) to match the lecture as revised on 29 October. Each answer opens with the lecture&rsquo;s
     own words.</p>
 
     <div class="q">
-      <p class="stem">1. In Ex. 2(b), the tour found by hand and the tour Logjam&rsquo;s twoopt returns agree. Which of the nine checks is that, and why?</p>
+      <p class="stem">1. In Ex. 3(b), the tour found by hand and the tour Logjam&rsquo;s twoopt returns agree. Which of the nine checks is that, and why?</p>
       <ol type="A">
-        <li>Landmark, since the tour of Ex. 2(a) is a case whose answer was already known</li>
+        <li>Landmark, since the tour of Ex. 3(a) is a case whose answer was already known</li>
         <li>Balance, since the tour&rsquo;s arc costs add up to its total cost of 12</li>
         <li>Triangulate, since a person and a program reach one tour by two independent routes</li>
         <li>Prior, since the hand trace was written down before the code was run</li>
@@ -558,21 +559,21 @@
       </ol>
       <details><summary>Answer</summary><div>
         <p class="ans"><b>C.</b> Triangulate, since a person and a program reach one tour by two independent routes.</p>
-        <blockquote><p>&ldquo;The tour found by hand and the one the implementation finds agree, a Triangulate check of Lecture 1.2: solving Ex. 2(a) by hand, as Table 2 does, and running Logjam&rsquo;s code reach the same tour by two different routes, a person and a program.&rdquo;</p></blockquote>
+        <blockquote><p>&ldquo;The tour found by hand and the one the implementation finds agree, a Triangulate check of Lecture 1.2: solving Ex. 3(a) by hand, as Table 2 does, and running Logjam&rsquo;s code reach the same tour by two different routes, a person and a program.&rdquo;</p></blockquote>
       </div></details>
     </div>
 
     <div class="q">
-      <p class="stem">2. Code block 11, line 6: <code>println(vcat(r[1:i], reverse(r[i+1:j]), r[j+1:end]))</code>. What change to the tour r does this line print?</p>
+      <p class="stem">2. Code block 12, line 6: <code>println(vcat(π[1:i], reverse(π[i+1:j]), π[j+1:end]))</code>. What change to the tour π does this line print?</p>
       <ol type="A">
-        <li>the nodes \(r_{i+1}\) and \(r_j\) swapped, with the nodes between them left in place</li>
-        <li>the arcs out of \(r_i\) and out of \(r_j\) removed, and the segment from \(r_{i+1}\) to \(r_j\) reversed</li>
-        <li>node \(r_{i+1}\) moved to position \(j\), with the nodes between them shifted forward</li>
+        <li>the nodes \(\pi_{i+1}\) and \(\pi_j\) swapped, with the nodes between them left in place</li>
+        <li>the arcs out of \(\pi_i\) and out of \(\pi_j\) removed, and the segment from \(\pi_{i+1}\) to \(\pi_j\) reversed</li>
+        <li>node \(\pi_{i+1}\) moved to position \(j\), with the nodes between them shifted forward</li>
         <li>the nodes at positions \(i\) and \(j\) exchanged, as the exchange procedure of the UFL does</li>
       </ol>
       <details><summary>Answer</summary><div>
-        <p class="ans"><b>B.</b> The arcs out of \(r_i\) and out of \(r_j\) removed, and the segment from \(r_{i+1}\) to \(r_j\) reversed.</p>
-        <blockquote><p>&ldquo;The tour up to \(r_i\), then the segment from \(r_{i+1}\) to \(r_j\) reversed, then the rest: the arcs out of \(r_i\) and out of \(r_j\) are removed, and arcs from \(r_i\) to \(r_j\) and from \(r_{i+1}\) to \(r_{j+1}\) are added.&rdquo;</p></blockquote>
+        <p class="ans"><b>B.</b> The arcs out of \(\pi_i\) and out of \(\pi_j\) removed, and the segment from \(\pi_{i+1}\) to \(\pi_j\) reversed.</p>
+        <blockquote><p>&ldquo;The tour up to \(\pi_i\), then the segment from \(\pi_{i+1}\) to \(\pi_j\) reversed, then the rest: the arcs out of \(\pi_i\) and out of \(\pi_j\) are removed, and arcs from \(\pi_i\) to \(\pi_j\) and from \(\pi_{i+1}\) to \(\pi_{j+1}\) are added.&rdquo;</p></blockquote>
       </div></details>
     </div>
 
@@ -587,7 +588,7 @@
       <details><summary>Answer</summary><div>
         <p class="ans"><b>C.</b> The first restricts the solutions, while the second is something that has to be true about the world.</p>
         <blockquote data-src="1-intr-2"><p>&ldquo;assumptions: lists what must be true about the world, and it is the slot to reach for when the temptation is to write another constraint: a constraint restricts the solutions, while an assumption is something that has to be true about the world.&rdquo;</p></blockquote>
-        <p class="note">Lecture 1.2, Sec. 3. Model 1&rsquo;s implementation, TSP(c), checks only that the cost matrix is square, and Ex. 2 runs it on the asymmetric \(D\).</p>
+        <p class="note">Lecture 1.2, Sec. 3. Model 1&rsquo;s implementation, TSP(c), checks only that the cost matrix is square, and Ex. 3 runs it on the asymmetric \(D\).</p>
       </div></details>
     </div>
 
@@ -684,21 +685,21 @@
 <script>
 // core:begin
 // The arithmetic of the page's panels. 5-rte-1.recap.jl runs this under Node against the
-// lecture's Code block 11 and Table 2, Logjam's twoopt from every starting tour, brute
+// lecture's Code block 12 and Table 2, Logjam's twoopt from every starting tour, brute
 // force, and the table of 120 tours in his F22 final-exam study guide.
 function tourCost(r, C) {                      // the sum of the tour's arc costs
   let s = 0;
   for (let k = 0; k < r.length - 1; k++) s += C[r[k] - 1][r[k + 1] - 1];
   return s;
 }
-function changesOf(r) {                        // the loop of Code block 11
+function changesOf(r) {                        // the loop of Code block 12
   const out = [], n = r.length;
   for (let i = 1; i <= n - 2; i++)
     for (let j = i + 2; j <= Math.min(n - 1, n + i - 3); j++)
       out.push({i: i, j: j, seq: r.slice(0, i).concat(r.slice(i, j).reverse(), r.slice(j))});
   return out;
 }
-function twoOptTrace(r0, C) {                  // the loop of Code block 14, every row kept
+function twoOptTrace(r0, C) {                  // the loop of Code block 15, every row kept
   let r = r0.slice(), best = r.slice(), TC = tourCost(r, C);
   const rows = [{seq: r.slice(), cost: TC, change: 0, kept: true, start: true,
                  i: 0, j: 0, base: r.slice(), baseCost: TC}];
@@ -745,7 +746,7 @@ function multiStartFrom(C, starts) {           // multi-start over given random 
   });
   return {runs: runs, tour: bestTour, cost: best};
 }
-function bruteForce(C) {                       // every tour from node 1, as Code block 18
+function bruteForce(C) {                       // every tour from node 1, as Code block 19
   let best = Infinity, tour = null, count = 0, total = 0;
   for (const t of tourTable(C)) {
     total++;
@@ -763,7 +764,7 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
   const sub = n => String(n).split("").map(c => SUB[+c]).join("");
   const tourStr = r => r.join("-");
   const LET = "abcdefghij";
-  const S = {C: DATA.D, label: "D, Ex. 2’s costs"};
+  const S = {C: DATA.D, label: "D, Ex. 3’s costs"};
   let TABLE = [], INDEX = {};
   function rebuild() {
     TABLE = tourTable(S.C); INDEX = {};
@@ -875,7 +876,7 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
         drawTour(svg, base, base, {letters: true});
         text.innerHTML = "<p>The tour " + tourStr(base) + ", its arcs lettered a to f in order" +
           (withC ? ", of cost " + tourCost(base, S.C) : "") + ". <b>Next</b> takes its " + ch.length +
-          " changes in the order of Code block 11.</p>";
+          " changes in the order of Code block 12.</p>";
       } else {
         const c = ch[k - 1], i = c.i, j = c.j;
         drawTour(svg, base, c.seq, {change: true, i: i, j: j, letters: true});
@@ -920,7 +921,7 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
         "starts again at its first change, a and c.";
       const strict = r.cost === r.baseCost ? " (an improvement has to be strict)" : "";
       if (r.change === 9) return r.cost + " is not lower than " + r.baseCost + strict + ", and that was the yellow row’s last change.";
-      const c = changesOf(r.base)[r.change];                // the next change, in Code block 11's order
+      const c = changesOf(r.base)[r.change];                // the next change, in Code block 12's order
       return r.cost + " is not lower than " + r.baseCost + strict + ", so the scan goes on to change " +
         (r.change + 1) + " of the same yellow row, arcs " + LET[c.i - 1] + " and " + LET[c.j - 1] + " out.";
     }
@@ -1075,7 +1076,7 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
     rebuild(); showCosts(); F8.render(); MS.clear();
     if (isEx2) LK.start(1); else LK.restart();
   }
-  bEx2.addEventListener("click", () => useCosts(DATA.D, "D, Ex. 2’s costs", true));
+  bEx2.addEventListener("click", () => useCosts(DATA.D, "D, Ex. 3’s costs", true));
   bNew.addEventListener("click", () => useCosts(randomCosts(sym.checked),
     sym.checked ? "new symmetric costs" : "new costs", false));
   rebuild(); showCosts();

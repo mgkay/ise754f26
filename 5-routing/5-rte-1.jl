@@ -175,6 +175,40 @@ end
 xlims!(ax, -0.3, 2.85); ylims!(ax, -1.0, 1.0)
 fig
 
+# Sec. 1. Traveling salesman problem
+## Example 1: Ten NC cities by brute force
+# Determine the minimum great circle distance tour through the ten NC
+# cities with a population over 100,000 of {{< xref 4.1 example-2 >}} by
+# brute force, looking at every tour of the mathematical formulation
+# @eq-tsp-perm.
+# Code block 4: the NC cities over 100,000, from the Logjam gazetteer
+using DataFrames, Logjam
+df = filter(r -> (r.STFIP == st2fips(:NC)) && (r.POP > 100_000),
+            usplace())
+select!(df, :NAME, :LAT, :LON, :POP)
+prt(df)
+# Code block 5: great circle distances, and every tour by brute force
+using Combinatorics
+P = hcat(df.LON, df.LAT)               # one row per city
+D = dists(P, P, :mi)
+n = size(D, 1)
+tours = ([1; p; 1] for p ∈ permutations(2:n))
+# Parentheses, not square brackets, make tours a generator: each tour is
+# built from the next permutation only when minimum asks for it, so the
+# tours are looked at one at a time and never held in memory together.
+# Square brackets would build and store every tour first.
+TCᵒ, πᵒ = minimum((sum(D[π[k], π[k+1]] for k ∈ 1:n), π)
+# Each tour is paired with its cost, the sum of @eq-tsp-perm, and minimum
+# compares the pairs by cost first, so it returns the cheapest cost
+# together with its tour.
+                  for π ∈ tours)
+@show length(tours)                    # the tours looked at
+@show TCᵒ                              # the cheapest of them
+@show πᵒ;                              # the tour that costs it
+# The checks the prose states
+@assert length(tours) == factorial(n - 1)
+@assert sum(D[πᵒ[k+1], πᵒ[k]] for k ∈ 1:n) ≈ TCᵒ   # its reverse, the same
+
 # Sec. 2. TSP as a MILP
 ## Model: Traveling salesman problem
 # Model: traveling salesman problem
@@ -211,7 +245,7 @@ function TSP(c)
     set_attribute(model, "mip_rel_gap", 0.0)
     # HiGHS stops by default once its solution is proved within 0.01% of
     # the optimum; a gap of 0 makes it prove the tour optimal, which the
-    # Landmark checks of Ex. 2 and 3 rely on.
+    # Landmark checks of Ex. 2, 3 and 4 rely on.
     rounds = []
     while true
         optimize!(model)
@@ -240,26 +274,18 @@ function TSP(c)
     end
 end
 
-## Example 1: Ten NC cities
+## Example 2: Ten NC cities as a MILP
 # Determine the minimum great circle distance tour through the ten NC
-# cities with a population over 100,000 of {{< xref 4.1 example-2 >}},
-# by solving the formulation of @mdl-tsp one round at a time, starting
-# from its assignment problem.
-# Code block 4: the NC cities over 100,000, from the Logjam gazetteer
-using DataFrames, Logjam
-df = filter(r -> (r.STFIP == st2fips(:NC)) && (r.POP > 100_000),
-            usplace())
-select!(df, :NAME, :LAT, :LON, :POP)
-prt(df)
-# Code block 5: great circle distances, and the TSP solved in rounds
-P = hcat(df.LON, df.LAT)               # one row per city
-D = dists(P, P, :mi)
+# cities of Ex. 1, by solving the formulation of @mdl-tsp one round at a
+# time, starting from its assignment problem, and determine whether its
+# tour is the one Ex. 1 found by brute force.
+# Code block 6: the TSP solved in rounds
 nc10 = TSP(D)
 rounds = DataFrame(round = eachindex(nc10.rounds),
                    mi = [rd.TC for rd in nc10.rounds],
                    subtours = [length(rd.S) for rd in nc10.rounds])
 prt(rounds)
-# Code block 6: each round's solution, drawn on a map
+# Code block 7: each round's solution, drawn on a map
 # (makemap draws one map per figure, so the three frames are plain axes in
 # longitude and latitude, scaled by the cosine of the mean latitude)
 (xl, yl) = mapbbox(df.LON, df.LAT; xexpand = 0.14, yexpand = 0.16)
@@ -336,18 +362,18 @@ function tspspfillcur(XY, k = 8)
 end
 
 ## Sec. 3. Two-opt improvement
-# Code block 7: the four points, their positions and their tour
+# Code block 8: the four points, their positions and their tour
 XY4 = [0.8 0.8; 0.1 0.2; 0.3 0.7; 0.7 0.2]       # points 1 to 4
 θ4 = sfcpos.(XY4[:, 1], XY4[:, 2])
 @show round.(θ4, digits = 3)
 @show tspspfillcur(XY4);
-# Code block 8: positions on a grid, rows from y = 1 down to y = 0
+# Code block 9: positions on a grid, rows from y = 1 down to y = 0
 g = (0:10) ./ 10
 Θ = [sfcpos(x, y) for y in reverse(g), x in g]
 prt(round.(Θ, RoundNearestTiesAway, digits = 3);
     rows = string.(reverse(g)), cols = string.(g), row_title = "y",
     allfrac = 3)
-# Code block 9: the curve, drawn by joining a grid's points in curve order
+# Code block 10: the curve, by joining a grid's points in curve order
 gr = 0:0.02:1
 X = [x for y in gr, x in gr]
 Y = [y for y in gr, x in gr]
@@ -370,7 +396,7 @@ text!(ax, at[:, 1], at[:, 2];
       color = ink, fontsize = 13, align = (:center, :center))
 limits!(ax, 0, 1, 0, 1)
 fig
-# Code block 10: the changes that remove arc a with arc c, and with arc d,
+# Code block 11: the changes that remove arc a with arc c, and with arc d,
 # beside the table of all nine changes
 tourarcs = [(1, 2, "a"), (2, 3, "b"), (3, 4, "c"), (4, 5, "d"),
             (5, 6, "e"), (6, 1, "f")]      # 1-2-3-4-5-6-1, lettered
@@ -424,7 +450,7 @@ for i in 1:size(P6, 1)                     # nodes over the arcs
 end
 xlims!(ax, -0.6, 2.3); ylims!(ax, -1.1, 2.3)
 # the table beside it: the arc letters over the tour, then each change of
-# the loop of Code block 11, its reversed segment boxed
+# the loop of Code block 12, its reversed segment boxed
 tb = Axis(fig[1, 2])
 hidedecorations!(tb); hidespines!(tb)
 text!(tb, (1:6) .+ 0.5, zeros(6); text = last.(tourarcs), color = dcc,
@@ -438,11 +464,11 @@ changes = [(i, j) for i = 1:length(tour)-2
            for j = i+2:min(length(tour)-1, length(tour)+i-3)]
 for (k, (i, j)) in enumerate(changes)
     y = -1.0 - k
-    rk = vcat(tour[1:i], reverse(tour[i+1:j]), tour[j+1:end])
+    πk = vcat(tour[1:i], reverse(tour[i+1:j]), tour[j+1:end])
     text!(tb, 0.0, y; text = tourarcs[i][3] * "-" * tourarcs[j][3],
           color = dcc, font = :bold, fontsize = 14,
           align = (:center, :center))
-    text!(tb, 1:7, fill(y, 7); text = string.(rk), color = ink,
+    text!(tb, 1:7, fill(y, 7); text = string.(πk), color = ink,
           fontsize = 14, align = (:center, :center))
     c = k == 1 ? redc : k == 2 ? bluec : dcc   # a-c and a-d as drawn
     lines!(tb, [i + 0.6, j + 0.4, j + 0.4, i + 0.6, i + 0.6],
@@ -452,19 +478,19 @@ end
 xlims!(tb, -0.8, 7.6); ylims!(tb, -10.6, 0.5)
 colsize!(fig.layout, 1, Aspect(1, 2.9 / 3.4))   # the tour at its aspect
 fig
-# Code block 11: the nine 2-opt changes of the tour 1-2-3-4-5-6-1
-r = [1:6; 1]
-println(r)
-for i = 1:length(r)-2
-    for j = i+2:min(length(r)-1, length(r)+i-3)
+# Code block 12: the nine 2-opt changes of the tour 1-2-3-4-5-6-1
+π = [1:6; 1]
+println(π)
+for i = 1:length(π)-2
+    for j = i+2:min(length(π)-1, length(π)+i-3)
     # $j$ starts two past $i$, so the two arcs removed are never adjacent,
     # and when $i = 1$ it stops one short, since the last arc, back into
     # node 1, is adjacent to the first.
-        println(vcat(r[1:i], reverse(r[i+1:j]), r[j+1:end]))
-        # The tour up to $r_i$, then the segment from $r_{i+1}$ to $r_j$
-        # reversed, then the rest: the arcs out of $r_i$ and out of $r_j$
-        # are removed, and arcs from $r_i$ to $r_j$ and from $r_{i+1}$ to
-        # $r_{j+1}$ are added.
+        println(vcat(π[1:i], reverse(π[i+1:j]), π[j+1:end]))
+        # The tour up to $\pi_i$, then the segment from $\pi_{i+1}$ to
+        # $\pi_j$ reversed, then the rest: the arcs out of $\pi_i$ and out
+        # of $\pi_j$ are removed, and arcs from $\pi_i$ to $\pi_j$ and
+        # from $\pi_{i+1}$ to $\pi_{j+1}$ are added.
     end
 end
 
@@ -474,24 +500,24 @@ logjam_rung(:twoopt, "TSP, two-opt improvement"; keywords = false)
 using Random
 randtour(n) = (tour = randperm(n); push!(tour, tour[1]))
 
-function multistart(n, rTCh; nruns = 100)
-    rᵒ, TCᵒ = nothing, Inf
+function multistart(n, πTCh; nruns = 100)
+    πᵒ, TCᵒ = nothing, Inf
     for i = 1:nruns
-        r, TC = twoopt(randtour(n), rTCh)
+        π, TC = twoopt(randtour(n), πTCh)
         if TC < TCᵒ
-            rᵒ, TCᵒ = r, TC
+            πᵒ, TCᵒ = π, TC
             println(i, ": ", TCᵒ)
         end
     end
-    return rᵒ, TCᵒ
+    return πᵒ, TCᵒ
 end
 
-# Example 2: Six-node tour
-## Example 2(a): By hand
+# Example 3: Six-node tour
+## Example 3(a): By hand
 # Determine the tour that 2-opt reaches from 1-2-3-4-5-6-1, listing each
 # sequence in the order the procedure considers it, with its cost.
-# Ex. 2's arc costs, for the figure and the table that follow; Code blocks
-# 12 and 13, in Ex. 2(b), show the same
+# Ex. 3's arc costs, for the figure and the table that follow; Code blocks
+# 13 and 14, in Ex. 3(b), show the same
 D = [
      0     8     6     9     1     5
      3     0     1     5     4     2
@@ -499,24 +525,24 @@ D = [
      8     2     1     0    10     6
      6     7    10     1     0    10
      6     2     5     2     1     0]
-rTCh(r) = sum(segcost(r, D))
-# The tours of Ex. 2(a), each one the loop of twoopt kept:
+πTCh(π) = sum(segcost(π, D))
+# The tours of Ex. 3(a), each one the loop of twoopt kept:
 # twoopt's loop, as in the pseudocode above, recording every sequence
 # it considers and whether it kept it
-function twoopt_steps(r, rTCh)
-    rᵒ, TCᵒ = copy(r), rTCh(r)
-    tried = [(r = copy(r), TC = TCᵒ, kept = true, seg = 1:0)]
+function twoopt_steps(π, πTCh)
+    πᵒ, TCᵒ = copy(π), πTCh(π)
+    tried = [(π = copy(π), TC = TCᵒ, kept = true, seg = 1:0)]
     done = false
     while !done
         done = true
-        for i = 1:length(r)-2
-            for j = i+2:min(length(r)-1, length(r)+i-3)
-                r′ = vcat(r[1:i], reverse(r[i+1:j]), r[j+1:end])
-                TC = rTCh(r′)
-                push!(tried, (r = r′, TC = TC, kept = TC < TCᵒ,
+        for i = 1:length(π)-2
+            for j = i+2:min(length(π)-1, length(π)+i-3)
+                π′ = vcat(π[1:i], reverse(π[i+1:j]), π[j+1:end])
+                TC = πTCh(π′)
+                push!(tried, (π = π′, TC = TC, kept = TC < TCᵒ,
                               seg = i+1:j))   # the positions reversed
                 if TC < TCᵒ
-                    rᵒ, TCᵒ = r′, TC
+                    πᵒ, TCᵒ = π′, TC
                     done = false
                     break
                 end
@@ -525,11 +551,11 @@ function twoopt_steps(r, rTCh)
                 break
             end
         end
-        r = copy(rᵒ)
+        π = copy(πᵒ)
     end
     return tried
 end
-tried = twoopt_steps(r, rTCh)
+tried = twoopt_steps(π, πTCh)
 steps = filter(t -> t.kept, tried)     # the start, then each kept tour
 function segdist(c, p, q)             # from point c to the segment p-q,
     d = q .- p                         # to keep each label clear
@@ -538,7 +564,7 @@ function segdist(c, p, q)             # from point c to the segment p-q,
 end
 fig = Figure(size = (687, 270))
 for (k, s) in enumerate(steps)
-    old = k == 1 ? s.r : steps[k-1].r
+    old = k == 1 ? s.π : steps[k-1].π
     ttl = k == 1 ? rich("start: ", rich("$(s.TC)", color = bluec)) :
           rich("step $(k - 1): ",
                rich("$(steps[k-1].TC)", color = (ink, 0.45)),
@@ -547,7 +573,7 @@ for (k, s) in enumerate(steps)
               titlesize = 13, titlefont = :regular)
     hidedecorations!(ax); hidespines!(ax)
     oldarcs = [(old[m], old[m+1]) for m in 1:length(old)-1]
-    newarcs = [(s.r[m], s.r[m+1]) for m in 1:length(s.r)-1]
+    newarcs = [(s.π[m], s.π[m+1]) for m in 1:length(s.π)-1]
     gone = [(i, j) for (i, j) in oldarcs                # removed, not
             if !((i, j) in newarcs || (j, i) in newarcs)]  # reversed
     for (i, j) in gone                 # dashed and crossed out, in ink
@@ -587,10 +613,10 @@ end
 colgap!(fig.layout, 2)
 fig
 
-## Example 2(b): In Julia
+## Example 3(b): In Julia
 # Determine the same trace in Julia, and the same tour with Logjam's
-# twoopt, and determine whether they agree with Ex. 2(a).
-# Code block 12: the arc costs of Ex. 2, and each arc's cost on the tour
+# twoopt, and determine whether they agree with Ex. 3(a).
+# Code block 13: the arc costs of Ex. 3, and each arc's cost on the tour
 D = [
      0     8     6     9     1     5
      3     0     1     5     4     2
@@ -599,64 +625,64 @@ D = [
      6     7    10     1     0    10
      6     2     5     2     1     0]
 
-@show r
-segcost(r, D)
-# Code block 13: the tour's cost
-rTCh(r) = sum(segcost(r, D))
-rTCh(r)
-# Code block 14: twoopt, printing each sequence it considers
-function twoopt_prt(r, rTCh)
-    rᵒ, TCᵒ = copy(r), rTCh(r)
-    println("*", TCᵒ, ": ", rᵒ)
+@show π
+segcost(π, D)
+# Code block 14: the tour's cost
+πTCh(π) = sum(segcost(π, D))
+πTCh(π)
+# Code block 15: twoopt, printing each sequence it considers
+function twoopt_prt(π, πTCh)
+    πᵒ, TCᵒ = copy(π), πTCh(π)
+    println("*", TCᵒ, ": ", πᵒ)
     done = false
     while !done
         done = true
-        for i = 1:length(r)-2
-            for j = i+2:min(length(r)-1, length(r)+i-3)
-                r′ = vcat(r[1:i], reverse(r[i+1:j]), r[j+1:end])
-                TC = rTCh(r′)
+        for i = 1:length(π)-2
+            for j = i+2:min(length(π)-1, length(π)+i-3)
+                π′ = vcat(π[1:i], reverse(π[i+1:j]), π[j+1:end])
+                TC = πTCh(π′)
                 if TC < TCᵒ
-                    rᵒ, TCᵒ = r′, TC
-                    println("*", TCᵒ, ": ", rᵒ)
+                    πᵒ, TCᵒ = π′, TC
+                    println("*", TCᵒ, ": ", πᵒ)
                     done = false
                     break
                 else
-                    println(" ", TC, ": ", r′)
+                    println(" ", TC, ": ", π′)
                 end
             end
             if done == false
                 break
             end
         end
-        r = copy(rᵒ)
+        π = copy(πᵒ)
     end
-    return rᵒ, TCᵒ
+    return πᵒ, TCᵒ
 end
 
-twoopt_prt(r, rTCh)
-twoopt(r, rTCh)                        # Code block 15: Logjam's 2-opt
+twoopt_prt(π, πTCh)
+twoopt(π, πTCh)                        # Code block 16: Logjam's 2-opt
 
-## Example 2(c): Multi-start
+## Example 3(c): Multi-start
 # Determine the best tour that multi-start finds from 100 random
 # starting tours.
-# Code block 16: a random tour, the construction of multi-start
+# Code block 17: a random tour, the construction of multi-start
 Random.seed!(2024)
 
-@show r = randtour(6);
-# Code block 17: multi-start, 2-opt from 100 random tours
+@show π = randtour(6);
+# Code block 18: multi-start, 2-opt from 100 random tours
 n, nruns = 6, 100
-rᵒ, TCᵒ = multistart(n, rTCh; nruns)
-@show rᵒ
+πᵒ, TCᵒ = multistart(n, πTCh; nruns)
+@show πᵒ
 @show TCᵒ;
 
-## Example 2(d): Against the optimum
+## Example 3(d): Against the optimum
 # Determine the optimal tour, by looking at all 120 tours and by solving
-# the formulation of @mdl-tsp, and how far the tours of Ex. 2(a) and
-# 2(c) are from it.
-# Code block 18: all 120 tours by brute force, and the formulation
-using Combinatorics
-tours = [[1; p; 1] for p ∈ permutations(2:6)]
-TCs = rTCh.(tours)
+# the formulation of @mdl-tsp, and how far the tours of Ex. 3(a) and
+# 3(c) are from it.
+# Code block 19: all 120 tours by brute force, and the formulation
+tours = ([1; p; 1] for p ∈ permutations(2:6))   # as in Ex. 1
+TCs = [πTCh(π) for π ∈ tours]                   # only the costs
+
 ex2 = TSP(D)
 @show length(tours)                    # the tours looked at
 @show minimum(TCs)                     # the cheapest of them
@@ -670,7 +696,7 @@ ex2 = TSP(D)
 @assert TCᵒ == ex2.TC == minimum(TCs)                # multi-start optimal
 
 ## Sec. 4. Expected tour length
-# Code block 19: the pairwise saving of two customers served from a DC
+# Code block 20: the pairwise saving of two customers served from a DC
 PS = [0.0 0.0; 0.15 1.0; 1.1 0.25]     # the DC, customer i, customer j
 rs = 0.09                              # node radius, data units
 function trip!(ax, i, j; color = ink, dashed = false, off = 0.035)
@@ -725,11 +751,11 @@ text!(ax2, sum(PS[2:3, 1]) / 2 + 0.02, sum(PS[2:3, 2]) / 2 + 0.02;
 nodes!(ax2, L"d_i + d_{ij} + d_j")
 Label(fig[2, 2], "(b)"; color = ink, fontsize = 14, tellwidth = false)
 fig
-# Code block 20: the two-customer route in a circle of radius 1
+# Code block 21: the two-customer route in a circle of radius 1
 fig = Figure(size = (330, 330))
 ax = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax); hidespines!(ax)
-θ = range(0, 2π, length = 361)
+θ = range(0, 2pi, length = 361)
 lines!(ax, cos.(θ), sin.(θ); color = bluec, linewidth = 1.6)  # radius 1
 lines!(ax, (2/3) .* cos.(θ), (2/3) .* sin.(θ); color = dcc,
        linewidth = 1.3, linestyle = :dash)     # the expected distance
@@ -749,16 +775,16 @@ text!(ax, 0.47, -0.04; text = L"\frac{2}{3}", color = ink, fontsize = 15,
       align = (:center, :top))
 text!(ax, d / 2 - 0.035, d / 2 - 0.035;       # inside the triangle,
       text = L"\sqrt{2(2/3)^2}", color = ink, # clear of the dashed circle
-      fontsize = 14, rotation = -π / 4, align = (:center, :top))
+      fontsize = 14, rotation = -pi / 4, align = (:center, :top))
 text!(ax, 0.82cosd(-45) + 0.025cosd(45),
       0.82sind(-45) + 0.025sind(45);
-      text = L"1", color = bluec, fontsize = 13, rotation = -π / 4,
+      text = L"1", color = bluec, fontsize = 13, rotation = -pi / 4,
       align = (:center, :bottom))              # between the two circles
 text!(ax, 0.0, 1.0 - 0.06; text = L"a = \pi", color = ink, fontsize = 15,
       align = (:center, :top))
 xlims!(ax, -1.08, 1.08); ylims!(ax, -1.08, 1.08)
 fig
-# Code block 21: the average angle between two random points, simulated
+# Code block 22: the average angle between two random points, simulated
 Random.seed!(1)
 absdiffdeg(a, b) = min(360 - mod(a - b, 360), mod(a - b, 360))
 # mod gives the angle from $b$ to $a$ going one way around the circle,
@@ -772,7 +798,7 @@ for row in eachrow(sims)
     row.min, row.max, row.mean = minimum(ang), maximum(ang), sum(ang) / n
 end
 prt(sims)
-# Code block 22: customers spread uniformly, and the square each one has
+# Code block 23: customers spread uniformly, and the square each one has
 Random.seed!(242)
 mpts = 300                             # customers in the circle
 P = Matrix{Float64}(undef, 0, 2)
@@ -786,7 +812,7 @@ end
 fig = Figure(size = (687, 320))
 ax1 = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax1); hidespines!(ax1)
-θ = range(0, 2π, length = 361)
+θ = range(0, 2pi, length = 361)
 lines!(ax1, cos.(θ), sin.(θ); color = bluec, linewidth = 1.6)
 scatter!(ax1, P[:, 1], P[:, 2]; color = redc, markersize = 3)
 scatter!(ax1, [0.0], [0.0]; color = ink, markersize = 7)
@@ -826,7 +852,7 @@ xlims!(ax1, -1.05, 1.05); ylims!(ax1, -1.05, 1.05)
 xlims!(ax2, -0.2, 4.0); ylims!(ax2, -0.2, 3.9)
 colsize!(fig.layout, 1, Relative(0.47))
 fig
-# Code block 23: the estimate against optimal and 2-opt tours
+# Code block 24: the estimate against optimal and 2-opt tours
 function disk(m)                     # m points uniform in the unit disk,
     P = Matrix{Float64}(undef, 0, 2) # by rejection from the square
     while size(P, 1) < m
@@ -834,14 +860,14 @@ function disk(m)                     # m points uniform in the unit disk,
         # A point uniform in the square from $-1$ to 1 is kept only if it
         # falls inside the unit circle, which leaves the kept points
         # uniform over the circle; about $\pi/4$ of them, 79%, are kept.
-        # Code block 22 draws its customers the same way.
+        # Code block 23 draws its customers the same way.
         if sum(p .^ 2) < 1
             P = [P; p]
         end
     end
     return P
 end
-φ = 2(sqrt(2) + 1) / (3sqrt(π))
+φ = 2(sqrt(2) + 1) / (3sqrt(pi))
 Random.seed!(150)
 est = DataFrame(m = Int[], reps = Int[], estimate = Float64[],
                 exact = Float64[], twoopt = Float64[])
@@ -850,12 +876,12 @@ for m in (2, 5, 10, 20, 50, 100, 200)
     Ps = [[0.0 0.0; disk(m)] for _ in 1:reps]   # the DC at the center
     Ds = [dists(P, P, 2) for P in Ps]           # Euclidean
     TC = m ≤ 50 ? [TSP(D).TC for D in Ds] : [NaN]   # exact, to m = 50
-    TC2 = [twoopt([1:m+1; 1], r -> sum(segcost(r, D)))[2]
+    TC2 = [twoopt([1:m+1; 1], π -> sum(segcost(π, D)))[2]
     # 2-opt starts from the tour that visits the customers in the order
     # they were drawn, which is itself a random tour, so it needs no
     # random start of its own.
            for D in Ds]
-    push!(est, (m, reps, φ * sqrt(m * π), sum(TC) / length(TC),
+    push!(est, (m, reps, φ * sqrt(m * pi), sum(TC) / length(TC),
                 sum(TC2) / reps))
 end
 est.ratio = est.estimate ./ est.exact
@@ -863,13 +889,13 @@ est.ratio2opt = est.estimate ./ est.twoopt
 prt(est)
 
 # Sec. 4. Expected tour length
-# Example 3: Tour of North Carolina
-## Example 3(a): Estimate first
+# Example 4: Tour of North Carolina
+## Example 4(a): Estimate first
 # Determine the length of the tour that @eq-tsp-est estimates, before
 # any tour is built.
-# Code block 24: the NC counties, from the Logjam gazetteer
+# Code block 25: the NC counties, from the Logjam gazetteer
 df = filter(r -> (r.STFIP == st2fips(:NC)), uscounty());
-# Code block 25: the estimated length of the tour
+# Code block 26: the estimated length of the tour
 @show a = sum(df.ALAND) + sum(df.AWATER)
 @show TCᴱ = 0.908sqrt(nrow(df)*a);
 # The numbers the display above sets, held to the code
@@ -879,59 +905,59 @@ df = filter(r -> (r.STFIP == st2fips(:NC)), uscounty());
 # F24's published estimate, made with 0.9, on the same data
 @assert round(0.9sqrt(nrow(df) * a), digits = 2) == 2087.89
 
-## Example 3(b): Multi-start 2-opt
+## Example 4(b): Multi-start 2-opt
 # Determine the best tour that 2-opt finds from 100 random starting
 # tours, under great circle distances.
-# Code block 26: great circle distances between the county points
+# Code block 27: great circle distances between the county points
 XY = hcat(df.LON, df.LAT)
 D = dists(XY, XY, :mi);
-# Code block 27: a random tour of the counties, and its cost
+# Code block 28: a random tour of the counties, and its cost
 Random.seed!(2024)
-r = randtour(nrow(df))
-@show rTCh(r);
-# Code block 28: the random tour on a map
+π = randtour(nrow(df))
+@show πTCh(π);
+# Code block 29: the random tour on a map
 fig, ax = makemap(df.LON, df.LAT; xexpand=0.05)
 resize!(fig, 687, 300)
-lines!(ax, df.LON[r], df.LAT[r], color=:red, linewidth=.5)
+lines!(ax, df.LON[π], df.LAT[π], color=:red, linewidth=.5)
 fig
-# Code block 29: multi-start, 2-opt from 100 random tours of the counties
+# Code block 30: multi-start, 2-opt from 100 random tours of the counties
 Random.seed!(2024)
 
 n, nruns = nrow(df), 100
-rᵒ, TCᵒ = multistart(n, rTCh; nruns);
-# Code block 30: the best tour on a map
+πᵒ, TCᵒ = multistart(n, πTCh; nruns);
+# Code block 31: the best tour on a map
 fig, ax = makemap(df.LON, df.LAT; xexpand=0.05)
 resize!(fig, 687, 300)
-lines!(ax, df.LON[rᵒ], df.LAT[rᵒ], color=:red, linewidth=.5)
+lines!(ax, df.LON[πᵒ], df.LAT[πᵒ], color=:red, linewidth=.5)
 fig
 
-## Example 3(c): Against the optimum
+## Example 4(c): Against the optimum
 # Determine the optimal tour, by solving the formulation of @mdl-tsp,
 # and how far the estimate and the multi-start tour are from it.
-# Code block 31: the optimal tour of the counties, by the formulation
+# Code block 32: the optimal tour of the counties, by the formulation
 nc = TSP(D)
 @show round(nc.TC, digits = 2)
 @show length(nc.rounds);
-# Code block 32: the spacefilling curve's tour, and that tour after 2-opt
-rsfc = tspspfillcur(XY)
-rsfc2, TCsfc2 = twoopt(rsfc, rTCh)
-@show round(rTCh(rsfc), digits = 2)
+# Code block 33: the spacefilling curve's tour, and that tour after 2-opt
+πsfc = tspspfillcur(XY)
+πsfc2, TCsfc2 = twoopt(πsfc, πTCh)
+@show round(πTCh(πsfc), digits = 2)
 @show round(TCsfc2, digits = 2);
-# Code block 33: each tour and estimate of Ex. 3 against the optimum
+# Code block 34: each tour and estimate of Ex. 4 against the optimum
 cmp = DataFrame(tour = ["estimate", "multi-start 2-opt", "optimal"],
                 mi = [TCᴱ, TCᵒ, nc.TC])
 cmp.above = 100 .* (cmp.mi ./ nc.TC .- 1)      # % above the optimum
 prt(cmp)
-# The answers Ex. 3 gives, the second published with this example
+# The answers Ex. 4 gives, the second published with this example
 @assert round(TCᴱ, digits = 2) == 2106.45          # the estimate, 0.908
 @assert round(TCᵒ, digits = 2) == 2141.21          # 100 random starts
 
-## Example 3(d): On the roads
+## Example 4(d): On the roads
 # Determine the optimal tour of the counties on the road miles of
 # Logjam's FAF5 road network, and how much the circuity factor of 1.2 of
 # Lecture 2.2, Sec. 7, and the estimate of @eq-tsp-est must be adjusted
 # to match it.
-# Code block 34: road distances between the county points, on FAF5
+# Code block 35: road distances between the county points, on FAF5
 using SimpleWeightedGraphs
 N, L = prune_reindex(faf5nodes(), faf5links())   # nodes numbered from 1
 Nc, Lc = cropnetwork(N, L, df.LON, df.LAT)       # a box around the points
@@ -948,13 +974,13 @@ short = off .& (D .< 50)
 @show all(Dr[off] .≥ D[off])           # no road below great circle
 @show sum(Dr[off]) / sum(D[off])       # circuity, all pairs
 @show sum(Dr[short]) / sum(D[short]);  # circuity under 50 mi
-# Code block 35: the optimal tour on road miles
+# Code block 36: the optimal tour on road miles
 ncr = TSP(Dr)
 @show 1.2nc.TC                         # great circle optimum, x 1.2
 @show sum(segcost(nc.tour, Dr))        # the great circle tour, driven
 @show ncr.TC                           # the road optimum
 @show ncr.TC / (φ * sqrt(nrow(df) * a)); # factor the estimate needs
-# Code block 36: the optimal road tour, each leg along its roads
+# Code block 37: the optimal road tour, each leg along its roads
 legs = zip(ncr.tour[1:end-1], ncr.tour[2:end])
 path = reduce(vcat, [tracepath(Pr[i], i, j)[1:end-1] for (i, j) in legs])
 push!(path, path[1])                       # back to where it started
