@@ -263,6 +263,20 @@ prt(rounds)
 # (makemap draws one map per figure, so the three frames are plain axes in
 # longitude and latitude, scaled by the cosine of the mean latitude)
 (xl, yl) = mapbbox(df.LON, df.LAT; xexpand = 0.14, yexpand = 0.16)
+lab = Dict(aligntext(df.LON, df.LAT; offsetamt = 5))
+al, os = copy(lab[:align]), copy(lab[:offset])
+# moved by hand where, in some round, an arc, the border or another name
+# crosses the place Logjam's aligntext gives
+for (nm, a, o) in [("Charlotte", (:right, :bottom), (-5, 3)),
+                   ("Concord", (:left, :top), (5, -3)),
+                   ("High Point", (:left, :top), (4, -4)),
+                   ("Durham", (:left, :bottom), (5, 3)),
+                   ("Cary", (:right, :top), (-6, -4)),
+                   ("Fayetteville", (:right, :top), (-4, -4)),
+                   ("Wilmington", (:right, :top), (-3, -4))]
+    i = findfirst(==(nm), df.NAME)
+    al[i], os[i] = a, o
+end
 fig = Figure(size = (687, 640))
 cells = [fig[1, 1], fig[1, 2], fig[2, 1:2]]
 for (k, rd) in enumerate(nc10.rounds)
@@ -281,7 +295,7 @@ for (k, rd) in enumerate(nc10.rounds)
     end
     scatter!(ax, df.LON, df.LAT; color = bluec, markersize = 8)
     text!(ax, df.LON, df.LAT; text = df.NAME, fontsize = k < 3 ? 11 : 12,
-          color = ink, aligntext(df.LON, df.LAT; offsetamt = 5)...)
+          color = ink, align = al, offset = os)
 end
 rowsize!(fig.layout, 2, Relative(0.6))
 fig
@@ -330,10 +344,9 @@ XY4 = [0.8 0.8; 0.1 0.2; 0.3 0.7; 0.7 0.2]       # points 1 to 4
 # Code block 8: positions on a grid, rows from y = 1 down to y = 0
 g = (0:10) ./ 10
 Θ = [sfcpos(x, y) for y in reverse(g), x in g]
-grid = DataFrame(round.(Θ, RoundNearestTiesAway, digits = 3),
-                 string.(g))
-insertcols!(grid, 1, :y => reverse(g))
-prt(grid)
+prt(round.(Θ, RoundNearestTiesAway, digits = 3);
+    rows = string.(reverse(g)), cols = string.(g), row_title = "y",
+    allfrac = 3)
 # Code block 9: the curve, drawn by joining a grid's points in curve order
 gr = 0:0.02:1
 X = [x for y in gr, x in gr]
@@ -343,13 +356,18 @@ fig = Figure(size = (360, 360))
 ax = Axis(fig[1, 1]; aspect = DataAspect(), xticks = 0:0.2:1,
           yticks = 0:0.2:1, xgridvisible = false, ygridvisible = false)
 lines!(ax, vec(X)[ij], vec(Y)[ij]; color = (ink, 0.55), linewidth = 0.5)
+# each label on a white card, centred beside its point and clear of the
+# tour (the axis is about 300 px across its 0 to 1)
+at = XY4 .+ [0.0 0.08; 0.10 -0.07; -0.10 0.07; 0.10 -0.07]
+scatter!(ax, at[:, 1], at[:, 2]; marker = Rect, color = :white,
+         markersize = fill((76, 26), 4))
 r4 = tspspfillcur(XY4)
 lines!(ax, XY4[r4, 1], XY4[r4, 2]; color = bluec, linewidth = 2)
 scatter!(ax, XY4[:, 1], XY4[:, 2]; color = redc, markersize = 10)
-text!(ax, XY4[:, 1], XY4[:, 2];
+text!(ax, at[:, 1], at[:, 2];
       text = [rich("$i: ", rich(string(round(θ4[i], digits = 3)),
                                 color = bluec)) for i in 1:4],
-      color = ink, fontsize = 13, offset = (6, 6))
+      color = ink, fontsize = 13, align = (:center, :center))
 limits!(ax, 0, 1, 0, 1)
 fig
 # Code block 10: the changes that remove arc a with arc c, and with arc d,
@@ -362,9 +380,9 @@ function arc6!(ax, i, j; color = ink, dashed = false, off = 0.0)
     v = [u[2], -u[1]] .* off               # shifted to the arc's right
     t, h = p .+ r6 .* u .+ v, q .- r6 .* u .+ v
     if dashed                              # a dashed shaft, then its head
-        lines!(ax, [t[1], h[1] - 0.07u[1]], [t[2], h[2] - 0.07u[2]];
+        lines!(ax, [t[1], h[1] - 0.11u[1]], [t[2], h[2] - 0.11u[2]];
                color = color, linewidth = 1.3, linestyle = :dash)
-        scatter!(ax, [h[1] - 0.05u[1]], [h[2] - 0.05u[2]];
+        scatter!(ax, [h[1] - 0.09u[1]], [h[2] - 0.09u[2]];
                  marker = :rtriangle, rotation = atan(u[2], u[1]),
                  markersize = 9, color = color)
     else
@@ -394,9 +412,9 @@ for (i, j, off) in [(1, 4, 0.0), (4, 3, 0.07), (3, 2, -0.07),
 end
 for (i, j, c, dy) in [(1, 2, redc, -0.12), (1, 2, bluec, 0.12),
                       (3, 4, redc, 0.0), (4, 5, bluec, 0.0)]  # removed
-    m = mid(i, j)
-    text!(ax, m[1], m[2] + dy; text = "×", color = c, fontsize = 22,
-          align = (:center, :center))
+    m = mid(i, j)                          # a mark on the arc
+    scatter!(ax, [m[1]], [m[2] + dy]; marker = '×', markersize = 22,
+             color = c)
 end
 for i in 1:size(P6, 1)                     # nodes over the arcs
     poly!(ax, Circle(Point2f(P6[i, 1], P6[i, 2]), r6); color = :white,
@@ -534,24 +552,27 @@ for (k, s) in enumerate(steps)
             if !((i, j) in newarcs || (j, i) in newarcs)]  # reversed
     for (i, j) in gone                 # dashed and crossed out, in ink
         arc6!(ax, i, j; color = (ink, 0.35), dashed = true)
-        m = mid(i, j)
-        text!(ax, m[1], m[2]; text = "×", color = ink, fontsize = 16,
-              align = (:center, :center))
+        m = mid(i, j)                  # a mark on the arc, not a label
+        scatter!(ax, [m[1]], [m[2]]; marker = '×', markersize = 16,
+                 color = ink)
     end
     for (i, j) in newarcs              # each arc, the ones the change adds blue
         arc6!(ax, i, j; color = (i, j) in oldarcs ? ink : bluec)
     end
-    segs = [(P6[i, :], P6[j, :]) for (i, j) in newarcs]
+    segs = [(P6[i, :], P6[j, :]) for (i, j) in [newarcs; gone]]
+    placed = Vector{Float64}[]         # the costs labeled so far
     for (i, j) in newarcs              # each cost, given, where it is clearest
         p, q = P6[i, :], P6[j, :]
         u = (q .- p) ./ hypot((q .- p)...)
         w = [-u[2], u[1]]
-        cands = [p .+ t .* (q .- p) .+ sg * 0.17 .* w
-                 for t in (0.3, 0.42, 0.58, 0.7), sg in (1, -1)]
+        cands = [p .+ t .* (q .- p) .+ sg * o .* w
+                 for t in 0.2:0.1:0.8, sg in (1, -1), o in (0.24, 0.32)]
         others = [sg for sg in segs if !(sg[1] == p && sg[2] == q)]
         room(c) = minimum([[segdist(c, a, b) for (a, b) in others];
-                           [hypot((c .- P6[n, :])...) - r6 for n in 1:6]])
+                           [hypot((c .- P6[n, :])...) - r6 for n in 1:6];
+                           [hypot((c .- l)...) - 0.2 for l in placed]])
         c = cands[argmax(room.(cands))]
+        push!(placed, c)
         text!(ax, c[1], c[2]; text = string(D[i, j]), fontsize = 12,
               color = redc, align = (:center, :center))
     end
@@ -776,9 +797,16 @@ hidedecorations!(ax1); hidespines!(ax1)
 lines!(ax1, cos.(θ), sin.(θ); color = bluec, linewidth = 1.6)
 scatter!(ax1, P[:, 1], P[:, 2]; color = redc, markersize = 3)
 scatter!(ax1, [0.0], [0.0]; color = ink, markersize = 7)
-text!(ax1, 0.04, -0.02; text = "DC", color = ink, fontsize = 12,
-      align = (:left, :top))
-text!(ax1, -0.72, 0.62; text = L"a", color = ink, fontsize = 18)
+# each label where the customers leave it the most room
+gap(c) = minimum(hypot.(P[:, 1] .- c[1], P[:, 2] .- c[2]))
+cDC = argmax(gap, [r .* (cosd(t), sind(t))
+                   for t in 0:15:345 for r in (0.14, 0.17)])
+ca = argmax(gap, [(x, y) for x in -0.7:0.02:-0.4
+                  for y in 0.4:0.02:0.7 if hypot(x, y) < 0.8])
+text!(ax1, cDC...; text = "DC", color = ink, fontsize = 12,
+      align = (:center, :center))
+text!(ax1, ca...; text = L"a", color = ink, fontsize = 18,
+      align = (:center, :center))
 Label(fig[2, 1], "(a)"; color = ink, fontsize = 14,
       tellwidth = false)               # caption below
 b = (0.45, -0.05, 0.14)                # the square (b) zooms into
@@ -794,7 +822,8 @@ for i in 0:2, j in 0:2                 # one customer per square
     scatter!(ax2, [i + 0.5], [j + 0.5]; color = redc, markersize = 12)
 end
 lines!(ax2, [1, 2, 2, 1, 1], [2, 2, 3, 3, 2]; color = ink, linewidth = 2)
-text!(ax2, 1.5, 3.1; text = L"\frac{1}{\sqrt{s}} = \sqrt{\frac{a}{m}}",
+text!(ax2, 1.5, 3.1;
+      text = L"\frac{1}{\sqrt{\delta}} = \sqrt{\frac{a}{m}}",
       color = ink, fontsize = 15, align = (:center, :bottom))
 text!(ax2, 3.1, 1.5; text = L"\sqrt{\frac{a}{m}}", color = ink,
       fontsize = 15, align = (:left, :center))
@@ -950,20 +979,24 @@ function near(s, lon, lat)                 # the link of sign s nearest
     j = argmin(hypot.(x .- lon, y .- lat))
     return x[j], y[j]
 end
-for (s, lon, lat, al) in [("I 40", -81.6, 35.75, (:center, :bottom)),
-                          ("I 85", -79.6, 35.55, (:left, :top)),
-                          ("I 95", -78.0, 35.2, (:left, :center)),
-                          ("I 77", -80.9, 36.3, (:right, :center)),
-                          ("I 26", -82.6, 35.2, (:right, :center))]
+signs = [("I 40", -81.0, 35.75, (:center, :top), (0, -6)),
+         ("I 85", -79.6, 35.55, (:left, :top), (4, 0)),
+         ("I 95", -78.0, 35.2, (:left, :center), (4, 0)),
+         ("I 77", -80.9, 36.3, (:right, :center), (4, 0)),
+         ("I 26", -82.45, 35.3, (:left, :bottom), (5, 4))]
+for (s, lon, lat, al, off) in signs
     text!(ax, near(s, lon, lat)...; text = replace(s, " " => "-"),
           fontsize = 10, color = (ink, 0.7), font = :bold, align = al,
-          offset = (4, 0))
+          offset = off)
 end
-for (nm, v) in [("Raleigh", -1), ("Charlotte", -1), ("Wilmington", -1),
-                 ("Asheville", 1)]        # below the point, or above it
+places = [("Raleigh", (:left, :center), (6, 0)),      # each clear
+          ("Charlotte", (:right, :top), (-14, -14)),  # of the tour
+          ("Wilmington", (:left, :top), (5, -4)),
+          ("Asheville", (:left, :bottom), (14, 14))]
+for (nm, al, off) in places
     c = only(filter(r -> r.STFIP == st2fips(:NC) && r.NAME == nm,
                     usplace()))
     text!(ax, c.LON, c.LAT; text = nm, fontsize = 11, color = ink,
-          align = (:center, v < 0 ? :top : :bottom), offset = (0, 5v))
+          align = al, offset = off)
 end
 fig
