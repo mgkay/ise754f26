@@ -2969,22 +2969,6 @@
    "label": "Ex. 2",
    "word": "Ex."
   },
-  "example-2-a": {
-   "label": "Ex. 2(a)",
-   "word": "Ex."
-  },
-  "example-2-b": {
-   "label": "Ex. 2(b)",
-   "word": "Ex."
-  },
-  "example-2-c": {
-   "label": "Ex. 2(c)",
-   "word": "Ex."
-  },
-  "example-2-d": {
-   "label": "Ex. 2(d)",
-   "word": "Ex."
-  },
   "example-3": {
    "label": "Ex. 3",
    "word": "Ex."
@@ -3003,6 +2987,26 @@
   },
   "example-3-d": {
    "label": "Ex. 3(d)",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-4-a": {
+   "label": "Ex. 4(a)",
+   "word": "Ex."
+  },
+  "example-4-b": {
+   "label": "Ex. 4(b)",
+   "word": "Ex."
+  },
+  "example-4-c": {
+   "label": "Ex. 4(c)",
+   "word": "Ex."
+  },
+  "example-4-d": {
+   "label": "Ex. 4(d)",
    "word": "Ex."
   }
  },
