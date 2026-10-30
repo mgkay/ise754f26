@@ -183,7 +183,6 @@
   table.lk tr.picked td { box-shadow: inset 0 2px 0 var(--view), inset 0 -2px 0 var(--view); }
   table.lk tr.answer td { background: #d6e6f5 !important; color: #0b3d6b; font-weight: 700; }
   table.lk tr.base td { background: var(--hl-warn) !important; font-weight: 700; color: var(--strong); }
-  table.lk tr.wrong td { text-decoration: line-through; color: var(--gray); }
   ol.howto { margin: 0; padding-left: 1.5rem; font-family: var(--sans); font-size: 0.95em; display: flex; flex-direction: column; gap: 0.3rem; }
   /* the list stays put while the text beside it changes */
   .lk-grid { justify-content: flex-start; }
@@ -365,7 +364,8 @@
         Its 9 changes are taken in the order of Code block 12: arcs a and c out first, then a
         and d, a and e, b and d, and so on to d and f.</li>
         <li>Work out the sequence the next change gives, find it among the rows listed, and
-        <b>click it</b>. A row that is not it is struck through; try again.</li>
+        <b>click it</b>. The row clicked goes into the table below, with the number of the
+        change that gives it.</li>
         <li>If its cost is lower than the yellow row&rsquo;s, it becomes the yellow row and the
         scan starts again at its first change, a and c. If not, the scan goes on to the next
         change of the same yellow row.</li>
@@ -402,7 +402,7 @@
       <div class="scroll"><table class="tt" id="lk-run">
         <thead><tr><th class="r">#</th><th class="r">Row</th><th>Sequence</th><th class="r">Cost</th><th class="r">Change</th><th></th></tr></thead>
         <tbody></tbody>
-        <caption>Table 2 so far: each row found, with its number in the table of 120 tours.</caption>
+        <caption>Table 2 so far: each row picked, with its number in the table of 120 tours.</caption>
       </table></div>
     </div>
 
@@ -717,6 +717,21 @@ function twoOptTrace(r0, C) {                  // the loop of Code block 15, eve
   }
   return {rows: rows, tour: best, cost: TC};
 }
+function scanRow(base, C, m) {                 // change m of base, as a row of Table 2
+  const c = changesOf(base)[m - 1], baseCost = tourCost(base, C), cost = tourCost(c.seq, C);
+  return {seq: c.seq, cost: cost, change: m, kept: cost < baseCost, start: false,
+          i: c.i, j: c.j, base: base.slice(), baseCost: baseCost};
+}
+function scanState(rows) {                     // the tour the scan is on, and the changes looked at
+  let base = rows[0].seq, seen = new Set();
+  for (const r of rows.slice(1)) {
+    if (r.kept) { base = r.seq; seen = new Set(); } else seen.add(r.change);
+  }
+  const n = changesOf(base).length;
+  let next = 1;
+  while (next <= n && seen.has(next)) next++;
+  return {base: base, next: next, done: seen.size === n};
+}
 function tourTable(C) {                        // every tour from node 1, in lexicographic order
   const n = C.length, out = [];
   (function perm(prefix, rest) {
@@ -909,30 +924,36 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
   const LK = (function () {
     const svg = $("lk-svg"), text = $("lk-text"), cand = $("lk-cand"), run = document.querySelector("#lk-run tbody");
     const rowIn = $("lk-row"), mode = $("lk-mode");
-    // found = how many rows of Table 2 are found so far (the start is the first)
-    let trace = null, found = 1, wrong = [], hint = false, msg = "", startNo = 1;
+    // rows = the rows of Table 2 picked so far (the start is the first); any row one change
+    // from the yellow row is taken as picked, never judged; ref = 2-opt's own run, for the end
+    let rows = [], ref = null, hint = false, msg = "", startNo = 1;
     function lkTable(rows, cls) {
       return "<table class='lk'><thead><tr><th class='r'>No.</th><th>Tour</th><th class='r'>Cost</th></tr></thead><tbody>" +
         rows.map(t => "<tr data-no='" + t.no + "' class='" + cls(t) + "'><td class='r'>" + t.no + "</td><td>" +
           t.tour.join(" ") + "</td><td class='r'>" + t.cost + "</td></tr>").join("") + "</tbody></table>";
     }
-    function outcome(r) {                        // what a found row does to the scan
+    function outcome(r, st) {                    // what a picked row does to the scan
       if (r.kept) return r.cost + " is lower than " + r.baseCost + ", so it becomes the yellow row and the scan " +
         "starts again at its first change, a and c.";
       const strict = r.cost === r.baseCost ? " (an improvement has to be strict)" : "";
-      if (r.change === 9) return r.cost + " is not lower than " + r.baseCost + strict + ", and that was the yellow row’s last change.";
-      const c = changesOf(r.base)[r.change];                // the next change, in Code block 12's order
+      if (st.done) return r.cost + " is not lower than " + r.baseCost + strict + ", and that was the last of the yellow row’s 9 changes to look at.";
+      const c = changesOf(st.base)[st.next - 1];            // the next change, in Code block 12's order
       return r.cost + " is not lower than " + r.baseCost + strict + ", so the scan goes on to change " +
-        (r.change + 1) + " of the same yellow row, arcs " + LET[c.i - 1] + " and " + LET[c.j - 1] + " out.";
+        st.next + " of the same yellow row, arcs " + LET[c.i - 1] + " and " + LET[c.j - 1] + " out.";
+    }
+    function add(r, prefix) {
+      rows.push(r);
+      msg = prefix + "Row " + INDEX[r.seq.join(",")] + ", " + tourStr(r.seq) + ", cost " + r.cost + ", change " + r.change +
+            ": " + outcome(r, scanState(rows));
+      hint = false; render();
     }
     function render() {
-      const rows = trace.rows, done = found >= rows.length;
-      const next = done ? null : rows[found];
-      const cur = done ? trace.tour : next.base;            // the yellow row's tour
+      const st = scanState(rows), done = st.done, cur = st.base;   // the yellow row's tour
+      const next = done ? null : changesOf(cur)[st.next - 1];
       const curNo = INDEX[cur.join(",")], curCost = tourCost(cur, S.C);
-      const lastNo = found > 1 ? INDEX[rows[found - 1].seq.join(",")] : null;
+      const lastNo = rows.length > 1 ? INDEX[rows[rows.length - 1].seq.join(",")] : null;
       // the rows listed: the yellow row and the rows one change away from it, or all 120
-      const cls = t => [!done && t.no !== curNo ? "cand" : "", wrong.includes(t.no) ? "wrong" : "",
+      const cls = t => [!done && t.no !== curNo ? "cand" : "",
                         t.no === lastNo ? "answer" : "", t.no === curNo ? "base" : ""].join(" ");
       if (mode.value === "a") {
         let h = "<div class='lk-full'>";
@@ -950,12 +971,14 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
       // the text: what the last click did, then what to do now
       let t = msg ? "<p>" + msg + "</p>" : "";
       if (done) {
+        const refEnd = INDEX[ref.tour.join(",")];
         t += "<p><b>Done.</b> None of the 9 changes of the yellow row " + curNo + ", " + tourStr(cur) + ", is lower than its " +
              curCost + ", so 2-opt stops there: a local optimum, after " + rows.length + " rows of Table 2. " +
-             "<b>Start over</b>, or start from another row.</p>";
+             "2-opt&rsquo;s own run from row " + startNo + " takes " + ref.rows.length + " rows to row " + refEnd + ", " +
+             tourStr(ref.tour) + ", cost " + ref.cost + ". <b>Start over</b>, or start from another row.</p>";
       } else {
-        t += "<p><b>Row " + (found + 1) + " of Table 2.</b> The scan is on the yellow row " + curNo + ", " + tourStr(cur) +
-             ", cost " + curCost + ". Its next change is change " + next.change + " of 9, arcs " + LET[next.i - 1] + " and " +
+        t += "<p><b>Row " + (rows.length + 1) + " of Table 2.</b> The scan is on the yellow row " + curNo + ", " + tourStr(cur) +
+             ", cost " + curCost + ". Its next change is change " + st.next + " of 9, arcs " + LET[next.i - 1] + " and " +
              LET[next.j - 1] + " out. Click the row that change gives.</p>";
         if (hint) t += "<p>Hint: arcs " + LET[next.i - 1] + " (" + cur[next.i - 1] + "→" + cur[next.i] + ") and " +
              LET[next.j - 1] + " (" + cur[next.j - 1] + "→" + cur[next.j] + ") come out, and the segment " +
@@ -965,13 +988,13 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
       // Table 2 so far
       run.innerHTML = "";
       const lastKept = rows.map(r => r.kept).lastIndexOf(true);
-      for (let s = 0; s < found; s++) {
+      for (let s = 0; s < rows.length; s++) {
         const r = rows[s], tr = document.createElement("tr");
-        tr.className = (r.kept ? "kept" : "") + (s === found - 1 ? " now" : "");
+        tr.className = (r.kept ? "kept" : "") + (s === rows.length - 1 ? " now" : "");
         let note = r.start ? "start" : r.kept ? "kept" : "";
         if (done) {
           if (s === lastKept) note = s === 0 ? "start: local optimum" : "kept: local optimum";
-          if (s === lastKept + 1) note = "verifying the local optimum: all " + rows[rows.length - 1].change + " changes";
+          if (s === lastKept + 1) note = "checking the local optimum: none of its 9 changes is lower";
         }
         tr.innerHTML = "<td class='r'>" + (s + 1) + "</td><td class='r'>" + INDEX[r.seq.join(",")] + "</td><td>" +
           seqHTML(r.seq, r.i, r.j) + "</td><td class='r'>" + r.cost + "</td><td class='r'>" + (r.start ? "" : r.change) +
@@ -980,27 +1003,23 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
       }
       $("lk-hint").disabled = done || hint;
       $("lk-show").disabled = done;
-      $("lk-undo").disabled = found <= 1;
+      $("lk-undo").disabled = rows.length <= 1;
       $("lk-end").disabled = done;
     }
-    function accept(prefix) {
-      const r = trace.rows[found];
-      msg = prefix + "Row " + INDEX[r.seq.join(",")] + ", " + tourStr(r.seq) + ", cost " + r.cost + ": " + outcome(r);
-      found++; wrong = []; hint = false; render();
-    }
     function pick(no) {
-      const r = trace.rows[found];
-      if (no === INDEX[r.seq.join(",")]) accept("Yes. ");
-      else {
-        if (!wrong.includes(no)) wrong.push(no);
-        msg = "Row " + no + " is not the sequence change " + r.change + " gives. Try again, or use <b>Hint</b> or <b>Show me</b>.";
+      const cur = scanState(rows).base;
+      const m = changesOf(cur).findIndex(c => INDEX[c.seq.join(",")] === no) + 1;
+      if (m > 0) add(scanRow(cur, S.C, m), "");
+      else {                                      // not a 2-opt move at all, so it cannot be taken
+        msg = "Row " + no + ", " + tourStr(TABLE[no - 1].tour) + ", is not one change away from the yellow row: " +
+              "no 2-opt change of " + tourStr(cur) + " gives it.";
         render();
       }
     }
     function start(no) {
       startNo = no; rowIn.value = no;
-      trace = twoOptTrace(TABLE[no - 1].tour, S.C);
-      found = 1; wrong = []; hint = false; msg = ""; render();
+      ref = twoOptTrace(TABLE[no - 1].tour, S.C);
+      rows = [ref.rows[0]]; hint = false; msg = ""; render();
     }
     $("lk-apply").addEventListener("click", () => {
       let no = Math.round(+rowIn.value);
@@ -1009,10 +1028,16 @@ function bruteForce(C) {                       // every tour from node 1, as Cod
     });
     $("lk-random").addEventListener("click", () => start(1 + Math.floor(Math.random() * TABLE.length)));
     $("lk-reset").addEventListener("click", () => start(startNo));
-    $("lk-undo").addEventListener("click", () => { if (found > 1) { found--; wrong = []; hint = false; msg = ""; render(); } });
-    $("lk-show").addEventListener("click", () => accept("Shown: "));
+    $("lk-undo").addEventListener("click", () => { if (rows.length > 1) { rows.pop(); hint = false; msg = ""; render(); } });
+    $("lk-show").addEventListener("click", () => {
+      const st = scanState(rows);
+      if (!st.done) add(scanRow(st.base, S.C, st.next), "Shown: ");
+    });
     $("lk-hint").addEventListener("click", () => { hint = true; render(); });
-    $("lk-end").addEventListener("click", () => { found = trace.rows.length; wrong = []; hint = false; msg = ""; render(); });
+    $("lk-end").addEventListener("click", () => {     // 2-opt's own steps from here to the end
+      for (let st = scanState(rows); !st.done; st = scanState(rows)) rows.push(scanRow(st.base, S.C, st.next));
+      hint = false; msg = ""; render();
+    });
     mode.addEventListener("change", render);
     return {start: start, restart: () => start(startNo)};
   })();
