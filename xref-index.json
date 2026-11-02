@@ -3011,11 +3011,11 @@
   }
  },
  "5.2": {
-  "eq-route-cost": {
+  "eq-route-seqs": {
    "label": "Eq. 1",
    "word": "Eq."
   },
-  "eq-route-seqs": {
+  "eq-route-cost": {
    "label": "Eq. 2",
    "word": "Eq."
   },
@@ -3027,6 +3027,18 @@
    "label": "Eq. 4",
    "word": "Eq."
   },
+  "eq-insert-count": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-five-shipments": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-pairwise-saving": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
   "fig-three-shipments": {
    "label": "Fig. 1",
    "word": "Fig."
@@ -3035,10 +3047,95 @@
    "label": "Fig. 2",
    "word": "Fig."
   },
+  "fig-insert-positions": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-southeast-route": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-five-shipments": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-pairwise-saving": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-cw-route": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-raleigh-savings": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-raleigh-twoopt": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-nc-savings": {
+   "label": "Fig. 10",
+   "word": "Fig."
+  },
+  "fig-nc-twoopt": {
+   "label": "Fig. 11",
+   "word": "Fig."
+  },
+  "fig-thirty-shipments": {
+   "label": "Fig. 12",
+   "word": "Fig."
+  },
+  "fig-thirty-savings": {
+   "label": "Fig. 13",
+   "word": "Fig."
+  },
+  "fig-thirty-insertion": {
+   "label": "Fig. 14",
+   "word": "Fig."
+  },
+  "fig-load-mix": {
+   "label": "Fig. 15",
+   "word": "Fig."
+  },
+  "fig-load-mix-example": {
+   "label": "Fig. 16",
+   "word": "Fig."
+  },
+  "fig-loads-independent": {
+   "label": "Fig. 17",
+   "word": "Fig."
+  },
+  "fig-loads": {
+   "label": "Fig. 18",
+   "word": "Fig."
+  },
+  "tbl-cw-savings": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-savings-ex1": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-savings-steps": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-methods": {
+   "label": "Table 4",
+   "word": "Table"
+  },
   "mdl-rteseq": {
    "label": "Model 1",
    "word": "Model",
-   "name": "Multi-stop route sequencing"
+   "name": "Route sequencing"
+  },
+  "mdl-loadform": {
+   "label": "Model 2",
+   "word": "Model",
+   "name": "Load formation"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -3052,8 +3149,92 @@
    "label": "Ex. 1(b)",
    "word": "Ex."
   },
+  "example-1-c": {
+   "label": "Ex. 1(c)",
+   "word": "Ex."
+  },
   "example-2": {
    "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-4-a": {
+   "label": "Ex. 4(a)",
+   "word": "Ex."
+  },
+  "example-4-b": {
+   "label": "Ex. 4(b)",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-5-a": {
+   "label": "Ex. 5(a)",
+   "word": "Ex."
+  },
+  "example-5-b": {
+   "label": "Ex. 5(b)",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-6-a": {
+   "label": "Ex. 6(a)",
+   "word": "Ex."
+  },
+  "example-6-b": {
+   "label": "Ex. 6(b)",
+   "word": "Ex."
+  },
+  "example-6-c": {
+   "label": "Ex. 6(c)",
+   "word": "Ex."
+  },
+  "example-6-d": {
+   "label": "Ex. 6(d)",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  },
+  "example-8": {
+   "label": "Ex. 8",
+   "word": "Ex."
+  },
+  "example-9": {
+   "label": "Ex. 9",
+   "word": "Ex."
+  },
+  "example-9-a": {
+   "label": "Ex. 9(a)",
+   "word": "Ex."
+  },
+  "example-9-b": {
+   "label": "Ex. 9(b)",
+   "word": "Ex."
+  },
+  "example-9-c": {
+   "label": "Ex. 9(c)",
    "word": "Ex."
   }
  },
