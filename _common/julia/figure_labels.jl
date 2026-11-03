@@ -38,6 +38,27 @@
 #     `makemap`); a 3-D axis is listed as skipped, never silently passed.
 # A label FAILS when its ink comes within CLEAR_PX of an obstacle's edge.
 #
+# AND WHEN ITS INK LEAVES THE AXIS VIEWPORT (2026-11-03, workflow review III Sec. 5.4).
+# Everything above measures a label against what is drawn INSIDE the axis, so a label
+# running off the axis's edge touched nothing and passed: 5.2's Figs. 8 and 9 shipped
+# Raleigh's "(L1,2,3,4,5)" cut off at the map's right edge with this check green, and he
+# asked on 2026-11-01 for "something that keeps this from happening". So a label whose
+# ink box extends more than VIEWPORT_PX past any edge of its axis's `scene.viewport` is
+# a finding of kind "viewport", one per text line, naming the edge and how far past it
+# the ink runs. On a map the viewport is the map; on a plot it is the plotting area
+# inside the spines. Either way the ink past it is not drawn: CairoMakie clips an axis's
+# plots to its viewport (measured 2026-11-03 on a 20-unit label set across a hidden-spine
+# axis's right edge with 80 units of figure padding beyond it: 78 dark pixels just inside
+# the edge, none outside). The test is the one 5.2's label-drafting script used to
+# refuse a placement (its `partok`, commit 2d3acbc3), written once here so every figure
+# gets it. ADDITIVE: no placement, no obstacle and no other finding changes.
+#
+# THE RECORD ALSO CARRIES THE TYPE THE FIGURE WAS DRAWN WITH (same date): `size_px`, the
+# figure's own size in units, and `text_sizes`, every visible text it draws (text!
+# labels, tick labels, axis labels, titles, legend entries) by font size. Nothing here
+# judges them. `tools/check_figure_scale.py` multiplies them by the scale the rendered
+# page shows the figure at, which is the only place a label's size on the page exists.
+#
 # HOW IT RUNS, AND WHY NOT BY RE-EXECUTING THE LECTURE. Including this file installs a
 # display hook: when Quarto's Julia engine shows a figure, the hook lets Makie draw it,
 # then measures that same figure object and files the result under
@@ -83,6 +104,9 @@ const NEAR_PX = 4.0
 # feature the author drew -- 3.2's dashed scale-break line visibly crosses its "qI"
 # label at alpha below this, and that is a finding.
 const FAINT_ALPHA = 0.35
+# A label's ink may run this far past its axis's viewport, in figure units, before it is
+# cut off: half a pixel is the antialiased edge pixel itself, not a clipped glyph.
+const VIEWPORT_PX = 0.5
 
 const P2 = NTuple{2,Float64}
 
@@ -526,14 +550,110 @@ function _walk!(labels, obs, occ, p, top, group, scene, counter, w, h; inarrow =
     end
 end
 
+# ----------------------------------------------------------------------------------
+# the type the figure is drawn with, for tools/check_figure_scale.py
+# ----------------------------------------------------------------------------------
+
+# One Text plot's strings, by font size in figure units. A glyph's scale is in its
+# plot's markerspace, so it is taken to figure pixels through the scene's projection:
+# the identity for a text! label (markerspace :pixel), and also for an axis's tick
+# labels, axis labels and title, which are :data in a block scene whose camera IS pixel
+# space (measured 2026-11-03: Axis decorations report markerspace = :data). A Text plot
+# whose projection cannot be taken is counted in `skipped`, never guessed. A
+# one-character non-alphanumeric string (a `*` marking an optimum, a `?`) is a MARKER
+# drawn with text!() because Makie has no such marker shape, and is left out, as
+# check_figure_scale.py's source pass leaves it out.
+function _text_sizes!(acc, t, scene, skipped)
+    _attr(t, :visible, true) || return
+    ms = _attr(t, :markerspace, :pixel)
+    k = 1.0
+    if ms !== :pixel
+        k = try
+            p0 = Makie.project(scene, ms, :pixel, Makie.Point3f(0, 0, 0))
+            p1 = Makie.project(scene, ms, :pixel, Makie.Point3f(0, 1, 0))
+            Float64(abs(p1[2] - p0[2]))
+        catch
+            NaN
+        end
+        if !isfinite(k) || k <= 0
+            skipped[] += 1
+            return
+        end
+    end
+    blocks, scales, gidx = t.text_blocks[], t.text_scales[], t.glyphindices[]
+    texts = t.input_text[]
+    fsattr = _attr(t, :fontsize, 0.0)
+    for (b, r) in enumerate(blocks)
+        isempty(r) && continue
+        raw = texts isa AbstractVector ? texts[b] : texts
+        str = strip(_string(raw))
+        isempty(str) && continue
+        (length(str) == 1 && !isletter(str[1]) && !isdigit(str[1])) && continue
+        fs = 0.0
+        if raw isa Makie.LaTeXString
+            # A LaTeX label's glyphs are scaled by its layout: a sub- or superscript to
+            # about 0.7, a \left\{ to the height it spans (3.4's q_max label read as 33.8
+            # units by its brace). The size it is DRAWN with is the fontsize it was given.
+            f = fsattr isa AbstractVector ? fsattr[min(b, length(fsattr))] : fsattr
+            fs = Float64(f isa Real ? f : f[2])
+        else
+            for i in r
+                gidx[i] == 0 && continue
+                fs = max(fs, Float64(scales[i][2]))
+            end
+        end
+        fs > 0 || continue
+        sz = round(fs * k, digits = 2)
+        n, sample = get(acc, sz, (0, ""))
+        acc[sz] = (n + 1, isempty(sample) ? first(replace(str, '\n' => ' '), 40) : sample)
+    end
+end
+
+"""
+    text_sizes(fig) -> (sizes, skipped, error)
+
+Every visible text in `fig`, in every scene (the axes, their tick and axis labels,
+titles, legends, colorbars), as `[{"size", "n", "sample"}]` sorted by size: the
+font sizes in figure units that the page then scales. `skipped` counts Text plots whose
+size could not be projected to figure pixels; `error` is the first failure, never
+swallowed silently.
+"""
+function text_sizes(fig::Makie.Figure)
+    acc = Dict{Float64,Tuple{Int,String}}()
+    skipped, err = Ref(0), Ref("")
+    function visit(p, scene)
+        _attr(p, :visible, true) || return
+        if p isa Makie.Text
+            try
+                _text_sizes!(acc, p, scene, skipped)
+            catch e
+                isempty(err[]) && (err[] = first(sprint(showerror, e), 200))
+            end
+            return
+        end
+        foreach(c -> visit(c, scene), p.plots)
+    end
+    function scan(scene)
+        foreach(p -> visit(p, scene), scene.plots)
+        foreach(scan, scene.children)
+    end
+    scan(fig.scene)
+    sizes = [Dict{String,Any}("size" => k, "n" => v[1], "sample" => v[2])
+             for (k, v) in sort!(collect(acc); by = first)]
+    return sizes, skipped[], err[]
+end
+
 """
     measure(fig) -> NamedTuple
 
 Every label-versus-obstacle pair in every 2-D axis of `fig` (an `Axis`, or a GeoMakie
 `GeoAxis` such as Logjam's `makemap` draws) closer than `NEAR_PX`, split into `findings`
 (closer than `CLEAR_PX`: the rule), `near` (not failing) and `faint` (contacts with
-the muted base, not failing). Call it after the figure has been drawn, which is what
-the display hook does. A 3-D axis is listed in `skipped`, never silently passed.
+the muted base, not failing); and, in `findings` as kind "viewport", every label whose
+ink runs more than `VIEWPORT_PX` past its axis's viewport. Call it after the figure has
+been drawn, which is what the display hook does. A 3-D axis is listed in `skipped`,
+never silently passed. `size_px` and `text_sizes` record the figure's size and the
+type it is drawn with, for the page's scale check; they judge nothing.
 """
 function measure(fig::Makie.Figure)
     clear = clear_px()
@@ -573,8 +693,15 @@ function measure(fig::Makie.Figure)
         nlab += length(labels); nobs += length(obs)
         _pairs!(findings, near, faint, labels, obs, occ, clear, ai, scene, ax)
     end
+    sizes, unprojected, terr = try
+        text_sizes(fig)
+    catch e
+        Dict{String,Any}[], 0, first(sprint(showerror, e), 200)
+    end
     return (labels = nlab, obstacles = nobs, findings = findings, near = near,
-            faint = faint, skipped = skipped, clear_px = clear)
+            faint = faint, skipped = skipped, clear_px = clear,
+            size_px = [Float64(v) for v in Makie.widths(fig.scene.viewport[])],
+            text_sizes = sizes, text_unprojected = unprojected, text_sizes_error = terr)
 end
 measure(fig::Makie.FigureAxisPlot) = measure(fig.figure)
 
@@ -636,6 +763,25 @@ function _pairs!(findings, near, faint, labels, obs, occ, clear, ai, scene, ax)
             "axis" => ai, "label" => A.text, "whole" => A.whole, "anchor" => A.anchor,
             "kind" => "label", "with" => "the label \"$(B.text)\" at $(B.anchor)",
             "clearance_px" => round(d, digits = 2), "box_px" => box(A),
+            "at_px" => [round(at[1], digits = 1), round(at[2], digits = 1)],
+            "at_data" => todata(at)))
+    end
+    # Label against the axis's own edge: ink past the viewport is clipped, cut off. One
+    # finding per text line, at the edge it runs furthest past; `clearance_px` is minus
+    # that distance, so it sorts and reads as an overlap like the others.
+    vw, vh = Float64.(Makie.widths(scene.viewport[]))
+    for L in labels
+        x0, x1, y0, y1 = _bbox(L.poly)
+        past = ((-x0, "left"), (x1 - vw, "right"), (-y0, "bottom"), (y1 - vh, "top"))
+        d, side = past[argmax(first.(past))]
+        d > VIEWPORT_PX || continue
+        key = side == "left" ? (c -> -c[1]) : side == "right" ? (c -> c[1]) :
+              side == "bottom" ? (c -> -c[2]) : (c -> c[2])
+        at = L.poly[argmax(key.(L.poly))]                # the corner furthest out
+        push!(findings, Dict{String,Any}(
+            "axis" => ai, "label" => L.text, "whole" => L.whole, "anchor" => L.anchor,
+            "kind" => "viewport", "with" => "the $side edge of the axis viewport",
+            "clearance_px" => round(-d, digits = 2), "box_px" => box(L),
             "at_px" => [round(at[1], digits = 1), round(at[2], digits = 1)],
             "at_data" => todata(at)))
     end
