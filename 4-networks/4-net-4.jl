@@ -489,11 +489,11 @@ plannets(cat([30 30 30; 30 10 50; 22 8 60],     # x[i,j,k]: stage i,
 ## Example 1(c): Costs of the plan with code
 # Compute part (b)'s three costs from the plan with code, and check them
 # against the answers published with the problem.
-# Code block 6: Ex. 1(b)'s plan, costed
+# Code block 6: Ex. 1(b)'s plan, and its costs
 X = cat([30 30 30; 30 10 50; 22 8 60],   # x[i,j,k]: stage i, week j,
         [16 17 17; 0 20 30; 0 17 33];    #   material k (ton)
         dims = 3)
-Db = [20 12; 10 25; 45 5]                # demand in week j for material k
+Db = [20 12; 10 25; 45 5]                # demand in week j, material k
 Y = zeros(3, 4, 2)                       # inventory, by flow balance
 Y[3, 1, 2] = 20
 for k in 1:2, j in 1:3
@@ -502,7 +502,8 @@ for k in 1:2, j in 1:3
     end
     Y[3, j+1, k] = Y[3, j, k] + X[3, j, k] - Db[j, k]
 end
-loads = ceil.(Int, dropdims(sum(X, dims = 3), dims = 3)[2:3, :] ./ u[2:3])
+loads = ceil.(Int,
+              dropdims(sum(X, dims = 3), dims = 3)[2:3, :] ./ u[2:3])
 cᵖb = [600 400; 0 0; 0 0]
 cⁱb = cumsum(cᵖb .+ cˢ./u, dims = 1)*0.5/52
 PC = sum(reshape(cᵖb, 3, 1, 2) .* X)
