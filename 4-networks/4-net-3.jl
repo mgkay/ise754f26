@@ -700,7 +700,7 @@ TCᵖ + TCⁱ + TCˢ, TCᵒ          # Code block 29: their sum, and the total
 # Currently, five tons of material is in storage at stage one and none
 # at stage two; at the end of the planning period, seven tons of
 # material should be in storage at stage one and four at stage two.
-# Code block 30: Ex. 5(b)'s plan, costed
+# Code block 30: Ex. 5(b)'s plan, and its costs
 X = [20 4 40; 25 0 37]              # production at stage i in month j
 db = [22, 3, 33]                    # demand in month j
 Y = zeros(2, 4)                     # inventory, by flow balance
@@ -711,7 +711,7 @@ for j in 1:3
 end
 @assert Y[:, 4] == [7, 4]           # the final inventories required
 cⁱb = cumsum(cᵖ + cˢ./u)*0.05       # monthly carrying rate 0.05
-Z = X .> 0                          # a setup wherever there is production
+Z = X .> 0                          # a setup wherever production > 0
 VPC, IC, SC = sum(cᵖ.*X), sum(cⁱb.*Y[:, 2:end]), sum(cˢ.*Z)
 @assert all((VPC, IC, SC) .≈ (62400, 673.75, 54000))  # published
 @show VPC

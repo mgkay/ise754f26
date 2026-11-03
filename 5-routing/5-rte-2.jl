@@ -246,24 +246,11 @@ round.(Dz, digits = 2)
 # Gainesville, shipped independently and consolidated on one route, for
 # several routes.
 # Code block 6: the six cities, and the road distances between them
-function namest2lonlat(names, states, df)
-    x, y = Float64[], Float64[]
-    for (name, st) in zip(names, states)
-        idx = findfirst(r -> startswith(r[:NAME], name) &&
-                             r[:ST] == Symbol(st), eachrow(df))
-        if idx === nothing
-            error("'$name', '$st' not found in DataFrame")
-        end
-        push!(x, df[idx, :LON])
-        push!(y, df[idx, :LAT])
-    end
-    return x, y
-end
-
 City = ["Raleigh", "Athens", "Asheville", "Jacksonville", "Savannah",
         "Gainesville"]
-St = ["NC", "GA", "NC", "FL", "GA", "FL"]
-x, y = namest2lonlat(City, St, usplace())
+St = [:NC, :GA, :NC, :FL, :GA, :FL]
+loc = [loc2lonlat(c; state = s) for (c, s) in zip(City, St)]
+x, y = [r.LON for r in loc], [r.LAT for r in loc]
 D = dists(hcat(x, y), hcat(x, y), :mi) * 1.2
 # Code block 7: the shipments
 sh = DataFrame(b = [1, 3, 5], e = [2, 4, 6]);

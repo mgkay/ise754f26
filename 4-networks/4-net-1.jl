@@ -610,7 +610,8 @@ function citynet!(ax, N, L; r = 0.034, fs = 12, labels = true,
         p, q = xy(N.LON[i], N.LAT[i]), xy(N.LON[j], N.LAT[j])
         u = (q .- p) ./ hypot((q .- p)...)
         t, h = p .+ r .* u, q .- r .* u
-        lines!(ax, [t[1], h[1]], [t[2], h[2]]; color = ink, linewidth = 1)
+        lines!(ax, [t[1], h[1]], [t[2], h[2]]; color = ink,
+               linewidth = 1)
         labels || continue
         s, f = get(lab, (i, j), (1, 0.5))
         m = p .+ f .* (q .- p) .+ 0.045s .* [-u[2], u[1]]
@@ -633,9 +634,10 @@ shift(N, dx, dy) = DataFrame(IDX = N.IDX, LON = N.LON .+ dx / cosd(36),
 fig = Figure(size = (687, 580))
 ax = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax); hidespines!(ax)
-citynet!(ax, N7, L7; lab = Dict((1, 3) => (-1, 0.5), (3, 4) => (-1, 0.62),
-                                (3, 6) => (-1, 0.5), (2, 5) => (-1, 0.5),
-                                (4, 5) => (-1, 0.5), (1, 4) => (1, 0.3)))
+citynet!(ax, N7, L7;
+         lab = Dict((1, 3) => (-1, 0.5), (3, 4) => (-1, 0.62),
+                    (3, 6) => (-1, 0.5), (2, 5) => (-1, 0.5),
+                    (4, 5) => (-1, 0.5), (1, 4) => (1, 0.3)))
 (x0, y0), (x1, y1) = xy(R7[1, 1], R7[1, 2]), xy(R7[2, 1], R7[2, 2])
 lines!(ax, [x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0]; color = supc,
        linestyle = :dash, linewidth = 1.8)
@@ -643,8 +645,9 @@ text!(ax, xy(-80.50, 36.62)...; text = "(a) Network", fontsize = 14,
       align = (:left, :center))
 
 # Each subgraph is derived from (a), so an arrow runs from (a) to each
-dyb, dxc = -0.85, 1.55                  # where the two subgraphs are put
-arrow!(p, q) = arrows2d!(ax, [p[1]], [p[2]], [q[1] - p[1]], [q[2] - p[2]];
+dyb, dxc = -0.85, 1.55            # where the two subgraphs are put
+arrow!(p, q) = arrows2d!(ax, [p[1]], [p[2]],
+                         [q[1] - p[1]], [q[2] - p[2]];
                          color = (ink, 0.7), shaftwidth = 1.5,
                          tipwidth = 11, tiplength = 11)
 arrow!(xy(-79.55, 35.76), xy(-79.55, 35.47))     # (a) to (b), down
@@ -654,8 +657,9 @@ a2 = shift(aN, 0.0, dyb)                 # (b) arcs < 35, below
 x5, y5 = xy(a2.LON[5], a2.LAT[5])
 scatter!(ax, [x5], [y5]; marker = :star5, markersize = 36,
          color = (supc, 0.85))           # the renumbered node
-citynet!(ax, a2, aL; lab = Dict((1, 3) => (-1, 0.5), (3, 4) => (-1, 0.62),
-                                (3, 5) => (-1, 0.5)))
+citynet!(ax, a2, aL;
+         lab = Dict((1, 3) => (-1, 0.5), (3, 4) => (-1, 0.62),
+                    (3, 5) => (-1, 0.5)))
 text!(ax, xy(-79.55, 35.39)...; text = "(b) Arcs < 35", fontsize = 14,
       align = (:center, :center))
 
