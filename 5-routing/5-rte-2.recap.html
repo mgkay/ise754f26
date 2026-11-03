@@ -141,8 +141,12 @@
   .duo > svg { flex: 1 1 18rem; max-width: 26rem; width: 100%; height: auto; }
   .duo > .side { flex: 1 1 16rem; min-width: 0; display: flex; flex-direction: column; gap: 0.6rem; }
   .stage { font-family: var(--sans); font-weight: 700; color: var(--strong); }
-  .duo > .side.narrow { flex: 0 1 18rem; }
-  .duo > .side.wide { flex: 1 1 24rem; }
+  .cwgrid { display: flex; flex-wrap: wrap; gap: 1rem 1.4rem; align-items: flex-start; }
+  .cwgrid > .cwleft { flex: 1 1 19rem; min-width: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .cwgrid > .cwright { flex: 1 1 18rem; min-width: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .cwright > svg { display: block; width: 100%; max-width: 19rem; height: auto; margin: 0 auto; }
+  .cwright > .note { font-size: 0.8em; }
+  .cwright table.dmat { margin: 0 auto; }
   table.pick td { white-space: nowrap; }
   table.pick td.wrap { white-space: normal; }
   table.pick td, table.pick th { font-family: var(--sans); font-variant-numeric: tabular-nums; padding: 0.25em 0.6em; }
@@ -374,40 +378,37 @@ TD123 = 430</pre>
       <p><b>Then the routes.</b> With all ten savings in, <b>click the pairs one at a time, from
       the largest saving down</b>. Each pair clicked is joined by the three rules and numbered
       in the order clicked, and the map draws the routes as they are built.</p>
-      <div class="duo">
-        <svg id="cw-map" viewBox="0 0 300 270" role="img" aria-label="The depot, node 1, and customers 2 to 6, with the routes built so far"></svg>
-        <div class="side">
-          <div class="scroll"><table class="dmat" id="cw-C"></table></div>
-          <div class="ctl">
-            <button type="button" id="cw-all">All the savings</button>
-          </div>
-        </div>
-      </div>
-      <div class="steptext" id="cw-text" aria-live="polite"></div>
-      <div class="duo">
-        <div class="side narrow">
+      <!-- One dashboard (instructor, 2026-11-03): the savings table on the left, spanning
+           both; C on the right above, for creating the savings, and the map below it, for
+           creating the routes, so both halves are seen without scrolling. -->
+      <div class="cwgrid">
+        <div class="cwleft">
           <div class="scroll"><table class="pick" id="cw-pairs">
             <thead><tr><th>Pair</th><th>\(s_{ij} = c_{1i} + c_{1j} - c_{ij}\)</th><th class="r">Step</th></tr></thead>
             <tbody></tbody>
             <caption>The savings, in the order of the pairs, not of the savings.</caption>
           </table></div>
+          <div class="ctl">
+            <button type="button" id="cw-all">All the savings</button>
+            <button type="button" id="cw-undo">Undo</button>
+            <button type="button" id="cw-reset">Start over</button>
+          </div>
+          <div class="steptext" id="cw-text" aria-live="polite"></div>
+          <p class="kept" id="cw-cost"></p>
         </div>
-        <div class="side wide">
-          <div class="scroll"><table class="pick" id="cw-steps">
-            <thead><tr><th class="r">Step</th><th>Pair</th><th class="r">Saving</th><th>Rule</th><th>Routes</th></tr></thead>
-            <tbody></tbody>
-            <caption>Each pair clicked, in the order clicked, as Table 1 lists them.</caption>
-          </table></div>
+        <div class="cwright">
+          <div class="scroll"><table class="dmat" id="cw-C"></table></div>
+          <svg id="cw-map" viewBox="0 0 300 270" role="img" aria-label="The depot, node 1, and customers 2 to 6, with the routes built so far"></svg>
+          <p class="note">The map draws only the routes, as the pairs are picked. Gray dotted: a
+          customer served out and back. Blue: a route. Red: the pair just joined. In \(C\),
+          orange: the costs clicked for the saving being found.</p>
         </div>
       </div>
-      <div class="ctl">
-        <button type="button" id="cw-undo">Undo</button>
-        <button type="button" id="cw-reset">Start over</button>
-      </div>
-      <p class="kept" id="cw-cost"></p>
-      <p class="note">Gray dotted: a customer served out and back. Blue: a route. Red: the pair
-      just joined. Orange: the pair whose saving is being found, and the costs clicked for
-      it.</p>
+      <div class="scroll"><table class="pick" id="cw-steps">
+        <thead><tr><th class="r">Step</th><th>Pair</th><th class="r">Saving</th><th>Rule</th><th>Routes</th></tr></thead>
+        <tbody></tbody>
+        <caption>Each pair clicked, in the order clicked, as Table 1 lists them.</caption>
+      </table></div>
     </div>
 
     <details>
@@ -738,7 +739,7 @@ function cwRun(C, order) {                   // the picks, in order, as the pane
   function wMap() {
     var svg = $("cw-map"); clear(svg);
     var steps = cur(), last = steps.length ? steps[steps.length - 1] : null, R = last ? last.routes : [];
-    var on = [].concat.apply([], R), p = W.sel === null ? null : PAIRS[W.sel];
+    var on = [].concat.apply([], R);
     function seg(a, b, at) {
       var u = CW.XY[a - 1], v = CW.XY[b - 1], e = el("line", { x1: WX(u), y1: WY(u), x2: WX(v), y2: WY(v) });
       for (var k in at) e.setAttribute(k, at[k]);
@@ -750,16 +751,11 @@ function cwRun(C, order) {                   // the picks, in order, as the pane
       for (var t = 0; t + 1 < x.length; t++) seg(x[t], x[t + 1], { stroke: "#1f6fb5", "stroke-width": 2.6 });
     });
     if (last && last.rule !== "none") seg(last.pair[0], last.pair[1], { stroke: "#c62828", "stroke-width": 4.5 });
-    if (p) {
-      if (W.got["1i"]) seg(1, p[0], { stroke: "#fd7e14", "stroke-width": 3.5, "stroke-dasharray": "7 4" });
-      if (W.got["1j"]) seg(1, p[1], { stroke: "#fd7e14", "stroke-width": 3.5, "stroke-dasharray": "7 4" });
-      if (W.got["ij"]) seg(p[0], p[1], { stroke: "#fd7e14", "stroke-width": 3.5 });
-    }
+    // Finding a saving draws nothing here (instructor, 2026-11-03: "Creating the route is
+    // separate from creating the savings"): the map shows only the routes the picks build.
     CW.XY.forEach(function (q, n) {
-      var mark = p && (n + 1 === p[0] || n + 1 === p[1]);
       if (n === 0) svg.appendChild(el("rect", { x: WX(q) - 13, y: WY(q) - 13, width: 26, height: 26, fill: "#f2d9a0", stroke: "#333", "stroke-width": 1.5 }));
-      else svg.appendChild(el("circle", { cx: WX(q), cy: WY(q), r: 13, fill: mark ? "#ffe8d2" : "#fff",
-        stroke: mark ? "#fd7e14" : "#333", "stroke-width": mark ? 3 : 1.5 }));
+      else svg.appendChild(el("circle", { cx: WX(q), cy: WY(q), r: 13, fill: "#fff", stroke: "#333", "stroke-width": 1.5 }));
       svg.appendChild(el("text", { x: WX(q), y: WY(q) + 5, "text-anchor": "middle", "font-size": 13, fill: "#333" }, String(n + 1)));
     });
   }
