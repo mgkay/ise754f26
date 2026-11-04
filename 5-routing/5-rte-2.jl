@@ -946,66 +946,8 @@ fig, ax = rtemap([ri30], sh30, X30)
 milabel!(ax, "Randomized insertion, best of 30", TCi30)
 fig
 
-## Sec. 3. Savings
-# Code block 49: the load mixes of two routes
-let  # set in the lecture math's serif, as the insertion positions are
-    fig = Figure(size = (380, 250), figure_padding = 4,
-                 fonts = (; regular = Makie.MathTeXEngine.texfont()))
-    ax = Axis(fig[1, 1]; aspect = DataAspect())
-    hidedecorations!(ax); hidespines!(ax)
-    dy = 0.62  # a row's height
-    # a route's stops along a rule, beneath each segment the shipments on
-    # board, and a box around each load mix: a loading followed by an
-    # unloading, where what is on board peaks
-    function loadmix!(r, y0, cap)
-        n, ld = length(r), isorigin(r)
-        text!(ax, 2.0 .* (0:n-1), fill(y0, n); text = string.(r),
-              fontsize = 16, color = ink, align = (:center, :center))
-        lines!(ax, [-0.4, 2n - 1.6], [y0 - 0.45, y0 - 0.45]; color = ink,
-               linewidth = 1)
-        onboard(k) = sort(setdiff(r[1:k][ld[1:k]], r[1:k][.!ld[1:k]]))
-        depth = maximum(length(onboard(k)) for k in 1:n-1)
-        for k in 1:n-1                     # the segment after stop k
-            s = onboard(k)
-            ys = y0 - 0.95 .- dy .* (0:length(s)-1)
-            text!(ax, fill(2k - 1.0, length(s)), ys; text = string.(s),
-                  fontsize = 16, color = ink, align = (:center, :center))
-            if ld[k] && !ld[k+1]           # a load mix, boxed
-                poly!(ax, Rect(2k - 1.42, ys[end] - 0.36, 0.84,
-                               y0 - 0.2 - ys[end] + 0.36);
-                      color = :transparent, strokecolor = bluec,
-                      strokewidth = 1.5)
-            end
-        end
-        yb = y0 - 0.95 - dy * (depth - 1) - 0.5
-        text!(ax, n - 1.0, yb; text = cap, fontsize = 15, color = ink,
-              align = (:center, :top))     # its subcaption
-        return yb
-    end
-    yb = loadmix!([1, 2, 3, 3, 2, 1], 0.0, "(a) A single load mix")
-    yb = loadmix!([1, 2, 1, 3, 2, 3], yb - 1.3,
-                  "(b) A first and a second load mix")
-    xlims!(ax, -0.6, 10.6); ylims!(ax, yb - 0.6, 0.45)
-    fig
-end
-# Code block 50: the single load-mix instance on the map
-shM = DataFrame(b = [1, 3, 2], e = [5, 4, 6])  # its three shipments
-fig, ax = makemap(x, y; xexpand=0.3)
-resize!(fig, 600, 520)
-lines!(ax, sh2ln(shM, x), sh2ln(shM, y), color=:red)
-for (b, e) in zip(shM.b, shM.e)  # each shipment's direction
-    legarrows!(ax, x[[b, e]], y[[b, e]]; color=:red, onmap=true)
-end
-loc = rte2loc([1, 2, 3, 1, 2, 3], shM)
-lines!(ax, x[loc], y[loc], color=:green)
-legarrows!(ax, x[loc], y[loc]; color=:green, onmap=true, at=0.4)
-scatter!(ax, x, y)
-text!(ax, x, y, text=citylabel.(eachindex(City), Ref(shM));
-      align=lalign, offset=loff)  # placed as in Fig. 2
-fig
-
 ## Sec. 4. Load formation
-# Code block 51: rte2idx and sh2rte
+# Code block 49: rte2idx and sh2rte
 # a route's shipments, or those of each route of a vector of routes
 rte2idx(r::AbstractVector{<:Integer}) = r[isorigin(r)]
 # :: restricts an argument to a type, so this definition, a method of
@@ -1056,7 +998,7 @@ end
 ## Example 9(a): Independent charges
 # Determine each shipment's independent transport charge as a P2P TL
 # shipment.
-# Code block 52: the 30 shipments, and each one's independent charge
+# Code block 50: the 30 shipments, and each one's independent charge
 shL = DataFrame(
     b = [15, 26, 23, 53, 35, 30, 39, 33, 34, 3, 9, 8, 29, 34, 38,
          32, 18, 17, 4, 4, 7, 30, 33, 22, 6, 19, 16, 8, 37, 14],
@@ -1065,13 +1007,13 @@ shL = DataFrame(
 dL = [D30[b, e] for (b, e) in zip(shL.b, shL.e)]  # D30: Code block 41
 c₀ = max.(2.00 .* dL, mincharge_tl())   # = charge_tl, one truckload
 sum(c₀)                                 # all 30 shipped independently
-# Code block 53: the 30 shipments on a map, by Code block 42's shmtmap
+# Code block 51: the 30 shipments on a map, by Code block 42's shmtmap
 shmtmap(shL, X30)[1]
 
 ## Example 9(b): Shipments on no route
 # Determine the routes of more than one shipment that savings
 # constructs, and the shipments on none of them.
-# Code block 54: route charge, routes by savings, and shipments on none
+# Code block 52: route charge, routes by savings, and shipments on none
 rTCLh(rte) = max(2.00 * rteTC(rte, shL, D30), mincharge_tl())
 @assert all(rTCLh([k, k]) ≈ c₀[k] for k in 1:nrow(shL))
 R = [twoopt_rte(r, rTCLh)[1] for r in savings(rTCLh, shL)
@@ -1083,13 +1025,13 @@ idx1                                      # the shipments on none
 ## Example 9(c): The loads
 # Determine the routes and the shipments shipped independently, and the
 # charge of the loads.
-# Code block 55: load formation on the 30 shipments
+# Code block 53: load formation on the 30 shipments
 RL, indL = loadform(rTCLh, shL, c₀)
 for i in eachindex(RL)                  # the vector of routes
     println("RL[$i] = [", join(RL[i], ","), "]")
 end
 TCload = sum(rTCLh.(RL))                # a single-shipment route at c₀
-# Code block 56: the loads on a map, by Code block 44's rtemap
+# Code block 54: the loads on a map, by Code block 44's rtemap
 function rtelabels!(ax, R, at)  # each route's label, placed by hand
     for (i, lon, lat, al) in at
         one = length(R[i]) == 2                    # one shipment
