@@ -3231,40 +3231,52 @@
   }
  },
  "5.3": {
-  "eq-route-cost-inf": {
+  "eq-route-cost-depot": {
    "label": "Eq. 1",
    "word": "Eq."
   },
-  "eq-tw-ex": {
+  "eq-route-cost-inf": {
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-truck-day": {
+  "eq-on-board": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-tsp-est": {
+  "eq-route-cost-cap": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-da2dcenter": {
+  "eq-tw-ex": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-rltl": {
+  "eq-truck-day": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-deliveries": {
+  "eq-tsp-est": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-cap-feas": {
+  "eq-da2dcenter": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-routes": {
+  "eq-rltl": {
    "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-deliveries": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-cap-feas": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-routes": {
+   "label": "Eq. 12",
    "word": "Eq."
   },
   "fig-cw-demands": {
@@ -3351,44 +3363,48 @@
    "label": "Fig. 21",
    "word": "Fig."
   },
-  "tbl-cw-capacity": {
+  "tbl-route-costs": {
    "label": "Table 1",
    "word": "Table"
   },
-  "tbl-cw-compare": {
+  "tbl-cw-capacity": {
    "label": "Table 2",
    "word": "Table"
   },
-  "tbl-tw-data": {
+  "tbl-cw-compare": {
    "label": "Table 3",
    "word": "Table"
   },
-  "tbl-tw-scans": {
+  "tbl-tw-data": {
    "label": "Table 4",
    "word": "Table"
   },
-  "tbl-ffd-steps": {
+  "tbl-tw-scans": {
    "label": "Table 5",
    "word": "Table"
   },
-  "tbl-ex9": {
+  "tbl-ffd-steps": {
    "label": "Table 6",
    "word": "Table"
   },
-  "mdl-vrp": {
+  "tbl-ex9": {
+   "label": "Table 7",
+   "word": "Table"
+  },
+  "mdl-vrp-depot": {
    "label": "Model 1",
    "word": "Model",
-   "name": "Vehicle routing"
+   "name": "Vehicle routing from a depot"
   },
-  "mdl-loadform-cap": {
+  "mdl-vrp": {
    "label": "Model 2",
    "word": "Model",
-   "name": "Load formation with capacity"
+   "name": "Vehicle routing problem"
   },
-  "mdl-vrptw": {
+  "mdl-vrp-pd": {
    "label": "Model 3",
    "word": "Model",
-   "name": "Vehicle routing with time windows"
+   "name": "Pickup and delivery problem"
   },
   "example-1": {
    "label": "Ex. 1",

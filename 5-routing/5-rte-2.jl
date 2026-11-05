@@ -975,22 +975,9 @@ R
 # Sec. 4. Load formation
 ## Model: Load formation
 # Model: load formation
-function loadform(rteTCh, sh, c₀)
+function loadform(rteTCh, sh)
     R = [twoopt_rte(r, rteTCh)[1] for r in savings(rteTCh, sh)
          if length(r) > 2]                  # multi-shipment routes
-    _, idx1 = sh2rte(1:nrow(sh), R)         # the shipments on none
-    for k in idx1
-        Δ = [mincostinsert_rte(k, r, rteTCh)[2] - rteTCh(r)
-             for r in R]                    # the charge it adds
-        isempty(Δ) && continue              # no route to add it to
-        j = argmin(Δ)
-        println(k, ": added ", round(Δ[j], digits = 2),
-                ", independent ", round(c₀[k], digits = 2))
-        if Δ[j] < c₀[k]
-            r′ = mincostinsert_rte(k, R[j], rteTCh)[1]
-            R[j] = twoopt_rte(r′, rteTCh)[1]
-        end
-    end
     return sh2rte(1:nrow(sh), R)    # the others, single-shipment routes
 end
 
@@ -1011,22 +998,24 @@ sum(c₀)                                 # all 30 shipped independently
 shmtmap(shL, X30)[1]
 
 ## Example 9(b): Shipments on no route
-# Determine the routes of more than one shipment that savings
-# constructs, and the shipments on none of them.
-# Code block 52: route charge, routes by savings, and shipments on none
+# Determine the pairwise savings of the 30 shipments, relative to their
+# independent charges, and the shipments in no pair with a positive
+# saving, which no route of more than one shipment carries.
+# Code block 52: route charge, and the pairwise savings
 rTCLh(rte) = max(2.00 * rteTC(rte, shL, D30), mincharge_tl())
 @assert all(rTCLh([k, k]) ≈ c₀[k] for k in 1:nrow(shL))
-R = [twoopt_rte(r, rTCLh)[1] for r in savings(rTCLh, shL)
-     if length(r) > 2]                    # its multi-shipment routes
-@show length.(R) .÷ 2                     # shipments on each
-RL, idx1 = sh2rte(1:nrow(shL), R)
-idx1                                      # the shipments on none
+ijs = pairwisesavings(rTCLh, shL)          # positive, largest first
+prt(hcat(ijs...)[1:5, :]; cols = ["i", "j", "Saving"],
+    row_title = "Pair")                    # the five largest
+@show length(ijs[3])                       # pairs with a positive saving
+idx1 = setdiff(1:nrow(shL), ijs[1], ijs[2])  # the shipments in none
 
 ## Example 9(c): The loads
 # Determine the routes and the shipments shipped independently, and the
 # charge of the loads.
 # Code block 53: load formation on the 30 shipments
-RL, indL = loadform(rTCLh, shL, c₀)
+RL, indL = loadform(rTCLh, shL)
+@assert indL == idx1                    # those in no positive saving
 for i in eachindex(RL)                  # the vector of routes
     println("RL[$i] = [", join(RL[i], ","), "]")
 end

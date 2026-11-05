@@ -7271,7 +7271,7 @@ Table 4: The constructions of route sequencing and what distinguishes them, eac
 <section id="load-formation" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="load-formation">4. Load formation</h2>
 <p>The basic idea is to handle the case where, for a set of shipments, multiple routes can be formed and some of the shipments can be independent. Even for a private company that owns all the shipments, it needs to be able to look at a situation and determine whether or not each shipment should be part of a consolidated load versus run as an independent shipment. The independent shipment is that of Lecture 3.2, a P2P TL shipment or an LTL shipment, which that lecture introduced as the alternative to a multi-stop consolidated load, with its independent transport charge <span class="math inline">c_0</span> of <a href="../3-transport/3-tran-2.html#eq-c0" class="xref" data-lec="3.2" data-id="eq-c0" title="One-Time Truck Shipments">Eq. 16 in Lecture 3.2</a>.</p>
-<p>The key idea is that minimum cost insertion will always add a shipment to a route. That is good and bad. But the savings procedure, using the default of not inserting negative savings, typically stops after all the positive savings have been used to create a route or multiple routes. At that point, there can be shipments left. What this means is these shipments may be better off as independent shipments. But this cannot really be determined without comparing the cost of the shipment added to an existing route. In this case, minimum cost insertion can be used because it will always add it to the route, and then what is looked at is the cost after the insertion versus the cost before the insertion. Take that differential cost and compare it to the independent cost, and pick the lesser of the two. This is the principal way of doing this.</p>
+<p>The key idea is that minimum cost insertion will always add a shipment to a route. That is good and bad. But the savings procedure, using the default of not inserting negative savings, typically stops after all the positive savings have been used to create a route or multiple routes. At that point, there can be shipments left. What this means is these shipments may be better off as independent shipments.</p>
 <!-- HIS F22 TELLING OF F22 SLIDE 254 (11/1/22 [41:36]), its last part, after the
      randomized savings of Sec. 3: what savings leaves. "This shipment route" is
      Matlog's sh2rte, left unnamed. -->
@@ -7342,7 +7342,7 @@ Table 4: The constructions of route sequencing and what distinguishes them, eac
      left alone inserted at least cost and kept on the route only if the added charge
      is less than its independent charge. makeRouting4.m Ex. 2 runs the same steps on
      the periodic version (pairwisesavings, savings, twoopt, sh2rte). -->
-<p>Load formation is stated as a model in <a href="#mdl-loadform" class="quarto-xref">Model 2</a>. It widens <a href="#mdl-rteseq" class="quarto-xref">Model 1</a> from one route to the loads of a set of shipments, each shipment either on one of the routes or shipped independently, and its procedure is the one just described, written out below.</p>
+<p>Load formation is stated as a model in <a href="#mdl-loadform" class="quarto-xref">Model 2</a>. It widens <a href="#mdl-rteseq" class="quarto-xref">Model 1</a> from one route to the loads of a set of shipments, each shipment either on one of the routes or shipped independently. Its formulation is the savings procedure of Sec. 3, each route then improved by 2-opt, with the cost of a single-shipment route the shipment’s independent charge, so that the savings are those of <a href="#eq-pairwise-savings" class="quarto-xref">Eq. 7</a>, relative to the shipments shipped independently, and a shipment that savings leaves on a route of its own is shipped independently.</p>
 <div id="mdl-loadform" class="quarto-float quarto-figure quarto-figure-center anchored" data-generalizes="mdl-rteseq">
 <figure class="quarto-float quarto-float-mdl figure">
 <div aria-describedby="mdl-loadform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -7370,54 +7370,46 @@ Model 2: Load formation
 <div class="model-relation">Generalization of <a href="#mdl-rteseq">Model 1: Route sequencing</a></div>
 </figure>
 </div>
+<!-- LOAD FORMATION BY SAVINGS, his "5.2: after 5.3" of 2026-11-04 (capture entry 68),
+     on his message that day: "If you look at the MATLAB notebooks, you'll typically see
+     much simpler code to implement what is called the load formation problem in lecture
+     5.2. It's typically just two lines of code. First, calculate the savings based on
+     independent shipment cost, and then apply the savings. Wrapped inside of that is a
+     call to 2-opt. And that's it." makeRouting4.m Ex. 2, lines 90-95: IJS =
+     pairwisesavings(rTCh,sh,minTLC(sh,tr)); twoopt(savings(rTCh,sh,IJS,true),rTCh,true);
+     sh2rte. Logjam's pairwisesavings takes no independent costs (CR 41); it uses the
+     cost of the route (k, k), so the savings are relative to the shipments shipped
+     independently when that cost is the independent charge, which Code block 52
+     asserts. His reading, 2026-11-04: the 11/01 insertion test (mark 286 strikes it
+     from his paragraph above, for him to accept or reword) is insert and improve's,
+     the 11/04 savings is savings', two ways of constructing the routes. SUPERSEDES the
+     procedure the comment before the model states, and the insertion test this rung
+     ran (mincostinsert_rte, the isempty skip of his 2026-11-02 question). Kept: the
+     multi-route form of his 2026-11-02 ruling, sh2rte appending a single-shipment route
+     for each shipment on no route of more than one. Measured on Ex. 9 (scratchpad
+     probe_52_twolines.jl): the same five routes and 1,232.64 as the insertion test gave,
+     since it kept shipments 2 and 4 independent. -->
 <div class="model-formulation" data-mdl-for="mdl-loadform" data-mdl-name="Load formation" id="rung-mdl-loadform-load-formation"><div class="model-rung-label">Model 2 formulation: Load formation</div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb112"><pre class="sourceCode numberSource pseudocode number-lines code-with-copy"><code class="sourceCode"><span id="cb112-1"><a href="#cb112-1"></a>algorithm loadform;</span>
-<span id="cb112-2"><a href="#cb112-2"></a>{ input:  shipments 1, …, n; independent charges; cost c(R) }</span>
-<span id="cb112-3"><a href="#cb112-3"></a>{ output: routes, and the shipments shipped independently   }</span>
-<span id="cb112-4"><a href="#cb112-4"></a>begin</span>
-<span id="cb112-5"><a href="#cb112-5"></a>    routes := savings, each route then improved by twoopt;</span>
-<span id="cb112-6"><a href="#cb112-6"></a>    for each shipment k alone on a route do</span>
-<span id="cb112-7"><a href="#cb112-7"></a>    begin</span>
-<span id="cb112-8"><a href="#cb112-8"></a>        R := the route to which mincostinsert(k, R) adds least;</span>
-<span id="cb112-9"><a href="#cb112-9"></a>        if c(mincostinsert(k, R)) − c(R) &lt; c₀(k) then</span>
-<span id="cb112-10"><a href="#cb112-10"></a>            R := twoopt(mincostinsert(k, R))</span>
-<span id="cb112-11"><a href="#cb112-11"></a>        else</span>
-<span id="cb112-12"><a href="#cb112-12"></a>            ship k independently;</span>
-<span id="cb112-13"><a href="#cb112-13"></a>    end;</span>
-<span id="cb112-14"><a href="#cb112-14"></a>    return the routes, and the shipments shipped independently;</span>
-<span id="cb112-15"><a href="#cb112-15"></a>end;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb112-2"><a href="#cb112-2"></a>{ input:  shipments 1, …, n; cost c(R), with c((k, k)) = c₀(k), }</span>
+<span id="cb112-3"><a href="#cb112-3"></a>{         the independent charge of shipment k                  }</span>
+<span id="cb112-4"><a href="#cb112-4"></a>{ output: routes, and the shipments shipped independently       }</span>
+<span id="cb112-5"><a href="#cb112-5"></a>begin</span>
+<span id="cb112-6"><a href="#cb112-6"></a>    routes := the routes of savings with more than one shipment,</span>
+<span id="cb112-7"><a href="#cb112-7"></a>              each then improved by twoopt;</span>
+<span id="cb112-8"><a href="#cb112-8"></a>    I := the shipments on none of the routes;</span>
+<span id="cb112-9"><a href="#cb112-9"></a>    add the route (k, k) for each shipment k in I;</span>
+<span id="cb112-10"><a href="#cb112-10"></a>    return the routes, and I, the shipments shipped independently;</span>
+<span id="cb112-11"><a href="#cb112-11"></a>end;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<!-- THE MULTI-ROUTE FORM, his ruling of 2026-11-02 on the proposal: sh2rte, Matlog's,
-     and no isroute. loadform keeps the multi-shipment routes of savings, finds the
-     shipments on none of them with sh2rte, and returns one vector of routes, each
-     shipment shipped independently on a single-shipment route of its own, with the
-     shipments of those routes. Insertion is mincostinsert_rte (region 206), so no
-     position that would split a route is tried. His question of 2026-11-02: "Where is
-     the function isempty defined in the lecture? ... It's not in Logjam, is it?" It is
-     Julia's own (Base), true for a collection with no elements; here it skips the
-     insertion test when savings left no route of more than one shipment, and its
-     comment now says so. -->
 <div class="model-implementation" data-mdl-for="mdl-loadform" data-mdl-name="Load formation" id="rung-mdl-loadform-load-formation"><div class="model-rung-label">Model 2 implementation: Load formation</div>
 <div id="126" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb113-1"><a href="#cb113-1"></a><span class="co"># Model: load formation</span></span>
-<span id="cb113-2"><a href="#cb113-2"></a><span class="kw">function</span> <span class="fu">loadform</span>(rteTCh, sh, c₀)</span>
+<span id="cb113-2"><a href="#cb113-2"></a><span class="kw">function</span> <span class="fu">loadform</span>(rteTCh, sh)</span>
 <span id="cb113-3"><a href="#cb113-3"></a>    R <span class="op">=</span> [<span class="fu">twoopt_rte</span>(r, rteTCh)[<span class="fl">1</span>] for r <span class="kw">in</span> <span class="fu">savings</span>(rteTCh, sh)</span>
 <span id="cb113-4"><a href="#cb113-4"></a>         if <span class="fu">length</span>(r) <span class="op">&gt;</span> <span class="fl">2</span>]                  <span class="co"># multi-shipment routes</span></span>
-<span id="cb113-5"><a href="#cb113-5"></a>    _, idx1 <span class="op">=</span> <span class="fu">sh2rte</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(sh), R)         <span class="co"># the shipments on none</span></span>
-<span id="cb113-6"><a href="#cb113-6"></a>    <span class="cf">for</span> k <span class="kw">in</span> idx1</span>
-<span id="cb113-7"><a href="#cb113-7"></a>        Δ <span class="op">=</span> [<span class="fu">mincostinsert_rte</span>(k, r, rteTCh)[<span class="fl">2</span>] <span class="op">-</span> <span class="fu">rteTCh</span>(r)</span>
-<span id="cb113-8"><a href="#cb113-8"></a>             for r <span class="kw">in</span> R]                    <span class="co"># the charge it adds</span></span>
-<span id="cb113-9"><a href="#cb113-9"></a>        <span class="fu">isempty</span>(Δ) <span class="op">&amp;&amp;</span> <span class="cf">continue</span>              <span class="co"># no route to add it to</span></span>
-<span id="cb113-10"><a href="#cb113-10"></a>        j <span class="op">=</span> <span class="fu">argmin</span>(Δ)</span>
-<span id="cb113-11"><a href="#cb113-11"></a>        <span class="fu">println</span>(k, <span class="st">&quot;: added &quot;</span>, <span class="fu">round</span>(Δ[j], digits <span class="op">=</span> <span class="fl">2</span>),</span>
-<span id="cb113-12"><a href="#cb113-12"></a>                <span class="st">&quot;, independent &quot;</span>, <span class="fu">round</span>(c₀[k], digits <span class="op">=</span> <span class="fl">2</span>))</span>
-<span id="cb113-13"><a href="#cb113-13"></a>        <span class="cf">if</span> Δ[j] <span class="op">&lt;</span> c₀[k]</span>
-<span id="cb113-14"><a href="#cb113-14"></a>            r′ <span class="op">=</span> <span class="fu">mincostinsert_rte</span>(k, R[j], rteTCh)[<span class="fl">1</span>]</span>
-<span id="cb113-15"><a href="#cb113-15"></a>            R[j] <span class="op">=</span> <span class="fu">twoopt_rte</span>(r′, rteTCh)[<span class="fl">1</span>]</span>
-<span id="cb113-16"><a href="#cb113-16"></a>        <span class="cf">end</span></span>
-<span id="cb113-17"><a href="#cb113-17"></a>    <span class="cf">end</span></span>
-<span id="cb113-18"><a href="#cb113-18"></a>    <span class="cf">return</span> <span class="fu">sh2rte</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(sh), R)    <span class="co"># the others, single-shipment routes</span></span>
-<span id="cb113-19"><a href="#cb113-19"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb113-5"><a href="#cb113-5"></a>    <span class="cf">return</span> <span class="fu">sh2rte</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(sh), R)    <span class="co"># the others, single-shipment routes</span></span>
+<span id="cb113-6"><a href="#cb113-6"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>loadform (generic function with 1 method)</code></pre>
 </div>
@@ -7523,20 +7515,37 @@ Figure 15: The 30 shipments of Ex. 9, each shipped independently from its origi
 <p>Example 9(b): Shipments on no route</p>
 </div>
 <div class="statement">
-<p>Determine the routes of more than one shipment that savings constructs, and the shipments on none of them.</p>
+<p>Determine the pairwise savings of the 30 shipments, relative to their independent charges, and the shipments in no pair with a positive saving, which no route of more than one shipment carries.</p>
 </div>
-<p>A route’s charge is one truck’s, at the same $2.00 per loaded mile over the route’s miles, since the truck has no capacity limit; for a route of one shipment that is the shipment’s own independent charge, which the <code>@assert</code> in Code block 52 checks. Code block 52 then constructs routes by savings on that charge, keeps those of more than one shipment, each improved by 2-opt, and finds the shipments on none of them with <code>sh2rte</code>:</p>
+<p>A route’s charge is one truck’s, at the same $2.00 per loaded mile over the route’s miles, since the truck has no capacity limit; for a route of one shipment that is the shipment’s own independent charge, which the <code>@assert</code> in Code block 52 checks. So the pairwise savings of <a href="#eq-pairwise-savings" class="quarto-xref">Eq. 7</a> on that charge are relative to the shipments shipped independently, <span class="math inline">c_i</span> being the independent charge of shipment <span style="white-space: nowrap"><span class="math inline">i</span>.</span> Code block 52 lists them with Logjam’s <code>pairwisesavings</code>, showing the five largest, and finds the shipments in no pair with a positive saving:</p>
+<!-- THE PAIRWISE SAVINGS, NOT THE ROUTES, since 2026-11-05: loadform (region 288) is
+     now savings and 2-opt, which this block ran before it, so (b) computes instead the
+     point of his 11/01 paragraph on the pairwise savings (Sec. 4): "once the pairwise
+     savings have been calculated, the shipments that are not appearing in any of the
+     positive savings pairs are immediately able to be identified as those that should
+     be considered for independent shipment." 90 pairs with a positive saving, the
+     largest 48.43 (6 and 22); shipments 2 and 4 in none, their best savings -134.09
+     (with 26) and -156.55 (with 6) (scratchpad probe_52_twolines.jl). The part's
+     heading, "Shipments on no route", is kept: a heading inside its div takes no
+     inline mark, and the statement (mark 289) now says why they are on none. -->
 <div id="132" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb118-1"><a href="#cb118-1"></a><span class="co"># Code block 52: route charge, routes by savings, and shipments on none</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb118-1"><a href="#cb118-1"></a><span class="co"># Code block 52: route charge, and the pairwise savings</span></span>
 <span id="cb118-2"><a href="#cb118-2"></a><span class="fu">rTCLh</span>(rte) <span class="op">=</span> <span class="fu">max</span>(<span class="fl">2.00</span> <span class="op">*</span> <span class="fu">rteTC</span>(rte, shL, D30), <span class="fu">mincharge_tl</span>())</span>
 <span id="cb118-3"><a href="#cb118-3"></a><span class="pp">@assert</span> <span class="fu">all</span>(<span class="fu">rTCLh</span>([k, k]) <span class="op">≈</span> c₀[k] <span class="cf">for</span> k <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(shL))</span>
-<span id="cb118-4"><a href="#cb118-4"></a>R <span class="op">=</span> [<span class="fu">twoopt_rte</span>(r, rTCLh)[<span class="fl">1</span>] for r <span class="kw">in</span> <span class="fu">savings</span>(rTCLh, shL)</span>
-<span id="cb118-5"><a href="#cb118-5"></a>     if <span class="fu">length</span>(r) <span class="op">&gt;</span> <span class="fl">2</span>]                    <span class="co"># its multi-shipment routes</span></span>
-<span id="cb118-6"><a href="#cb118-6"></a><span class="pp">@show</span> <span class="fu">length</span>.(R) <span class="op">.÷</span> <span class="fl">2</span>                     <span class="co"># shipments on each</span></span>
-<span id="cb118-7"><a href="#cb118-7"></a>RL, idx1 <span class="op">=</span> <span class="fu">sh2rte</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(shL), R)</span>
-<span id="cb118-8"><a href="#cb118-8"></a>idx1                                      <span class="co"># the shipments on none</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb118-4"><a href="#cb118-4"></a>ijs <span class="op">=</span> <span class="fu">pairwisesavings</span>(rTCLh, shL)          <span class="co"># positive, largest first</span></span>
+<span id="cb118-5"><a href="#cb118-5"></a><span class="fu">prt</span>(<span class="fu">hcat</span>(ijs<span class="op">...</span>)[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">:</span>]; cols <span class="op">=</span> [<span class="st">&quot;i&quot;</span>, <span class="st">&quot;j&quot;</span>, <span class="st">&quot;Saving&quot;</span>],</span>
+<span id="cb118-6"><a href="#cb118-6"></a>    row_title <span class="op">=</span> <span class="st">&quot;Pair&quot;</span>)                    <span class="co"># the five largest</span></span>
+<span id="cb118-7"><a href="#cb118-7"></a><span class="pp">@show</span> <span class="fu">length</span>(ijs[<span class="fl">3</span>])                       <span class="co"># pairs with a positive saving</span></span>
+<span id="cb118-8"><a href="#cb118-8"></a>idx1 <span class="op">=</span> <span class="fu">setdiff</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(shL), ijs[<span class="fl">1</span>], ijs[<span class="fl">2</span>])  <span class="co"># the shipments in none</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>length.(R) .÷ 2 = [12, 7, 9]</code></pre>
+<pre><code>Pair   i   j  Saving
+────────────────────
+   1   6  22   48.43
+   2  10  20   47.76
+   3   8   9   45.00
+   4   8  16   45.00
+   5   8  23   45.00
+length(ijs[3]) = 90</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>2-element Vector{Int64}:
@@ -7544,7 +7553,7 @@ Figure 15: The 30 shipments of Ex. 9, each shipped independently from its origi
  4</code></pre>
 </div>
 </div>
-<p>Shipments 2 and 4 are on no route of more than one shipment, since savings merges every shipment in a pair with a positive saving: they are the candidates for independent shipment.</p>
+<p>Shipments 2 and 4 are in no pair with a positive saving, so savings never puts either on a route: they are the candidates for independent shipment.</p>
 <div class="part-end">
 
 </div>
@@ -7554,18 +7563,21 @@ Figure 15: The 30 shipments of Ex. 9, each shipped independently from its origi
 <div class="statement">
 <p>Determine the routes and the shipments shipped independently, and the charge of the loads.</p>
 </div>
-<p>Code block 53 runs load formation, printing for each shipment on no route the least charge its insertion adds to a route and its independent charge. Its routes are one vector, in the form of Code block 49, in which each shipment shipped independently is a single-shipment route at its independent charge, and the block prints that vector a route to a line, <code>RL[i]</code> being route <code>i</code>:</p>
+<p>Code block 53 runs load formation, savings on the route charge, each route then improved by 2-opt. Its routes are one vector, in the form of Code block 49, in which each shipment shipped independently is a single-shipment route at its independent charge, and the block prints that vector a route to a line, <code>RL[i]</code> being route <code>i</code>:</p>
+<!-- loadform's two arguments, since 2026-11-05 (region 288): no c₀, since no
+     insertion test reads it, and nothing printed per shipment. The @assert is a
+     Triangulate check of (b): the shipments savings leaves alone are those in no
+     positive saving. -->
 <div id="134" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb121-1"><a href="#cb121-1"></a><span class="co"># Code block 53: load formation on the 30 shipments</span></span>
-<span id="cb121-2"><a href="#cb121-2"></a>RL, indL <span class="op">=</span> <span class="fu">loadform</span>(rTCLh, shL, c₀)</span>
-<span id="cb121-3"><a href="#cb121-3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fu">eachindex</span>(RL)                  <span class="co"># the vector of routes</span></span>
-<span id="cb121-4"><a href="#cb121-4"></a>    <span class="fu">println</span>(<span class="st">&quot;RL[</span><span class="sc">$</span>i<span class="st">] = [&quot;</span>, <span class="fu">join</span>(RL[i], <span class="st">&quot;,&quot;</span>), <span class="st">&quot;]&quot;</span>)</span>
-<span id="cb121-5"><a href="#cb121-5"></a><span class="cf">end</span></span>
-<span id="cb121-6"><a href="#cb121-6"></a>TCload <span class="op">=</span> <span class="fu">sum</span>(<span class="fu">rTCLh</span>.(RL))                <span class="co"># a single-shipment route at c₀</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb121-2"><a href="#cb121-2"></a>RL, indL <span class="op">=</span> <span class="fu">loadform</span>(rTCLh, shL)</span>
+<span id="cb121-3"><a href="#cb121-3"></a><span class="pp">@assert</span> indL <span class="op">==</span> idx1                    <span class="co"># those in no positive saving</span></span>
+<span id="cb121-4"><a href="#cb121-4"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fu">eachindex</span>(RL)                  <span class="co"># the vector of routes</span></span>
+<span id="cb121-5"><a href="#cb121-5"></a>    <span class="fu">println</span>(<span class="st">&quot;RL[</span><span class="sc">$</span>i<span class="st">] = [&quot;</span>, <span class="fu">join</span>(RL[i], <span class="st">&quot;,&quot;</span>), <span class="st">&quot;]&quot;</span>)</span>
+<span id="cb121-6"><a href="#cb121-6"></a><span class="cf">end</span></span>
+<span id="cb121-7"><a href="#cb121-7"></a>TCload <span class="op">=</span> <span class="fu">sum</span>(<span class="fu">rTCLh</span>.(RL))                <span class="co"># a single-shipment route at c₀</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2: added 267.09, independent 60.53
-4: added 251.31, independent 146.7
-RL[1] = [6,22,13,15,13,7,15,29,7,23,8,29,16,22,14,9,23,5,8,6,16,14,9,5]
+<pre><code>RL[1] = [6,22,13,15,13,7,15,29,7,23,8,29,16,22,14,9,23,5,8,6,16,14,9,5]
 RL[2] = [25,12,28,19,20,10,25,12,11,20,10,28,11,19]
 RL[3] = [18,17,21,27,21,1,26,1,27,30,26,3,17,24,24,18,30,3]
 RL[4] = [2,2]
@@ -7575,7 +7587,7 @@ RL[5] = [4,4]</code></pre>
 <pre><code>1232.6418479871288</code></pre>
 </div>
 </div>
-<p>Shipments 2 and 4 are shipped independently: for each, the charge added by inserting it at least cost is more than its independent charge. In <code>RL</code>, the routes of more than one shipment that savings constructs come first, routes 1 to 3, and the single-shipment routes that <code>sh2rte</code> adds come after them, routes 4 and 5, for shipments 2 and 4; each shipment appears twice in its route, at its loading and at its unloading.</p>
+<p>Shipments 2 and 4 are shipped independently: they are the shipments of Ex. 9(b) in no pair with a positive saving, which the <code>@assert</code> in Code block 53 checks, and savings leaves each on a route of its own. In <code>RL</code>, the routes of more than one shipment that savings constructs come first, routes 1 to 3, and the single-shipment routes that <code>sh2rte</code> adds come after them, routes 4 and 5, for shipments 2 and 4; each shipment appears twice in its route, at its loading and at its unloading.</p>
 <!-- HIS 2018 NARRATION OF makeRouting4.m Ex. 2 ([14:08]-[14:57]), the periodic run of
      these same 30 shipments, in which shipment 4 also stays independent; Code block 50
      leaves it independent for the same reason. The rest of the passage, an LTL
