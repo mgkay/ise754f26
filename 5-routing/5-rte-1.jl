@@ -75,7 +75,7 @@ alts = [  # label, stops, first stop (x, y), stop offsets, empty legs
     ("(f) Multiple routes", "PDPDPD", 0.43, -4.51,
      [0, 3.0, 4.75, 5.8, 7.1, 9.0], [2, 4])]
 r1 = 0.26                                  # stop radius, data units
-fig = Figure(size = (687, 372))
+fig = Figure(size = (687, 379))
 ax = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax); hidespines!(ax)
 for (lab, s, x0, y0, xs, empty) in alts
@@ -109,7 +109,7 @@ lines!(ax, [xe[1], xe[1], xe[2], xe[2]], [-4.36, -4.28, -4.28, -4.36];
        color = bluec, linewidth = 1.0)
 text!(ax, sum(xe) / 2, -4.06; text = "empty", color = bluec,
       fontsize = 12, align = (:center, :center))
-xlims!(ax, -1.25, 9.75); ylims!(ax, -5.2, 0.4)
+xlims!(ax, -1.25, 9.75); ylims!(ax, -5.3, 0.4)
 fig
 # Code block 2: the six-node tour, each arc from the node it leaves
 P6 = [0.0 0.0; 0.0 1.2; 0.85 2.0; 1.7 1.2; 1.7 0.0; 0.85 -0.8]  # nodes

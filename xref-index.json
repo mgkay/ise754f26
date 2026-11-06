@@ -3243,40 +3243,44 @@
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-route-cost-cap": {
+  "eq-load-mix": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-tw-ex": {
+  "eq-route-cost-cap": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-truck-day": {
+  "eq-tw-ex": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-tsp-est": {
+  "eq-truck-day": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-da2dcenter": {
+  "eq-tsp-est": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-rltl": {
+  "eq-da2dcenter": {
    "label": "Eq. 9",
    "word": "Eq."
   },
-  "eq-deliveries": {
+  "eq-rltl": {
    "label": "Eq. 10",
    "word": "Eq."
   },
-  "eq-cap-feas": {
+  "eq-deliveries": {
    "label": "Eq. 11",
    "word": "Eq."
   },
-  "eq-routes": {
+  "eq-cap-feas": {
    "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-routes": {
+   "label": "Eq. 13",
    "word": "Eq."
   },
   "fig-cw-demands": {
@@ -3396,15 +3400,15 @@
    "word": "Model",
    "name": "Vehicle routing from a depot"
   },
-  "mdl-vrp": {
+  "mdl-vrp-pd": {
    "label": "Model 2",
    "word": "Model",
-   "name": "Vehicle routing problem"
+   "name": "Pickup and delivery problem"
   },
-  "mdl-vrp-pd": {
+  "mdl-vrp": {
    "label": "Model 3",
    "word": "Model",
-   "name": "Pickup and delivery problem"
+   "name": "Vehicle routing problem"
   },
   "example-1": {
    "label": "Ex. 1",

@@ -3931,6 +3931,86 @@ vertical-align: -.125em;
   }
 </style>
 
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var head = document.getElementsByTagName("head")[0];
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css";
+      head.appendChild(link);
+      
+      function renderMathElements() {
+        var mathElements = document.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            if (window.katex) {
+              window.katex.render(texText.data, mathElements[i], {
+                displayMode: mathElements[i].classList.contains('display'),
+                throwOnError: false,
+                macros: macros,
+                fleqn: false
+              });
+            } else {
+              console.error("KaTeX has not been loaded correctly, as not found globally.");
+            }
+          }
+        }
+      }
+
+      var script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js";
+      script.onload = renderMathElements;
+      
+      // Check for RequireJS and AMD detection as it conflicts with KaTeX loading.
+      if (typeof require === 'function' && typeof define === 'function' && define.amd) {
+        // Disable require.js AMD detection temporarily, as it conflicts with KaTeX loading using CommonJS
+        var disableAmdScript = document.createElement("script");
+        disableAmdScript.textContent = 'window._amd_backup = window.define.amd; window.define.amd = false;';
+        head.appendChild(disableAmdScript);
+        
+        // overwrite onload to restore Require.js AMD detection
+        script.onload = function() {
+          // Restore Require.js AMD detection
+          window.define.amd = window._amd_backup;
+          delete window._amd_backup;
+          renderMathElements();
+        };
+      }
+
+      head.appendChild(script);
+    });
+  </script>
+  
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -3954,9 +4034,10 @@ vertical-align: -.125em;
   <li><a href="#worked-a-feasibility-model" id="toc-worked-a-feasibility-model" class="nav-link" data-scroll-target="#worked-a-feasibility-model">5. Worked: a feasibility model</a></li>
   <li><a href="#worked-an-optimization-model-mixed-variable-types" id="toc-worked-an-optimization-model-mixed-variable-types" class="nav-link" data-scroll-target="#worked-an-optimization-model-mixed-variable-types">6. Worked: an optimization model, mixed variable types</a></li>
   <li><a href="#the-model-ladder" id="toc-the-model-ladder" class="nav-link" data-scroll-target="#the-model-ladder">7. The model ladder</a></li>
-  <li><a href="#two-cases-the-five-slots-stretch-to-and-one-they-do-not" id="toc-two-cases-the-five-slots-stretch-to-and-one-they-do-not" class="nav-link" data-scroll-target="#two-cases-the-five-slots-stretch-to-and-one-they-do-not">8. Two cases the five slots stretch to, and one they do not</a></li>
-  <li><a href="#using-this-as-a-prompt" id="toc-using-this-as-a-prompt" class="nav-link" data-scroll-target="#using-this-as-a-prompt">9. Using this as a prompt</a></li>
-  <li><a href="#checking-a-model-mechanically" id="toc-checking-a-model-mechanically" class="nav-link" data-scroll-target="#checking-a-model-mechanically">10. Checking a model mechanically</a></li>
+  <li><a href="#two-cases-at-the-edge-of-the-form" id="toc-two-cases-at-the-edge-of-the-form" class="nav-link" data-scroll-target="#two-cases-at-the-edge-of-the-form">8. Two cases at the edge of the form</a></li>
+  <li><a href="#comparing-two-models" id="toc-comparing-two-models" class="nav-link" data-scroll-target="#comparing-two-models">9. Comparing two models</a></li>
+  <li><a href="#using-this-as-a-prompt" id="toc-using-this-as-a-prompt" class="nav-link" data-scroll-target="#using-this-as-a-prompt">10. Using this as a prompt</a></li>
+  <li><a href="#checking-a-model-mechanically" id="toc-checking-a-model-mechanically" class="nav-link" data-scroll-target="#checking-a-model-mechanically">11. Checking a model mechanically</a></li>
   </ul>
 </nav>
     </div>
@@ -3983,7 +4064,7 @@ vertical-align: -.125em;
 
 
 <p>Lecture 1.1 introduces this form. This page is where to come back when a model gets complicated enough that the question is not <em>what</em> to write but <strong>which slot it goes in</strong>.</p>
-<p>The form matters twice over. It is how models are presented in the lectures, so reading it fluently is reading the course. And it is how a model is handed to an AI assistant: a statement in this form is a specification the assistant can descend from, while a paragraph of prose is an invitation to guess.</p>
+<p>The form is how the lectures present a model, and how a model is handed to an AI assistant: a statement in this form is a specification the assistant can descend from, while a paragraph of prose is an invitation to guess.</p>
 <section id="quick-reference" class="level2">
 <h2 class="anchored" data-anchor-id="quick-reference">Quick reference</h2>
 <p>Six keywords, in this order, and no others.</p>
@@ -4025,16 +4106,16 @@ vertical-align: -.125em;
 </tr>
 </tbody>
 </table>
-<p>One word in that table needs introducing before it is used. A model can be written on up to three <strong>rungs</strong>, which together make up the <strong>model ladder</strong>: the <strong>concept</strong>, in words only; the <strong>formulation</strong>, the same model committed to symbols or pseudocode; and the <strong>implementation</strong>, runnable Julia. The six keywords are the <strong>model format</strong>, and five of them are used on every rung. <code>where:</code> is the exception, because it defines symbols and the concept has none, so <strong>the first appearance of <code>where:</code> is the signal that a model has descended past the concept</strong>. <a href="#the-model-ladder">Sec. 7</a> sets the ladder out in full.</p>
-<p>The pair to keep straight is <code>subject to:</code> against <code>assumptions:</code>. <strong>A constraint restricts the solutions; an assumption is something that has to be true about the world.</strong> A constraint cannot be untrue, because it is being imposed. An assumption can, which is why a false one leaves the wrong model rather than merely a worse answer.</p>
+<p>A model can be written on up to three <strong>rungs</strong>, which together make up the <strong>model ladder</strong>: the <strong>concept</strong>, in words only; the <strong>formulation</strong>, the same model committed to symbols or pseudocode; and the <strong>implementation</strong>, runnable Julia. The six keywords are the <strong>model format</strong>, and five of them are used on every rung. <code>where:</code> is the exception, because it defines symbols and the concept has none, so <strong>the first appearance of <code>where:</code> is the signal that a model has descended past the concept</strong>. <a href="#the-model-ladder">Sec. 7</a> sets the ladder out in full.</p>
+<p>The pair to keep straight is <code>subject to:</code> against <code>assumptions:</code>. <strong>A constraint restricts the solutions; an assumption is something that has to be true about the world.</strong> <a href="#which-slot-does-it-go-in">Sec. 2</a> gives the test.</p>
 <p>Four rules govern the slots:</p>
 <ul>
 <li><strong><code>minimize:</code>/<code>maximize:</code> and <code>return:</code> take exactly one entity.</strong> If a return seems to need three things, it is one composite thing: name it.</li>
 <li><strong><code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are always lettered lists</strong>, <code>(a) (b)   (c)</code>, one item per line, <em>even at a single item</em>.</li>
 <li><strong><code>where:</code> is a definition list keyed by symbol</strong>, not lettered, since every entry is a symbol and its meaning.</li>
-<li><strong>The six are the whole list.</strong> A seventh keyword is an error, however plausible it reads. The temptation comes with a model that has nothing to optimize, which seems to need an opening word of its own; it does not, and the table below says why. What a new keyword would say belongs in <code>solve for:</code> if it names an unknown, or in <code>return:</code> if it names what a model that determines nothing computes.</li>
+<li><strong>The six are the whole list.</strong> A seventh keyword is an error, however plausible it reads. What it would say belongs in <code>solve for:</code> if it names an unknown, or in <code>return:</code> if it names what a model that determines nothing computes.</li>
 </ul>
-<p>And the first line tells you what kind of model it is:</p>
+<p>The first line shows what kind of model it is:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -4065,19 +4146,17 @@ vertical-align: -.125em;
 </tr>
 </tbody>
 </table>
-<p><strong>A model that determines something has no <code>return:</code>.</strong> Its output is the unknowns, and <code>solve for:</code> already names them, so a <code>return:</code> would only say it again. The optimal value of the objective is not a separate output either: it is the <code>minimize:</code> line evaluated at the solution. <code>return:</code> belongs to the descriptive model, where nothing is determined and it is the only statement of what the model produces. The lectures follow this from Lecture 3.4; the earlier lectures still write a <code>return:</code> in models that determine something, and this semester either form is accepted.</p>
-<p>Everything below is the detail behind these three tables. A model written this way can be checked mechanically; see <a href="#checking-a-model-mechanically">Sec. 10</a>.</p>
+<p><strong>A model that determines something has no <code>return:</code>.</strong> <code>solve for:</code> already names its output, and the optimal value is the objective evaluated at the solution. Lectures before 3.4 still write a <code>return:</code> in such models, and this semester either form is accepted.</p>
+<p>A model written this way can be checked mechanically; see <a href="#checking-a-model-mechanically">Sec. 11</a>.</p>
 </section>
 <section id="why-the-slots-are-shaped-this-way" class="level2">
 <h2 class="anchored" data-anchor-id="why-the-slots-are-shaped-this-way">1. Why the slots are shaped this way</h2>
-<p>The uniform silhouette is the point. Every model has the same slots in the same order, so a slot that is thin or missing is visible <strong>as a slot</strong> rather than as an absence nobody notices. That property is what makes this a good prompt as much as a good notation.</p>
+<p>Every model has the same slots in the same order, so a slot that is thin or missing is visible <strong>as a slot</strong> rather than as an absence nobody notices.</p>
 <p>The always-a-list rule exists for the same reason. A single constraint written inline reads as a sentence; written as <code>(a)</code> it reads as a list with one entry, and the reader asks what <code>(b)</code> would have been.</p>
-<p>A descriptive model computes something and determines nothing, so it has no <code>solve for:</code> and no objective. A feasibility model determines something but has no preference among the solutions that work. An optimization model determines something and prefers some solutions to others. Read the first line and you know which you are looking at.</p>
 <section id="omitted-or-present-and-empty" class="level3">
 <h3 class="anchored" data-anchor-id="omitted-or-present-and-empty">Omitted, or present and empty</h3>
-<p>These are two different things, and the difference carries information.</p>
 <p><strong>A slot is omitted when the category does not apply to that kind of model.</strong> A descriptive model has nothing to determine, so <code>solve for:</code> is absent, and its absence is how the reader knows what kind of model it is.</p>
-<p><strong>A slot is written with <code>none</code> when the category applies but is empty.</strong> An optimization model with no constraints gets <code>subject to: none</code>, which is a real finding about the problem rather than an omission: the unconstrained economic-order-quantity model is the standard example, and reading <code>none</code> there tells you something worth knowing.</p>
+<p><strong>A slot is written with <code>none</code> when the category applies but is empty.</strong> An optimization model with no constraints gets <code>subject to: none</code>, which is a real finding about the problem rather than an omission: the unconstrained economic-order-quantity model is the standard example.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -4143,30 +4222,29 @@ vertical-align: -.125em;
   (a) demand:   every store&#39;s demand is fully served;
   (b) capacity: no hub exceeds its throughput limit;
   (c) linkage:  a site serves demand only if it is open</code></pre>
-<p>An empty list is legitimate and informative. <code>subject to: none</code> says the problem is unconstrained, which is a real fact about it.</p>
 </section>
 <section id="does-the-model-take-it-as-given-rather-than-representing-it-assumptions" class="level3">
 <h3 class="anchored" data-anchor-id="does-the-model-take-it-as-given-rather-than-representing-it-assumptions">4. Does the model take it as given rather than representing it? → <code>assumptions:</code></h3>
-<p>An assumption is a condition about the world or the data that the model treats as <strong>determined, so that it does not have to be modeled</strong>. Every model simplifies something; this slot is where those simplifications are written down. That is its whole job: an assumption is what makes a simplification legitimate instead of hidden.</p>
+<p>An assumption is a condition about the world or the data that the model treats as <strong>determined, so that it does not have to be modeled</strong>. Every model simplifies something, and writing the simplifications down here is what makes them legitimate instead of hidden.</p>
 <p><em>“Stops are uniformly distributed over the service region”</em> is an assumption because the model does not represent where the stops actually are, it takes a claim about them instead. <em>“Store demands are known and constant”</em> is an assumption because the model does not represent demand varying, it assumes it away.</p>
-<p><strong>The test against a constraint is falsifiability.</strong> A constraint cannot be untrue: it is a condition being imposed. An assumption can, because it is a claim about how things are. So <em>a constraint binds the solution; an assumption binds the model</em> — and if an assumption turns out to be false, the consequence is not a worse answer but <strong>the wrong model</strong>.</p>
-<p>That is also why the assumptions are what a result is checked against. When an answer looks wrong, the first question is usually not “was the arithmetic right?” but “is one of these still true?”</p>
+<p><strong>The test against a constraint is falsifiability.</strong> A constraint is imposed, so it cannot be untrue; an assumption is a claim about how things are, so it can. <em>A constraint binds the solution; an assumption binds the model</em>, and a false assumption gives not a worse answer but <strong>the wrong model</strong>.</p>
+<p>So when an answer looks wrong, the first question is usually not “was the arithmetic right?” but “is one of the assumptions still true?”</p>
 </section>
 <section id="is-it-what-a-model-that-determines-nothing-computes-return" class="level3">
 <h3 class="anchored" data-anchor-id="is-it-what-a-model-that-determines-nothing-computes-return">5. Is it what a model that determines nothing computes? → <code>return:</code></h3>
-<p>Only a descriptive model has this slot. A model that determines something has already named its output in <code>solve for:</code>.</p>
-<p>One entity. Naming it in words is real modeling work, and in a descriptive model it is the most consequential line in the concept, because it is where “what would I actually do with this answer?” gets determined.</p>
+<p>Only a descriptive model has this slot.</p>
+<p>Its one entity, named in words, is the most consequential line of a descriptive concept, since it is where “what would I actually do with this answer?” gets determined.</p>
 <p><code>return:</code> is not a place for by-products. If a quantity is computed along the way and is worth reporting, it belongs inside the one composite thing being returned, described as part of it.</p>
 </section>
 <section id="is-it-a-symbol-definition-or-given-data-where" class="level3">
 <h3 class="anchored" data-anchor-id="is-it-a-symbol-definition-or-given-data-where">6. Is it a symbol definition or given data? → <code>where:</code></h3>
-<p><strong><code>where:</code> never appears in the concept.</strong> Its first appearance is precisely the signal that the model has descended to a formulation. It holds given data and symbol meanings with units, never the unknowns, because the unknowns are declared in <code>solve for:</code>.</p>
+<p><strong><code>where:</code> never appears in the concept.</strong> It holds given data and symbol meanings with units, never the unknowns, because the unknowns are declared in <code>solve for:</code>.</p>
 </section>
 </section>
 <section id="the-three-mistakes-this-form-catches" class="level2">
 <h2 class="anchored" data-anchor-id="the-three-mistakes-this-form-catches">3. The three mistakes this form catches</h2>
-<p><strong>A domain choice written as a constraint.</strong> If a warehouse must sit at one of eight existing stores, the wrong repair is adding a constraint. The right repair is changing what the unknown <em>is</em>, from a point in the plane to a choice among eight sites, in <code>solve for:</code>. That single change makes it a different kind of problem with a different solution method, and putting it in <code>solve for:</code> makes the consequence visible instead of burying it in a list.</p>
-<p><strong>An assumption written as a constraint.</strong> <em>“The warehouse has no capacity limit”</em> sounds restrictive and is not. It asserts something falsifiable about the world and justifies the <em>absence</em> of a capacity constraint. It is an assumption, and if it is wrong the model is wrong rather than merely the answer.</p>
+<p><strong>A domain choice written as a constraint.</strong> If a warehouse must sit at one of eight existing stores, the wrong repair is adding a constraint. The right repair is changing what the unknown <em>is</em>, from a point in the plane to a choice among eight sites, in <code>solve for:</code>. That makes it a different kind of problem, with a different solution method, which <code>solve for:</code> shows and a list of constraints buries.</p>
+<p><strong>An assumption written as a constraint.</strong> <em>“The warehouse has no capacity limit”</em> sounds restrictive and is not. It is a falsifiable claim about the world that justifies the <em>absence</em> of a capacity constraint, so it is an assumption.</p>
 <p><strong>A decision hidden in <code>return:</code>.</strong> Writing <em>“return: which six locations to open and the hub each demand point uses”</em> puts the decision in the output slot and leaves <code>solve for:</code> empty. The decision goes in <code>solve for:</code>, and once it is there the model needs no <code>return:</code> at all.</p>
 </section>
 <section id="worked-a-descriptive-model" class="level2">
@@ -4204,20 +4282,36 @@ assumptions:
   (a) store demands are known and constant;
   (b) transport cost is proportional to weighted distance</code></pre>
 <p><strong>Formulation: the same slots, now with symbols, and <code>where:</code> appears.</strong></p>
-<pre><code>solve for:
-  (a) yₖ ∈ {0,1}  1 if site k is opened, for each k ∈ K;
-  (b) xⱼₖ ≥ 0     demand of store j from site k, j ∈ J, k ∈ K;
-  (c) fₖ ∈ ℤ₊     vehicles based at site k, for each k ∈ K
-where:
-  K   the set of candidate sites
-  J   the set of stores
-  dⱼ  annual demand of store j, in tons
-  cₖ  annual fixed cost of operating site k, in dollars</code></pre>
+<p><strong>solve for:</strong><br>
+(a) <span style="white-space: nowrap"><span class="math inline">y_k \in \{0, 1\}</span>,</span> 1 if site <span class="math inline">k</span> is opened, <span style="white-space: nowrap"><span class="math inline">k \in K</span>;</span><br>
+(b) <span style="white-space: nowrap"><span class="math inline">x_{jk} \geq 0</span>,</span> demand of store <span class="math inline">j</span> served from site <span style="white-space: nowrap"><span class="math inline">k</span>,</span> <span style="white-space: nowrap"><span class="math inline">j \in J</span>,</span> <span style="white-space: nowrap"><span class="math inline">k \in K</span>;</span><br>
+(c) <span style="white-space: nowrap"><span class="math inline">f_k \in \mathbb{Z}_{+}</span>,</span> vehicles based at site <span style="white-space: nowrap"><span class="math inline">k</span>,</span> <span class="math inline">k \in K</span></p>
+<p><strong>where:</strong></p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">K</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">set of candidate sites</span>
+</dd>
+<dt><span class="math inline">J</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">set of stores</span>
+</dd>
+<dt><span class="math inline">d_j</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">annual demand of store <span class="math inline">j</span> (ton)</span>
+</dd>
+<dt><span class="math inline">c_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">annual fixed cost of operating site <span class="math inline">k</span> ($).</span>
+</dd>
+</dl>
+</div>
 <p>The unknowns stayed in <code>solve for:</code> and did not migrate into <code>where:</code>. The two slots answer different questions: what is being determined, and what was given.</p>
 </section>
 <section id="the-model-ladder" class="level2">
 <h2 class="anchored" data-anchor-id="the-model-ladder">7. The model ladder</h2>
-<p>One model can be written on three rungs, and together they make up its <strong>model ladder</strong>. They are not three models and not three stages of a process: they are the same model stated three ways: in words, in mathematics, and in code. Each is a complete statement of it. (The ladder is not Lecture 1.1’s levels of modeling, which rank different models by cost and faithfulness; every rung here holds the same model.)</p>
+<p>The three rungs of a <strong>model ladder</strong> are not three models or three stages of a process but one model stated three ways, in words, in mathematics and in code, each a complete statement of it. (The ladder is not Lecture 1.1’s levels of modeling, which rank different models by cost and faithfulness.)</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -4249,60 +4343,245 @@ where:
 </tr>
 </tbody>
 </table>
-<p><strong>Not every model goes all the way down</strong>, and how far it goes is shown by which parts are present rather than by any numbering. A concept alone is a legitimate model, and often the only one worth writing: it is what a decision needs stated before anyone argues about method. A concept with a formulation and no implementation is equally legitimate when the point is the mathematics rather than an answer.</p>
-<p><strong>The first appearance of <code>where:</code> is the signal that a model has descended.</strong> Nothing else marks the boundary, because the concept’s job is to be free of symbols and <code>where:</code> exists only to define them.</p>
+<p><strong>Not every model goes all the way down</strong>. A concept alone is a legitimate model, and often the only one worth writing. A concept with a formulation and no implementation is equally legitimate when the point is the mathematics rather than an answer.</p>
 <section id="how-the-rungs-are-titled" class="level3">
 <h3 class="anchored" data-anchor-id="how-the-rungs-are-titled">How the rungs are titled</h3>
-<p><strong>The concept carries no rung word.</strong> A model float is captioned <em>“Model 3: Poisson arrival simulation”</em> and nothing more, because the concept is what a model <em>is</em>; naming it would be like labelling a book “book.” The other two are labelled precisely to distinguish them from it, and from each other:</p>
+<p><strong>The concept carries no rung word.</strong> The concept is what a model <em>is</em>, so its caption is the number and name alone; the other two rungs add their rung word:</p>
 <pre><code>Model 3: Poisson arrival simulation                 &lt;- the concept
 Model 3 formulation: Poisson arrival simulation
 Model 3 implementation: Poisson arrival simulation</code></pre>
-<p>The number and the name are the concept’s; the lower rungs borrow both and add only the rung word. So everything carrying <em>“Model 3”</em> is one model, and the reader never has to work out which parts belong together.</p>
+<p>Everything carrying <em>“Model 3”</em> is one model.</p>
 </section>
 <section id="descending-is-a-fill-in-not-a-rewrite" class="level3">
 <h3 class="anchored" data-anchor-id="descending-is-a-fill-in-not-a-rewrite">Descending is a fill-in, not a rewrite</h3>
-<p>Each rung commits detail the one above left open; it must not change what the one above said. <strong>If the formulation carries a constraint the concept never mentioned, something was determined silently</strong>, and that is worth stopping over rather than smoothing past. The same holds further down: an implementation that quietly assumes a bound the formulation did not state is not an implementation of that model.</p>
-<p>This is the only reason the rungs are worth separating at all. Written as one document they cannot be checked against each other; written as three, the check is a reading.</p>
+<p>Each rung commits detail the one above left open; it must not change what the one above said. <strong>If the formulation carries a constraint the concept never mentioned, something was determined silently</strong>. The same holds further down: an implementation that quietly assumes a bound the formulation did not state is not an implementation of that model.</p>
 </section>
 <section id="when-one-concept-has-more-than-one-formulation" class="level3">
 <h3 class="anchored" data-anchor-id="when-one-concept-has-more-than-one-formulation">When one concept has more than one formulation</h3>
-<p>A concept can be approached more than one way, and the two approaches are <strong>not two models</strong>. They are two formulations under one concept, each with its own implementation, and they are told apart by a short parenthetical rather than a new number:</p>
+<p>Two approaches to one concept are <strong>not two models</strong> but two formulations under it, each with its own implementation, told apart by a parenthetical rather than a new number:</p>
 <pre><code>Model 5: single-facility minisum location
 Model 5 formulation (analytic): ...      Model 5 implementation (analytic): ...
 Model 5 formulation (numerical): ...     Model 5 implementation (numerical): ...</code></pre>
-<p>Keeping the number is the point. The concept did not change, so renumbering would claim a second problem where there is one problem and two methods, and the comparison between them is usually what the lecture is about.</p>
-<p><strong>Branching below the formulation is possible and is almost never what is wanted.</strong> Two implementations of <em>one</em> formulation are usually the same model written twice, which is a coding difference rather than a modeling one. The course’s habit is to parameterize instead: <code>minisum(w, P, dist)</code> takes the distance function as an argument, so one implementation serves straight-line and great-circle distance rather than spawning two. If a genuine split is ever needed, the parenthetical extends, but a long label is a fair warning that the distinction may not be a modeling distinction at all.</p>
+<p>Renumbering would claim a second problem where there is one problem and two methods.</p>
+<p><strong>Branching below the formulation is almost never wanted.</strong> Two implementations of <em>one</em> formulation are a coding difference, not a modeling one. The course’s habit is to parameterize instead: <code>minisum(w, P, dist)</code> takes the distance function as an argument, so one implementation serves straight-line and great-circle distance.</p>
 </section>
 </section>
-<section id="two-cases-the-five-slots-stretch-to-and-one-they-do-not" class="level2">
-<h2 class="anchored" data-anchor-id="two-cases-the-five-slots-stretch-to-and-one-they-do-not">8. Two cases the five slots stretch to, and one they do not</h2>
+<section id="two-cases-at-the-edge-of-the-form" class="level2">
+<h2 class="anchored" data-anchor-id="two-cases-at-the-edge-of-the-form">8. Two cases at the edge of the form</h2>
 <section id="more-than-one-objective" class="level3">
 <h3 class="anchored" data-anchor-id="more-than-one-objective">More than one objective</h3>
 <p><code>minimize:</code> still holds <strong>one</strong> entity, but that entity may be an ordered preference rather than a single quantity. Give the objectives in order and say how they are resolved:</p>
 <pre><code>minimize:   first the number of vehicles used, then, among the solutions
             that use the fewest, the total distance travelled</code></pre>
 <p>That is the <strong>lexicographic</strong> resolution, and it is the one this course uses most: the second objective is a tie-break among the answers that are already best on the first. The alternatives are a <strong>weighted sum</strong>, which trades the objectives against each other at a stated exchange rate, and a <strong>Pareto</strong> treatment, which declines to trade them and returns the set of answers where improving one means worsening another.</p>
-<p><strong>Whichever is used, say which.</strong> An unresolved list of objectives is not a model: it does not determine an answer, and a reader cannot tell whether a solution is right without knowing how the objectives were reconciled. Stating “first… then…” is the resolution, and it is why the ordering carries the whole meaning.</p>
+<p><strong>Whichever is used, say which.</strong> An unresolved list of objectives is not a model, since it does not determine an answer.</p>
 </section>
 <section id="models-whose-constraints-contain-another-model" class="level3">
 <h3 class="anchored" data-anchor-id="models-whose-constraints-contain-another-model">Models whose constraints contain another model</h3>
 <p>Some problems are genuinely two-storey: one decision is made in anticipation of how somebody else will then respond, and the second party’s response is itself the answer to an optimization. Siting facilities knowing that competitors will site theirs afterwards is the standard example, and the beach models of Lecture 2.1 are its simplest form.</p>
-<p><strong>The five slots do not currently express this, and that is an open question rather than an established convention.</strong> The difficulty is real: the follower’s problem is not a constraint in the ordinary sense, because it is not a condition a solution satisfies but a whole model whose <em>solution</em> the leader’s constraints refer to. Writing it as an assumption is worse, since assumptions are conditions taken as given about the world and this one is derived.</p>
-<p>The shape a convention would need is clear enough: the follower’s model stated in the same five slots, and the leader’s <code>subject to:</code> naming it as a constraint rather than restating it. What is not determined is how the two are labelled and numbered, and whether a reader can follow the nesting without it becoming heavier than the problem. <strong>If a bi-level model appears in the course, expect this section to be filled in rather than the model to be forced into the flat form.</strong></p>
+<p><strong>The slots do not yet express this, and how they should is an open question.</strong> The follower’s problem is not a condition a solution satisfies but a whole model whose <em>solution</em> the leader’s constraints refer to, and it is not an assumption either, since it is derived rather than given.</p>
+<p>A convention would state the follower’s model in the same slots and have the leader’s <code>subject to:</code> name it. <strong>If a bi-level model appears in the course, this section will be filled in rather than the model forced into the flat form.</strong></p>
+</section>
+</section>
+<section id="comparing-two-models" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-two-models">9. Comparing two models</h2>
+<p>A lecture often presents one model as a change to another, and five words name how the two are related. Four come in two pairs that answer different questions, and the fifth names two very similar models that fit neither:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Special case / generalization</th>
+<th style="text-align: left;">Restriction / relaxation</th>
+<th style="text-align: left;">Variant</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="row-label"><strong>Compares</strong></span></td>
+<td style="text-align: left;">two problems, over all their instances</td>
+<td style="text-align: left;">two feasible sets, on one instance</td>
+<td style="text-align: left;">two very similar models, with the same decisions</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="row-label"><strong>Test</strong></span></td>
+<td style="text-align: left;">Can every instance of A be posed as an instance of B, with the same solutions? Then A is a special case of B, and B a generalization of A.</td>
+<td style="text-align: left;">Is every feasible solution of R feasible for Q, with Q’s objective never worse on them? Then R is a restriction of Q, and Q a relaxation of R.</td>
+<td style="text-align: left;">Is B made from A by changing a few of its parts and keeping its decisions, in a way none of the other four words describes on every instance? Then B is a variant of A.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="row-label"><strong>Bounds the optimum?</strong></span></td>
+<td style="text-align: left;">no</td>
+<td style="text-align: left;">yes: minimizing, relaxation <span class="math inline">\leq</span> original <span class="math inline">\leq</span> restriction; maximizing reverses it</td>
+<td style="text-align: left;">no bound holds on every instance</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="row-label"><strong>Why it matters</strong></span></td>
+<td style="text-align: left;">a special case can admit a faster method; a generalization covers more situations</td>
+<td style="text-align: left;">a relaxation gives a bound; a restriction gives a feasible answer</td>
+<td style="text-align: left;">records that the two models are close when no class or bound relation holds</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A special case narrows the problem; a restriction narrows the solutions.</strong> Only the second pair gives a bound, the reasoning behind the Bounds check of Lecture 1.2. A special case gives no bound: on its own instances it has the general problem’s optimum. A relaxation may also replace the objective with one never worse on the original’s solutions; Lagrangian relaxation, named in Lecture 4.4, works that way.</p>
+<section id="which-slot-the-change-is-in" class="level3">
+<h3 class="anchored" data-anchor-id="which-slot-the-change-is-in">Which slot the change is in</h3>
+<p>The slot a change touches usually says which word applies:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 40%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span class="row-label">Change to the model</span></th>
+<th style="text-align: left;">Slot</th>
+<th style="text-align: left;">The new model is a</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fix given data, or add an assumption</td>
+<td style="text-align: left;"><code>where:</code>, <code>assumptions:</code></td>
+<td style="text-align: left;">special case</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Add given data, or let fixed data vary</td>
+<td style="text-align: left;"><code>where:</code>, often with a <code>subject to:</code> row that uses it</td>
+<td style="text-align: left;">generalization</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Add a rule no choice of the given data reproduces</td>
+<td style="text-align: left;"><code>subject to:</code>, or a narrower <code>solve for:</code> domain</td>
+<td style="text-align: left;">restriction</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="row-label">Drop a rule</span></td>
+<td style="text-align: left;"><code>subject to:</code>, or a wider <code>solve for:</code> domain</td>
+<td style="text-align: left;">relaxation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Widen one part and narrow another, keeping the decisions</td>
+<td style="text-align: left;">two slots at once, such as a <code>where:</code> entry and a <code>subject to:</code> row both added</td>
+<td style="text-align: left;">variant</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Replace the objective with one no choice of data reproduces, neither always the lower</td>
+<td style="text-align: left;"><code>minimize:</code> or <code>maximize:</code></td>
+<td style="text-align: left;">variant</td>
+</tr>
+</tbody>
+</table>
+<p>A two-variable linear program shows all five. On the formulation rung, Model A is</p>
+<p><span class="math display">
+\begin{array}{rlrclll}
+\textbf{Model A} : &amp; \text{Minimize} &amp; c_1 x_1 + c_2 x_2 &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp; \text{subject to} &amp;  &amp;  &amp;  &amp;  &amp; \\[2pt]
+&amp;  &amp; 2x_1 + x_2 &amp; \geq &amp; 6 &amp;  &amp; (a) \\[2pt]
+&amp;  &amp; x_1 + 2x_2 &amp; \geq &amp; 9 &amp;  &amp; (b) \\[2pt]
+&amp;  &amp; x_1,\, x_2 &amp; \geq &amp; 0 &amp;  &amp;
+\end{array}
+</span></p>
+<p>where</p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">c_1, c_2</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">given cost per unit of <span class="math inline">x_1</span> and of <span style="white-space: nowrap"><span class="math inline">x_2</span>.</span></span>
+</dd>
+</dl>
+</div>
+<p>On the instance <span class="math inline">c_1 = c_2 = 1</span> its best is 5, at <span style="white-space: nowrap"><span class="math inline">(1, 4)</span>.</span> Each model below makes one change to it.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 36%">
+<col style="width: 30%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span class="row-label">Model</span></th>
+<th style="text-align: left;">Change to Model A</th>
+<th style="text-align: left;">Relation to Model A</th>
+<th style="text-align: left;">Best, <span class="math inline">c_1 = c_2 = 1</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="row-label">B</span></td>
+<td style="text-align: left;">costs fixed at 1: minimize <span class="math inline">x_1 + x_2</span></td>
+<td style="text-align: left;">special case</td>
+<td style="text-align: left;">5 at <span class="math inline">(1, 4)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="row-label">C</span></td>
+<td style="text-align: left;">add (c) <span style="white-space: nowrap"><span class="math inline">x_2 \leq u</span>,</span> with <span class="math inline">u</span> given</td>
+<td style="text-align: left;">generalization; <span class="math inline">u = \infty</span> is Model A</td>
+<td style="text-align: left;">5 at <span class="math inline">(1, 4)</span> with <span style="white-space: nowrap"><span class="math inline">u = 4</span>;</span> 7 at <span class="math inline">(5, 2)</span> with <span class="math inline">u = 2</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="row-label">D</span></td>
+<td style="text-align: left;">add (c) <span class="math inline">x_1 \geq x_2</span></td>
+<td style="text-align: left;">restriction</td>
+<td style="text-align: left;">6 at <span class="math inline">(3, 3)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="row-label">E</span></td>
+<td style="text-align: left;">drop (b)</td>
+<td style="text-align: left;">relaxation</td>
+<td style="text-align: left;">3 at <span class="math inline">(3, 0)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="row-label">F</span></td>
+<td style="text-align: left;">add (c) <span class="math inline">x_2 \leq 2</span></td>
+<td style="text-align: left;">restriction</td>
+<td style="text-align: left;">7 at <span class="math inline">(5, 2)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="row-label">G</span></td>
+<td style="text-align: left;">make the 9 in (b) a given <span style="white-space: nowrap"><span class="math inline">b</span>,</span> and add (c) <span class="math inline">x_1 \geq x_2</span></td>
+<td style="text-align: left;">variant</td>
+<td style="text-align: left;">6 at <span class="math inline">(3, 3)</span> with <span style="white-space: nowrap"><span class="math inline">b = 9</span>;</span> 4 at <span class="math inline">(2, 2)</span> with <span class="math inline">b = 6</span></td>
+</tr>
+</tbody>
+</table>
+<p>The bounds hold as the second pair promises: the relaxation’s 3 is below Model A’s 5, and the restrictions’ 6 and 7 are above it.</p>
+<p><strong>Where a number lives determines the relation.</strong> Models C and F add the same-looking row. In Model C the bound <span class="math inline">u</span> is given data, and set to <span class="math inline">\infty</span> it never binds, so every instance of Model A is an instance of Model C. In Model F the 2 is written into the row and holds on every instance, so the row only removes solutions. An added constraint generalizes only when it carries data that can make it slack.</p>
+<p><strong>The reverse holds too.</strong> A constraint gives a special case when some choice of the general model’s given data has the same effect. Model F is a special case of Model C, since setting <span class="math inline">u = 2</span> imposes it, though only a restriction of Model A, which has no <span style="white-space: nowrap"><span class="math inline">u</span>.</span> A traveling salesman problem (TSP) that forbids arc <span class="math inline">(i, j)</span> is the TSP with <span style="white-space: nowrap"><span class="math inline">c_{ij} = \infty</span>,</span> and an integer program is a mixed-integer program with every variable chosen to be integer.</p>
+</section>
+<section id="when-neither-holds-a-variant" class="level3">
+<h3 class="anchored" data-anchor-id="when-neither-holds-a-variant">When neither holds: a variant</h3>
+<p>A <strong>variant</strong> is a model very like another: made from it by changing a few of its parts while keeping its decisions, when none of the four words describes the change on every instance. Calling it a variant records that the two are close even though no class or bound relation holds. Two models that share no decisions, such as a TSP and a facility location model, are not variants of each other; they are different models. A change escapes all four words in one of two ways. One part can be widened while another is narrowed, as in Model G: the 9 in row (b) becomes given data <span style="white-space: nowrap"><span class="math inline">b</span>,</span> which generalizes, and <span class="math inline">x_1 \geq x_2</span> is added, which restricts. Its best is 6 with <span class="math inline">b = 9</span> but 4 with <span style="white-space: nowrap"><span class="math inline">b = 6</span>,</span> above and below Model A’s 5. Or the objective can change in a way no choice of data reproduces, with neither objective always the lower. Either way, no bound between the two answers holds on every instance. A changed objective that is never above the other on every solution makes a relaxation instead: with nonnegative costs a tour’s largest arc cost never exceeds its total, so the bottleneck TSP is a relaxation of the TSP.</p>
+</section>
+<section id="state-the-strongest-relation-that-holds" class="level3">
+<h3 class="anchored" data-anchor-id="state-the-strongest-relation-that-holds">State the strongest relation that holds</h3>
+<p>A pair can stand in more than one relation, so the one to state is the first of these that is true:</p>
+<ol type="1">
+<li>special case or generalization;</li>
+<li>restriction or relaxation, when it holds on every instance;</li>
+<li>variant.</li>
+</ol>
+<p>The TSP against the assignment problem is the standard case. Neither is a special case of the other, since no choice of costs keeps an assignment from forming subtours. But every tour is an assignment, so the TSP is a restriction of the assignment problem, and the assignment problem’s optimum is a lower bound on the shortest tour.</p>
 </section>
 </section>
 <section id="using-this-as-a-prompt" class="level2">
-<h2 class="anchored" data-anchor-id="using-this-as-a-prompt">9. Using this as a prompt</h2>
+<h2 class="anchored" data-anchor-id="using-this-as-a-prompt">10. Using this as a prompt</h2>
 <p>Hand an assistant a model written in this form and it has what it needs: what to optimize, what to determine, what must hold, what to give back, and what it may take for granted. Hand it a paragraph and it will supply all five itself, plausibly and invisibly.</p>
 <p><strong>The model does not go in the chat. It goes in a file, and the prompt points at the file.</strong> Keep it beside the work as <code>model.md</code>, and ask for what is wanted this time:</p>
 <pre><code>Read model.md, produce the formulation, then a Julia
 script implementing it, and run it.</code></pre>
-<p>Four things follow from that arrangement, and only the first is convenience.</p>
-<p><strong>It is revisable.</strong> A model changes as it is understood. Editing one slot in a file and re-running beats retyping a paragraph and hoping the change was the only one.</p>
-<p><strong>It survives the session.</strong> A model stated once in conversation erodes as the window fills. A file is re-read whole, so the specification is exactly as precise on the hundredth turn as the first.</p>
-<p><strong>It separates the specification from the task.</strong> <code>model.md</code> says what the model <em>is</em>. The prompt says what to do with it <em>now</em>: formulate it, implement it, vary a parameter, check a result against it. Those are different things, and keeping them apart is what stops a prompt from quietly becoming the model.</p>
-<p><strong>It leaves a history.</strong> The file can be committed, so the model’s evolution is visible and a slot that was silently dropped can be found. A decision reached after an hour of argument is in the file, not in a conversation nobody can reopen.</p>
-<p>The last of these is the one that matters most by the end of a project, and it is the same argument the course makes about session notes: what must survive has to be written down, and what changed is a question only version control can answer.</p>
+<p>A file has four advantages over the chat.</p>
+<p><strong>It is revisable.</strong> Editing one slot in a file and re-running beats retyping a paragraph and hoping the change was the only one.</p>
+<p><strong>It survives the session.</strong> A model stated in conversation erodes as the window fills; a file is re-read whole, as precise on the hundredth turn as the first.</p>
+<p><strong>It separates the specification from the task.</strong> <code>model.md</code> says what the model <em>is</em>. The prompt says what to do with it <em>now</em>: formulate it, implement it, vary a parameter, check a result against it. Keeping them apart stops a prompt from quietly becoming the model.</p>
+<p><strong>It leaves a history.</strong> The file can be committed, so the model’s evolution is visible and a slot that was silently dropped can be found.</p>
 <section id="where-each-rung-lives" class="level3">
 <h3 class="anchored" data-anchor-id="where-each-rung-lives">Where each rung lives</h3>
 <p>The concept and the formulation are <strong>one model on two rungs, so they share one file.</strong> The formulation goes into <code>model.md</code> beneath the concept, exactly as a lecture’s model callout shows both in a single object.</p>
@@ -4338,22 +4617,22 @@ script implementing it, and run it.</code></pre>
 </tr>
 </tbody>
 </table>
-<p>This is the division of labor the whole course rests on, so it is worth being blunt about: turning a stated model into symbols and then into code is translation, and translation is what the assistant is for. Determining what is being optimized, what is being determined, what must hold and what may be assumed is not translation, and it is not delegated.</p>
-<p>The implementation separates into its own file for one reason: it must be executable, and words and symbols are not. Give the script a header comment naming the model file it came from, so the pair does not drift apart.</p>
-<p><strong>Keeping both in one file is what makes the descent checkable.</strong> Descending is supposed to be a fill-in operation rather than a rewrite, and that claim can only be audited if the two sit side by side: a constraint present in the formulation and absent from the concept above it is then visible in a glance, and it means something was determined without being stated. Split across a file and a conversation, the same drift is invisible.</p>
+<p>Turning a stated model into symbols and then into code is translation, and translation is what the assistant is for. Determining what is being optimized, what is being determined, what must hold and what may be assumed is not translation, and it is not delegated.</p>
+<p>Give the script a header comment naming the model file it came from, so the pair does not drift apart.</p>
+<p><strong>Keeping both in one file is what makes the descent checkable.</strong> A constraint present in the formulation and absent from the concept above it is then visible at a glance.</p>
 </section>
 </section>
 <section id="checking-a-model-mechanically" class="level2">
-<h2 class="anchored" data-anchor-id="checking-a-model-mechanically">10. Checking a model mechanically</h2>
+<h2 class="anchored" data-anchor-id="checking-a-model-mechanically">11. Checking a model mechanically</h2>
 <p>Because the form is strict, a program can check whether a model statement follows it. One ships with the course materials:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">julia</span> ../materials/env/check_model.jl model.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Run from the folder holding the model, so the relative path reaches across to <code>materials</code>. It prints a line per finding with its line number, and exits nonzero when any finding is an error, so it can also be used inside a loop.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="ex">julia</span> ../materials/env/check_model.jl model.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run from the folder holding the model, so the relative path reaches across to <code>materials</code>. It prints a line per finding with its line number, and exits nonzero when any finding is an error.</p>
 <p><strong>What it checks.</strong> That every keyword is one of the six and spelled as such; that the keywords appear in the order above; that <code>minimize:</code>, <code>maximize:</code> and <code>return:</code> carry exactly one entity; that <code>solve for:</code>, <code>subject to:</code> and <code>assumptions:</code> are lettered lists running from <code>(a)</code> without gaps, or read <code>none</code>; that every constraint carries a name; that <code>where:</code> is keyed by symbol rather than lettered; that a model determining nothing has a <code>return:</code>; and that the slots are mutually coherent, so an objective without <code>solve for:</code> is an error and <code>solve for:</code> without <code>subject to:</code> is queried.</p>
-<p><strong>What it cannot check, and this is the important half.</strong> It reads the shape, not the modeling. It cannot tell that something written as a constraint is really an assumption, that a domain choice was buried in <code>subject to:</code> instead of <code>solve for:</code>, that a <code>return:</code> is naming a by-product, or that an assumption is false. Every one of those is a judgment, they are what the rest of this page is about, and a clean report says only that the statement is well formed:</p>
+<p><strong>What it cannot check is the modeling.</strong> It cannot tell that something written as a constraint is really an assumption, that a domain choice was buried in <code>subject to:</code> instead of <code>solve for:</code>, that a <code>return:</code> is naming a by-product, or that an assumption is false. Those are judgments, and a clean report says only that the statement is well formed:</p>
 <pre><code>OK  model.md conforms to the model format.
     Note: the format is checked, not the modeling. Whether a
     constraint should have been an assumption is still yours.</code></pre>
-<p>That distinction is worth dwelling on, because it is the same one the course makes about AI-produced work. A mechanical check is cheap, so run it every time; but passing it is evidence about form alone, and reading a green result as approval of the model is the error the whole course exists to train out.</p>
+<p>Run it every time, since it is cheap, but read a clean result as evidence about form alone, the same distinction the course makes about AI-produced work.</p>
 
 
 </section>

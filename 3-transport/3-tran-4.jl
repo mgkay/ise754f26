@@ -532,7 +532,7 @@ CXY = [getindex.(C, :LON) getindex.(C, :LAT)]
 # The DC
 DCcity = "Memphis"
 DC = loc2lonlat(DCcity; state = :TN)
-DCXY = [DC.LON DC.LAT]
+DCXY = [DC.LON DC.LAT];
 # Code block 19: the suppliers, the DC and the customers
 using GeoMakie
 
