@@ -4238,7 +4238,7 @@ window.Quarto = {
 </section>
 <section id="is-it-a-symbol-definition-or-given-data-where" class="level3">
 <h3 class="anchored" data-anchor-id="is-it-a-symbol-definition-or-given-data-where">6. Is it a symbol definition or given data? → <code>where:</code></h3>
-<p><strong><code>where:</code> never appears in the concept.</strong> It holds given data and symbol meanings with units, never the unknowns, because the unknowns are declared in <code>solve for:</code>.</p>
+<p><strong><code>where:</code> never appears in the concept.</strong> It defines every symbol the formulation uses: the given data, with units, and the meaning of each decision variable. The concept’s <code>solve for:</code> names the decision in words.</p>
 </section>
 </section>
 <section id="the-three-mistakes-this-form-catches" class="level2">
@@ -4283,12 +4283,24 @@ assumptions:
   (b) transport cost is proportional to weighted distance</code></pre>
 <p><strong>Formulation: the same slots, now with symbols, and <code>where:</code> appears.</strong></p>
 <p><strong>solve for:</strong><br>
-(a) <span style="white-space: nowrap"><span class="math inline">y_k \in \{0, 1\}</span>,</span> 1 if site <span class="math inline">k</span> is opened, <span style="white-space: nowrap"><span class="math inline">k \in K</span>;</span><br>
-(b) <span style="white-space: nowrap"><span class="math inline">x_{jk} \geq 0</span>,</span> demand of store <span class="math inline">j</span> served from site <span style="white-space: nowrap"><span class="math inline">k</span>,</span> <span style="white-space: nowrap"><span class="math inline">j \in J</span>,</span> <span style="white-space: nowrap"><span class="math inline">k \in K</span>;</span><br>
-(c) <span style="white-space: nowrap"><span class="math inline">f_k \in \mathbb{Z}_{+}</span>,</span> vehicles based at site <span style="white-space: nowrap"><span class="math inline">k</span>,</span> <span class="math inline">k \in K</span></p>
+(a) <span style="white-space: nowrap"><span class="math inline">y_k \in \{0, 1\}</span>,</span> <span style="white-space: nowrap"><span class="math inline">k \in K</span>;</span><br>
+(b) <span style="white-space: nowrap"><span class="math inline">x_{jk} \geq 0</span>,</span> <span style="white-space: nowrap"><span class="math inline">j \in J</span>,</span> <span style="white-space: nowrap"><span class="math inline">k \in K</span>;</span><br>
+(c) <span style="white-space: nowrap"><span class="math inline">f_k \in \mathbb{Z}_{+}</span>,</span> <span class="math inline">k \in K</span></p>
 <p><strong>where:</strong></p>
 <div class="deflist deflist-cols">
 <dl>
+<dt><span class="math inline">y_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">1 if site <span class="math inline">k</span> is opened, 0 otherwise</span>
+</dd>
+<dt><span class="math inline">x_{jk}</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">demand of store <span class="math inline">j</span> served from site <span class="math inline">k</span></span>
+</dd>
+<dt><span class="math inline">f_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">vehicles based at site <span class="math inline">k</span></span>
+</dd>
 <dt><span class="math inline">K</span></dt>
 <dd>
 <span class="deflist-eq">=</span> <span class="deflist-text">set of candidate sites</span>
@@ -4307,7 +4319,7 @@ assumptions:
 </dd>
 </dl>
 </div>
-<p>The unknowns stayed in <code>solve for:</code> and did not migrate into <code>where:</code>. The two slots answer different questions: what is being determined, and what was given.</p>
+<p><code>solve for:</code> gives each unknown its symbol and the values it may take; <code>where:</code> says what every symbol means, unknowns and given data alike.</p>
 </section>
 <section id="the-model-ladder" class="level2">
 <h2 class="anchored" data-anchor-id="the-model-ladder">7. The model ladder</h2>
