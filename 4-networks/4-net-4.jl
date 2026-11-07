@@ -833,9 +833,9 @@ function setups!(ax, x, z, title)
         text!(ax, j - 0.5, 0.1; text = "$j", fontsize = 11,
               align = (:center, :bottom), color = ink)
     end
-    text!(ax, t / 2, 0.75; text = title, fontsize = 14,
-          align = (:center, :bottom), color = ink)
-    xlims!(ax, -1.6, t + 0.1); ylims!(ax, -m - 0.1, 1.45)
+    text!(ax, t / 2, -m - 0.2; text = title, fontsize = 14,
+          align = (:center, :top), color = ink)   # caption, below it
+    xlims!(ax, -1.6, t + 0.1); ylims!(ax, -m - 0.75, 0.6)
     return ax
 end
 r2 = prodinv_excl(cᵖ, cⁱ, d, u, LBʸ, UBʸ)     # Ex. 2's plan, again

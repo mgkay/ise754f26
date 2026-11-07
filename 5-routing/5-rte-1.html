@@ -4296,7 +4296,7 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">6.1: Working and One-Time-Safety Stock</span>
+ <span class="menu-text">6.1: Work, Econ, One-Time-Safety Stock</span>
   </li>
           <li class="sidebar-item">
  <span class="menu-text">6.2: Periodic Safety Stock</span>
@@ -4860,7 +4860,7 @@ Model 1: Traveling salesman problem
      why; the tour is pi, as in all of the lecture's code since the same request. -->
 <div class="no-row-height column-margin column-container"><div class>
 <p><strong>One permutation at a time.</strong> As long as the permutations are not all generated first, brute force stays feasible even for fairly large problems: each call for a permutation gives just the next one in the sequence, not all of the billions or trillions of them. It may take some time, but it uses essentially no memory, since none of those permutations has to be stored. The Combinatorics package’s <code>permutations</code> is designed to generate one at a time, which is what makes this convenient.</p>
-</div></div><p>Code block 5 computes the great circle distances between them, the arc costs <span class="math inline">c_{ij}</span> of a symmetric TSP, and costs every tour that starts and ends at the first city, as the permutations of cities 2 to 10 taken one at a time, keeping the cheapest, which is the mathematical formulation of <a href="#eq-tsp-perm" class="quarto-xref">Eq. 4</a> worked in full:</p>
+</div></div><p>Code block 5 computes the great circle distances between them, the arc costs <span class="math inline">c_{ij}</span> of a symmetric TSP, and computes the cost of every tour that starts and ends at the first city, as the permutations of cities 2 to 10 taken one at a time, keeping the cheapest, which is the mathematical formulation of <a href="#eq-tsp-perm" class="quarto-xref">Eq. 4</a> worked in full:</p>
 <div id="18" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode numberSource julia code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode julia"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1"></a><span class="co"># Code block 5: great circle distances, and every tour by brute force</span></span>
 <span id="annotated-cell-5-2"><a href="#annotated-cell-5-2"></a><span class="im">using</span> <span class="bu">Combinatorics</span></span>
@@ -6358,7 +6358,7 @@ TCᵒ = 9</code></pre>
 <div class="statement">
 <p>Determine the optimal tour, by looking at all 120 tours and by solving the formulation of <a href="#mdl-tsp" class="quarto-xref">Model 1</a>, and how far the tours of Ex. 3(a) and 3(c) are from it.</p>
 </div>
-<p>With only six nodes, brute force is reasonable: Code block 19 lists every tour that starts and ends at node 1, as the permutations of nodes 2 to 6, costs each one, which is the mathematical formulation of <a href="#eq-tsp-perm" class="quarto-xref">Eq. 4</a> worked in full, and solves <a href="#mdl-tsp" class="quarto-xref">Model 1</a> with the implementation of Sec. 2:</p>
+<p>With only six nodes, brute force is reasonable: Code block 19 lists every tour that starts and ends at node 1, as the permutations of nodes 2 to 6, computes the cost of each one, which is the mathematical formulation of <a href="#eq-tsp-perm" class="quarto-xref">Eq. 4</a> worked in full, and solves <a href="#mdl-tsp" class="quarto-xref">Model 1</a> with the implementation of Sec. 2:</p>
 <!-- COMBINATORICS' permutations, his request of 2026-10-28 (capture entry 4):
      "Normally, to generate permutations by brute force, I would use the
      permutations generator from the combinatoric package", with a using line "so
@@ -7104,7 +7104,7 @@ TCᴱ = 0.908 * sqrt(nrow(df) * a) = 2106.4535225676354</code></pre>
 <div class="statement">
 <p>Determine the best tour that 2-opt finds from 100 random starting tours, under great circle distances.</p>
 </div>
-<p>Code block 27 computes the great circle distance between every pair of county points, so that the tour cost <code>πTCh</code> of Code block 14, which reads <code>D</code>, now costs a tour of the counties:</p>
+<p>Code block 27 computes the great circle distance between every pair of county points, so that the tour cost <code>πTCh</code> of Code block 14, which reads <code>D</code>, now computes the cost of a tour of the counties:</p>
 <!-- RENUMBERED 2026-10-27: Code blocks 26 to 30 until Ex. 2(a)'s figure code was
      hidden and unnumbered (REG-95), then 25 to 29, and 26 to 30 again once
      @fig-pairwise-saving's code became Code block 19 (flag-marks 218 and 219 keep
@@ -7118,7 +7118,7 @@ TCᴱ = 0.908 * sqrt(nrow(df) * a) = 2106.4535225676354</code></pre>
 <span id="cb49-2"><a href="#cb49-2"></a>XY <span class="op">=</span> <span class="fu">hcat</span>(df.LON, df.LAT)</span>
 <span id="cb49-3"><a href="#cb49-3"></a>D <span class="op">=</span> <span class="fu">dists</span>(XY, XY, <span class="op">:</span>mi);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Code block 28 draws a random tour of the 100 counties and costs it with <code>πTCh</code>, and <a href="#fig-nc-random" class="quarto-xref">Fig. 13</a> draws it:</p>
+<p>Code block 28 draws a random tour of the 100 counties and computes its cost with <code>πTCh</code>, and <a href="#fig-nc-random" class="quarto-xref">Fig. 13</a> draws it:</p>
 <!-- THE TOUR IS pi IN THE CODE (capture entry 8): r and rTCh are pi and piTCh in
      Code blocks 28 and 29; nothing else changed. -->
 <div id="86" class="cell" data-execution_count="1">

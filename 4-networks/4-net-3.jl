@@ -258,11 +258,12 @@ N = (X = X, Y = Yᵒ, d = d)
 fig = Figure(size = (680, 260))
 for (k, (Nk, hl, title)) in enumerate([(N₀, [], "(a) As given"),
         (N, [(2, 1)], "(b) Balance at stage 2, month 1")])
-    ax = Axis(fig[1, k]; aspect = DataAspect(), title = title,
-              titlesize = 14, titlefont = :regular)
+    ax = Axis(fig[1, k]; aspect = DataAspect())
     frame!(ax, Nk, N₀, Dict((:Y, 2, 2) => "c"); hl = hl, ls = 15)
+    Label(fig[2, k], title; fontsize = 14, tellwidth = false)
 end
-colgap!(fig.layout, 8)
+rowsize!(fig.layout, 2, Fixed(20))    # the captions, below the panels
+colgap!(fig.layout, 8); rowgap!(fig.layout, 4)
 fig
 # Code block 3: missing flows found node by node by flow balance
 # At node (i, j), inventory in plus production equals what goes on, to
@@ -336,9 +337,11 @@ for k in 0:length(steps) + 1
     else                                      # the nodes left over check
         hl, title = left, "($('a' + k)) Check: the nodes left over"
     end
-    ax = Axis(fig[k ÷ 2 + 1, k % 2 + 1]; aspect = DataAspect(),
-              title = title, titlesize = 13, titlefont = :regular)
+    r, c = 2(k ÷ 2) + 1, k % 2 + 1            # panel, caption below
+    ax = Axis(fig[r, c]; aspect = DataAspect())
     frame!(ax, Nk, N₀, name; hl = hl, ls = 14)
+    Label(fig[r + 1, c], title; fontsize = 13, tellwidth = false)
+    rowsize!(fig.layout, r + 1, Fixed(18))
 end
 colgap!(fig.layout, 8); rowgap!(fig.layout, 4)
 fig
@@ -451,9 +454,11 @@ function latestframes(d, u, y⁰, yᵗ⁺¹)
             j > 1 && (Y[i, j] = pl.y[i, j])
             hl, title = (i, j), "($('a' + k)) Step $k: stage $i, month $j"
         end
-        ax = Axis(fig[k ÷ 2 + 1, k % 2 + 1]; aspect = DataAspect(),
-                  title = title, titlesize = 13, titlefont = :regular)
+        r, c = 2(k ÷ 2) + 1, k % 2 + 1        # panel, caption below
+        ax = Axis(fig[r, c]; aspect = DataAspect())
         planframe!(ax, X, Y, d, u, hl)
+        Label(fig[r + 1, c], title; fontsize = 13, tellwidth = false)
+        rowsize!(fig.layout, r + 1, Fixed(18))
     end
     colgap!(fig.layout, 8); rowgap!(fig.layout, 4)
     return fig
@@ -861,11 +866,11 @@ let
     # (a) a plan made in each period: its first δ periods already
     # ordered, the period δ ahead ordered now, the rest planned
     ax1 = Axis(fig[1, 1]; xticks = 1:T, ylabel = "Plan made in period",
-               yticks = 1:rows, yreversed = true, titlesize = 13,
-               titlefont = :regular,
-               title = rich("(a) Rolling: plan ",
-                   it("H"), up(" = $H"), " periods ahead; ",
-                   "order for the period a lead time away"))
+               yticks = 1:rows, yreversed = true)
+    Label(fig[2, 1], rich("(a) Rolling: plan ",
+              it("H"), up(" = $H"), " periods ahead; ",
+              "order for the period a lead time away");
+          fontsize = 13, tellwidth = false)    # its caption, below it
     hidespines!(ax1, :t, :r)
     vspan!(ax1, [b0 - 0.5], [o[1] - 0.5]; color = (idlec, 0.35))
     vspan!(ax1, [o[1] - 0.5], [o[end] + 0.5]; color = (datac, 0.18))
@@ -901,17 +906,17 @@ let
             PolyElement(color = ordc), PolyElement(color = planc),
             MarkerElement(marker = :rtriangle, color = invc,
                           markersize = 9)]
-    Legend(fig[2, 1], elem,
+    Legend(fig[3, 1], elem,
            ["Already ordered", "Ordered now", "Planned, not yet ordered",
             "Inventory carried in at the start and out at the end"];
            orientation = :horizontal, nbanks = 2, framevisible = false,
            labelsize = 12)
     # (b) the horizon of the outlined plan: from its order to the end
     # of the outage, each period's materials ordered δ periods ahead
-    ax2 = Axis(fig[3, 1]; xlabel = "Period", xticks = 1:T,
-               titlesize = 13, titlefont = :regular,
-               title = "(b) How long: from the first build-ahead " *
-                       "order to the end of the outage")
+    ax2 = Axis(fig[4, 1]; xlabel = "Period", xticks = 1:T)
+    Label(fig[5, 1], "(b) How long: from the first build-ahead " *
+                     "order to the end of the outage";
+          fontsize = 13, tellwidth = false)    # its caption, below it
     hideydecorations!(ax2); hidespines!(ax2, :t, :r, :l)
     for j in 1:T
         if b0 <= j < o[1]              # idle capacity builds inventory
