@@ -4296,7 +4296,7 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text">6.1: Working and One-Time-Safety Stock</span>
+ <span class="menu-text">6.1: Work, Econ, One-Time-Safety Stock</span>
   </li>
           <li class="sidebar-item">
  <span class="menu-text">6.2: Periodic Safety Stock</span>
@@ -5147,13 +5147,13 @@ Figure 7: Inventory at a DC under uncoordinated transshipment. Supplier 1 ships
      implementation. No Logjam export computes either (change request 16). -->
 <p>With a DC between the suppliers and the customers, each product is either cross-docked or stocked at the DC, and <a href="#mdl-transship" class="quarto-xref">Model 1</a> states the problem of determining which.</p>
 <p>A <em>cross-docking set</em> is a group of products whose suppliers all ship on one interval, the set’s own, so that its products arrive at the DC together and leave it the same day. A product in no set is <em>stocked</em>: held at the DC, and shipped in on its own interval. A <em>delivery</em> is everything a customer receives from the DC on one day. Each set makes a delivery to each customer on its interval, and a stocked product goes out either in one set’s deliveries or in a delivery that carries only stocked products. A shipment is <em>uncoordinated</em> when its size is its own optimal size, as in Lecture 3.3, and <em>coordinated</em> when its size is its annual flow times its set’s interval. Every shipment is therefore one of the four kinds in <a href="#tbl-split-shipments" class="quarto-xref">Table 1</a>.</p>
-<div id="tbl-split-shipments" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-split-shipments" class="fit quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-split-shipments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table 1: The four kinds of shipment through the DC, in or out and uncoordinated or coordinated, each with its inventory fraction.
 </figcaption>
 <div aria-describedby="tbl-split-shipments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="caption-top table">
+<table class="fit caption-top table">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -6454,7 +6454,7 @@ Table 3: Logistics-related codes.
 <ul>
 <li>UNSPSC (United Nations Standard Products and Services Code). A hierarchical 8-digit code that can be used to classify all products and services at the segment, family, class, and commodity levels.</li>
 <li>GPC (Global Product Catalog). A directory of product attributes that allows independent data repositories to be synchronized for global, multi-industry supply chain messaging and reporting.</li>
-<li>GTIN (Global Trade Item Number). All-numeric system for assigning globally unique codes to trade items (products and services). GTIN includes UPC, ISBN, and NDC.</li>
+<li>GTIN (Global Trade Item Number). All-numeric system for assigning globally unique codes to trade items (products and services). GTIN includes the next three codes.</li>
 <li>UPC (Universal Product Code). The standard bar code for retail items in North America.</li>
 <li>ISBN (International Standard Book Numbering). An international standard code for books.</li>
 <li>NDC (National Drug Code). A code maintained by the FDA for identifying prescription drugs and some over the counter drugs.</li>

@@ -83,10 +83,7 @@ end
 ## Example 2: Fermat's 1629 problem
 # Determine the minisum location for three facilities of equal weight at
 # $(1, 1)$, $(6, 1)$, and $(6, 5)$, under straight-line distance.
-# Code block 4: straight-line distance, the same as Logjam.d2
-d2(x1, x2) = length(x1) == length(x2) ?
-    sqrt(sum((x1 .- x2).^2)) :
-    error("Inputs not same length.")
+# Code block 4: the minisum location, under Logjam's d2
 P = [1.0 1.0; 6.0 1.0; 6.0 5.0]     # three EFs, one per row
 w = [1.0, 1.0, 1.0]                 # equal weights
 Xᵒ = minisum(w, P, d2)              # the minisum location

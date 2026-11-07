@@ -224,7 +224,7 @@ function dijkstra(W, s)
         for j in 1:n
             if !S[j] && (i == 0 || d[j] < d[i])
             # i == 0 means that no unlabeled node has been found yet in
-            # this pass, so the first one met becomes the candidate, and
+            # this pass, so the first one seen becomes the candidate, and
             # each later one replaces it only if its distance is smaller.
                 i = j
             end
@@ -634,6 +634,11 @@ shift(N, dx, dy) = DataFrame(IDX = N.IDX, LON = N.LON .+ dx / cosd(36),
 fig = Figure(size = (687, 580))
 ax = Axis(fig[1, 1]; aspect = DataAspect())
 hidedecorations!(ax); hidespines!(ax)
+# A panel's caption, hung centered beneath the panel: lon its middle,
+# lat just below its lowest point
+under!(lon, lat, s) = text!(ax, xy(lon, lat)...; text = s,
+                            fontsize = 14, align = (:center, :top))
+mid(v) = (minimum(v) + maximum(v)) / 2
 citynet!(ax, N7, L7;
          lab = Dict((1, 3) => (-1, 0.5), (3, 4) => (-1, 0.62),
                     (3, 6) => (-1, 0.5), (2, 5) => (-1, 0.5),
@@ -641,8 +646,8 @@ citynet!(ax, N7, L7;
 (x0, y0), (x1, y1) = xy(R7[1, 1], R7[1, 2]), xy(R7[2, 1], R7[2, 2])
 lines!(ax, [x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0]; color = supc,
        linestyle = :dash, linewidth = 1.8)
-text!(ax, xy(-80.50, 36.62)...; text = "(a) Network", fontsize = 14,
-      align = (:left, :center))
+under!((R7[1, 1] + maximum(N7.LON)) / 2, R7[1, 2] - 0.05,
+       "(a) Network")                    # under the rectangle
 
 # Each subgraph is derived from (a), so an arrow runs from (a) to each
 dyb, dxc = -0.85, 1.55            # where the two subgraphs are put
@@ -660,14 +665,11 @@ scatter!(ax, [x5], [y5]; marker = :star5, markersize = 36,
 citynet!(ax, a2, aL;
          lab = Dict((1, 3) => (-1, 0.5), (3, 4) => (-1, 0.62),
                     (3, 5) => (-1, 0.5)))
-text!(ax, xy(-79.55, 35.39)...; text = "(b) Arcs < 35", fontsize = 14,
-      align = (:center, :center))
+under!(mid(a2.LON), minimum(a2.LAT) - 0.07, "(b) Arcs < 35")
 
 c3 = shift(cN, dxc, 0.2)                 # (c) nodes in the rectangle
 citynet!(ax, c3, cL; lab = Dict((1, 2) => (1, 0.5)))
-text!(ax, xy(-80.16 + dxc / cosd(36), 36.45)...;
-      text = "(c) Nodes in rectangle", fontsize = 14,
-      align = (:center, :center))
+under!(mid(c3.LON), minimum(c3.LAT) - 0.07, "(c) Nodes in rectangle")
 fig
 # Code block 40: six new nodes, connected to the seven-city network
 x1 = [-79.990, -80.308, -79.629, -79.899, -79.554, -79.143]  # lon

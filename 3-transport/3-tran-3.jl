@@ -476,11 +476,14 @@ fig = Figure(size = (687, 420))
 for (i, vi) in enumerate((25_000, 85_000))
     axv = Axis(fig[1, i]; xlabel = "Shipment size (ton)",
                ylabel = i == 1 ? "\$ per year" : "",
-               title = "($('a' + i - 1)) \$$(commafmt(vi)) per ton",
-               titlesize = 16, xlabelsize = 15, ylabelsize = 15,
+               xlabelsize = 15, ylabelsize = 15,
                xticklabelsize = 13, yticklabelsize = 13)
     costcurves!(axv, vi)
+    Label(fig[2, i], "($('a' + i - 1)) \$$(commafmt(vi)) per ton";
+          fontsize = 16, tellwidth = false)     # caption, below its panel
 end
+rowsize!(fig.layout, 2, Fixed(22))
+rowgap!(fig.layout, 4)
 fig
 
 ## Model: Minimum-TLC shipment size
