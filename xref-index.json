@@ -3562,5 +3562,206 @@
    "label": "Ex. 10",
    "word": "Ex."
   }
+ },
+ "6.1": {
+  "eq-tlc": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-ic-roles": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-tlc-parts": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-h-parts": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-little": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-tlc-tl": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-q-truck": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-tlc-eoq": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-eoq": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-profit": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-median": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-prefill-cost": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-tp": {
+   "label": "Eq. 13",
+   "word": "Eq."
+  },
+  "eq-l1l2": {
+   "label": "Eq. 14",
+   "word": "Eq."
+  },
+  "eq-tp-orders": {
+   "label": "Eq. 15",
+   "word": "Eq."
+  },
+  "fig-harris": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-prefill": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-prefill-time": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-bakery-demand": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-bakery-profit": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "fig-bakery-orders": {
+   "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "tbl-roles": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-procedures": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "mdl-eoq": {
+   "label": "Model 1",
+   "word": "Model",
+   "name": "Economic order quantity"
+  },
+  "mdl-safety1": {
+   "label": "Model 2",
+   "word": "Model",
+   "name": "One-time safety stock"
+  },
+  "mdl-safety1-orders": {
+   "label": "Model 3",
+   "word": "Model",
+   "name": "One-time safety stock with orders"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-4-a": {
+   "label": "Ex. 4(a)",
+   "word": "Ex."
+  },
+  "example-4-b": {
+   "label": "Ex. 4(b)",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-5-a": {
+   "label": "Ex. 5(a)",
+   "word": "Ex."
+  },
+  "example-5-b": {
+   "label": "Ex. 5(b)",
+   "word": "Ex."
+  },
+  "example-5-c": {
+   "label": "Ex. 5(c)",
+   "word": "Ex."
+  },
+  "example-5-d": {
+   "label": "Ex. 5(d)",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-6-a": {
+   "label": "Ex. 6(a)",
+   "word": "Ex."
+  },
+  "example-6-b": {
+   "label": "Ex. 6(b)",
+   "word": "Ex."
+  },
+  "example-6-c": {
+   "label": "Ex. 6(c)",
+   "word": "Ex."
+  },
+  "example-6-d": {
+   "label": "Ex. 6(d)",
+   "word": "Ex."
+  },
+  "example-6-e": {
+   "label": "Ex. 6(e)",
+   "word": "Ex."
+  },
+  "example-6-f": {
+   "label": "Ex. 6(f)",
+   "word": "Ex."
+  },
+  "example-6-g": {
+   "label": "Ex. 6(g)",
+   "word": "Ex."
+  }
  }
 }

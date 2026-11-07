@@ -167,7 +167,7 @@ units = ud .* nc ./ sum(nc)          # units/yr by ZIP
 fz = units .* uwt                    # ton/yr by ZIP
 z = uszcta3()
 idx = [findfirst(==(zi), z.ZCTA3) for zi in zip]
-Pz = hcat(z.LON[idx], z.LAT[idx])    # ZIP centroids
+Pz = hcat(z.LON[idx], z.LAT[idx]);   # ZIP centroids
 # Code block 14: the cost of serving each ZIP from each candidate site
 rton = 0.25                          # $/ton-mi, given
 g = 1.2                              # road circuity, lecture 2.2

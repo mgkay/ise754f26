@@ -450,7 +450,7 @@ ud, uwt = 12e6, 15 / 2000              # units/yr in total, ton/unit
 fz = ud .* ncust ./ sum(ncust) .* uwt  # ton/yr by ZIP
 zc = uszcta3()
 iz = [findfirst(==(zi), zc.ZCTA3) for zi in zip]
-Pz = hcat(zc.LON[iz], zc.LAT[iz])      # ZIP centroids
+Pz = hcat(zc.LON[iz], zc.LAT[iz]);     # ZIP centroids
 # Code block 20: the distance the unadjusted model was giving away
 az = zc.ALAND[iz]               # mi^2 of land in each ZIP
 Dz = 1.2 .* dists(Pz, Pz, :mi)  # circuity 1.2, as in lecture 2.4

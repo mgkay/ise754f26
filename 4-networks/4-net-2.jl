@@ -1081,7 +1081,9 @@ j = [2, 3, 4, 5, 5, 5]
 c = [2, 3, 4, 5, 1, 3]
 s = [6, 2, 0, 0, -8]
 A = list2incid(i, j, length(s))
-Matrix([c' 0; A s])
+prt([c' NaN; A s]; rows = ["Cost"; string.(1:length(s))],
+    cols = [["($a,$b)" for (a, b) in zip(i, j)]; "Supply"],
+    row_title = "Node")
 
 # Example 6: Small networks as flows
 ## Example 6(a): Ex. 4's transportation problem
@@ -1114,14 +1116,16 @@ j = [2, 3, 3, 4, 4, 5, 5, 6, 6]
 c = [4, 2, 1, 5, 8, 10, 2, 6, 3]
 s = [1, 0, 0, 0, 0, -1]
 A = list2incid(i, j, length(s))
-Matrix([c' 0; A s])
+prt([c' NaN; A s]; rows = ["Cost"; string.(1:length(s))],
+    cols = [["($a,$b)" for (a, b) in zip(i, j)]; "Supply"],
+    row_title = "Node")
 # Code block 54: Ex. 6(b)'s network as a flow, drawn with Code block 50
 # The nodes where Lecture 4.1 draws them, and each cost on the side of
 # its arc where Lecture 4.1 puts the arc's length
 XY6 = [(0.0, 0.0), (1.0, 0.58), (1.0, -0.58), (2.0, 0.58),
        (2.0, -0.58), (3.0, 0.0)]
 fig = drawnet(XY6, i, j, string.(c), s; showzero = true, w = 440,
-              h = 230, lim = ((-0.6, 3.6), (-0.95, 0.95)),
+              h = 230, lim = ((-0.6, 3.6), (-1.0, 0.95)),
               side = [1, -1, -1, 1, 1, 1, -1, 1, -1])
 # The lower bound on arc (2,3), on the side of it clear of its cost
 text!(content(fig[1, 1]), 1.07, 0.24; text = L"l = 1", color = ink,
@@ -1135,7 +1139,8 @@ idx = findfirst(==((2, 3)), collect(zip(i, j)))   # Arc (2,3)'s index
 l = zeros(length(i))
 l[idx] = 1
 u = fill(Inf, length(i))
-[u l]
+prt([u l]; rows = ["($a,$b)" for (a, b) in zip(i, j)],
+    cols = ["u", "l"], row_title = "Arc")
 # Code block 57: the shortest path through arc (2,3)
 TCᵒ, xᵒ = mcnf(A, c, s; u = u, l = l)
 @show TCᵒ
