@@ -6841,10 +6841,10 @@ y⁰ = [0 0; 0 0; 0 sum(d[[1 2], 2])] = [0 0; 0 0; 0 11]</code></pre>
 <span id="cb50-4"><a href="#cb50-4"></a><span class="pp">@show</span> <span class="fu">round</span>(<span class="dt">Int</span>, secs);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>r5.TC = 149745.64188911687
-round(Int, secs) = 56</code></pre>
+round(Int, secs) = 57</code></pre>
 </div>
 </div>
-<p>Here the solve takes about a minute, 56 seconds on this page’s render. Code block 30 finds the plan’s production, inventory and switchover costs as Code block 22 does for Ex. 3, and Code block 31 adds them and checks the total against the problem’s published solution:</p>
+<p>Here the solve takes about a minute, 57 seconds on this page’s render. Code block 30 finds the plan’s production, inventory and switchover costs as Code block 22 does for Ex. 3, and Code block 31 adds them and checks the total against the problem’s published solution:</p>
 <div id="80" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Code block 30: the production, inventory and switchover costs</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a><span class="co"># Reshaped cᵖ broadcast for multiplication with r5.x</span></span>

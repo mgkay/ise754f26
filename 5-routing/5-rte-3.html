@@ -6466,7 +6466,7 @@ Table 4: The route of Ex. 4, its stops in order: the travel time into each and 
 <div class="statement">
 <p>Determine the earliest finish, the latest start and the schedule by the three scans.</p>
 </div>
-<p>The time-window constraint takes a little more work than capacity, but computationally it is not very difficult. The route has a depot at node 1 and three customers, with travel times of 1, 2, 1 and 1 hours on its legs. There is assumed to be no time for loading or unloading the vehicle, which could be added but would only make the example more complicated, and the vehicle’s capacity is infinite, so there is no limit on it. The constraints are the time windows. Each customer has one: delivery to customer 2 can occur any time between 8 and 11, to customer 3 between 12 and 2 p.m., and to customer 4 between 3 and 6 p.m. The route is already set up to be close to feasible: if one window came before another in the direction the route travels, it would be known immediately to be violated. The depot itself has two windows, a departure window, any time between 6 a.m. and 6 p.m., and a return window, between 6 p.m. and midnight. In practice the two do not overlap because of the distribution center itself: its loading docks are set up for receiving or for shipping out product, and there are many practical reasons not to mix the two. The question is the total time the route requires, and the objective is to minimize it. Its lower bound is 5 hours: with zero loading and unloading time, the lower bound is just the sum of the travel times, and even with no time windows the route would take at least 5 hours. With the windows, the question is the minimum time in which every customer can be served without violating a window, which may require the vehicle to pause when it arrives early until the window starts, as a truck waiting outside the customer’s location: arriving at 7 a.m. for a window that opens at 8 means waiting an hour. The route is solved by a series of scans. The first is a forward scan, which starts at the beginning of the departure window, 6 a.m., to give the best chance of realizing the minimum time. The vehicle arrives at customer 2 at 7 a.m. and, because of its window, waits one hour; with zero unloading time, at 8 it heads for customer 3, which takes two hours, arriving at 10 a.m., where the window starts at 12, so it waits two hours. At 12 it travels an hour to customer 4, arriving at 1 p.m., and waits two hours until 3; one hour back to the depot, it arrives at 4 and has to wait until 6 p.m. Were there a loading or unloading time, at a customer the unloading usually has to be within the window, while at the distribution center, for a peddling route, the loading can usually be done before the window starts, and unloading likewise outside it. What the first forward scan establishes is that the earliest the route can finish is 6 p.m., and that is not going to change. Starting at 6 a.m. and finishing at 6 p.m., though, the route spends ten hours on the road, which is not as short as it could be. Since it has to finish by 6 p.m., the latest it can start is found by going in the backward direction. Reversing from 18, one hour back to customer 4 gives 17, within its window, so there is no waiting at that customer, which already saves time. One hour back to customer 3 gives 16, against a window that closes at 14, a two-hour wait; two hours back to customer 2 gives 12, against its close of 11, a one-hour delay; and one hour back to the depot gives 10. That is the latest start.</p>
+<p>The time-window constraint takes a little more work than capacity, but computationally it is not very difficult. The route has a depot at node 1 and three customers, with travel times of 1, 2, 1 and 1 hours on its legs. There is assumed to be no time for loading or unloading the vehicle, which could be added but would only make the example more complicated, and the vehicle’s capacity is infinite, so there is no limit on it. The constraints are the time windows. Each customer has one: delivery to customer 2 can occur any time between 8 and 11, to customer 3 between 12 and 2 p.m., and to customer 4 between 3 and 6 p.m. The route is already set up to be close to feasible: if one window came before another in the direction the route travels, it would be known immediately to be violated. The depot itself has two windows, a departure window, any time between 6 a.m. and 6 p.m., and a return window, between 6 p.m. and midnight. In practice the two do not overlap because of the distribution center itself: its loading docks are set up for receiving or for shipping out product, and there are many practical reasons not to mix the two. The question is the total time the route requires, and the objective is to minimize it. Its lower bound is 5 hours: with zero loading and unloading time, the lower bound is just the sum of the travel times, and even with no time windows the route would take at least 5 hours. With the windows, the question is the minimum time in which every customer can be served without violating a window, which may require the vehicle to pause when it arrives early until the window starts, as a truck waiting outside the customer’s location: arriving at 7 a.m. for a window that opens at 8 means waiting an hour. The route is solved by a series of scans. The first is a forward scan, which starts at the beginning of the departure window, 6 a.m., to give the best chance of realizing the minimum time. The vehicle arrives at customer 2 at 7 a.m. and, because of its window, waits one hour; with zero unloading time, at 8 it heads for customer 3, which takes two hours, arriving at 10 a.m., where the window starts at 12, so it waits two hours. At 12 it travels an hour to customer 4, arriving at 1 p.m., and waits two hours until 3; one hour back to the depot, it arrives at 4 and has to wait until 6 p.m. Were there a loading or unloading time, at a customer the unloading usually has to be within the window, while at the distribution center, for a peddling route, the loading can usually be done before the window starts, and unloading likewise outside it. What the first forward scan establishes is that the earliest the route can finish is 6 p.m., and that is not going to change. Starting at 6 a.m. and finishing at 6 p.m., though, the route spends twelve hours on the road, which is not as short as it could be. Since it has to finish by 6 p.m., the latest it can start is found by going in the backward direction. Reversing from 18, one hour back to customer 4 gives 17, within its window, so there is no waiting at that customer, which already saves time. One hour back to customer 3 gives 16, against a window that closes at 14, a two-hour wait; two hours back to customer 2 gives 12, against its close of 11, a one-hour delay; and one hour back to the depot gives 10. That is the latest start.</p>
 <!-- THE SCAN FIGURE, E6b ruled 2026-11-03 ("Split into three frames, one per scan"),
      with the starting state as frame (a) (REG-60, XMP-12), a small departure from the
      11/01 preview to show him. Slide 254's layout and its "7 - 8" reach-then-start
@@ -6553,6 +6553,39 @@ Table 5: Ex. 4 by hand, the three scans with no unloading time (<span style="wh
 </table>
 </div>
 </figure>
+</div>
+<p>where</p>
+<div class="deflist deflist-cols">
+<dl>
+<dt><span class="math inline">t_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">travel time into stop <span class="math inline">k</span> (h)</span>
+</dd>
+<dt><span class="math inline">\ell_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">opening of the window of stop <span class="math inline">k</span> (h of the day)</span>
+</dd>
+<dt><span class="math inline">h_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">closing of the window of stop <span class="math inline">k</span> (h of the day)</span>
+</dd>
+<dt><span class="math inline">u_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">unloading time at stop <span class="math inline">k</span> (h)</span>
+</dd>
+<dt><span class="math inline">\mathrm{a}_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">earliest stop <span class="math inline">k</span> can be served, by the forward scan</span>
+</dd>
+<dt><span class="math inline">\mathrm{b}_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">latest stop <span class="math inline">k</span> can be served, by the reverse scan</span>
+</dd>
+<dt><span class="math inline">\mathrm{c}_k</span></dt>
+<dd>
+<span class="deflist-eq">=</span> <span class="deflist-text">time stop <span class="math inline">k</span> is served in the schedule, by the forward scan again.</span>
+</dd>
+</dl>
 </div>
 <!-- SLIDE 254'S SECOND LINE, landed clean, now set on two lines so its number clears it
      at 1024 px (check_equation_fit EQFIT-01, 17 px of overlap); the words and numbers are
@@ -8025,12 +8058,12 @@ t_s\left(\sqrt{m}\right)^2 + \frac{\varphi\sqrt{a}}{v}\sqrt{m}
 m &amp;= 17.564^2 = 308.51
 \end{aligned}
 </span></p>
-<p>A fractional delivery cannot be made, so <span style="white-space: nowrap"><span class="math inline">m_{\max} = \lfloor 308.51 \rfloor = 308</span>,</span> and <span class="math inline">500 - 308 = 192</span> deliveries have to be outsourced; the rounded constants, 0.75 and 0.9, give 309 and 191. With seven trucks the right-hand side is <span style="white-space: nowrap"><span class="math inline">7(7) - 0.752(6)\sqrt{200}/25 = 46.448</span>,</span> so <span class="math inline">m = 366.18</span> and 134 are outsourced; with eight it is <span style="white-space: nowrap"><span class="math inline">53.022</span>,</span> <span style="white-space: nowrap"><span class="math inline">m = 424.40</span>,</span> and 76 are. Solving <a href="#eq-time-feas" class="quarto-xref">Eq. 10</a> for <span class="math inline">N</span> instead, with <span style="white-space: nowrap"><span class="math inline">m = 500</span>,</span></p>
+<p>A fractional delivery cannot be made, so <span style="white-space: nowrap"><span class="math inline">m_{\max} = \lfloor 308.51 \rfloor = 308</span>,</span> and <span class="math inline">500 - 308 = 192</span> deliveries have to be outsourced; the rounded constants, 0.75 and 0.9, give 309 and 191. With seven trucks the right-hand side is <span style="white-space: nowrap"><span class="math inline">7(7) - 0.752(6)\sqrt{200}/25 = 46.448</span>,</span> so <span class="math inline">m = 366.19</span> and 134 are outsourced; with eight it is <span style="white-space: nowrap"><span class="math inline">53.022</span>,</span> <span style="white-space: nowrap"><span class="math inline">m = 424.41</span>,</span> and 76 are. Solving <a href="#eq-time-feas" class="quarto-xref">Eq. 10</a> for <span class="math inline">N</span> instead, with <span style="white-space: nowrap"><span class="math inline">m = 500</span>,</span></p>
 <p><span class="math display">
 \begin{aligned}
 N &amp;\ge \frac{\varphi\sqrt{ma}/v + m t_s - \kappa\sqrt{a}/v}{t_{\max} - \kappa\sqrt{a}/v} \\
   &amp;= \frac{0.908\sqrt{500(200)}/25 + 500(0.1) - 0.752\sqrt{200}/25}{7 - 0.752\sqrt{200}/25} \\
-  &amp;= \frac{11.486 + 50 - 0.425}{7 - 0.425} = \frac{61.060}{6.575} = 9.29
+  &amp;= \frac{11.485 + 50 - 0.425}{7 - 0.425} = \frac{61.060}{6.575} = 9.29
 \end{aligned}
 </span></p>
 <p>so ten trucks would need no outsourcing.</p>

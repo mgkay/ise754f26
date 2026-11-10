@@ -3584,44 +3584,60 @@
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-tlc-tl": {
+  "eq-turns": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-q-truck": {
+  "eq-tlc-tl": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-tlc-eoq": {
+  "eq-q-truck": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-eoq": {
+  "eq-tlc-eoq": {
    "label": "Eq. 9",
    "word": "Eq."
   },
-  "eq-profit": {
+  "eq-eoq": {
    "label": "Eq. 10",
    "word": "Eq."
   },
-  "eq-median": {
+  "eq-profit": {
    "label": "Eq. 11",
    "word": "Eq."
   },
-  "eq-prefill-cost": {
+  "eq-median": {
    "label": "Eq. 12",
    "word": "Eq."
   },
-  "eq-tp": {
+  "eq-overshort": {
    "label": "Eq. 13",
    "word": "Eq."
   },
-  "eq-l1l2": {
+  "eq-prefill-cost": {
    "label": "Eq. 14",
    "word": "Eq."
   },
-  "eq-tp-orders": {
+  "eq-tp": {
    "label": "Eq. 15",
+   "word": "Eq."
+  },
+  "eq-perfect": {
+   "label": "Eq. 16",
+   "word": "Eq."
+  },
+  "eq-l1l2": {
+   "label": "Eq. 17",
+   "word": "Eq."
+  },
+  "eq-production-rule": {
+   "label": "Eq. 18",
+   "word": "Eq."
+  },
+  "eq-tp-reg": {
+   "label": "Eq. 19",
    "word": "Eq."
   },
   "fig-harris": {
@@ -3644,8 +3660,24 @@
    "label": "Fig. 5",
    "word": "Fig."
   },
-  "fig-bakery-orders": {
+  "fig-bakery-corr-orders": {
    "label": "Fig. 6",
+   "word": "Fig."
+  },
+  "fig-bakery-orders": {
+   "label": "Fig. 7",
+   "word": "Fig."
+  },
+  "fig-bakery-corr-visitors": {
+   "label": "Fig. 8",
+   "word": "Fig."
+  },
+  "fig-transit-perms": {
+   "label": "Fig. 9",
+   "word": "Fig."
+  },
+  "fig-transit-split": {
+   "label": "Fig. 10",
    "word": "Fig."
   },
   "tbl-roles": {
@@ -3666,10 +3698,10 @@
    "word": "Model",
    "name": "One-time safety stock"
   },
-  "mdl-safety1-orders": {
+  "mdl-safety1-reg": {
    "label": "Model 3",
    "word": "Model",
-   "name": "One-time safety stock with orders"
+   "name": "One-time safety stock by regression"
   },
   "example-1": {
    "label": "Ex. 1",
@@ -3723,6 +3755,10 @@
    "label": "Ex. 5(b)",
    "word": "Ex."
   },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
   "example-5-c": {
    "label": "Ex. 5(c)",
    "word": "Ex."
@@ -3761,6 +3797,26 @@
   },
   "example-6-g": {
    "label": "Ex. 6(g)",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  },
+  "example-7-a": {
+   "label": "Ex. 7(a)",
+   "word": "Ex."
+  },
+  "example-7-b": {
+   "label": "Ex. 7(b)",
+   "word": "Ex."
+  },
+  "example-7-c": {
+   "label": "Ex. 7(c)",
+   "word": "Ex."
+  },
+  "example-7-d": {
+   "label": "Ex. 7(d)",
    "word": "Ex."
   }
  }
