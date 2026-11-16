@@ -401,9 +401,9 @@ end
 # Determine the sites and the total cost for the five cities of Lecture
 # 2.4, which are Asheville, Statesville, Greensboro, Raleigh and
 # Wilmington, at mile markers 50, 150, 220, 295 and 420 along I-40, each
-# with unit demand and costing 150, 200, 150, 150 and 200 to establish,
-# and determine whether the answer its heuristics reached is the best
-# one.
+# with unit demand and a cost of 150, 200, 150, 150 and 200 to
+# establish, and determine whether the answer its heuristics reached is
+# the best one.
 # Code block 13: the five I-40 cities of lecture 2.4, through the model
 P = [50 150 220 295 420]'      # mile markers along I-40
 r, f = 1, 1                    # rate and flow, both unit here
@@ -645,7 +645,7 @@ fig
 # Determine the smallest collection of the five subsets whose union is
 # all six objects, where the subsets are $M_1 = \{1,2\}$, $M_2 =
 # \{1,4,5\}$, $M_3 = \{3,5\}$, $M_4 = \{2,3,6\}$ and $M_5 = \{6\}$, each
-# costing the same.
+# at the same cost.
 # Code block 20: the five subsets as an object-by-subset matrix
 m, n = 6, 5
 A = zeros(m, n)       # A = objects x subsets

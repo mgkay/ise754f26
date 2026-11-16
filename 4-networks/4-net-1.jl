@@ -357,8 +357,8 @@ fig
 # Code block 15: the labels after each step, node by node
 println("| Step | Labeled | ",
 # The block prints a Markdown table, one println for each row, and the
-# page renders what it prints as a table, since the cell's output is
-# marked asis.
+# page renders what it prints as a table, since the cell's output is set
+# to asis.
         join(["Node $v" for v in 1:n6], " | "), " |")
 println("|:-:|:-:|", repeat(":-:|", n6))
 for (k, st) in enumerate(steps)

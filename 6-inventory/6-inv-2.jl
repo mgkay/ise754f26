@@ -591,7 +591,7 @@ prt([d fill(1/13, 13) share; NaN mean(d) mean(many)]; fracdig = 4,
 # Example 4: Lee's new recipe
 ## Example 4(a): The best base stock level
 # Determine the best base stock level, simulated on the 13 days
-# bootstrapped, and whether the new recipe earns more than the old.
+# bootstrapped, and whether the new recipe makes more than the old.
 # Code block 20: Lee's days bootstrapped into a schedule of demands
 N = 2_000                         # days simulated
 rng = Xoshiro(1234)               # its own stream of random numbers
