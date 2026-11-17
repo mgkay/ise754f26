@@ -4195,67 +4195,67 @@
   }
  },
  "6.3": {
-  "eq-yield": {
+  "eq-srv-tp": {
    "label": "Eq. 1",
    "word": "Eq."
   },
-  "eq-srv-tp": {
+  "eq-gprime": {
    "label": "Eq. 2",
    "word": "Eq."
   },
-  "eq-gprime": {
+  "eq-g": {
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-g": {
+  "eq-caprecovery": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-caprecovery": {
+  "eq-k": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-k": {
+  "eq-little": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-ct": {
+  "eq-ctq-rec": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-tpub": {
+  "eq-qx": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-mm1": {
+  "eq-qx-tail": {
    "label": "Eq. 9",
    "word": "Eq."
   },
-  "eq-restar": {
+  "eq-th-rec": {
    "label": "Eq. 10",
    "word": "Eq."
   },
-  "eq-little": {
+  "eq-tpub": {
    "label": "Eq. 11",
    "word": "Eq."
   },
-  "eq-ctq-rec": {
+  "eq-tc-rec": {
    "label": "Eq. 12",
    "word": "Eq."
   },
-  "eq-qx": {
+  "eq-yield": {
    "label": "Eq. 13",
    "word": "Eq."
   },
-  "eq-qx-tail": {
+  "eq-ct": {
    "label": "Eq. 14",
    "word": "Eq."
   },
-  "eq-th-rec": {
+  "eq-mm1": {
    "label": "Eq. 15",
    "word": "Eq."
   },
-  "eq-tc-rec": {
+  "eq-restar": {
    "label": "Eq. 16",
    "word": "Eq."
   },
@@ -4299,7 +4299,7 @@
    "label": "Fig. 3",
    "word": "Fig."
   },
-  "fig-cumulative": {
+  "fig-workstation": {
    "label": "Fig. 4",
    "word": "Fig."
   },
@@ -4317,6 +4317,10 @@
   },
   "tbl-ct-rule": {
    "label": "Table 3",
+   "word": "Table"
+  },
+  "tbl-recursion": {
+   "label": "Table 4",
    "word": "Table"
   },
   "mdl-srv": {
@@ -4370,14 +4374,6 @@
    "label": "Ex. 3(b)",
    "word": "Ex."
   },
-  "example-3-c": {
-   "label": "Ex. 3(c)",
-   "word": "Ex."
-  },
-  "example-3-d": {
-   "label": "Ex. 3(d)",
-   "word": "Ex."
-  },
   "example-4": {
    "label": "Ex. 4",
    "word": "Ex."
@@ -4390,6 +4386,10 @@
    "label": "Ex. 4(b)",
    "word": "Ex."
   },
+  "example-4-c": {
+   "label": "Ex. 4(c)",
+   "word": "Ex."
+  },
   "example-5": {
    "label": "Ex. 5",
    "word": "Ex."
@@ -4400,10 +4400,6 @@
   },
   "example-5-b": {
    "label": "Ex. 5(b)",
-   "word": "Ex."
-  },
-  "example-5-c": {
-   "label": "Ex. 5(c)",
    "word": "Ex."
   },
   "example-6": {
@@ -4442,10 +4438,6 @@
    "label": "Ex. 7(c)",
    "word": "Ex."
   },
-  "example-7-d": {
-   "label": "Ex. 7(d)",
-   "word": "Ex."
-  },
   "example-8": {
    "label": "Ex. 8",
    "word": "Ex."
@@ -4470,20 +4462,8 @@
    "label": "Ex. 9(b)",
    "word": "Ex."
   },
-  "example-10": {
-   "label": "Ex. 10",
-   "word": "Ex."
-  },
-  "example-10-a": {
-   "label": "Ex. 10(a)",
-   "word": "Ex."
-  },
-  "example-10-b": {
-   "label": "Ex. 10(b)",
-   "word": "Ex."
-  },
-  "example-10-c": {
-   "label": "Ex. 10(c)",
+  "example-9-c": {
+   "label": "Ex. 9(c)",
    "word": "Ex."
   }
  }
