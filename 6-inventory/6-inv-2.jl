@@ -367,13 +367,13 @@ TPᵒbosim, qmaxᵒbosim = maximum((simTP(q; backorder = true), q)
 ## Example 2(b): In code
 # Compute the same probabilities in Julia and compare them with Ex.
 # 2(a).
-# Code block 9: F(k; μ), the probability of k or fewer, Poisson mean μ
-function poissoncdf(k, μ)
-    pj = exp(-μ)                  # Pr(D_L = 0)
-    F = pj                        # F(0; μ)
-    for j in 1:k
-        pj *= μ/j                 # Pr(D_L = j), from Pr(D_L = j - 1)
-        F += pj                   # F(j; μ), from F(j - 1; μ)
+# Code block 9: F(j; μ), the probability of j or fewer, Poisson mean μ
+function poissoncdf(j, μ)
+    pℓ = exp(-μ)                  # Pr(D_L = 0)
+    F = pℓ                        # F(0; μ)
+    for ℓ in 1:j
+        pℓ *= μ/ℓ                 # Pr(D_L = ℓ), from Pr(D_L = ℓ - 1)
+        F += pℓ                   # F(ℓ; μ), from F(ℓ - 1; μ)
     end
     return F
 end
@@ -381,27 +381,27 @@ end
 ra = 6                          # units/period, demand arrival rate
 te = 1/8                        # period, lead time
 μ = ra*te                       # units, mean demand during a lead time
-k = 0:3                         # demands during a lead time
+j = 0:3                         # demands during a lead time
 
-pk = exp(-μ) .* μ.^k ./ factorial.(k)  # Pr(D_L = k)
-F = poissoncdf.(k, μ)                  # F(k; μ)
-prt([pk F]; rows = k, cols = ["pk", "F"], row_title = "k",
+pj = exp(-μ) .* μ.^j ./ factorial.(j)  # Pr(D_L = j)
+F = poissoncdf.(j, μ)                  # F(j; μ)
+prt([pj F]; rows = j, cols = ["pj", "F"], row_title = "j",
     fracdig = 5, allfrac = 5)
-# Code block 11: Pr(D_L = k) and F(k; μ) for up to six demands
+# Code block 11: Pr(D_L = j) and F(j; μ) for up to six demands
 cdfc = colorant"#1e8a3c"                 # a cumulative probability
-kk = 0:6                                 # demands during a lead time
-pk = exp(-μ) .* μ.^kk ./ factorial.(kk)  # Pr(D_L = k)
+jj = 0:6                                 # demands during a lead time
+pj = exp(-μ) .* μ.^jj ./ factorial.(jj)  # Pr(D_L = j)
 fig = Figure(size = (600, 300))
-ax = Axis(fig[1, 1]; xlabel = L"\text{Demands during a lead time, } k",
+ax = Axis(fig[1, 1]; xlabel = L"\text{Demands during a lead time, } j",
           ylabel = "Probability", xlabelsize = 15, ylabelsize = 15,
-          xticklabelsize = 13, yticklabelsize = 13, xticks = kk)
-barplot!(ax, kk, pk; color = bluec, label = L"\Pr(D_L = k)")
-scatterlines!(ax, kk, poissoncdf.(kk, μ); color = cdfc,
-              markersize = 8, label = L"F(k;\,\mu)")
-lbl = string.(round.(pk[1:4], digits = 3))
-text!(ax, kk[1:3], pk[1:3]; text = lbl[1:3], color = :white,
+          xticklabelsize = 13, yticklabelsize = 13, xticks = jj)
+barplot!(ax, jj, pj; color = bluec, label = L"\Pr(D_L = j)")
+scatterlines!(ax, jj, poissoncdf.(jj, μ); color = cdfc,
+              markersize = 8, label = L"F(j;\,\mu)")
+lbl = string.(round.(pj[1:4], digits = 3))
+text!(ax, jj[1:3], pj[1:3]; text = lbl[1:3], color = :white,
       align = (:center, :top), offset = (0, -4), fontsize = 13)
-text!(ax, kk[4], pk[4]; text = lbl[4], align = (:center, :bottom),
+text!(ax, jj[4], pj[4]; text = lbl[4], align = (:center, :bottom),
       offset = (0, 3), fontsize = 13)
 ylims!(ax, 0, 1.12)
 axislegend(ax; position = :rc, labelsize = 13)
@@ -485,7 +485,7 @@ fig
 pi0(qmax, μ) = qmax == 0 ? 1.0 : 1 - poissoncdf(qmax - 1, μ)
 # With $q_{\max} = 0$ nothing is ever on hand, so every demand is out of
 # stock and $\pi_0 = 1$, set directly since $F(-1; \mu)$ is not defined.
-qbar(qmax, μ) = sum(poissoncdf(k, μ) for k in 0:qmax-1; init = 0.0)
+qbar(qmax, μ) = sum(poissoncdf(j, μ) for j in 0:qmax-1; init = 0.0)
 TP(qmax; h = h, ra = ra, μ = μ) =
 # The carrying rate, arrival rate and mean demand during a lead time are
 # keyword arguments, each the example's value unless another is given, as
@@ -498,11 +498,12 @@ maxTP(qmaxs; h = h, ra = ra, μ = μ) =
     maximum((TP(q; h, ra, μ), q) for q in qmaxs)
 # Model: base stock with backorders, Poisson demand, constant lead time
 # Total profit with the delay discount on the fraction backordered
-TPbo(qmax; g = g) =
+TPbo(qmax; g = g, h = h, ra = ra, μ = μ) =
 # pi0 and qbar are those of @mdl-basestock's implementation for Poisson
 # demand, exact here, since every stockout is backordered. The delay
 # discount factor is a keyword argument, the example's unless another is
-# given, as Ex. 3(c) gives others.
+# given, as Ex. 3(c) gives others, and so are the carrying rate, arrival
+# rate and mean demand during a lead time, as in TP.
     (p - c)*(1 - pi0(qmax, μ)*g*te)*ra - c*h*qbar(qmax, μ)
 
 # Example 3: Base stock with Poisson demand
@@ -961,24 +962,29 @@ TPᵒrpbosim, qoᵒbosim, qminᵒbosim =
 ## Model: Reorder point with backorders
 # Model: reorder point with lost sales, Poisson demand, constant lead time
 # Fraction lost and average on hand, averaged over the q_o levels
-pi0rp(qo, qmin, μ) = sum(pi0(qmin + j, μ) for j in 1:qo)/qo
-# Base stock's measure at each level $q_{\min} + j$ the position passes
+pi0rp(qo, qmin, μ) = sum(pi0(qmin + ℓ, μ) for ℓ in 1:qo)/qo
+# Base stock's measure at each level $q_{\min} + \ell$ the position passes
 # through, averaged over the $q_o$ levels, @eq-rp-pi0; @eq-rp-qbar
 # likewise.
-qbarrp(qo, qmin, μ) = sum(qbar(qmin + j, μ) for j in 1:qo)/qo
-ro(qo, qmin) = (1 - pi0rp(qo, qmin, μ))*ra/qo
-TPrp(qo, qmin; co = co) = (p - c)*(1 - pi0rp(qo, qmin, μ))*ra -
-    c*h*qbarrp(qo, qmin, μ) - co*ro(qo, qmin)
+qbarrp(qo, qmin, μ) = sum(qbar(qmin + ℓ, μ) for ℓ in 1:qo)/qo
+ro(qo, qmin; ra = ra, μ = μ) = (1 - pi0rp(qo, qmin, μ))*ra/qo
+TPrp(qo, qmin; co = co, h = h, ra = ra, μ = μ) =
+# The fixed cost per order is a keyword argument, as are the carrying
+# rate, arrival rate and mean demand during a lead time, as in TP, each
+# the example's unless another is given.
+    (p - c)*(1 - pi0rp(qo, qmin, μ))*ra -
+    c*h*qbarrp(qo, qmin, μ) - co*ro(qo, qmin; ra, μ)
 maxTPrp(qos, qmins) =
 # Every pair of an order quantity and an order point is tried in turn, and
 # the one with the largest total profit is kept.
     maximum((TPrp(qo, qmin), qo, qmin) for qo in qos, qmin in qmins)
 # Model: reorder point with backorders, Poisson demand, constant lead time
 # Total profit with the delay discount on the fraction backordered
-TPrpbo(qo, qmin; co = co) =
+TPrpbo(qo, qmin; co = co, h = h, ra = ra, μ = μ) =
 # pi0rp and qbarrp are those of @mdl-reorder's implementation for Poisson
 # demand, exact here, since every stockout is backordered. Every demand is
-# sold in the end, so orders are placed at $r_a / q_o$ a period.
+# sold in the end, so orders are placed at $r_a / q_o$ a period. The
+# keyword arguments are those of TPrp.
     (p - c)*(1 - pi0rp(qo, qmin, μ)*g*te)*ra -
     c*h*qbarrp(qo, qmin, μ) - co*ra/qo
 
@@ -1169,7 +1175,7 @@ axislegend(ax; position = :rb, labelsize = 13)
 fig
 
 ## Example 8(d): Comparison in code
-# Compute the comparison of Ex. 8(a) to 7(c), and compare it with the
+# Compute the comparison of Ex. 8(a) to 8(c), and compare it with the
 # values by hand.
 # Code block 44: nine regional warehouses against one central warehouse
 TP9 = 9TPᵒ                        # $/period, nine times Ex. 3's best

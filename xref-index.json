@@ -4193,5 +4193,298 @@
    "label": "Ex. 10(c)",
    "word": "Ex."
   }
+ },
+ "6.3": {
+  "eq-yield": {
+   "label": "Eq. 1",
+   "word": "Eq."
+  },
+  "eq-srv-tp": {
+   "label": "Eq. 2",
+   "word": "Eq."
+  },
+  "eq-gprime": {
+   "label": "Eq. 3",
+   "word": "Eq."
+  },
+  "eq-g": {
+   "label": "Eq. 4",
+   "word": "Eq."
+  },
+  "eq-caprecovery": {
+   "label": "Eq. 5",
+   "word": "Eq."
+  },
+  "eq-k": {
+   "label": "Eq. 6",
+   "word": "Eq."
+  },
+  "eq-ct": {
+   "label": "Eq. 7",
+   "word": "Eq."
+  },
+  "eq-tpub": {
+   "label": "Eq. 8",
+   "word": "Eq."
+  },
+  "eq-mm1": {
+   "label": "Eq. 9",
+   "word": "Eq."
+  },
+  "eq-restar": {
+   "label": "Eq. 10",
+   "word": "Eq."
+  },
+  "eq-little": {
+   "label": "Eq. 11",
+   "word": "Eq."
+  },
+  "eq-ctq-rec": {
+   "label": "Eq. 12",
+   "word": "Eq."
+  },
+  "eq-qx": {
+   "label": "Eq. 13",
+   "word": "Eq."
+  },
+  "eq-qx-tail": {
+   "label": "Eq. 14",
+   "word": "Eq."
+  },
+  "eq-th-rec": {
+   "label": "Eq. 15",
+   "word": "Eq."
+  },
+  "eq-tc-rec": {
+   "label": "Eq. 16",
+   "word": "Eq."
+  },
+  "eq-mto-tp": {
+   "label": "Eq. 17",
+   "word": "Eq."
+  },
+  "eq-mts-tp": {
+   "label": "Eq. 18",
+   "word": "Eq."
+  },
+  "eq-h": {
+   "label": "Eq. 19",
+   "word": "Eq."
+  },
+  "eq-mts-mu": {
+   "label": "Eq. 20",
+   "word": "Eq."
+  },
+  "eq-mts-pi0": {
+   "label": "Eq. 21",
+   "word": "Eq."
+  },
+  "eq-mts-qbar": {
+   "label": "Eq. 22",
+   "word": "Eq."
+  },
+  "eq-poisson-cdf": {
+   "label": "Eq. 23",
+   "word": "Eq."
+  },
+  "fig-prod-system": {
+   "label": "Fig. 1",
+   "word": "Fig."
+  },
+  "fig-srv-tp": {
+   "label": "Fig. 2",
+   "word": "Fig."
+  },
+  "fig-peaks": {
+   "label": "Fig. 3",
+   "word": "Fig."
+  },
+  "fig-cumulative": {
+   "label": "Fig. 4",
+   "word": "Fig."
+  },
+  "fig-mts-tp": {
+   "label": "Fig. 5",
+   "word": "Fig."
+  },
+  "tbl-models": {
+   "label": "Table 1",
+   "word": "Table"
+  },
+  "tbl-buffer-cost": {
+   "label": "Table 2",
+   "word": "Table"
+  },
+  "tbl-ct-rule": {
+   "label": "Table 3",
+   "word": "Table"
+  },
+  "mdl-srv": {
+   "label": "Model 1",
+   "word": "Model",
+   "name": "Service system design"
+  },
+  "mdl-mto": {
+   "label": "Model 2",
+   "word": "Model",
+   "name": "Make-to-order design"
+  },
+  "mdl-mts": {
+   "label": "Model 3",
+   "word": "Model",
+   "name": "Make-to-stock design"
+  },
+  "example-1": {
+   "label": "Ex. 1",
+   "word": "Ex."
+  },
+  "example-1-a": {
+   "label": "Ex. 1(a)",
+   "word": "Ex."
+  },
+  "example-1-b": {
+   "label": "Ex. 1(b)",
+   "word": "Ex."
+  },
+  "example-2": {
+   "label": "Ex. 2",
+   "word": "Ex."
+  },
+  "example-2-a": {
+   "label": "Ex. 2(a)",
+   "word": "Ex."
+  },
+  "example-2-b": {
+   "label": "Ex. 2(b)",
+   "word": "Ex."
+  },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
+  "example-3-a": {
+   "label": "Ex. 3(a)",
+   "word": "Ex."
+  },
+  "example-3-b": {
+   "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
+   "word": "Ex."
+  },
+  "example-3-d": {
+   "label": "Ex. 3(d)",
+   "word": "Ex."
+  },
+  "example-4": {
+   "label": "Ex. 4",
+   "word": "Ex."
+  },
+  "example-4-a": {
+   "label": "Ex. 4(a)",
+   "word": "Ex."
+  },
+  "example-4-b": {
+   "label": "Ex. 4(b)",
+   "word": "Ex."
+  },
+  "example-5": {
+   "label": "Ex. 5",
+   "word": "Ex."
+  },
+  "example-5-a": {
+   "label": "Ex. 5(a)",
+   "word": "Ex."
+  },
+  "example-5-b": {
+   "label": "Ex. 5(b)",
+   "word": "Ex."
+  },
+  "example-5-c": {
+   "label": "Ex. 5(c)",
+   "word": "Ex."
+  },
+  "example-6": {
+   "label": "Ex. 6",
+   "word": "Ex."
+  },
+  "example-6-a": {
+   "label": "Ex. 6(a)",
+   "word": "Ex."
+  },
+  "example-6-b": {
+   "label": "Ex. 6(b)",
+   "word": "Ex."
+  },
+  "example-6-c": {
+   "label": "Ex. 6(c)",
+   "word": "Ex."
+  },
+  "example-6-d": {
+   "label": "Ex. 6(d)",
+   "word": "Ex."
+  },
+  "example-7": {
+   "label": "Ex. 7",
+   "word": "Ex."
+  },
+  "example-7-a": {
+   "label": "Ex. 7(a)",
+   "word": "Ex."
+  },
+  "example-7-b": {
+   "label": "Ex. 7(b)",
+   "word": "Ex."
+  },
+  "example-7-c": {
+   "label": "Ex. 7(c)",
+   "word": "Ex."
+  },
+  "example-7-d": {
+   "label": "Ex. 7(d)",
+   "word": "Ex."
+  },
+  "example-8": {
+   "label": "Ex. 8",
+   "word": "Ex."
+  },
+  "example-8-a": {
+   "label": "Ex. 8(a)",
+   "word": "Ex."
+  },
+  "example-8-b": {
+   "label": "Ex. 8(b)",
+   "word": "Ex."
+  },
+  "example-9": {
+   "label": "Ex. 9",
+   "word": "Ex."
+  },
+  "example-9-a": {
+   "label": "Ex. 9(a)",
+   "word": "Ex."
+  },
+  "example-9-b": {
+   "label": "Ex. 9(b)",
+   "word": "Ex."
+  },
+  "example-10": {
+   "label": "Ex. 10",
+   "word": "Ex."
+  },
+  "example-10-a": {
+   "label": "Ex. 10(a)",
+   "word": "Ex."
+  },
+  "example-10-b": {
+   "label": "Ex. 10(b)",
+   "word": "Ex."
+  },
+  "example-10-c": {
+   "label": "Ex. 10(c)",
+   "word": "Ex."
+  }
  }
 }
