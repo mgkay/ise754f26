@@ -378,6 +378,7 @@ qSS = qᵒ - mean(d)   # the safety stock of Ex. 6(c)'s size
 ## Model: One-time safety stock by regression
 # Model: one-time safety stock by regression
 # Total cost, the production rule, and the best rule
+using Combinatorics, LinearAlgebra
 fC(q::AbstractVector, d) = sum(fc.(q, d))
 # q::AbstractVector makes this a second method of fC, which Julia uses
 # only when q is a vector, one quantity for each demand; when q is a
@@ -392,22 +393,30 @@ fq̂(a, x...) = a[1] .+ sum(a[j + 1]*x[j] for j in 1:length(x))
 # .+ adds the intercept to each of its elements, giving one size for each
 # day; given single numbers, as in fq̂(a, 120, 45), the rule gives one
 # size.
-mincost(d, x...) = optimize(a -> fC(fq̂(a, x...), d),
-# x... in a call does the reverse of x... in a definition: it spreads the
-# tuple back out into separate arguments, so fq̂(a, x...) is fq̂(a, o)
-# when mincost was called as mincost(d, o). optimize minimizes, so the
-# total cost is handed to it as it is, where the total profit of Code
-# block 17 had to be negated.
-                            [0; ones(length(x))]).minimizer
-                            # Given a starting vector rather than an
-                            # interval, as Code block 17 gave it, optimize
-                            # searches over all the elements of a
-                            # together. [0; ones(length(x))] starts the
-                            # intercept at 0 and each of the $m$
-                            # coefficients at 1, which for the orders
-                            # alone is the rule of baking just the orders,
-                            # and .minimizer is the a at which the search
-                            # ends.
+function mincost(d, x...)
+    X = [ones(length(d)) hcat(x...)]
+    # x... in a call does the reverse of x... in a definition: it spreads
+    # the tuple back out into separate arguments, so hcat(x...) is hcat(o)
+    # and fq̂(a, x...) is fq̂(a, o) when mincost was called as mincost(d,
+    # o). X has a row for each demand, a 1 for the intercept followed by
+    # that demand's value of each independent variable, and $m + 1$
+    # columns.
+    Cᵒ, aᵒ = Inf, zeros(size(X, 2))
+    for s in combinations(1:length(d), size(X, 2))
+    # combinations, from Combinatorics, gives every set s of $m + 1$ of
+    # the demands. For each, X[s, :] \ d[s] solves for the rule that meets
+    # those demands exactly, and rank, from LinearAlgebra, skips a set
+    # whose rows do not determine one rule. The cheapest rule found, aᵒ,
+    # is returned.
+        rank(X[s, :]) < size(X, 2) && continue
+        a = X[s, :] \ d[s]            # the rule meeting demands s exactly
+        C = fC(fq̂(a, x...), d)
+        if C < Cᵒ
+            Cᵒ, aᵒ = C, a
+        end
+    end
+    return aᵒ
+end
 
 ## Example 6(f): Loaves from the morning's orders
 # Determine the linear rule on each morning's orders that maximizes
