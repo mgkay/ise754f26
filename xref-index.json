@@ -4207,83 +4207,83 @@
    "label": "Eq. 3",
    "word": "Eq."
   },
-  "eq-caprecovery": {
+  "eq-little": {
    "label": "Eq. 4",
    "word": "Eq."
   },
-  "eq-k": {
+  "eq-ctq-rec": {
    "label": "Eq. 5",
    "word": "Eq."
   },
-  "eq-little": {
+  "eq-qx": {
    "label": "Eq. 6",
    "word": "Eq."
   },
-  "eq-ctq-rec": {
+  "eq-qx-tail": {
    "label": "Eq. 7",
    "word": "Eq."
   },
-  "eq-qx": {
+  "eq-th-rec": {
    "label": "Eq. 8",
    "word": "Eq."
   },
-  "eq-qx-tail": {
+  "eq-tpub": {
    "label": "Eq. 9",
    "word": "Eq."
   },
-  "eq-th-rec": {
+  "eq-mto-tp": {
    "label": "Eq. 10",
    "word": "Eq."
   },
-  "eq-tpub": {
+  "eq-yield": {
    "label": "Eq. 11",
    "word": "Eq."
   },
-  "eq-tc-rec": {
+  "eq-ct": {
    "label": "Eq. 12",
    "word": "Eq."
   },
-  "eq-yield": {
+  "eq-mmin": {
    "label": "Eq. 13",
    "word": "Eq."
   },
-  "eq-ct": {
+  "eq-mm1": {
    "label": "Eq. 14",
    "word": "Eq."
   },
-  "eq-mm1": {
+  "eq-restar": {
    "label": "Eq. 15",
    "word": "Eq."
   },
-  "eq-restar": {
+  "eq-mts-tp": {
    "label": "Eq. 16",
    "word": "Eq."
   },
-  "eq-mto-tp": {
+  "eq-h": {
    "label": "Eq. 17",
    "word": "Eq."
   },
-  "eq-mts-tp": {
+  "eq-mts-mu": {
    "label": "Eq. 18",
    "word": "Eq."
   },
-  "eq-h": {
+  "eq-mts-pi0": {
    "label": "Eq. 19",
    "word": "Eq."
   },
-  "eq-mts-mu": {
+  "eq-mts-qbar": {
    "label": "Eq. 20",
    "word": "Eq."
   },
-  "eq-mts-pi0": {
+  "eq-poisson-cdf": {
    "label": "Eq. 21",
    "word": "Eq."
   },
-  "eq-mts-qbar": {
+  "eq-caprecovery": {
    "label": "Eq. 22",
    "word": "Eq."
   },
-  "eq-poisson-cdf": {
+  "eq-k": {
    "label": "Eq. 23",
    "word": "Eq."
   },
@@ -4291,20 +4291,16 @@
    "label": "Fig. 1",
    "word": "Fig."
   },
-  "fig-srv-tp": {
+  "fig-peaks": {
    "label": "Fig. 2",
    "word": "Fig."
   },
-  "fig-peaks": {
+  "fig-srv-tp": {
    "label": "Fig. 3",
    "word": "Fig."
   },
-  "fig-workstation": {
-   "label": "Fig. 4",
-   "word": "Fig."
-  },
   "fig-mts-tp": {
-   "label": "Fig. 5",
+   "label": "Fig. 4",
    "word": "Fig."
   },
   "tbl-models": {
@@ -4315,12 +4311,16 @@
    "label": "Table 2",
    "word": "Table"
   },
-  "tbl-ct-rule": {
+  "tbl-small-day": {
    "label": "Table 3",
    "word": "Table"
   },
   "tbl-recursion": {
    "label": "Table 4",
+   "word": "Table"
+  },
+  "tbl-ct-rule": {
+   "label": "Table 5",
    "word": "Table"
   },
   "mdl-srv": {
@@ -4350,6 +4350,10 @@
    "label": "Ex. 1(b)",
    "word": "Ex."
   },
+  "example-3": {
+   "label": "Ex. 3",
+   "word": "Ex."
+  },
   "example-2": {
    "label": "Ex. 2",
    "word": "Ex."
@@ -4362,16 +4366,16 @@
    "label": "Ex. 2(b)",
    "word": "Ex."
   },
-  "example-3": {
-   "label": "Ex. 3",
-   "word": "Ex."
-  },
   "example-3-a": {
    "label": "Ex. 3(a)",
    "word": "Ex."
   },
   "example-3-b": {
    "label": "Ex. 3(b)",
+   "word": "Ex."
+  },
+  "example-3-c": {
+   "label": "Ex. 3(c)",
    "word": "Ex."
   },
   "example-4": {
@@ -4384,10 +4388,6 @@
   },
   "example-4-b": {
    "label": "Ex. 4(b)",
-   "word": "Ex."
-  },
-  "example-4-c": {
-   "label": "Ex. 4(c)",
    "word": "Ex."
   },
   "example-5": {
@@ -4416,54 +4416,6 @@
   },
   "example-6-c": {
    "label": "Ex. 6(c)",
-   "word": "Ex."
-  },
-  "example-6-d": {
-   "label": "Ex. 6(d)",
-   "word": "Ex."
-  },
-  "example-7": {
-   "label": "Ex. 7",
-   "word": "Ex."
-  },
-  "example-7-a": {
-   "label": "Ex. 7(a)",
-   "word": "Ex."
-  },
-  "example-7-b": {
-   "label": "Ex. 7(b)",
-   "word": "Ex."
-  },
-  "example-7-c": {
-   "label": "Ex. 7(c)",
-   "word": "Ex."
-  },
-  "example-8": {
-   "label": "Ex. 8",
-   "word": "Ex."
-  },
-  "example-8-a": {
-   "label": "Ex. 8(a)",
-   "word": "Ex."
-  },
-  "example-8-b": {
-   "label": "Ex. 8(b)",
-   "word": "Ex."
-  },
-  "example-9": {
-   "label": "Ex. 9",
-   "word": "Ex."
-  },
-  "example-9-a": {
-   "label": "Ex. 9(a)",
-   "word": "Ex."
-  },
-  "example-9-b": {
-   "label": "Ex. 9(b)",
-   "word": "Ex."
-  },
-  "example-9-c": {
-   "label": "Ex. 9(c)",
    "word": "Ex."
   }
  }
